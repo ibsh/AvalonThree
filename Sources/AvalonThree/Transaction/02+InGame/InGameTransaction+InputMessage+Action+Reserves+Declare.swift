@@ -1,0 +1,64 @@
+//
+//  InGameTransaction+InputMessage+Action+Reserves+Declare.swift
+//  AvalonThree
+//
+//  Created by Ibrahim Sha'ath on 6/18/24.
+//
+
+import Foundation
+
+extension InGameTransaction {
+
+    mutating func declareReservesAction(
+        playerID: PlayerID,
+        isFree: Bool
+    ) throws -> Prompt? {
+
+        let emptySquares = table
+            .endZoneSquares(coachID: playerID.coachID)
+            .filter({ square in
+                table.squareIsUnobstructed(square)
+                && table.squareIsEmptyOfPlayers(square)
+            })
+
+        // cannot be placed adjacent to an opponent or in a square containing a ball unless there is
+        // no other option.
+
+        let idealFinalSquares = emptySquares
+            .filter { square in
+                table.standingOpponentsAdjacentToSquare(square, for: playerID).isEmpty
+                && table.looseBalls(in: square).isEmpty
+            }
+
+        let validFinalSquares = idealFinalSquares.isEmpty ? emptySquares : idealFinalSquares
+
+        let declaration = ActionDeclaration(
+            playerID: playerID,
+            actionID: .reserves
+        )
+
+        // set the action
+        history.append(
+            .actionDeclaration(
+                declaration: declaration,
+                snapshot: ActionSnapshot(table: table)
+            )
+        )
+        if isFree {
+            history.append(.actionIsFree)
+        }
+
+        let validSquares = ValidMoveSquares(
+            intermediate: [],
+            final: validFinalSquares
+        )
+
+        history.append(.reservesValidSquares(validSquares))
+        events.append(.declaredAction(declaration: declaration, isFree: isFree))
+
+        return Prompt(
+            coachID: playerID.coachID,
+            payload: .reservesActionSpecifySquare(playerID: playerID, validSquares: validSquares)
+        )
+    }
+}

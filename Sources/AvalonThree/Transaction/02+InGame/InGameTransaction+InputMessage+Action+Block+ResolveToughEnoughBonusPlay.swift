@@ -1,0 +1,34 @@
+//
+//  InGameTransaction+InputMessage+Action+Block+ResolveToughEnoughBonusPlay.swift
+//  AvalonThree
+//
+//  Created by Ibrahim Sha'ath on 7/8/24.
+//
+
+import Foundation
+
+extension InGameTransaction {
+
+    mutating func blockActionUseToughEnoughBonusPlay() throws -> Prompt? {
+        return try blockActionResolveToughEnoughBonusPlay(use: true)
+    }
+
+    mutating func blockActionDeclineToughEnoughBonusPlay() throws -> Prompt? {
+        return try blockActionResolveToughEnoughBonusPlay(use: false)
+    }
+
+    private mutating func blockActionResolveToughEnoughBonusPlay(
+        use: Bool
+    ) throws -> Prompt? {
+
+        let coachID = try history.latestTurnContext().coachID.inverse
+
+        let bonusPlay = BonusPlay.toughEnough
+
+        if use {
+            try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
+        }
+
+        return try blockActionRollForArmour()
+    }
+}

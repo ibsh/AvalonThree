@@ -1,0 +1,652 @@
+//
+//  GetTogetherTests.swift
+//  AvalonThreeTests
+//
+//  Created by Ibrahim Sha'ath on 6/29/24.
+//
+
+import Testing
+@testable import AvalonThree
+
+struct GetTogetherTests {
+
+    @Test func notAvailableWhenNotAdjacentToTwoTeammates() async throws {
+
+        // MARK: - Init
+
+        var game = Game(
+            phase: .active(
+                Table(
+                    config: FinalizedConfig(
+                        coinFlipWinnerCoachID: .home,
+                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
+                            boardSpecID: .whiteWolfHolm,
+                            challengeDeckID: .shortStandard,
+                            teamID: .human
+                        ),
+                        coinFlipLoserConfig: CoinFlipLoserConfig(
+                            teamID: .orc
+                        )
+                    ),
+                    players: [
+                        Player(
+                            id: PlayerID(coachID: .away, index: 0),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(3, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: PlayerID(coachID: .away, index: 1),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(7, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: PlayerID(coachID: .away, index: 2),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(7, 7)),
+                            canTakeActions: true
+                        ),
+                    ],
+                    coinFlipLoserHand: [],
+                    coinFlipWinnerHand: [],
+                    coinFlipLoserActiveBonuses: [],
+                    coinFlipWinnerActiveBonuses: [],
+                    coinFlipLoserScore: 0,
+                    coinFlipWinnerScore: 0,
+                    balls: [],
+                    deck: [],
+                    objectives: Objectives(
+                        third: ChallengeCard(
+                            challenge: .getTogether,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    discards: []
+                ),
+                [
+                    .prepareForTurn(
+                        coachID: .away,
+                        isSpecial: nil,
+                        mustDiscardObjective: false
+                    ),
+                ]
+            ),
+            previousPrompt: Prompt(
+                coachID: .away,
+                payload: .declarePlayerAction(
+                    validDeclarations: [],
+                    playerActionsLeft: 3
+                )
+            ),
+            randomizers: Randomizers(),
+            uuidProvider: DefaultUUIDProvider()
+        )
+
+        // MARK: - Declare run
+
+        var (latestEvents, latestPayload) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: PlayerID(coachID: .away, index: 0),
+                        actionID: .run
+                    ),
+                    consumesBonusPlays: []
+                )
+            )
+        )
+
+        #expect(
+            latestEvents == [
+                .declaredAction(
+                    declaration: ActionDeclaration(
+                        playerID: PlayerID(coachID: .away, index: 0),
+                        actionID: .run
+                    ),
+                    isFree: false
+                )
+            ]
+        )
+
+        #expect(
+            latestPayload == Prompt(
+                coachID: .away,
+                payload: .runActionSpecifySquares(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    maxRunDistance: 5,
+                    validSquares: ValidMoveSquares(
+                        intermediate: squares("""
+                        ...........
+                        aaaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        aaaaaaaaa..
+                        aaaaaaa.a..
+                        aaaaaaa.a..
+                        aaaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        ...........
+                        ...........
+                        ...........
+                        """),
+                        final: squares("""
+                        ...........
+                        .aaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        aaaaaaaaa..
+                        aaaaaaa.a..
+                        aaaaaaa.a..
+                        aaaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        ...........
+                        ...........
+                        ...........
+                        """)
+                    )
+                )
+            )
+        )
+
+        // MARK: - Specify run
+
+        (latestEvents, latestPayload) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .runActionSpecifySquares(squares: [
+                    sq(4, 5),
+                    sq(5, 5),
+                    sq(6, 5),
+                ])
+            )
+        )
+
+        #expect(
+            latestEvents == [
+                .playerMoved(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    square: sq(4, 5),
+                    reason: .run
+                ),
+                .playerMoved(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    square: sq(5, 5),
+                    reason: .run
+                ),
+                .playerMoved(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    square: sq(6, 5),
+                    reason: .run
+                ),
+            ]
+        )
+
+        #expect(
+            latestPayload == Prompt(
+                coachID: .away,
+                payload: .declarePlayerAction(
+                    validDeclarations: [
+                        ValidDeclaration(
+                            declaration: ActionDeclaration(
+                                playerID: PlayerID(coachID: .away, index: 1),
+                                actionID: .run
+                            ),
+                            consumesBonusPlays: []
+                        ),
+                        ValidDeclaration(
+                            declaration: ActionDeclaration(
+                                playerID: PlayerID(coachID: .away, index: 2),
+                                actionID: .run
+                            ),
+                            consumesBonusPlays: []
+                        ),
+                    ],
+                    playerActionsLeft: 2
+                )
+            )
+        )
+    }
+
+    @Test func notAvailableWhenEitherOfTheTwoTeammatesIsProne() async throws {
+
+        // MARK: - Init
+
+        var game = Game(
+            phase: .active(
+                Table(
+                    config: FinalizedConfig(
+                        coinFlipWinnerCoachID: .home,
+                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
+                            boardSpecID: .whiteWolfHolm,
+                            challengeDeckID: .shortStandard,
+                            teamID: .human
+                        ),
+                        coinFlipLoserConfig: CoinFlipLoserConfig(
+                            teamID: .orc
+                        )
+                    ),
+                    players: [
+                        Player(
+                            id: PlayerID(coachID: .away, index: 0),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(3, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: PlayerID(coachID: .away, index: 1),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(7, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: PlayerID(coachID: .away, index: 2),
+                            spec: .orc_lineman,
+                            state: .prone(square: sq(7, 7)),
+                            canTakeActions: true
+                        ),
+                    ],
+                    coinFlipLoserHand: [],
+                    coinFlipWinnerHand: [],
+                    coinFlipLoserActiveBonuses: [],
+                    coinFlipWinnerActiveBonuses: [],
+                    coinFlipLoserScore: 0,
+                    coinFlipWinnerScore: 0,
+                    balls: [],
+                    deck: [],
+                    objectives: Objectives(
+                        third: ChallengeCard(
+                            challenge: .getTogether,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    discards: []
+                ),
+                [
+                    .prepareForTurn(
+                        coachID: .away,
+                        isSpecial: nil,
+                        mustDiscardObjective: false
+                    ),
+                ]
+            ),
+            previousPrompt: Prompt(
+                coachID: .away,
+                payload: .declarePlayerAction(
+                    validDeclarations: [],
+                    playerActionsLeft: 3
+                )
+            ),
+            randomizers: Randomizers(),
+            uuidProvider: DefaultUUIDProvider()
+        )
+
+        // MARK: - Declare run
+
+        var (latestEvents, latestPayload) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: PlayerID(coachID: .away, index: 0),
+                        actionID: .run
+                    ),
+                    consumesBonusPlays: []
+                )
+            )
+        )
+
+        #expect(
+            latestEvents == [
+                .declaredAction(
+                    declaration: ActionDeclaration(
+                        playerID: PlayerID(coachID: .away, index: 0),
+                        actionID: .run
+                    ),
+                    isFree: false
+                )
+            ]
+        )
+
+        #expect(
+            latestPayload == Prompt(
+                coachID: .away,
+                payload: .runActionSpecifySquares(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    maxRunDistance: 5,
+                    validSquares: ValidMoveSquares(
+                        intermediate: squares("""
+                        ...........
+                        aaaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        aaaaaaaaa..
+                        aaaaaaa.a..
+                        aaaaaaa.a..
+                        aaaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        ...........
+                        ...........
+                        ...........
+                        """),
+                        final: squares("""
+                        ...........
+                        .aaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        aaaaaaaaa..
+                        aaaaaaa.a..
+                        aaaaaaa.a..
+                        aaaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        ...........
+                        ...........
+                        ...........
+                        """)
+                    )
+                )
+            )
+        )
+
+        // MARK: - Specify run
+
+        (latestEvents, latestPayload) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .runActionSpecifySquares(squares: [
+                    sq(4, 6),
+                    sq(5, 6),
+                    sq(6, 6),
+                ])
+            )
+        )
+
+        #expect(
+            latestEvents == [
+                .playerMoved(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    square: sq(4, 6),
+                    reason: .run
+                ),
+                .playerMoved(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    square: sq(5, 6),
+                    reason: .run
+                ),
+                .playerMoved(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    square: sq(6, 6),
+                    reason: .run
+                ),
+            ]
+        )
+
+        #expect(
+            latestPayload == Prompt(
+                coachID: .away,
+                payload: .declarePlayerAction(
+                    validDeclarations: [
+                        ValidDeclaration(
+                            declaration: ActionDeclaration(
+                                playerID: PlayerID(coachID: .away, index: 1),
+                                actionID: .run
+                            ),
+                            consumesBonusPlays: []
+                        ),
+                        ValidDeclaration(
+                            declaration: ActionDeclaration(
+                                playerID: PlayerID(coachID: .away, index: 2),
+                                actionID: .standUp
+                            ),
+                            consumesBonusPlays: []
+                        ),
+                    ],
+                    playerActionsLeft: 2
+                )
+            )
+        )
+    }
+
+    @Test func availableWhenMovingAdjacentToTwoTeammates() async throws {
+
+        // MARK: - Init
+
+        var game = Game(
+            phase: .active(
+                Table(
+                    config: FinalizedConfig(
+                        coinFlipWinnerCoachID: .home,
+                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
+                            boardSpecID: .whiteWolfHolm,
+                            challengeDeckID: .shortStandard,
+                            teamID: .human
+                        ),
+                        coinFlipLoserConfig: CoinFlipLoserConfig(
+                            teamID: .orc
+                        )
+                    ),
+                    players: [
+                        Player(
+                            id: PlayerID(coachID: .away, index: 0),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(3, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: PlayerID(coachID: .away, index: 1),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(7, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: PlayerID(coachID: .away, index: 2),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(7, 7)),
+                            canTakeActions: true
+                        ),
+                    ],
+                    coinFlipLoserHand: [],
+                    coinFlipWinnerHand: [],
+                    coinFlipLoserActiveBonuses: [],
+                    coinFlipWinnerActiveBonuses: [],
+                    coinFlipLoserScore: 0,
+                    coinFlipWinnerScore: 0,
+                    balls: [],
+                    deck: [],
+                    objectives: Objectives(
+                        third: ChallengeCard(
+                            challenge: .getTogether,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    discards: []
+                ),
+                [
+                    .prepareForTurn(
+                        coachID: .away,
+                        isSpecial: nil,
+                        mustDiscardObjective: false
+                    ),
+                ]
+            ),
+            previousPrompt: Prompt(
+                coachID: .away,
+                payload: .declarePlayerAction(
+                    validDeclarations: [],
+                    playerActionsLeft: 3
+                )
+            ),
+            randomizers: Randomizers(),
+            uuidProvider: DefaultUUIDProvider()
+        )
+
+        // MARK: - Declare run
+
+        var (latestEvents, latestPayload) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: PlayerID(coachID: .away, index: 0),
+                        actionID: .run
+                    ),
+                    consumesBonusPlays: []
+                )
+            )
+        )
+
+        #expect(
+            latestEvents == [
+                .declaredAction(
+                    declaration: ActionDeclaration(
+                        playerID: PlayerID(coachID: .away, index: 0),
+                        actionID: .run
+                    ),
+                    isFree: false
+                )
+            ]
+        )
+
+        #expect(
+            latestPayload == Prompt(
+                coachID: .away,
+                payload: .runActionSpecifySquares(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    maxRunDistance: 5,
+                    validSquares: ValidMoveSquares(
+                        intermediate: squares("""
+                        ...........
+                        aaaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        aaaaaaaaa..
+                        aaaaaaa.a..
+                        aaaaaaa.a..
+                        aaaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        ...........
+                        ...........
+                        ...........
+                        """),
+                        final: squares("""
+                        ...........
+                        .aaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        aaaaaaaaa..
+                        aaaaaaa.a..
+                        aaaaaaa.a..
+                        aaaaaaaaa..
+                        aaaaaaaaa..
+                        a..aaaaa...
+                        a..aaaaa...
+                        ...........
+                        ...........
+                        ...........
+                        """)
+                    )
+                )
+            )
+        )
+
+        // MARK: - Specify run
+
+        (latestEvents, latestPayload) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .runActionSpecifySquares(squares: [
+                    sq(4, 6),
+                    sq(5, 6),
+                    sq(6, 6),
+                ])
+            )
+        )
+
+        #expect(
+            latestEvents == [
+                .playerMoved(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    square: sq(4, 6),
+                    reason: .run
+                ),
+                .playerMoved(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    square: sq(5, 6),
+                    reason: .run
+                ),
+                .playerMoved(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    square: sq(6, 6),
+                    reason: .run
+                ),
+            ]
+        )
+
+        #expect(
+            latestPayload == Prompt(
+                coachID: .away,
+                payload: .earnedObjective(
+                    objectiveIDs: [.third]
+                )
+            )
+        )
+
+        // MARK: - Claim objective
+
+        (latestEvents, latestPayload) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .claimObjective(objectiveID: .third)
+            )
+        )
+
+        #expect(
+            latestEvents == [
+                .claimedObjective(coachID: .away, objectiveID: .third),
+                .scoreUpdated(coachID: .away, increment: 1),
+            ]
+        )
+
+        #expect(
+            latestPayload == Prompt(
+                coachID: .away,
+                payload: .declarePlayerAction(
+                    validDeclarations: [
+                        ValidDeclaration(
+                            declaration: ActionDeclaration(
+                                playerID: PlayerID(coachID: .away, index: 1),
+                                actionID: .run
+                            ),
+                            consumesBonusPlays: []
+                        ),
+                        ValidDeclaration(
+                            declaration: ActionDeclaration(
+                                playerID: PlayerID(coachID: .away, index: 2),
+                                actionID: .run
+                            ),
+                            consumesBonusPlays: []
+                        ),
+                    ],
+                    playerActionsLeft: 2
+                )
+            )
+        )
+    }
+}

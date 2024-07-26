@@ -1,0 +1,58 @@
+//
+//  InGameTransaction+InputMessage+Action+HurlTeammate+SpecifyTarget.swift
+//  AvalonThree
+//
+//  Created by Ibrahim Sha'ath on 6/27/24.
+//
+
+import Foundation
+
+extension InGameTransaction {
+
+    mutating func hurlTeammateActionSpecifyTarget(
+        targetSquare: Square
+    ) throws -> Prompt? {
+
+        let turnContext = try history.latestTurnContext()
+
+        guard
+            let actionContext = try turnContext.actionContexts().last,
+            !actionContext.isFinished,
+            let validTargets = actionContext.history.lastResult(
+                { entry -> Set<HurlTeammateTarget>? in
+                    guard case .hurlTeammateValidTargets(let validTargets) = entry else {
+                        return nil
+                    }
+                    return validTargets
+                }
+            )
+        else {
+            throw GameError("No action in history")
+        }
+
+        guard
+            let validTarget = validTargets
+                .first(where: { $0.targetSquare == targetSquare })
+        else {
+            throw GameError("Invalid target")
+        }
+
+        history.append(.hurlTeammateTarget(validTarget))
+
+        if table
+            .getHand(coachID: turnContext.coachID)
+            .contains(where: { $0.bonusPlay == .accuratePass }),
+           validTarget.distance == .short
+        {
+
+            return Prompt(
+                coachID: actionContext.coachID,
+                payload: .hurlTeammateActionEligibleForAccuratePassBonusPlay(
+                    playerID: actionContext.playerID
+                )
+            )
+        }
+
+        return try hurlTeammateActionRollDie()
+    }
+}
