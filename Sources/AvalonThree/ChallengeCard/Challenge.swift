@@ -152,9 +152,7 @@ extension Challenge {
              .spreadOut,
              .takeThemDown,
              .tieThemUp,
-             .breakTheirLines,
              .causeSomeCarnage,
-             .goDeep,
              .lastChance,
              .pileOn,
              .playAsATeam,
@@ -162,7 +160,9 @@ extension Challenge {
              .showSomeGrit,
              .showThemHowItsDone:
             true
-        case .moveTheBall:
+        case .moveTheBall,
+             .breakTheirLines,
+             .goDeep:
             false
         }
     }
