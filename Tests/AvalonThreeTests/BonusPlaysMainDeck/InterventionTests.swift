@@ -24,7 +24,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -236,7 +237,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -594,7 +596,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -936,7 +939,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -1295,7 +1299,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .dwarf
+                            teamID: .dwarf,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -1739,7 +1744,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .elf
+                            teamID: .elf,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -2188,7 +2194,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -2440,7 +2447,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -2775,7 +2783,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -3012,7 +3021,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -3356,7 +3366,8 @@ struct InterventionTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human

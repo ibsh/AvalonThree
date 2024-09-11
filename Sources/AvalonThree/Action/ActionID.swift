@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ActionID: CaseIterable, Codable {
+public enum ActionID: CaseIterable, Codable, Sendable {
     case run
     case mark
     case pass

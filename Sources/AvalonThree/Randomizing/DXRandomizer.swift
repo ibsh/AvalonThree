@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol DXRandomizing {
+protocol DXRandomizing: Sendable {
     func roll() -> Int
     var range: ClosedRange<Int> { get }
     var die: Die { get }

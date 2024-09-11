@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum BlockDieResult: Codable {
+public enum BlockDieResult: Codable, Sendable {
     case miss
     case shove
     case tackle

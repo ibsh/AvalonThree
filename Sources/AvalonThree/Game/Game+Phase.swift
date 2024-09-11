@@ -8,7 +8,7 @@
 import Foundation
 
 extension Game {
-    enum Phase {
+    enum Phase: Sendable {
         case config(Config)
         case setup(Table)
         case active(Table, [HistoryEntry])

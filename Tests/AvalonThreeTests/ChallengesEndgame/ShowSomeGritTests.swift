@@ -24,7 +24,8 @@ struct ShowSomeGritTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .halfling
+                            teamID: .halfling,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -321,7 +322,8 @@ struct ShowSomeGritTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .halfling
+                            teamID: .halfling,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -672,7 +674,8 @@ struct ShowSomeGritTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .halfling
+                            teamID: .halfling,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human

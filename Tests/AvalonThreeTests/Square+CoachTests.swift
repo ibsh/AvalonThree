@@ -16,7 +16,8 @@ struct SquareCoachTests {
             coinFlipWinnerConfig: CoinFlipWinnerConfig(
                 boardSpecID: .bilbaliHarbor,
                 challengeDeckID: .longRandomised,
-                teamID: .darkElf
+                teamID: .darkElf,
+                rawTalentBonusRecipientID: nil
             ),
             coinFlipLoserConfig: CoinFlipLoserConfig(
                 teamID: .woodElf

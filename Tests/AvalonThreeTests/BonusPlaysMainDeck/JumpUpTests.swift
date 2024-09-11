@@ -28,7 +28,8 @@ struct JumpUpTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .orc
+                            teamID: .orc,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human
@@ -513,7 +514,8 @@ struct JumpUpTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .orc
+                            teamID: .orc,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .human

@@ -26,7 +26,8 @@ struct PassingTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .necromantic
@@ -195,7 +196,8 @@ struct PassingTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .necromantic

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol DirectionRandomizing {
+protocol DirectionRandomizing: Sendable {
     func rollForDirection() -> Direction
 }
 

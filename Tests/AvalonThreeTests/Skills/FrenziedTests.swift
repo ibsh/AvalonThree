@@ -24,7 +24,8 @@ struct FrenziedTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .dwarf
@@ -242,7 +243,8 @@ struct FrenziedTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .dwarf
@@ -744,7 +746,8 @@ struct FrenziedTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .dwarf

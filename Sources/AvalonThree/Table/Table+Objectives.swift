@@ -7,13 +7,13 @@
 
 import Foundation
 
-public struct Objectives: Codable {
+public struct Objectives: Codable, Sendable {
     var first: ChallengeCard?
     var second: ChallengeCard?
     var third: ChallengeCard?
 }
 
-public enum ObjectiveID: Codable {
+public enum ObjectiveID: Codable, Sendable {
     case first
     case second
     case third

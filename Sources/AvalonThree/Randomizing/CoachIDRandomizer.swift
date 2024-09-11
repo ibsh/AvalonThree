@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CoachIDRandomizing {
+protocol CoachIDRandomizing: Sendable {
     func flipForCoachID() -> CoachID
 }
 

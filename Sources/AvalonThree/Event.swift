@@ -7,12 +7,12 @@
 
 import Foundation
 
-public enum Die: Equatable, Codable {
+public enum Die: Equatable, Codable, Sendable {
     case d6
     case d8
 }
 
-public enum Event: Equatable, Codable {
+public enum Event: Equatable, Codable, Sendable {
 
     case flippedCoin(CoachID)
 
@@ -329,18 +329,18 @@ public enum Event: Equatable, Codable {
     )
 }
 
-public enum PassRollModification: Hashable, Codable {
+public enum PassRollModification: Hashable, Codable, Sendable {
     case longDistance
     case obstructed
     case targetPlayerMarked
 }
 
-public enum HurlTeammateRollModification: Hashable, Codable {
+public enum HurlTeammateRollModification: Hashable, Codable, Sendable {
     case longDistance
     case obstructed
 }
 
-public enum BlockRollModification: Hashable, Codable {
+public enum BlockRollModification: Hashable, Codable, Sendable {
     case playerThrewBomb
     case playerIsHulkingBrute
     case playerHasMightyBlow
@@ -350,12 +350,12 @@ public enum BlockRollModification: Hashable, Codable {
     case opponentHasStandFirm
 }
 
-public enum ArmourRollModification: Hashable, Codable {
+public enum ArmourRollModification: Hashable, Codable, Sendable {
     case kerrunch
     case absoluteCarnageBonusPlay
 }
 
-public enum PlayerMoveReason: Equatable, Codable {
+public enum PlayerMoveReason: Equatable, Codable, Sendable {
     case run
     case reserves
     case sidestep
@@ -365,19 +365,19 @@ public enum PlayerMoveReason: Equatable, Codable {
     case shadow
 }
 
-public enum PlayerFallDownReason: Equatable, Codable {
+public enum PlayerFallDownReason: Equatable, Codable, Sendable {
     case blocked
     case divingTackle
 }
 
-public enum PlayerInjuryReason: Equatable, Codable {
+public enum PlayerInjuryReason: Equatable, Codable, Sendable {
     case blocked
     case fouled
     case fumbled
     case trapdoor
 }
 
-public enum EndConditions: Equatable, Codable {
+public enum EndConditions: Equatable, Codable, Sendable {
     case suddenDeath(CoachID)
     case clock(CoachID)
     case tie

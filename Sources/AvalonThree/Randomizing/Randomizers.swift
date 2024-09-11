@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Randomizers {
+struct Randomizers: Sendable {
     let blockDie: BlockDieRandomizing
     let coachID: CoachIDRandomizing
     let d6: D6Randomizing

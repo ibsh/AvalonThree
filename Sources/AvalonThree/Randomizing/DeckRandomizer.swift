@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol DeckRandomizing {
+protocol DeckRandomizing: Sendable {
     func deal(_ id: ChallengeDeckID) -> [ChallengeCard]
 }
 

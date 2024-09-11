@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum FoulDieResult: Codable {
+public enum FoulDieResult: Codable, Sendable {
     case spotted
     case takeThat
     case slipped

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum BoardSpecID: Codable {
+public enum BoardSpecID: Codable, Sendable {
     case whiteWolfHolm
     case altdorfOldTown
     case barakVarrFoundry

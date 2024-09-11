@@ -9,9 +9,7 @@ import Foundation
 
 extension ConfigTransaction {
 
-    mutating func beginGame(
-        rawTalentBonusRecipientID: CoachID?
-    ) throws -> Prompt? {
+    mutating func beginGame() throws -> Prompt? {
 
         guard config.coinFlipWinnerCoachID == nil else {
             throw GameError("Game has already begun")
@@ -20,7 +18,6 @@ extension ConfigTransaction {
         let coinFlipWinnerCoachID = randomizers.coachID.flipForCoachID()
         events.append(.flippedCoin(coinFlipWinnerCoachID))
 
-        config.rawTalentBonusRecipientID = rawTalentBonusRecipientID
         config.coinFlipWinnerCoachID = coinFlipWinnerCoachID
 
         return Prompt(

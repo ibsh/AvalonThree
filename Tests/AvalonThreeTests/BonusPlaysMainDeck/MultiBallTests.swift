@@ -30,7 +30,8 @@ struct MultiBallTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .bilbaliHarbor,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -250,7 +251,8 @@ struct MultiBallTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .bilbaliHarbor,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -470,7 +472,8 @@ struct MultiBallTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .bilbaliHarbor,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -704,7 +707,8 @@ struct MultiBallTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .bilbaliHarbor,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -930,7 +934,8 @@ struct MultiBallTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .bilbaliHarbor,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -1171,7 +1176,8 @@ struct MultiBallTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .bilbaliHarbor,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc

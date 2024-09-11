@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol TrapdoorRandomizing {
+protocol TrapdoorRandomizing: Sendable {
     func selectRandomTrapdoor(from squares: Set<Square>) -> Square
 }
 

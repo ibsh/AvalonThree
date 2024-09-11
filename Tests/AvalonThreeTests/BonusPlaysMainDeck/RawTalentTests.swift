@@ -10,7 +10,7 @@ import Testing
 
 struct RawTalentTests {
 
-    @Test func homeCoachCanGiveACopyToHomeCoach() async throws {
+    @Test func secondCoachCanGiveACopyToHomeCoach() async throws {
 
         // MARK: - Init
 
@@ -36,7 +36,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .begin(rawTalentBonusRecipientID: .home)
+                message: .begin
             )
         )
 
@@ -49,7 +49,8 @@ struct RawTalentTests {
                     config: CoinFlipWinnerConfig(
                         boardSpecID: .barakVarrFoundry,
                         challengeDeckID: .shortStandard,
-                        teamID: .lizardmen
+                        teamID: .lizardmen,
+                        rawTalentBonusRecipientID: .home
                     )
                 )
             )
@@ -152,7 +153,7 @@ struct RawTalentTests {
         #expect(game.table.coinFlipWinnerHand == [])
     }
 
-    @Test func homeCoachCanGiveACopyToAwayCoach() async throws {
+    @Test func secondCoachCanGiveACopyToAwayCoach() async throws {
 
         // MARK: - Init
 
@@ -178,7 +179,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .begin(rawTalentBonusRecipientID: .away)
+                message: .begin
             )
         )
 
@@ -191,7 +192,8 @@ struct RawTalentTests {
                     config: CoinFlipWinnerConfig(
                         boardSpecID: .barakVarrFoundry,
                         challengeDeckID: .shortStandard,
-                        teamID: .lizardmen
+                        teamID: .lizardmen,
+                        rawTalentBonusRecipientID: .away
                     )
                 )
             )
@@ -294,7 +296,7 @@ struct RawTalentTests {
         ])
     }
 
-    @Test func homeCoachCanGiveACopyToNeitherCoach() async throws {
+    @Test func secondCoachCanGiveACopyToNeitherCoach() async throws {
 
         // MARK: - Init
 
@@ -320,7 +322,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .begin(rawTalentBonusRecipientID: nil)
+                message: .begin
             )
         )
 
@@ -333,7 +335,8 @@ struct RawTalentTests {
                     config: CoinFlipWinnerConfig(
                         boardSpecID: .barakVarrFoundry,
                         challengeDeckID: .shortStandard,
-                        teamID: .lizardmen
+                        teamID: .lizardmen,
+                        rawTalentBonusRecipientID: nil
                     )
                 )
             )
@@ -448,7 +451,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -660,7 +664,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -872,7 +877,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .halfling
@@ -1248,7 +1254,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .halfling
@@ -1610,7 +1617,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -1792,7 +1800,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -1985,7 +1994,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -2196,7 +2206,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -2436,7 +2447,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .khorne
@@ -2665,7 +2677,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .khorne
@@ -2880,7 +2893,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .necromantic
@@ -3065,7 +3079,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .snotling
@@ -3286,7 +3301,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .snotling
@@ -3467,7 +3483,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -3664,7 +3681,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc
@@ -3850,7 +3868,8 @@ struct RawTalentTests {
                         coinFlipWinnerConfig: CoinFlipWinnerConfig(
                             boardSpecID: .whiteWolfHolm,
                             challengeDeckID: .shortStandard,
-                            teamID: .human
+                            teamID: .human,
+                            rawTalentBonusRecipientID: nil
                         ),
                         coinFlipLoserConfig: CoinFlipLoserConfig(
                             teamID: .orc

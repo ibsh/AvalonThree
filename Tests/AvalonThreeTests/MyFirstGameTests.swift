@@ -49,7 +49,7 @@ struct MyFirstGameTests {
         var (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .begin(rawTalentBonusRecipientID: nil)
+                message: .begin
             )
         )
 
@@ -111,7 +111,8 @@ struct MyFirstGameTests {
                     config: CoinFlipWinnerConfig(
                         boardSpecID: .whiteWolfHolm,
                         challengeDeckID: .shortStandard,
-                        teamID: .skaven
+                        teamID: .skaven,
+                        rawTalentBonusRecipientID: nil
                     )
                 )
             )
@@ -123,7 +124,8 @@ struct MyFirstGameTests {
                     config: CoinFlipWinnerConfig(
                         boardSpecID: .whiteWolfHolm,
                         challengeDeckID: .shortStandard,
-                        teamID: .skaven
+                        teamID: .skaven,
+                        rawTalentBonusRecipientID: nil
                     )
                 )
             ]

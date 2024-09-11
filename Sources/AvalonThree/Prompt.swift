@@ -7,12 +7,12 @@
 
 import Foundation
 
-public struct Prompt: Equatable, Codable {
+public struct Prompt: Equatable, Codable, Sendable {
     public let coachID: CoachID
     public let payload: PromptPayload
 }
 
-public enum PromptPayload: Equatable, Codable {
+public enum PromptPayload: Equatable, Codable, Sendable {
 
     // MARK: - Config
 
@@ -327,7 +327,7 @@ public enum PromptPayload: Equatable, Codable {
     )
 }
 
-public struct ValidMoveSquares: Hashable, Codable {
+public struct ValidMoveSquares: Hashable, Codable, Sendable {
     /// This is an overestimation for performance reasons. Do not use it for display to the player,
     /// only for path validation.
     public let intermediate: Set<Square>
@@ -335,7 +335,7 @@ public struct ValidMoveSquares: Hashable, Codable {
     public let final: Set<Square>
 }
 
-public struct PassTarget: Hashable, Codable {
+public struct PassTarget: Hashable, Codable, Sendable {
     public let targetPlayerID: PlayerID
     public let targetSquare: Square
     public let distance: PassDistance
@@ -343,7 +343,7 @@ public struct PassTarget: Hashable, Codable {
     public let markedTargetSquares: Set<Square>
 }
 
-public struct HurlTeammateTarget: Hashable, Codable {
+public struct HurlTeammateTarget: Hashable, Codable, Sendable {
     public let targetSquare: Square
     public let distance: PassDistance
     public let obstructingSquares: Set<Square>

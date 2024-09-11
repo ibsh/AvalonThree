@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct PassMeasure: Hashable, Codable {
+struct PassMeasure: Hashable, Codable, Sendable {
     let distance: PassDistance
     let touchingSquares: Set<Square>
 }
 
-public enum PassDistance: Codable {
+public enum PassDistance: Codable, Sendable {
     case handoff
     case short
     case long

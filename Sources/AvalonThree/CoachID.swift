@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum CoachID: CaseIterable, Codable {
+public enum CoachID: CaseIterable, Codable, Sendable {
     case home
     case away
 }

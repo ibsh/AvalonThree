@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol BlockDieRandomizing {
+protocol BlockDieRandomizing: Sendable {
     func rollBlockDie() -> BlockDieResult
 }
 

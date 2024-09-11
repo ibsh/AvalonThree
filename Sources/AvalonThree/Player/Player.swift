@@ -14,12 +14,12 @@ struct Player {
     var canTakeActions: Bool
 }
 
-public struct PlayerID: Hashable, Codable {
+public struct PlayerID: Hashable, Codable, Sendable {
     let coachID: CoachID
     let index: Int
 }
 
-public struct PlayerConfig: Hashable, Codable {
+public struct PlayerConfig: Hashable, Codable, Sendable {
     let id: PlayerID
     let specID: PlayerSpecID
 }

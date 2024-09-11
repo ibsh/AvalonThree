@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Square: Hashable, Codable {
+public struct Square: Hashable, Codable, Sendable {
     public let x: Int
     public let y: Int
 

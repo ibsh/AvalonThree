@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Game {
+public struct Game: Sendable {
 
     var phase: Phase
     var previousPrompt: Prompt?

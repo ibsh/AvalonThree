@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol UUIDProviding {
+protocol UUIDProviding: Sendable {
     func generate() -> UUID
 }
 

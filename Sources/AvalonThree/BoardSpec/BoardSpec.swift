@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BoardSpec: Codable {
+struct BoardSpec: Codable, Sendable {
     let obstructedSquares: Set<Square>
     let trapdoorSquares: Set<Square>
 }

@@ -14,8 +14,8 @@ extension ConfigTransaction {
     ) throws -> Prompt? {
 
         switch messageWrapper.message {
-        case .begin(let rawTalentBonusRecipientID):
-            return try beginGame(rawTalentBonusRecipientID: rawTalentBonusRecipientID)
+        case .begin:
+            return try beginGame()
 
         case .coinFlipWinnerConfig(let config):
             return try coinFlipWinnerConfig(

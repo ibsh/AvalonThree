@@ -7,11 +7,11 @@
 
 import Foundation
 
-public enum InputMessage: Codable {
+public enum InputMessage: Codable, Sendable {
 
     // MARK: - Config
 
-    case begin(rawTalentBonusRecipientID: CoachID?)
+    case begin
     case coinFlipWinnerConfig(config: CoinFlipWinnerConfig)
     case coinFlipLoserConfig(config: CoinFlipLoserConfig)
 
@@ -184,7 +184,7 @@ public enum InputMessage: Codable {
     case selectObjectiveToDiscard(objectiveID: ObjectiveID)
 }
 
-public struct InputMessageWrapper: Codable {
+public struct InputMessageWrapper: Codable, Sendable {
     let coachID: CoachID
     let message: InputMessage
 

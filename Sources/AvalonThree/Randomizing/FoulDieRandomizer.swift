@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol FoulDieRandomizing {
+protocol FoulDieRandomizing: Sendable {
     func rollFoulDie() -> FoulDieResult
 }
 

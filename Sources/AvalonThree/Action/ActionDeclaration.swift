@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ValidDeclaration: Hashable, Codable {
+public struct ValidDeclaration: Hashable, Codable, Sendable {
     let declaration: ActionDeclaration
     /// Some bonus plays, when available in the player's hand, increase the set of valid
     /// declarations they may make.
@@ -23,7 +23,7 @@ public struct ValidDeclaration: Hashable, Codable {
     let consumesBonusPlays: [BonusPlay]
 }
 
-public struct ActionDeclaration: Hashable, Codable {
+public struct ActionDeclaration: Hashable, Codable, Sendable {
     let playerID: PlayerID
     let actionID: ActionID
 }

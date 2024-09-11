@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Challenge: Codable {
+public enum Challenge: Codable, Sendable {
     // Regular challenges
 
     /// Claim this card if your player made a Block or Foul action and the target was injured.

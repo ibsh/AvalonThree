@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ChallengeCard: Equatable, Codable {
+public struct ChallengeCard: Equatable, Codable, Sendable {
     public let challenge: Challenge
     public let bonusPlay: BonusPlay
 }

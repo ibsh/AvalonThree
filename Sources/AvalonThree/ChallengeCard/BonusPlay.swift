@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum BonusPlay: Codable {
+public enum BonusPlay: Codable, Sendable {
     // Regular bonus plays
 
     /// Play this card before your player makes a Pass action that is a short pass. Treat the

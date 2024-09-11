@@ -49,7 +49,7 @@ extension ConfigTransaction {
         var coinFlipLoserHand = [ChallengeCard]()
         var coinFlipWinnerHand = [ChallengeCard]()
 
-        if let rawTalentBonusRecipientID = config.rawTalentBonusRecipientID {
+        if let rawTalentBonusRecipientID = coinFlipWinnerConfig.rawTalentBonusRecipientID {
             let card = ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
             if rawTalentBonusRecipientID == coinFlipWinnerCoachID {
                 coinFlipWinnerHand.append(card)
