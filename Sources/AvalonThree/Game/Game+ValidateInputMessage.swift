@@ -31,13 +31,13 @@ extension Game {
             throw GameError("Invalid message")
 
         case .specifyCoinFlipWinnerConfig:
-            guard case .coinFlipWinnerConfig = payload else {
+            guard case .specifyCoinFlipWinnerConfig = payload else {
                 throw GameError("Invalid message")
             }
             return
 
         case .specifyCoinFlipLoserConfig:
-            guard case .coinFlipLoserConfig = payload else {
+            guard case .specifyCoinFlipLoserConfig = payload else {
                 throw GameError("Invalid message")
             }
             return
