@@ -12,7 +12,7 @@ struct PassMeasure: Hashable, Codable, Sendable {
     let touchingSquares: Set<Square>
 }
 
-public enum PassDistance: Codable, Sendable {
+public enum PassDistance: String, Codable, Sendable {
     case handoff
     case short
     case long

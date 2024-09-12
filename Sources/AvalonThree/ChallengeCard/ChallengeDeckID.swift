@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ChallengeDeckID: Codable, Sendable {
+public enum ChallengeDeckID: String, Codable, Sendable {
     case shortStandard
     case shortRandomised
     case longStandard

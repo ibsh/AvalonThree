@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum PlayerSpecID: Codable, Sendable {
+public enum PlayerSpecID: String, Codable, Sendable {
     case blackOrc_blackOrc
     case blackOrc_goblin
     case chaos_beastman

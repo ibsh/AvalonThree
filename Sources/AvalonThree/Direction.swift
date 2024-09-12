@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Direction: CaseIterable, Codable, Sendable {
+public enum Direction: String, CaseIterable, Codable, Sendable {
     case north
     case northEast
     case east

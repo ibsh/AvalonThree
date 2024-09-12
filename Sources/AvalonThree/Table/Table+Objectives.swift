@@ -13,7 +13,7 @@ public struct Objectives: Codable, Sendable {
     var third: ChallengeCard?
 }
 
-public enum ObjectiveID: Codable, Sendable {
+public enum ObjectiveID: String, Codable, Sendable {
     case first
     case second
     case third

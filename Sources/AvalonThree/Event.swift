@@ -7,14 +7,16 @@
 
 import Foundation
 
-public enum Die: Equatable, Codable, Sendable {
+public enum Die: String, Equatable, Codable, Sendable {
     case d6
     case d8
 }
 
 public enum Event: Equatable, Codable, Sendable {
 
-    case flippedCoin(CoachID)
+    case flippedCoin(
+        coachID: CoachID
+    )
 
     case coinFlipLoserConfigured(
         config: CoinFlipLoserConfig
@@ -329,18 +331,18 @@ public enum Event: Equatable, Codable, Sendable {
     )
 }
 
-public enum PassRollModification: Hashable, Codable, Sendable {
+public enum PassRollModification: String, Hashable, Codable, Sendable {
     case longDistance
     case obstructed
     case targetPlayerMarked
 }
 
-public enum HurlTeammateRollModification: Hashable, Codable, Sendable {
+public enum HurlTeammateRollModification: String, Hashable, Codable, Sendable {
     case longDistance
     case obstructed
 }
 
-public enum BlockRollModification: Hashable, Codable, Sendable {
+public enum BlockRollModification: String, Hashable, Codable, Sendable {
     case playerThrewBomb
     case playerIsHulkingBrute
     case playerHasMightyBlow
@@ -350,12 +352,12 @@ public enum BlockRollModification: Hashable, Codable, Sendable {
     case opponentHasStandFirm
 }
 
-public enum ArmourRollModification: Hashable, Codable, Sendable {
+public enum ArmourRollModification: String, Hashable, Codable, Sendable {
     case kerrunch
     case absoluteCarnageBonusPlay
 }
 
-public enum PlayerMoveReason: Equatable, Codable, Sendable {
+public enum PlayerMoveReason: String, Equatable, Codable, Sendable {
     case run
     case reserves
     case sidestep
@@ -365,12 +367,12 @@ public enum PlayerMoveReason: Equatable, Codable, Sendable {
     case shadow
 }
 
-public enum PlayerFallDownReason: Equatable, Codable, Sendable {
+public enum PlayerFallDownReason: String, Equatable, Codable, Sendable {
     case blocked
     case divingTackle
 }
 
-public enum PlayerInjuryReason: Equatable, Codable, Sendable {
+public enum PlayerInjuryReason: String, Equatable, Codable, Sendable {
     case blocked
     case fouled
     case fumbled

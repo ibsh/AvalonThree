@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum TeamID: Codable, Sendable {
+public enum TeamID: String, Codable, Sendable {
     case blackOrc
     case chaos
     case darkElf

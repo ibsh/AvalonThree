@@ -16,7 +16,7 @@ extension ConfigTransaction {
         }
 
         let coinFlipWinnerCoachID = randomizers.coachID.flipForCoachID()
-        events.append(.flippedCoin(coinFlipWinnerCoachID))
+        events.append(.flippedCoin(coachID: coinFlipWinnerCoachID))
 
         config.coinFlipWinnerCoachID = coinFlipWinnerCoachID
 
