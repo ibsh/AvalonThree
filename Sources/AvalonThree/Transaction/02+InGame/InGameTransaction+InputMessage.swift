@@ -395,8 +395,8 @@ extension InGameTransaction {
             )
 
         case .begin,
-             .coinFlipWinnerConfig,
-             .coinFlipLoserConfig:
+             .specifyCoinFlipWinnerConfig,
+             .specifyCoinFlipLoserConfig:
             throw GameError("Invalid message for InGameTransaction")
         }
     }

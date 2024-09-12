@@ -45,7 +45,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .coinFlipWinnerConfig(
+                message: .specifyCoinFlipWinnerConfig(
                     config: CoinFlipWinnerConfig(
                         boardSpecID: .barakVarrFoundry,
                         challengeDeckID: .shortStandard,
@@ -63,7 +63,7 @@ struct RawTalentTests {
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .coinFlipLoserConfig(
+                message: .specifyCoinFlipLoserConfig(
                     config: CoinFlipLoserConfig(
                         teamID: .orc
                     )
@@ -188,7 +188,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .coinFlipWinnerConfig(
+                message: .specifyCoinFlipWinnerConfig(
                     config: CoinFlipWinnerConfig(
                         boardSpecID: .barakVarrFoundry,
                         challengeDeckID: .shortStandard,
@@ -206,7 +206,7 @@ struct RawTalentTests {
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .coinFlipLoserConfig(
+                message: .specifyCoinFlipLoserConfig(
                     config: CoinFlipLoserConfig(
                         teamID: .orc
                     )
@@ -331,7 +331,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .coinFlipWinnerConfig(
+                message: .specifyCoinFlipWinnerConfig(
                     config: CoinFlipWinnerConfig(
                         boardSpecID: .barakVarrFoundry,
                         challengeDeckID: .shortStandard,
@@ -349,7 +349,7 @@ struct RawTalentTests {
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .coinFlipLoserConfig(
+                message: .specifyCoinFlipLoserConfig(
                     config: CoinFlipLoserConfig(
                         teamID: .orc
                     )

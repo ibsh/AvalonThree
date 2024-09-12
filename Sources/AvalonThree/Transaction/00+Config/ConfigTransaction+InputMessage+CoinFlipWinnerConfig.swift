@@ -9,7 +9,7 @@ import Foundation
 
 extension ConfigTransaction {
 
-    mutating func coinFlipWinnerConfig(
+    mutating func specifyCoinFlipWinnerConfig(
         coinFlipWinnerConfig: CoinFlipWinnerConfig
     ) throws -> Prompt? {
 
@@ -27,7 +27,7 @@ extension ConfigTransaction {
 
         return Prompt(
             coachID: coinFlipWinnerCoachID.inverse,
-            payload: .coinFlipLoserConfig(
+            payload: .specifyCoinFlipLoserConfig(
                 teamIDs: TeamID.availableCases
             )
         )

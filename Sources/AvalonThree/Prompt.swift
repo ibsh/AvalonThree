@@ -16,13 +16,13 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     // MARK: - Config
 
-    case coinFlipWinnerConfig(
+    case specifyCoinFlipWinnerConfig(
         boardSpecIDs: [BoardSpecID],
         challengeDeckIDs: [ChallengeDeckID],
         teamIDs: [TeamID]
     )
 
-    case coinFlipLoserConfig(
+    case specifyCoinFlipLoserConfig(
         teamIDs: [TeamID]
     )
 

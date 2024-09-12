@@ -17,13 +17,13 @@ extension ConfigTransaction {
         case .begin:
             return try beginGame()
 
-        case .coinFlipWinnerConfig(let config):
-            return try coinFlipWinnerConfig(
+        case .specifyCoinFlipWinnerConfig(let config):
+            return try specifyCoinFlipWinnerConfig(
                 coinFlipWinnerConfig: config
             )
 
-        case .coinFlipLoserConfig(let config):
-            return try coinFlipLoserConfig(
+        case .specifyCoinFlipLoserConfig(let config):
+            return try specifyCoinFlipLoserConfig(
                 coinFlipLoserConfig: config
             )
 

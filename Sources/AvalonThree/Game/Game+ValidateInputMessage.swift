@@ -29,13 +29,14 @@ extension Game {
         switch messageWrapper.message {
         case .begin:
             throw GameError("Invalid message")
-        case .coinFlipWinnerConfig:
+
+        case .specifyCoinFlipWinnerConfig:
             guard case .coinFlipWinnerConfig = payload else {
                 throw GameError("Invalid message")
             }
             return
 
-        case .coinFlipLoserConfig:
+        case .specifyCoinFlipLoserConfig:
             guard case .coinFlipLoserConfig = payload else {
                 throw GameError("Invalid message")
             }

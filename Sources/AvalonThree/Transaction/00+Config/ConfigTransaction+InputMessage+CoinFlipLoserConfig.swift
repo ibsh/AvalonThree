@@ -9,7 +9,7 @@ import Foundation
 
 extension ConfigTransaction {
 
-    mutating func coinFlipLoserConfig(
+    mutating func specifyCoinFlipLoserConfig(
         coinFlipLoserConfig: CoinFlipLoserConfig
     ) throws -> Prompt? {
 
