@@ -7,11 +7,6 @@
 
 import Foundation
 
-public enum Die: String, Equatable, Codable, Sendable {
-    case d6
-    case d8
-}
-
 public enum Event: Equatable, Codable, Sendable {
 
     case flippedCoin(
@@ -331,15 +326,9 @@ public enum Event: Equatable, Codable, Sendable {
     )
 }
 
-public enum PassRollModification: String, Hashable, Codable, Sendable {
-    case longDistance
-    case obstructed
-    case targetPlayerMarked
-}
-
-public enum HurlTeammateRollModification: String, Hashable, Codable, Sendable {
-    case longDistance
-    case obstructed
+public enum ArmourRollModification: String, Hashable, Codable, Sendable {
+    case kerrunch
+    case absoluteCarnageBonusPlay
 }
 
 public enum BlockRollModification: String, Hashable, Codable, Sendable {
@@ -352,19 +341,26 @@ public enum BlockRollModification: String, Hashable, Codable, Sendable {
     case opponentHasStandFirm
 }
 
-public enum ArmourRollModification: String, Hashable, Codable, Sendable {
-    case kerrunch
-    case absoluteCarnageBonusPlay
+public enum Die: String, Equatable, Codable, Sendable {
+    case d6
+    case d8
 }
 
-public enum PlayerMoveReason: String, Equatable, Codable, Sendable {
-    case run
-    case reserves
-    case sidestep
-    case mark
-    case shoved
-    case followUp
-    case shadow
+public enum EndConditions: Equatable, Codable, Sendable {
+    case suddenDeath(CoachID)
+    case clock(CoachID)
+    case tie
+}
+
+public enum HurlTeammateRollModification: String, Hashable, Codable, Sendable {
+    case longDistance
+    case obstructed
+}
+
+public enum PassRollModification: String, Hashable, Codable, Sendable {
+    case longDistance
+    case obstructed
+    case targetPlayerMarked
 }
 
 public enum PlayerFallDownReason: String, Equatable, Codable, Sendable {
@@ -379,8 +375,12 @@ public enum PlayerInjuryReason: String, Equatable, Codable, Sendable {
     case trapdoor
 }
 
-public enum EndConditions: Equatable, Codable, Sendable {
-    case suddenDeath(CoachID)
-    case clock(CoachID)
-    case tie
+public enum PlayerMoveReason: String, Equatable, Codable, Sendable {
+    case run
+    case reserves
+    case sidestep
+    case mark
+    case shoved
+    case followUp
+    case shadow
 }
