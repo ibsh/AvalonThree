@@ -14,9 +14,9 @@ extension SetupTransaction {
         return Prompt(
             coachID: table.coinFlipLoserCoachID,
             payload: .arrangePlayers(
-                playerConfigs: table.config.coinFlipLoserTeamID
-                    .spec
-                    .playerConfigs(coachID: table.coinFlipLoserCoachID)
+                playerConfigs: table.config.coinFlipLoserTeamID.spec.playerConfigs(
+                    coachID: table.coinFlipLoserCoachID
+                )
             )
         )
     }

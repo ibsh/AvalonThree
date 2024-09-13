@@ -100,13 +100,20 @@ public enum Challenge: String, Codable, Sendable {
 
     /// Claim this card if your player has made three or more Actions (not free actions) this turn.
     case showThemHowItsDone
+
+    // Fake challenges
+
+    /// This card can never be claimed as an objective, it's just to give to a new player for a free
+    /// reroll.
+    case rookieBonus
 }
 
 extension Challenge {
     var scoreIncrement: Int {
         switch self {
         case .lastChance,
-             .showSomeGrit:
+             .showSomeGrit,
+             .rookieBonus:
             return 0
         case .getTheBall,
              .getTogether,
@@ -158,7 +165,8 @@ extension Challenge {
              .playAsATeam,
              .showOffALittle,
              .showSomeGrit,
-             .showThemHowItsDone:
+             .showThemHowItsDone,
+             .rookieBonus:
             true
         case .moveTheBall,
              .breakTheirLines,

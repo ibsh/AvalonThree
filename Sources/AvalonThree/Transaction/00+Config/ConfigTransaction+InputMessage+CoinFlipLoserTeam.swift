@@ -67,14 +67,14 @@ extension ConfigTransaction {
         var coinFlipLoserHand = [ChallengeCard]()
         var coinFlipWinnerHand = [ChallengeCard]()
 
-        let rawTalentBonusPlay = ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+        let rookieBonusCard = ChallengeCard(challenge: .rookieBonus, bonusPlay: .rawTalent)
         switch rookieBonusRecipientID {
         case .noOne:
             break
         case .coinFlipLoser:
-            coinFlipLoserHand.append(rawTalentBonusPlay)
+            coinFlipLoserHand.append(rookieBonusCard)
         case .coinFlipWinner:
-            coinFlipWinnerHand.append(rawTalentBonusPlay)
+            coinFlipWinnerHand.append(rookieBonusCard)
         }
 
         events.append(

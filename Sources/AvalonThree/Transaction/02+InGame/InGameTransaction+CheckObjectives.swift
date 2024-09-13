@@ -102,6 +102,7 @@ extension InGameTransaction {
         case .showOffALittle: try canClaimShowOffALittle(turnContext, lastActionContext)
         case .showSomeGrit: try canClaimShowSomeGrit(turnContext, lastActionContext)
         case .showThemHowItsDone: try canClaimShowThemHowItsDone(turnContext, lastActionContext)
+        case .rookieBonus: throw GameError("The rookie bonus card should never be an objective")
         }
     }
 
