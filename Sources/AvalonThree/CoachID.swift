@@ -13,7 +13,7 @@ public enum CoachID: String, CaseIterable, Codable, Sendable {
 }
 
 extension CoachID {
-    var inverse: CoachID {
+    public var inverse: CoachID {
         switch self {
         case .home: return .away
         case .away: return .home
