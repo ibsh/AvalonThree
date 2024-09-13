@@ -21,15 +21,11 @@ struct EtherealTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .necromantic
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .necromantic
                     ),
                     players: [
                         Player(
@@ -222,15 +218,11 @@ struct EtherealTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .necromantic
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .necromantic
                     ),
                     players: [
                         Player(
@@ -382,15 +374,11 @@ struct EtherealTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .necromantic
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .necromantic
                     ),
                     players: [
                         Player(
@@ -541,15 +529,11 @@ struct EtherealTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .necromantic
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .necromantic
                     ),
                     players: [
                         Player(
@@ -701,15 +685,11 @@ struct EtherealTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .necromantic
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .necromantic
                     ),
                     players: [
                         Player(

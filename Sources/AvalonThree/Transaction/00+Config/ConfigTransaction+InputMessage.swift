@@ -17,14 +17,29 @@ extension ConfigTransaction {
         case .begin:
             return try beginGame()
 
-        case .specifyCoinFlipWinnerConfig(let config):
-            return try specifyCoinFlipWinnerConfig(
-                coinFlipWinnerConfig: config
+        case .specifyBoardSpec(let boardSpecID):
+            return try specifyBoardSpec(
+                boardSpecID: boardSpecID
             )
 
-        case .specifyCoinFlipLoserConfig(let config):
-            return try specifyCoinFlipLoserConfig(
-                coinFlipLoserConfig: config
+        case .specifyChallengeDeck(let challengeDeckID):
+            return try specifyChallengeDeck(
+                challengeDeckID: challengeDeckID
+            )
+
+        case .specifyRookieBonusRecipient(let rookieBonusRecipientID):
+            return try specifyRookieBonusRecipient(
+                rookieBonusRecipientID: rookieBonusRecipientID
+            )
+
+        case .specifyCoinFlipWinnerTeam(let teamID):
+            return try specifyCoinFlipWinnerTeam(
+                teamID: teamID
+            )
+
+        case .specifyCoinFlipLoserTeam(let teamID):
+            return try specifyCoinFlipLoserTeam(
+                teamID: teamID
             )
 
         case .arrangePlayers,

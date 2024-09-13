@@ -21,15 +21,11 @@ struct ShowSomeGritTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .halfling,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .human
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .halfling,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
@@ -319,15 +315,11 @@ struct ShowSomeGritTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .halfling,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .human
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .halfling,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
@@ -671,15 +663,11 @@ struct ShowSomeGritTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .halfling,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .human
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .halfling,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(

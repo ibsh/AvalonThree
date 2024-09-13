@@ -12,8 +12,11 @@ public enum InputMessage: Codable, Sendable {
     // MARK: - Config
 
     case begin
-    case specifyCoinFlipWinnerConfig(config: CoinFlipWinnerConfig)
-    case specifyCoinFlipLoserConfig(config: CoinFlipLoserConfig)
+    case specifyBoardSpec(boardSpecID: BoardSpecID)
+    case specifyChallengeDeck(challengeDeckID: ChallengeDeckID)
+    case specifyRookieBonusRecipient(rookieBonusRecipientID: RookieBonusRecipientID)
+    case specifyCoinFlipWinnerTeam(teamID: TeamID)
+    case specifyCoinFlipLoserTeam(teamID: TeamID)
 
     // MARK: - Table config
 

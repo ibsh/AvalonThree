@@ -24,15 +24,11 @@ struct MakeARiskyPassTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .orc
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .orc
                     ),
                     players: [
                         Player(
@@ -227,15 +223,11 @@ struct MakeARiskyPassTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .orc
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .orc
                     ),
                     players: [
                         Player(
@@ -428,15 +420,11 @@ struct MakeARiskyPassTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .orc
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .orc
                     ),
                     players: [
                         Player(
@@ -650,15 +638,11 @@ struct MakeARiskyPassTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .halfling
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .halfling
                     ),
                     players: [
                         Player(
@@ -999,15 +983,11 @@ struct MakeARiskyPassTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .halfling
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .halfling
                     ),
                     players: [
                         Player(
@@ -1358,15 +1338,11 @@ struct MakeARiskyPassTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .halfling
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .halfling
                     ),
                     players: [
                         // We need a fake treeman who's better at throwing, so we can test

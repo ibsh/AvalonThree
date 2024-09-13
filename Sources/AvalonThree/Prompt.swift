@@ -16,13 +16,23 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     // MARK: - Config
 
-    case specifyCoinFlipWinnerConfig(
-        boardSpecIDs: [BoardSpecID],
-        challengeDeckIDs: [ChallengeDeckID],
+    case specifyBoardSpec(
+        boardSpecIDs: [BoardSpecID]
+    )
+
+    case specifyChallengeDeck(
+        challengeDeckIDs: [ChallengeDeckID]
+    )
+
+    case specifyRookieBonusRecipient(
+        rookieBonusRecipientIDs: [RookieBonusRecipientID]
+    )
+
+    case specifyCoinFlipWinnerTeam(
         teamIDs: [TeamID]
     )
 
-    case specifyCoinFlipLoserConfig(
+    case specifyCoinFlipLoserTeam(
         teamIDs: [TeamID]
     )
 
@@ -69,9 +79,6 @@ public enum PromptPayload: Equatable, Codable, Sendable {
         playerID: PlayerID
     )
 
-    /// This is an exception to the principle that all prompts should have a closed series of
-    /// options, since it's a massive list of squares and kind of pointless to compute in
-    /// advance. Just let the client allow the user to specify their run square by square.
     case runActionSpecifySquares(
         playerID: PlayerID,
         maxRunDistance: Int,

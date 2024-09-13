@@ -21,15 +21,11 @@ struct LegUpTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .undead
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .undead
                     ),
                     players: [
                         Player(
@@ -237,15 +233,11 @@ struct LegUpTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .undead
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .undead
                     ),
                     players: [
                         Player(
@@ -457,15 +449,11 @@ struct LegUpTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .human,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .undead
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .undead
                     ),
                     players: [
                         Player(

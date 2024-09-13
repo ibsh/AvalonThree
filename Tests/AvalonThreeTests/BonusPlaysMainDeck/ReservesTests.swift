@@ -21,15 +21,11 @@ struct ReservesTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .orc,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .human
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .orc,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
@@ -347,15 +343,11 @@ struct ReservesTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .orc,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .human
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .orc,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
@@ -598,15 +590,11 @@ struct ReservesTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .orc,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .human
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .orc,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
@@ -1036,15 +1024,11 @@ struct ReservesTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                            boardSpecID: .whiteWolfHolm,
-                            challengeDeckID: .shortStandard,
-                            teamID: .orc,
-                            rawTalentBonusRecipientID: nil
-                        ),
-                        coinFlipLoserConfig: CoinFlipLoserConfig(
-                            teamID: .human
-                        )
+                        boardSpecID: .whiteWolfHolm,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .orc,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(

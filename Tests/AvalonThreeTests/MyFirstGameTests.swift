@@ -55,14 +55,14 @@ struct MyFirstGameTests {
 
         #expect(
             latestEvents == [
-                .flippedCoin(.home)
+                .flippedCoin(coachID: .home)
             ]
         )
 
         #expect(
             latestPayload == Prompt(
                 coachID: .home,
-                payload: .specifyCoinFlipWinnerConfig(
+                payload: .specifyBoardSpec(
                     boardSpecIDs: [
                         .whiteWolfHolm,
                         .altdorfOldTown,
@@ -70,13 +70,88 @@ struct MyFirstGameTests {
                         .ghrondGridiron,
                         .oghamStoneCrush,
                         .bilbaliHarbor,
-                    ],
+                    ]
+                )
+            )
+        )
+
+        // MARK: - Second coach config
+
+        (latestEvents, latestPayload) = try game.process(
+            InputMessageWrapper(
+                coachID: .home,
+                message: .specifyBoardSpec(boardSpecID: .whiteWolfHolm)
+            )
+        )
+
+        #expect(
+            latestEvents == [
+                .specifiedBoardSpec(boardSpecID: .whiteWolfHolm)
+            ]
+        )
+
+        #expect(
+            latestPayload == Prompt(
+                coachID: .home,
+                payload: .specifyChallengeDeck(
                     challengeDeckIDs: [
                         .shortStandard,
                         .shortRandomised,
                         .longStandard,
                         .longRandomised,
-                    ],
+                    ]
+                )
+            )
+        )
+
+        // MARK: - Second coach config
+
+        (latestEvents, latestPayload) = try game.process(
+            InputMessageWrapper(
+                coachID: .home,
+                message: .specifyChallengeDeck(challengeDeckID: .shortStandard)
+            )
+        )
+
+        #expect(
+            latestEvents == [
+                .specifiedChallengeDeck(challengeDeckID: .shortStandard)
+            ]
+        )
+
+        #expect(
+            latestPayload == Prompt(
+                coachID: .home,
+                payload: .specifyRookieBonusRecipient(
+                    rookieBonusRecipientIDs: [
+                        .noOne,
+                        .coinFlipLoser,
+                        .coinFlipWinner,
+                    ]
+                )
+            )
+        )
+
+        // MARK: - Second coach config
+
+        (latestEvents, latestPayload) = try game.process(
+            InputMessageWrapper(
+                coachID: .home,
+                message: .specifyRookieBonusRecipient(rookieBonusRecipientID: .noOne)
+            )
+        )
+
+
+        #expect(
+            latestEvents == [
+                .specifiedRookieBonusRecipient(rookieBonusRecipientID: .noOne)
+            ]
+        )
+
+        #expect(
+            latestPayload == Prompt(
+                coachID: .home,
+                payload: .specifyCoinFlipWinnerTeam(
                     teamIDs: [
                         .blackOrc,
                         .chaos,
@@ -107,34 +182,20 @@ struct MyFirstGameTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .specifyCoinFlipWinnerConfig(
-                    config: CoinFlipWinnerConfig(
-                        boardSpecID: .whiteWolfHolm,
-                        challengeDeckID: .shortStandard,
-                        teamID: .skaven,
-                        rawTalentBonusRecipientID: nil
-                    )
-                )
+                message: .specifyCoinFlipWinnerTeam(teamID: .skaven)
             )
         )
 
         #expect(
             latestEvents == [
-                .coinFlipWinnerConfigured(
-                    config: CoinFlipWinnerConfig(
-                        boardSpecID: .whiteWolfHolm,
-                        challengeDeckID: .shortStandard,
-                        teamID: .skaven,
-                        rawTalentBonusRecipientID: nil
-                    )
-                )
+                .specifiedCoinFlipWinnerTeam(teamID: .skaven)
             ]
         )
 
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .specifyCoinFlipLoserConfig(
+                payload: .specifyCoinFlipLoserTeam(
                     teamIDs: [
                         .blackOrc,
                         .chaos,
@@ -167,21 +228,13 @@ struct MyFirstGameTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyCoinFlipLoserConfig(
-                    config: CoinFlipLoserConfig(
-                        teamID: .human
-                    )
-                )
+                message: .specifyCoinFlipLoserTeam(teamID: .human)
             )
         )
 
         #expect(
             latestEvents == [
-                .coinFlipLoserConfigured(
-                    config: CoinFlipLoserConfig(
-                        teamID: .human
-                    )
-                ),
+                .specifiedCoinFlipLoserTeam(teamID: .human),
                 .tableWasSetUp(
                     playerConfigs: [
                         PlayerConfig(

@@ -7,26 +7,21 @@
 
 import Foundation
 
-/// "Coin flip winner" == "Second coach"
+/// Coin flip winner will ultimately take the second turn
 struct Config: Equatable, Codable, Sendable {
     var coinFlipWinnerCoachID: CoachID?
-    var coinFlipWinnerConfig: CoinFlipWinnerConfig?
-    var coinFlipLoserConfig: CoinFlipLoserConfig?
-}
-
-public struct CoinFlipWinnerConfig: Equatable, Codable, Sendable {
-    let boardSpecID: BoardSpecID
-    let challengeDeckID: ChallengeDeckID
-    let teamID: TeamID
-    let rawTalentBonusRecipientID: CoachID?
-}
-
-public struct CoinFlipLoserConfig: Equatable, Codable, Sendable {
-    let teamID: TeamID
+    var boardSpecID: BoardSpecID?
+    var challengeDeckID: ChallengeDeckID?
+    var rookieBonusRecipientID: RookieBonusRecipientID?
+    var coinFlipWinnerTeamID: TeamID?
+    var coinFlipLoserTeamID: TeamID?
 }
 
 struct FinalizedConfig: Equatable, Codable, Sendable {
     let coinFlipWinnerCoachID: CoachID
-    let coinFlipWinnerConfig: CoinFlipWinnerConfig
-    let coinFlipLoserConfig: CoinFlipLoserConfig
+    let boardSpecID: BoardSpecID
+    let challengeDeckID: ChallengeDeckID
+    let rookieBonusRecipientID: RookieBonusRecipientID
+    let coinFlipWinnerTeamID: TeamID
+    let coinFlipLoserTeamID: TeamID
 }

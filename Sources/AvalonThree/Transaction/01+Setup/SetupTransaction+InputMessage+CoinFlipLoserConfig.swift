@@ -9,15 +9,12 @@ import Foundation
 
 extension SetupTransaction {
 
-    mutating func specifyCoinFlipLoserConfig(
-        coinFlipLoserConfig: CoinFlipLoserConfig
-    ) throws -> Prompt? {
+    mutating func specifyCoinFlipLoserTeam() throws -> Prompt? {
 
         return Prompt(
             coachID: table.coinFlipLoserCoachID,
             payload: .arrangePlayers(
-                playerConfigs: coinFlipLoserConfig
-                    .teamID
+                playerConfigs: table.config.coinFlipLoserTeamID
                     .spec
                     .playerConfigs(coachID: table.coinFlipLoserCoachID)
             )

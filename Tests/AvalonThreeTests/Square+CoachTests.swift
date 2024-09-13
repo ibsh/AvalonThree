@@ -13,15 +13,11 @@ struct SquareCoachTests {
     private let table = Table(
         config: FinalizedConfig(
             coinFlipWinnerCoachID: .home,
-            coinFlipWinnerConfig: CoinFlipWinnerConfig(
-                boardSpecID: .bilbaliHarbor,
-                challengeDeckID: .longRandomised,
-                teamID: .darkElf,
-                rawTalentBonusRecipientID: nil
-            ),
-            coinFlipLoserConfig: CoinFlipLoserConfig(
-                teamID: .woodElf
-            )
+            boardSpecID: .bilbaliHarbor,
+            challengeDeckID: .longRandomised,
+            rookieBonusRecipientID: .noOne,
+            coinFlipWinnerTeamID: .darkElf,
+            coinFlipLoserTeamID: .woodElf
         ),
         players: [],
         coinFlipLoserHand: [],

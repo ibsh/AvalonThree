@@ -13,12 +13,24 @@ public enum Event: Equatable, Codable, Sendable {
         coachID: CoachID
     )
 
-    case coinFlipLoserConfigured(
-        config: CoinFlipLoserConfig
+    case specifiedBoardSpec(
+        boardSpecID: BoardSpecID
     )
 
-    case coinFlipWinnerConfigured(
-        config: CoinFlipWinnerConfig
+    case specifiedChallengeDeck(
+        challengeDeckID: ChallengeDeckID
+    )
+
+    case specifiedRookieBonusRecipient(
+        rookieBonusRecipientID: RookieBonusRecipientID
+    )
+
+    case specifiedCoinFlipWinnerTeam(
+        teamID: TeamID
+    )
+
+    case specifiedCoinFlipLoserTeam(
+        teamID: TeamID
     )
 
     case tableWasSetUp(

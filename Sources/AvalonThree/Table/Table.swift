@@ -39,14 +39,14 @@ extension Table {
     }
 
     var coinFlipLoserTeamID: TeamID {
-        config.coinFlipLoserConfig.teamID
+        config.coinFlipLoserTeamID
     }
 
     var coinFlipWinnerTeamID: TeamID {
-        config.coinFlipWinnerConfig.teamID
+        config.coinFlipWinnerTeamID
     }
 
     var boardSpecID: BoardSpecID {
-        config.coinFlipWinnerConfig.boardSpecID
+        config.boardSpecID
     }
 }

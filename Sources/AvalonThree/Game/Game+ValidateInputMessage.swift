@@ -30,14 +30,32 @@ extension Game {
         case .begin:
             throw GameError("Invalid message")
 
-        case .specifyCoinFlipWinnerConfig:
-            guard case .specifyCoinFlipWinnerConfig = payload else {
+        case .specifyBoardSpec:
+            guard case .specifyBoardSpec = payload else {
                 throw GameError("Invalid message")
             }
             return
 
-        case .specifyCoinFlipLoserConfig:
-            guard case .specifyCoinFlipLoserConfig = payload else {
+        case .specifyChallengeDeck:
+            guard case .specifyChallengeDeck = payload else {
+                throw GameError("Invalid message")
+            }
+            return
+
+        case .specifyRookieBonusRecipient:
+            guard case .specifyRookieBonusRecipient = payload else {
+                throw GameError("Invalid message")
+            }
+            return
+
+        case .specifyCoinFlipWinnerTeam:
+            guard case .specifyCoinFlipWinnerTeam = payload else {
+                throw GameError("Invalid message")
+            }
+            return
+
+        case .specifyCoinFlipLoserTeam:
+            guard case .specifyCoinFlipLoserTeam = payload else {
                 throw GameError("Invalid message")
             }
             return

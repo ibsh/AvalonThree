@@ -395,8 +395,11 @@ extension InGameTransaction {
             )
 
         case .begin,
-             .specifyCoinFlipWinnerConfig,
-             .specifyCoinFlipLoserConfig:
+             .specifyBoardSpec,
+             .specifyChallengeDeck,
+             .specifyRookieBonusRecipient,
+             .specifyCoinFlipWinnerTeam,
+             .specifyCoinFlipLoserTeam:
             throw GameError("Invalid message for InGameTransaction")
         }
     }

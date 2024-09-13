@@ -14,10 +14,8 @@ extension SetupTransaction {
     ) throws -> Prompt? {
 
         switch messageWrapper.message {
-        case .specifyCoinFlipLoserConfig(let config):
-            return try specifyCoinFlipLoserConfig(
-                coinFlipLoserConfig: config
-            )
+        case .specifyCoinFlipLoserTeam:
+            return try specifyCoinFlipLoserTeam()
 
         case .arrangePlayers(let playerPositions):
             return try arrangePlayers(
@@ -26,7 +24,10 @@ extension SetupTransaction {
             )
 
         case .begin,
-             .specifyCoinFlipWinnerConfig,
+             .specifyBoardSpec,
+             .specifyChallengeDeck,
+             .specifyRookieBonusRecipient,
+             .specifyCoinFlipWinnerTeam,
              .declarePlayerAction,
              .declareEmergencyReservesAction,
              .useRegenerationSkillStandUpAction,
