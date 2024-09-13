@@ -133,7 +133,7 @@ struct AbsolutelyNailsTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -319,7 +319,7 @@ struct AbsolutelyNailsTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)

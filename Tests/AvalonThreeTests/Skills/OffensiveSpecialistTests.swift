@@ -161,7 +161,7 @@ struct OffensiveSpecialistTests {
         #expect(
             latestEvents == [
                 .declinedOffensiveSpecialistSkillReroll(playerID: PlayerID(coachID: .away, index: 0)),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -394,7 +394,7 @@ struct OffensiveSpecialistTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)

@@ -111,6 +111,7 @@ public enum Event: Equatable, Codable, Sendable {
     )
 
     case selectedBlockDieResult(
+        coachID: CoachID,
         result: BlockDieResult
     )
 
@@ -119,6 +120,7 @@ public enum Event: Equatable, Codable, Sendable {
     )
 
     case selectedLooseBallDirection(
+        coachID: CoachID,
         direction: Direction
     )
 

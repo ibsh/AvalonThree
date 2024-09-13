@@ -4286,7 +4286,7 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .away, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 5),
                     square: sq(7, 7)

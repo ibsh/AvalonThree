@@ -912,7 +912,7 @@ struct BlockingPlayTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.smash, .smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(6, 7)
@@ -1077,7 +1077,7 @@ struct BlockingPlayTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .home, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .home, index: 0),
                     square: sq(7, 6)

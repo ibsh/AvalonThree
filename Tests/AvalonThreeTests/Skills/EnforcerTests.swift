@@ -148,7 +148,7 @@ struct EnforcerTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch, .tackle, .shove]),
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .away, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -167,7 +167,7 @@ struct EnforcerTests {
                     square: sq(1, 6),
                     reason: .followUp
                 ),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
                 .ballCameLoose(ballID: ballID),
                 .rolledForDirection(direction: .east),
@@ -178,7 +178,7 @@ struct EnforcerTests {
                 ),
                 .rolledForArmour(die: .d6, unmodified: 4),
                 .changedArmourResult(die: .d6, modified: 3, modifications: [.kerrunch]),
-                .selectedBlockDieResult(result: .tackle),
+                .selectedBlockDieResult(coachID: .away, result: .tackle),
                 .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
                 .rolledForArmour(die: .d6, unmodified: 2),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
@@ -360,7 +360,7 @@ struct EnforcerTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.miss, .smash, .smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -375,8 +375,8 @@ struct EnforcerTests {
                 .ballBounced(ballID: ballID, to: sq(1, 7)),
                 .rolledForArmour(die: .d6, unmodified: 2),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .selectedBlockDieResult(result: .smash),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
             ]
         )

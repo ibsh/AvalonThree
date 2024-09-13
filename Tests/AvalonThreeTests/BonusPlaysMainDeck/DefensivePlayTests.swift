@@ -1163,7 +1163,7 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.miss]),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(3, 8)
@@ -1771,7 +1771,7 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.miss, .miss]),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(3, 8)
@@ -2460,7 +2460,7 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 1),
                     square: sq(10, 8)
@@ -2710,7 +2710,7 @@ struct DefensivePlayTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(playerID: PlayerID(coachID: .away, index: 0), square: sq(4, 7)),
                 .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
                 .rolledForArmour(die: .d6, unmodified: 6)

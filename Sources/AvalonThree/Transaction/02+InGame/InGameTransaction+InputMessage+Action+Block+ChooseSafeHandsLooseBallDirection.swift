@@ -48,7 +48,9 @@ extension InGameTransaction {
             throw GameError("No loose ball to bounce")
         }
 
-        events.append(.selectedLooseBallDirection(direction: direction))
+        events.append(
+            .selectedLooseBallDirection(coachID: targetPlayerID.coachID, direction: direction)
+        )
 
         try bounceBall(id: newBallID, direction: direction)
 

@@ -130,7 +130,7 @@ struct ClawsTests {
             latestEvents == [
                 .rolledForClaws(result: 5),
                 .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)

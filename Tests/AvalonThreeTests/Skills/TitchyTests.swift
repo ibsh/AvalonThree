@@ -481,7 +481,7 @@ struct TitchyTests {
             latestEvents == [
                 .rolledForBlock(results: [.tackle]),
                 .changedBlockResults(results: [.miss], modifications: [.playerIsTitchy]),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)

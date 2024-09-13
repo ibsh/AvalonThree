@@ -444,7 +444,7 @@ struct FrenziedTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .away, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -970,7 +970,7 @@ struct FrenziedTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.miss]),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)

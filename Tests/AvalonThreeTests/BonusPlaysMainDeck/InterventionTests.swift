@@ -1633,7 +1633,7 @@ struct InterventionTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .home, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .home, index: 0),
                     square: sq(4, 13)
@@ -2076,7 +2076,7 @@ struct InterventionTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .home, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .home, index: 0),
                     square: sq(4, 13)

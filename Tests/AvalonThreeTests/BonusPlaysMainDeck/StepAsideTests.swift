@@ -138,7 +138,7 @@ struct StepAsideTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(0, 7)
@@ -349,7 +349,7 @@ struct StepAsideTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(0, 6)

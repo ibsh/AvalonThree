@@ -130,7 +130,7 @@ struct HandlingSkillsTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .away, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)

@@ -136,7 +136,7 @@ struct SafeHandsTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(3, 4)
@@ -174,7 +174,7 @@ struct SafeHandsTests {
 
         #expect(
             latestEvents == [
-                .selectedLooseBallDirection(direction: .east),
+                .selectedLooseBallDirection(coachID: .home, direction: .east),
                 .ballBounced(ballID: ballID, to: sq(4, 4)),
                 .rolledForArmour(die: .d6, unmodified: 6),
             ]

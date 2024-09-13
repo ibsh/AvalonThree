@@ -445,7 +445,7 @@ struct DivingTackleTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .away, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -738,7 +738,7 @@ struct DivingTackleTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -995,7 +995,7 @@ struct DivingTackleTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.miss]),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -1265,7 +1265,7 @@ struct DivingTackleTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -1531,7 +1531,7 @@ struct DivingTackleTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -1803,7 +1803,7 @@ struct DivingTackleTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.miss, .smash, .smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -1815,8 +1815,8 @@ struct DivingTackleTests {
                 .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
                 .rolledForArmour(die: .d6, unmodified: 2),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .selectedBlockDieResult(result: .smash),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
                 .playerFellDown(playerID: PlayerID(coachID: .away, index: 0), reason: .divingTackle),
                 .ballCameLoose(ballID: ballID),

@@ -186,7 +186,7 @@ struct DiscardFromHandTests {
             latestEvents == [
                 .usedOffensiveSpecialistSkillReroll(playerID: PlayerID(coachID: .away, index: 0)),
                 .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(7, 6)
@@ -757,7 +757,7 @@ struct DiscardFromHandTests {
             latestEvents == [
                 .usedOffensiveSpecialistSkillReroll(playerID: PlayerID(coachID: .away, index: 0)),
                 .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(7, 6)

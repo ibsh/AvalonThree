@@ -308,7 +308,7 @@ struct LastChanceTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(3, 11)
@@ -460,7 +460,7 @@ struct LastChanceTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.miss]),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(3, 11)

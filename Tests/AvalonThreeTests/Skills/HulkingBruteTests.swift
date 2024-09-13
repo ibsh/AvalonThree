@@ -409,7 +409,7 @@ struct HulkingBruteTests {
             latestEvents == [
                 .rolledForBlock(results: [.tackle]),
                 .changedBlockResults(results: [.miss], modifications: [.opponentIsHulkingBrute]),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(3, 6)

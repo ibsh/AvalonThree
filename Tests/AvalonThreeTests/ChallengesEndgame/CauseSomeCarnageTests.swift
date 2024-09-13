@@ -146,7 +146,7 @@ struct CauseSomeCarnageTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 7)
@@ -244,7 +244,7 @@ struct CauseSomeCarnageTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 1),
                     square: sq(5, 7)
@@ -423,7 +423,7 @@ struct CauseSomeCarnageTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.miss]),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 7)
@@ -511,7 +511,7 @@ struct CauseSomeCarnageTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 1),
                     square: sq(5, 7)
@@ -684,7 +684,7 @@ struct CauseSomeCarnageTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 7)
@@ -788,7 +788,7 @@ struct CauseSomeCarnageTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 1),
                     square: sq(5, 7)

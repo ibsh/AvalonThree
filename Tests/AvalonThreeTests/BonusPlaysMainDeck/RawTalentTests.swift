@@ -1758,7 +1758,7 @@ struct RawTalentTests {
             latestEvents == [
                 .revealedInstantBonusPlay(coachID: .away, bonusPlay: .rawTalent),
                 .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .away, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -1935,7 +1935,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -2126,7 +2126,7 @@ struct RawTalentTests {
         #expect(
             latestEvents == [
                 .declinedOffensiveSpecialistSkillReroll(playerID: PlayerID(coachID: .away, index: 0)),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -2361,7 +2361,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -2584,7 +2584,7 @@ struct RawTalentTests {
             latestEvents == [
                 .revealedInstantBonusPlay(coachID: .away, bonusPlay: .rawTalent),
                 .rolledForBlock(results: [.smash, .kerrunch, .smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -2603,8 +2603,8 @@ struct RawTalentTests {
                 ),
                 .rolledForArmour(die: .d6, unmodified: 1),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .selectedBlockDieResult(result: .smash),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
             ]
         )
 
@@ -2807,7 +2807,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .away, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
@@ -2826,13 +2826,13 @@ struct RawTalentTests {
                     square: sq(1, 6),
                     reason: .followUp
                 ),
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .away, result: .shove),
                 .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
                 .ballCameLoose(ballID: ballID),
                 .rolledForDirection(direction: Direction.south),
                 .ballBounced(ballID: ballID, to: sq(0, 7)),
                 .rolledForArmour(die: .d6, unmodified: 3),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0))
             ]
         )
@@ -3224,7 +3224,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(result: .tackle),
+                .selectedBlockDieResult(coachID: .away, result: .tackle),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -3408,7 +3408,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(result: .shove),
+                .selectedBlockDieResult(coachID: .away, result: .shove),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -3560,7 +3560,7 @@ struct RawTalentTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -3754,7 +3754,7 @@ struct RawTalentTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -3937,7 +3937,7 @@ struct RawTalentTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)

@@ -151,7 +151,7 @@ struct BodyCheckTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .bodyCheck),
                 .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(result: .kerrunch),
+                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)
@@ -332,7 +332,7 @@ struct BodyCheckTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(result: .smash),
+                .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(2, 6)

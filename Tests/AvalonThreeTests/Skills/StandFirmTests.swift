@@ -134,7 +134,7 @@ struct StandFirmTests {
             latestEvents == [
                 .rolledForBlock(results: [.shove]),
                 .changedBlockResults(results: [.miss], modifications: [.opponentHasStandFirm]),
-                .selectedBlockDieResult(result: .miss),
+                .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(3, 6)
