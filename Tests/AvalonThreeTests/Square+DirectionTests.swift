@@ -79,42 +79,100 @@ struct SquareDirectionTests {
     }
 
     @Test func testInvalidDirectionToEqual() async throws {
-        #expect(sq(5, 5).directionTo(sq(5, 5)) == nil)
+        #expect(sq(5, 5).direction(to: sq(5, 5)) == nil)
     }
 
     @Test func testInvalidDirectionToNotAdjacent() async throws {
-        #expect(sq(5, 5).directionTo(sq(5, 7)) == nil)
+        #expect(sq(5, 5).direction(to: sq(5, 7)) == nil)
     }
 
     @Test func testValidDirectionToNorth() async throws {
-        #expect(sq(5, 5).directionTo(sq(5, 4)) == .north)
+        #expect(sq(5, 5).direction(to: sq(5, 4)) == .north)
     }
 
     @Test func testValidDirectionToNorthEast() async throws {
-        #expect(sq(5, 5).directionTo(sq(6, 4)) == .northEast)
+        #expect(sq(5, 5).direction(to: sq(6, 4)) == .northEast)
     }
 
     @Test func testValidDirectionToEast() async throws {
-        #expect(sq(5, 5).directionTo(sq(6, 5)) == .east)
+        #expect(sq(5, 5).direction(to: sq(6, 5)) == .east)
     }
 
     @Test func testValidDirectionToSouthEast() async throws {
-        #expect(sq(5, 5).directionTo(sq(6, 6)) == .southEast)
+        #expect(sq(5, 5).direction(to: sq(6, 6)) == .southEast)
     }
 
     @Test func testValidDirectionToSouth() async throws {
-        #expect(sq(5, 5).directionTo(sq(5, 6)) == .south)
+        #expect(sq(5, 5).direction(to: sq(5, 6)) == .south)
     }
 
     @Test func testValidDirectionToSouthWest() async throws {
-        #expect(sq(5, 5).directionTo(sq(4, 6)) == .southWest)
+        #expect(sq(5, 5).direction(to: sq(4, 6)) == .southWest)
     }
 
     @Test func testValidDirectionToWest() async throws {
-        #expect(sq(5, 5).directionTo(sq(4, 5)) == .west)
+        #expect(sq(5, 5).direction(to: sq(4, 5)) == .west)
     }
 
     @Test func testValidDirectionToNorthWest() async throws {
-        #expect(sq(5, 5).directionTo(sq(4, 4)) == .northWest)
+        #expect(sq(5, 5).direction(to: sq(4, 4)) == .northWest)
+    }
+
+    @Test func testInvalidVisualDirectionToEqual() async throws {
+        #expect(sq(5, 5).visualDirection(to: sq(5, 5)) == nil)
+    }
+
+    @Test func testValidVisualDirectionToAdjacent() async throws {
+        #expect(sq(5, 5).visualDirection(to: sq(5, 4)) == .north)
+        #expect(sq(5, 5).visualDirection(to: sq(6, 4)) == .northEast)
+        #expect(sq(5, 5).visualDirection(to: sq(6, 5)) == .east)
+        #expect(sq(5, 5).visualDirection(to: sq(6, 6)) == .southEast)
+        #expect(sq(5, 5).visualDirection(to: sq(5, 6)) == .south)
+        #expect(sq(5, 5).visualDirection(to: sq(4, 6)) == .southWest)
+        #expect(sq(5, 5).visualDirection(to: sq(4, 5)) == .west)
+        #expect(sq(5, 5).visualDirection(to: sq(4, 4)) == .northWest)
+    }
+
+    @Test func testValidVisualDirectionToDistant() async throws {
+        #expect(sq(5, 5).visualDirection(to: sq(5, 0)) == .north)
+        #expect(sq(5, 5).visualDirection(to: sq(6, 0)) == .north)
+        #expect(sq(5, 5).visualDirection(to: sq(7, 0)) == .north)
+        #expect(sq(5, 5).visualDirection(to: sq(8, 0)) == .northEast)
+        #expect(sq(5, 5).visualDirection(to: sq(9, 0)) == .northEast)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 0)) == .northEast)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 1)) == .northEast)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 2)) == .northEast)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 3)) == .east)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 4)) == .east)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 5)) == .east)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 6)) == .east)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 7)) == .east)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 8)) == .southEast)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 9)) == .southEast)
+        #expect(sq(5, 5).visualDirection(to: sq(10, 10)) == .southEast)
+        #expect(sq(5, 5).visualDirection(to: sq(9, 10)) == .southEast)
+        #expect(sq(5, 5).visualDirection(to: sq(8, 10)) == .southEast)
+        #expect(sq(5, 5).visualDirection(to: sq(7, 10)) == .south)
+        #expect(sq(5, 5).visualDirection(to: sq(6, 10)) == .south)
+        #expect(sq(5, 5).visualDirection(to: sq(5, 10)) == .south)
+        #expect(sq(5, 5).visualDirection(to: sq(4, 10)) == .south)
+        #expect(sq(5, 5).visualDirection(to: sq(3, 10)) == .south)
+        #expect(sq(5, 5).visualDirection(to: sq(2, 10)) == .southWest)
+        #expect(sq(5, 5).visualDirection(to: sq(1, 10)) == .southWest)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 10)) == .southWest)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 9)) == .southWest)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 8)) == .southWest)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 7)) == .west)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 6)) == .west)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 5)) == .west)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 4)) == .west)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 3)) == .west)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 2)) == .northWest)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 1)) == .northWest)
+        #expect(sq(5, 5).visualDirection(to: sq(0, 0)) == .northWest)
+        #expect(sq(5, 5).visualDirection(to: sq(1, 0)) == .northWest)
+        #expect(sq(5, 5).visualDirection(to: sq(2, 0)) == .northWest)
+        #expect(sq(5, 5).visualDirection(to: sq(3, 0)) == .north)
+        #expect(sq(5, 5).visualDirection(to: sq(4, 0)) == .north)
     }
 }

@@ -105,7 +105,7 @@ extension InGameTransaction {
         // shove?
 
         if result == .shove {
-            guard let direction = playerSquare.directionTo(targetSquare) else {
+            guard let direction = playerSquare.direction(to: targetSquare) else {
                 throw GameError("Couldn't derive shove direction")
             }
 
@@ -166,7 +166,7 @@ extension InGameTransaction {
                             table.squareIsUnobstructed(adjacentSquare)
                         }
                         .compactMap { adjacentSquare in
-                            targetSquare.directionTo(adjacentSquare)
+                            targetSquare.direction(to: adjacentSquare)
                         }
                         .toSet()
 

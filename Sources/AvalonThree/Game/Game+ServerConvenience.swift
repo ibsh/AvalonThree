@@ -19,4 +19,32 @@ extension Game {
             table.coinFlipWinnerCoachID
         }
     }
+
+    public func playerIDInSquare(_ square: Square) -> PlayerID? {
+        switch phase {
+        case .config(let config):
+            nil
+        case .setup(let table),
+             .active(let table, _),
+             .finished(let table):
+            table.playerInSquare(square)?.id
+        }
+    }
+
+    public func visualDirection(from playerID: PlayerID, to targetSquare: Square) -> Direction? {
+        switch phase {
+        case .config(let config):
+            return nil
+        case .setup(let table),
+             .active(let table, _),
+             .finished(let table):
+            guard
+                let player = table.getPlayer(id: playerID),
+                let playerSquare = player.square
+            else {
+                return nil
+            }
+            return playerSquare.visualDirection(to: targetSquare)
+        }
+    }
 }
