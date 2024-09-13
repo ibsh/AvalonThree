@@ -918,7 +918,8 @@ struct BlockingPlayTests {
                     square: sq(6, 7)
                 ),
                 .playerAssistedBlock(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    assistingPlayerID: PlayerID(coachID: .away, index: 1),
+                    blockingPlayerID: PlayerID(coachID: .away, index: 0),
                     square: sq(6, 7)
                 ),
                 .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),

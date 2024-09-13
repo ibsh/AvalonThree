@@ -67,7 +67,11 @@ extension InGameTransaction {
                     return playerID
                 }) {
                     events.append(
-                        .playerAssistedBlock(playerID: assistingPlayerID, square: targetSquare)
+                        .playerAssistedBlock(
+                            assistingPlayerID: assistingPlayerID,
+                            blockingPlayerID: player.id,
+                            square: targetSquare
+                        )
                     )
                 }
             }

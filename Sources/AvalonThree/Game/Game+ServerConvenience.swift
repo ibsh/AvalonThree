@@ -22,7 +22,7 @@ extension Game {
 
     public func playerIDInSquare(_ square: Square) -> PlayerID? {
         switch phase {
-        case .config(let config):
+        case .config:
             nil
         case .setup(let table),
              .active(let table, _),
@@ -33,7 +33,7 @@ extension Game {
 
     public func visualDirection(from playerID: PlayerID, to targetSquare: Square) -> Direction? {
         switch phase {
-        case .config(let config):
+        case .config:
             return nil
         case .setup(let table),
              .active(let table, _),

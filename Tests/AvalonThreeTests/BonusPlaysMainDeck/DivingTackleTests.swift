@@ -1809,7 +1809,8 @@ struct DivingTackleTests {
                     square: sq(1, 6)
                 ),
                 .playerAssistedBlock(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    assistingPlayerID: PlayerID(coachID: .away, index: 1),
+                    blockingPlayerID: PlayerID(coachID: .away, index: 0),
                     square: sq(1, 6)
                 ),
                 .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),

@@ -212,7 +212,8 @@ public enum Event: Equatable, Codable, Sendable {
     )
 
     case playerAssistedBlock(
-        playerID: PlayerID,
+        assistingPlayerID: PlayerID,
+        blockingPlayerID: PlayerID,
         square: Square
     )
 
