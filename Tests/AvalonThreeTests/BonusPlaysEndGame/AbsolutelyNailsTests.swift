@@ -164,9 +164,15 @@ struct AbsolutelyNailsTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .home, bonusPlay: .absolutelyNails),
+                .revealedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absolutelyNails)
+                ),
                 .rolledForArmour(die: .d6, unmodified: 2),
-                .discardedPersistentBonusPlay(coachID: .home, bonusPlay: .absolutelyNails),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absolutelyNails)
+                ),
             ]
         )
 

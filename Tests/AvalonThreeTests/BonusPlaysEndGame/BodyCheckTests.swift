@@ -149,7 +149,10 @@ struct BodyCheckTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .bodyCheck),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .bodyCheck)
+                ),
                 .rolledForBlock(results: [.kerrunch]),
                 .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
@@ -159,7 +162,10 @@ struct BodyCheckTests {
                 .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
                 .rolledForArmour(die: .d6, unmodified: 5),
                 .changedArmourResult(die: .d6, modified: 4, modifications: [.kerrunch]),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .bodyCheck),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .bodyCheck)
+                ),
             ]
         )
 

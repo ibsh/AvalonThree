@@ -161,9 +161,15 @@ struct AbsoluteCarnageTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .absoluteCarnage),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absoluteCarnage)
+                ),
                 .rolledForArmour(die: .d6, unmodified: 6),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .absoluteCarnage),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absoluteCarnage)
+                ),
             ]
         )
 
@@ -344,10 +350,20 @@ struct AbsoluteCarnageTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .absoluteCarnage),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absoluteCarnage)
+                ),
                 .rolledForArmour(die: .d6, unmodified: 5),
-                .changedArmourResult(die: .d6, modified: 3, modifications: [.absoluteCarnageBonusPlay]),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .absoluteCarnage),
+                .changedArmourResult(
+                    die: .d6,
+                    modified: 3,
+                    modifications: [.absoluteCarnageBonusPlay]
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absoluteCarnage)
+                ),
             ]
         )
 

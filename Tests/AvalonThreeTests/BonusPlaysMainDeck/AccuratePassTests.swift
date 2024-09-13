@@ -1072,14 +1072,20 @@ struct AccuratePassTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .accuratePass),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass)
+                ),
                 .rolledForPass(die: .d6, unmodified: 2),
                 .playerPassedBall(
                     playerID: PlayerID(coachID: .away, index: 0),
                     square: sq(6, 6)
                 ),
                 .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .accuratePass),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass)
+                ),
             ]
         )
 
@@ -1427,7 +1433,10 @@ struct AccuratePassTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .accuratePass),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass)
+                ),
                 .rolledForHurlTeammate(die: .d6, unmodified: 2),
                 .playerHurledTeammate(
                     playerID: PlayerID(coachID: .away, index: 0),
@@ -1435,7 +1444,10 @@ struct AccuratePassTests {
                     square: sq(2, 6)
                 ),
                 .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .accuratePass),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass)
+                ),
             ]
         )
 

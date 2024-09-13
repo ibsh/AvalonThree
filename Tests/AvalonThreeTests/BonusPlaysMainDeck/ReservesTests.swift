@@ -222,7 +222,10 @@ struct ReservesTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .home, bonusPlay: .reserves),
+                .revealedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .reserves)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .home, index: 1),
@@ -294,7 +297,10 @@ struct ReservesTests {
                     square: sq(7, 14),
                     reason: .reserves
                 ),
-                .discardedPersistentBonusPlay(coachID: .home, bonusPlay: .reserves),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .reserves)
+                ),
                 .finalTurnBegan,
             ]
         )
@@ -896,7 +902,10 @@ struct ReservesTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .home, bonusPlay: .reserves),
+                .revealedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .reserves)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .home, index: 1),
@@ -968,7 +977,10 @@ struct ReservesTests {
                     square: sq(1, 14),
                     reason: .reserves
                 ),
-                .discardedPersistentBonusPlay(coachID: .home, bonusPlay: .reserves),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .reserves)
+                ),
                 .finalTurnBegan,
             ]
         )

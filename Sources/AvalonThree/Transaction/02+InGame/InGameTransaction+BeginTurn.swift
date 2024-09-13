@@ -183,7 +183,9 @@ extension InGameTransaction {
         var deck = table.deck
 
         for newObjectiveID in objectives.deal(from: &deck) {
-            events.append(.dealtNewObjective(objectiveID: newObjectiveID))
+            events.append(
+                .dealtNewObjective(coachID: turnContext.coachID, objectiveID: newObjectiveID)
+            )
         }
 
         table.deck = deck

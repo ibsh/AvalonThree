@@ -88,7 +88,12 @@ extension ConfigTransaction {
 
         var objectives = Objectives()
         for newObjectiveID in objectives.deal(from: &deck) {
-            events.append(.dealtNewObjective(objectiveID: newObjectiveID))
+            events.append(
+                .dealtNewObjective(
+                    coachID: coinFlipWinnerCoachID.inverse,
+                    objectiveID: newObjectiveID
+                )
+            )
         }
 
         table = Table(

@@ -236,7 +236,10 @@ struct InterferenceTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .interference),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .interference)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -328,7 +331,10 @@ struct InterferenceTests {
                     square: sq(2, 6),
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .interference),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .interference)
+                ),
             ]
         )
     }
@@ -813,7 +819,10 @@ struct InterferenceTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .interference),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .interference)
+                ),
             ]
         )
 
@@ -892,7 +901,10 @@ struct InterferenceTests {
                     square: sq(0, 6),
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .interference),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .interference)
+                ),
             ]
         )
     }
@@ -1426,7 +1438,10 @@ struct InterferenceTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .interference),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .interference)
+                ),
             ]
         )
 

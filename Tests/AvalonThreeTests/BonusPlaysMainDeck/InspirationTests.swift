@@ -1052,7 +1052,10 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 2),
@@ -1151,7 +1154,10 @@ struct InspirationTests {
                     square: sq(10, 7),
                     reason: .run
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan
             ]
@@ -1689,7 +1695,10 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 6),
@@ -1769,7 +1778,10 @@ struct InspirationTests {
                     square: sq(6, 6),
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan
             ]
@@ -2313,7 +2325,10 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 2),
@@ -2389,7 +2404,10 @@ struct InspirationTests {
                     playerID: PlayerID(coachID: .away, index: 6),
                     ballID: ballID
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan,
             ]
@@ -2933,7 +2951,10 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 6),
@@ -3119,7 +3140,10 @@ struct InspirationTests {
                 .rolledForDirection(direction: Direction.southEast),
                 .changedDirection(direction: Direction.south),
                 .ballBounced(ballID: ballID, to: sq(10, 11)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan,
             ]
@@ -3661,7 +3685,10 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 3),
@@ -3705,7 +3732,10 @@ struct InspirationTests {
                     square: sq(3, 9)
                 ),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 4), reason: .fouled),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan
             ]
@@ -4247,7 +4277,10 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 5),
@@ -4321,7 +4354,10 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .declinedFollowUp(playerID: PlayerID(coachID: .away, index: 5)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan
             ]
@@ -4859,7 +4895,10 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 5),
@@ -4899,7 +4938,10 @@ struct InspirationTests {
                     square: sq(9, 7),
                     reason: .sidestep
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan
             ]
@@ -5438,7 +5480,10 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 4),
@@ -5447,7 +5492,10 @@ struct InspirationTests {
                     isFree: true
                 ),
                 .playerStoodUp(playerID: PlayerID(coachID: .away, index: 4)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan
             ]
@@ -5985,7 +6033,10 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -6057,7 +6108,10 @@ struct InspirationTests {
                     square: sq(6, 0),
                     reason: .reserves
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .inspiration),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                ),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan
             ]

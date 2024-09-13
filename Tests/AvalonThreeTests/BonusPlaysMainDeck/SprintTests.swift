@@ -358,7 +358,10 @@ struct SprintTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .sprint),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .sprint)
+                ),
             ]
         )
 
@@ -468,7 +471,10 @@ struct SprintTests {
                     square: sq(1, 7),
                     reason: .run
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .sprint),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .sprint)
+                ),
             ]
         )
 

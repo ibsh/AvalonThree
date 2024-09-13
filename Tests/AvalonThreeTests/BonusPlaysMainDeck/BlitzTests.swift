@@ -945,7 +945,10 @@ struct BlitzTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .blitz),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blitz)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -991,7 +994,10 @@ struct BlitzTests {
                 .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
                 .rolledForArmour(die: .d6, unmodified: 5),
                 .changedArmourResult(die: .d6, modified: 4, modifications: [.kerrunch]),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .blitz),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blitz)
+                ),
             ]
         )
 

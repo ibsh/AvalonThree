@@ -216,7 +216,10 @@ struct NufflesBlessingTests {
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
                 .scoreUpdated(coachID: .away, increment: 1),
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .nufflesBlessing),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .nufflesBlessing)
+                ),
             ]
         )
 

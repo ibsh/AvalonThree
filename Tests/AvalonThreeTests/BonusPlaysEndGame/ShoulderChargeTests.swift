@@ -199,7 +199,10 @@ struct ShoulderChargeTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .shoulderCharge),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shoulderCharge)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -246,7 +249,10 @@ struct ShoulderChargeTests {
                 .rolledForArmour(die: .d6, unmodified: 3),
                 .changedArmourResult(die: .d6, modified: 2, modifications: [.kerrunch]),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .shoulderCharge),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shoulderCharge)
+                ),
             ]
         )
 

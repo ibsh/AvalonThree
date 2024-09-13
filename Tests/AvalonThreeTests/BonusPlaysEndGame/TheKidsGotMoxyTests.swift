@@ -152,7 +152,10 @@ struct TheKidsGotMoxyTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .theKidsGotMoxy),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .theKidsGotMoxy)
+                ),
                 .rolledForBlock(results: [.miss, .kerrunch, .shove]),
             ]
         )
@@ -186,7 +189,10 @@ struct TheKidsGotMoxyTests {
                 .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
                 .rolledForArmour(die: .d6, unmodified: 5),
                 .changedArmourResult(die: .d6, modified: 4, modifications: [.kerrunch]),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .theKidsGotMoxy),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .theKidsGotMoxy)
+                ),
             ]
         )
 

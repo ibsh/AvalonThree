@@ -137,7 +137,10 @@ struct BlockingPlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .blockingPlay),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay)
+                ),
             ]
         )
 
@@ -593,7 +596,10 @@ struct BlockingPlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .blockingPlay),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay)
+                ),
             ]
         )
 
@@ -925,7 +931,10 @@ struct BlockingPlayTests {
                 .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
                 .rolledForArmour(die: .d6, unmodified: 6),
                 .turnEnded(coachID: .away),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .blockingPlay),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay)
+                ),
             ]
         )
 
@@ -948,7 +957,7 @@ struct BlockingPlayTests {
         #expect(
             latestEvents == [
                 .discardedObjective(coachID: .home, objectiveID: .first),
-                .dealtNewObjective(objectiveID: .first),
+                .dealtNewObjective(coachID: .home, objectiveID: .first),
             ]
         )
 

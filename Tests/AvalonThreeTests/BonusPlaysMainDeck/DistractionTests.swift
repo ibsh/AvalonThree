@@ -211,7 +211,10 @@ struct DistractionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .home, bonusPlay: .distraction),
+                .revealedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .distraction)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .home, index: 0),
@@ -251,7 +254,10 @@ struct DistractionTests {
                     square: sq(8, 7),
                     reason: .sidestep
                 ),
-                .discardedPersistentBonusPlay(coachID: .home, bonusPlay: .distraction),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .distraction)
+                ),
             ]
         )
 
@@ -503,9 +509,9 @@ struct DistractionTests {
                     reason: .run
                 ),
                 .turnEnded(coachID: .away),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
-                .dealtNewObjective(objectiveID: .third),
+                .dealtNewObjective(coachID: .home, objectiveID: .first),
+                .dealtNewObjective(coachID: .home, objectiveID: .second),
+                .dealtNewObjective(coachID: .home, objectiveID: .third),
             ]
         )
 
@@ -1015,7 +1021,10 @@ struct DistractionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .home, bonusPlay: .distraction),
+                .revealedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .distraction)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .home, index: 0),
@@ -1055,11 +1064,14 @@ struct DistractionTests {
                     square: sq(8, 7),
                     reason: .sidestep
                 ),
-                .discardedPersistentBonusPlay(coachID: .home, bonusPlay: .distraction),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .distraction)
+                ),
                 .turnEnded(coachID: .away),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
-                .dealtNewObjective(objectiveID: .third),
+                .dealtNewObjective(coachID: .home, objectiveID: .first),
+                .dealtNewObjective(coachID: .home, objectiveID: .second),
+                .dealtNewObjective(coachID: .home, objectiveID: .third),
             ]
         )
 
@@ -1800,9 +1812,9 @@ struct DistractionTests {
         #expect(
             latestEvents == [
                 .turnEnded(coachID: .away),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
-                .dealtNewObjective(objectiveID: .third),
+                .dealtNewObjective(coachID: .home, objectiveID: .first),
+                .dealtNewObjective(coachID: .home, objectiveID: .second),
+                .dealtNewObjective(coachID: .home, objectiveID: .third),
             ]
         )
 
@@ -2957,7 +2969,10 @@ struct DistractionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .blitz),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blitz)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -3002,10 +3017,13 @@ struct DistractionTests {
                     square: sq(7, 6)
                 ),
                 .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .blitz),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blitz)
+                ),
                 .turnEnded(coachID: .away),
                 .playerCanTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .dealtNewObjective(objectiveID: .first),
+                .dealtNewObjective(coachID: .home, objectiveID: .first),
             ]
         )
 
@@ -3256,7 +3274,10 @@ struct DistractionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -3305,10 +3326,13 @@ struct DistractionTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     reason: .divingTackle
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
                 .turnEnded(coachID: .away),
                 .playerCanTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .dealtNewObjective(objectiveID: .first)
+                .dealtNewObjective(coachID: .home, objectiveID: .first)
             ]
         )
 
@@ -3559,7 +3583,10 @@ struct DistractionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .shoulderCharge),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shoulderCharge)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -3604,10 +3631,13 @@ struct DistractionTests {
                     square: sq(7, 6)
                 ),
                 .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .shoulderCharge),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shoulderCharge)
+                ),
                 .turnEnded(coachID: .away),
                 .playerCanTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .dealtNewObjective(objectiveID: .first)
+                .dealtNewObjective(coachID: .home, objectiveID: .first)
             ]
         )
 

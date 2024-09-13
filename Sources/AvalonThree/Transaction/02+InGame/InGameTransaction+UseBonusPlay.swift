@@ -22,12 +22,12 @@ extension InGameTransaction {
 
         switch bonusPlay.persistence {
         case .instant:
-            events.append(.revealedInstantBonusPlay(coachID: coachID, bonusPlay: bonusPlay))
+            events.append(.revealedInstantBonusPlay(coachID: coachID, card: card))
         case .oneAction,
              .oneTurn,
              .custom,
              .game:
-            events.append(.revealedPersistentBonusPlay(coachID: coachID, bonusPlay: bonusPlay))
+            events.append(.revealedPersistentBonusPlay(coachID: coachID, card: card))
             let bonuses = table.getActiveBonuses(coachID: coachID)
             table.setActiveBonuses(
                 coachID: coachID,

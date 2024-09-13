@@ -527,9 +527,12 @@ struct PassingPlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .passingPlay),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .passingPlay)
+                ),
+                .dealtNewObjective(coachID: .away, objectiveID: .first),
+                .dealtNewObjective(coachID: .away, objectiveID: .second),
             ]
         )
 
@@ -1093,7 +1096,10 @@ struct PassingPlayTests {
                     reason: .run
                 ),
                 .turnEnded(coachID: .away),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .passingPlay),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .passingPlay)
+                ),
             ]
         )
 
@@ -1622,8 +1628,8 @@ struct PassingPlayTests {
 
         #expect(
             latestEvents == [
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
+                .dealtNewObjective(coachID: .away, objectiveID: .first),
+                .dealtNewObjective(coachID: .away, objectiveID: .second),
             ]
         )
 

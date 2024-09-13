@@ -189,7 +189,10 @@ struct MultiBallTests {
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
                 .scoreUpdated(coachID: .away, increment: 2),
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .multiBall),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                ),
                 .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
                 .newBallAppeared(ballID: firstNewBallID, square: sq(5, 5)),
                 .rolledForDirection(direction: .south),
@@ -406,7 +409,10 @@ struct MultiBallTests {
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
                 .scoreUpdated(coachID: .away, increment: 2),
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .multiBall),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                ),
                 .rolledForTrapdoor(trapdoorSquare: sq(5, 9)),
                 .newBallAppeared(ballID: firstNewBallID, square: sq(5, 9)),
                 .rolledForDirection(direction: .south),
@@ -629,7 +635,10 @@ struct MultiBallTests {
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
                 .scoreUpdated(coachID: .away, increment: 2),
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .multiBall),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                ),
                 .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
                 .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
                 .newBallAppeared(ballID: firstNewBallID, square: sq(5, 5)),
@@ -854,7 +863,10 @@ struct MultiBallTests {
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
                 .scoreUpdated(coachID: .away, increment: 2),
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .multiBall),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                ),
                 .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
                 .ballDisappeared(ballID: ballID),
                 .newBallAppeared(ballID: firstNewBallID, square: sq(5, 5)),
@@ -1083,7 +1095,10 @@ struct MultiBallTests {
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
                 .scoreUpdated(coachID: .away, increment: 2),
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .multiBall),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                ),
                 .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
                 .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
                 .ballCameLoose(ballID: ballID),
@@ -1331,7 +1346,10 @@ struct MultiBallTests {
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
                 .scoreUpdated(coachID: .away, increment: 2),
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .multiBall),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                ),
                 .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
                 .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
                 .ballCameLoose(ballID: ballID),

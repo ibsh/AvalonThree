@@ -306,7 +306,10 @@ struct DodgeTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .dodge),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
+                ),
             ]
         )
 
@@ -404,7 +407,7 @@ struct DodgeTests {
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    bonusPlay: .dodge
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
                 ),
             ]
         )
@@ -543,7 +546,10 @@ struct DodgeTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .dodge),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
+                ),
             ]
         )
 
@@ -725,7 +731,10 @@ struct DodgeTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .dodge),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
+                ),
             ]
         )
 
@@ -1036,7 +1045,10 @@ struct DodgeTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .blockingPlay),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay)
+                ),
             ]
         )
 
@@ -1060,7 +1072,10 @@ struct DodgeTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .dodge),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
+                ),
             ]
         )
 
@@ -1154,7 +1169,7 @@ struct DodgeTests {
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    bonusPlay: .dodge
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
                 ),
             ]
         )

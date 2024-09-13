@@ -248,7 +248,10 @@ struct BribedRefTests {
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .third),
                 .scoreUpdated(coachID: .away, increment: 1),
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .bribedRef),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .bribedRef)
+                ),
             ]
         )
 

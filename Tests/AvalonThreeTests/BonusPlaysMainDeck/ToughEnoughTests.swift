@@ -161,9 +161,15 @@ struct ToughEnoughTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .home, bonusPlay: .toughEnough),
+                .revealedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .toughEnough)
+                ),
                 .rolledForArmour(die: .d8, unmodified: 4),
-                .discardedPersistentBonusPlay(coachID: .home, bonusPlay: .toughEnough),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .toughEnough)
+                ),
             ]
         )
 

@@ -534,7 +534,10 @@ struct StepAsideTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .home, bonusPlay: .stepAside),
+                .revealedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .stepAside)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .home, index: 0),
@@ -606,7 +609,10 @@ struct StepAsideTests {
                     square: sq(1, 5),
                     reason: .sidestep
                 ),
-                .discardedPersistentBonusPlay(coachID: .home, bonusPlay: .stepAside),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .stepAside)
+                ),
             ]
         )
 

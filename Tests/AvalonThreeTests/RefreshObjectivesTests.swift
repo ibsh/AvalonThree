@@ -406,7 +406,7 @@ struct RefreshObjectivesTests {
                 ),
                 .playerSentOff(playerID: PlayerID(coachID: .away, index: 0)),
                 .turnEnded(coachID: .away),
-                .dealtNewObjective(objectiveID: .first),
+                .dealtNewObjective(coachID: .home, objectiveID: .first),
             ]
         )
 
@@ -890,8 +890,8 @@ struct RefreshObjectivesTests {
         #expect(
             latestEvents == [
                 .discardedObjective(coachID: .home, objectiveID: .second),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
+                .dealtNewObjective(coachID: .home, objectiveID: .first),
+                .dealtNewObjective(coachID: .home, objectiveID: .second),
             ]
         )
 
@@ -1363,7 +1363,7 @@ struct RefreshObjectivesTests {
         #expect(
             latestEvents == [
                 .discardedObjective(coachID: .home, objectiveID: .second),
-                .dealtNewObjective(objectiveID: .second),
+                .dealtNewObjective(coachID: .home, objectiveID: .second),
             ]
         )
 

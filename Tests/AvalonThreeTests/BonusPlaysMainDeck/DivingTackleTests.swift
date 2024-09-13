@@ -408,7 +408,10 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -488,7 +491,10 @@ struct DivingTackleTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     reason: .divingTackle
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
             ]
         )
 
@@ -700,7 +706,10 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -748,7 +757,10 @@ struct DivingTackleTests {
                 .changedArmourResult(die: .d6, modified: 2, modifications: [.kerrunch]),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
                 .playerFellDown(playerID: PlayerID(coachID: .away, index: 0), reason: .divingTackle),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
             ]
         )
 
@@ -958,7 +970,10 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -1001,8 +1016,14 @@ struct DivingTackleTests {
                     square: sq(1, 6)
                 ),
                 .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .playerFellDown(playerID: PlayerID(coachID: .away, index: 0), reason: .divingTackle),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .playerFellDown(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    reason: .divingTackle
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
                 .turnEnded(coachID: .away),
                 .playerCanTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
                 .finalTurnBegan,
@@ -1226,7 +1247,10 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -1278,7 +1302,10 @@ struct DivingTackleTests {
                 .ballCameLoose(ballID: ballID),
                 .rolledForDirection(direction: .south),
                 .ballBounced(ballID: ballID, to: sq(2, 7)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
             ]
         )
 
@@ -1492,7 +1519,10 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -1540,11 +1570,17 @@ struct DivingTackleTests {
                 .rolledForArmour(die: .d6, unmodified: 3),
                 .changedArmourResult(die: .d6, modified: 2, modifications: [.kerrunch]),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .playerFellDown(playerID: PlayerID(coachID: .away, index: 0), reason: .divingTackle),
+                .playerFellDown(
+                    playerID: PlayerID(coachID: .away, index: 0),
+                    reason: .divingTackle
+                ),
                 .ballCameLoose(ballID: ballID),
                 .rolledForDirection(direction: .south),
                 .ballBounced(ballID: ballID, to: sq(2, 7)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
             ]
         )
 
@@ -1764,7 +1800,10 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -1827,7 +1866,10 @@ struct DivingTackleTests {
                     playerID: PlayerID(coachID: .away, index: 1),
                     ballID: ballID
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .divingTackle),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .divingTackle)
+                ),
             ]
         )
 

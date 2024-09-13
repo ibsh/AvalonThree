@@ -162,7 +162,10 @@ struct ProTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .pro),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                ),
                 .rolledForPass(die: .d8, unmodified: 5),
                 .changedPassResult(
                     die: .d8,
@@ -174,7 +177,10 @@ struct ProTests {
                     square: sq(3, 6)
                 ),
                 .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .pro),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                ),
             ]
         )
 
@@ -715,7 +721,10 @@ struct ProTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .pro),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                ),
                 .rolledForHurlTeammate(die: .d8, unmodified: 5),
                 .playerHurledTeammate(
                     playerID: PlayerID(coachID: .away, index: 0),
@@ -723,7 +732,10 @@ struct ProTests {
                     square: sq(1, 6)
                 ),
                 .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .pro),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                ),
             ]
         )
 
@@ -1259,9 +1271,15 @@ struct ProTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .home, bonusPlay: .pro),
+                .revealedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                ),
                 .rolledForArmour(die: .d8, unmodified: 4),
-                .discardedPersistentBonusPlay(coachID: .home, bonusPlay: .pro),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                ),
             ]
         )
 

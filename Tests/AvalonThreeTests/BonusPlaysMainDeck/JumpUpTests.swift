@@ -431,7 +431,10 @@ struct JumpUpTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .home, bonusPlay: .jumpUp),
+                .revealedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .jumpUp)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .home, index: 2),
@@ -440,7 +443,10 @@ struct JumpUpTests {
                     isFree: true
                 ),
                 .playerStoodUp(playerID: PlayerID(coachID: .home, index: 2)),
-                .discardedPersistentBonusPlay(coachID: .home, bonusPlay: .jumpUp),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .jumpUp)
+                ),
                 .finalTurnBegan,
             ]
         )

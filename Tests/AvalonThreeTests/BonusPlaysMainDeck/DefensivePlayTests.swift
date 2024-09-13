@@ -482,9 +482,12 @@ struct DefensivePlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .defensivePlay),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay)
+                ),
+                .dealtNewObjective(coachID: .away, objectiveID: .first),
+                .dealtNewObjective(coachID: .away, objectiveID: .second),
             ]
         )
 
@@ -1066,8 +1069,8 @@ struct DefensivePlayTests {
 
         #expect(
             latestEvents == [
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
+                .dealtNewObjective(coachID: .away, objectiveID: .first),
+                .dealtNewObjective(coachID: .away, objectiveID: .second),
             ]
         )
 
@@ -1672,10 +1675,13 @@ struct DefensivePlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .defensivePlay),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
-                .dealtNewObjective(objectiveID: .third),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay)
+                ),
+                .dealtNewObjective(coachID: .away, objectiveID: .first),
+                .dealtNewObjective(coachID: .away, objectiveID: .second),
+                .dealtNewObjective(coachID: .away, objectiveID: .third),
             ]
         )
 
@@ -1981,7 +1987,10 @@ struct DefensivePlayTests {
                 ),
                 .turnEnded(coachID: .away),
                 .playerCanTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .defensivePlay),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay)
+                ),
             ]
         )
 
@@ -2004,7 +2013,7 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .discardedObjective(coachID: .home, objectiveID: .second),
-                .dealtNewObjective(objectiveID: .second),
+                .dealtNewObjective(coachID: .home, objectiveID: .second),
             ]
         )
 
@@ -2601,8 +2610,11 @@ struct DefensivePlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .defensivePlay),
-                .dealtNewObjective(objectiveID: .first),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay)
+                ),
+                .dealtNewObjective(coachID: .away, objectiveID: .first),
             ]
         )
 

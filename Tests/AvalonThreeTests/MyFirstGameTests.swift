@@ -296,9 +296,9 @@ struct MyFirstGameTests {
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: []
                 ),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
-                .dealtNewObjective(objectiveID: .third),
+                .dealtNewObjective(coachID: .away, objectiveID: .first),
+                .dealtNewObjective(coachID: .away, objectiveID: .second),
+                .dealtNewObjective(coachID: .away, objectiveID: .third),
             ]
         )
 

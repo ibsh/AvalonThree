@@ -187,7 +187,10 @@ struct ShadowTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(coachID: .home, bonusPlay: .shadow),
+                .revealedInstantBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shadow)
+                ),
                 .playerMoved(
                     playerID: PlayerID(coachID: .home, index: 0),
                     square: sq(5, 5),
@@ -406,7 +409,10 @@ struct ShadowTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(coachID: .home, bonusPlay: .shadow),
+                .revealedInstantBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shadow)
+                ),
                 .playerMoved(
                     playerID: PlayerID(coachID: .home, index: 2),
                     square: sq(5, 5),

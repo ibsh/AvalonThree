@@ -165,9 +165,15 @@ struct BladedKnuckleDustersTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .bladedKnuckleDusters),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .bladedKnuckleDusters)
+                ),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .bladedKnuckleDusters),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .bladedKnuckleDusters)
+                ),
             ]
         )
 

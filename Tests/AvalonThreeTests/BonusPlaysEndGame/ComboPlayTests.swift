@@ -174,7 +174,10 @@ struct ComboPlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .comboPlay),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 1),
@@ -257,7 +260,10 @@ struct ComboPlayTests {
                     square: sq(4, 7),
                     reason: .run
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .comboPlay),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                ),
             ]
         )
 
@@ -472,7 +478,10 @@ struct ComboPlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .comboPlay),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 1),
@@ -555,7 +564,10 @@ struct ComboPlayTests {
                     square: sq(4, 7),
                     reason: .run
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .comboPlay),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                ),
             ]
         )
 
@@ -756,7 +768,10 @@ struct ComboPlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .comboPlay),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 1),
@@ -828,7 +843,10 @@ struct ComboPlayTests {
                     square: sq(3, 4),
                     reason: .sidestep
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .comboPlay),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                ),
             ]
         )
 
@@ -1055,7 +1073,10 @@ struct ComboPlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .comboPlay),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 1),
@@ -1127,7 +1148,10 @@ struct ComboPlayTests {
                     square: sq(3, 4),
                     reason: .sidestep
                 ),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .comboPlay),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                ),
             ]
         )
 

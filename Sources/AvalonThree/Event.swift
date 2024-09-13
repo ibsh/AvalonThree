@@ -297,6 +297,7 @@ public enum Event: Equatable, Codable, Sendable {
     )
 
     case dealtNewObjective(
+        coachID: CoachID,
         objectiveID: ObjectiveID
     )
 
@@ -312,17 +313,17 @@ public enum Event: Equatable, Codable, Sendable {
 
     case revealedInstantBonusPlay(
         coachID: CoachID,
-        bonusPlay: BonusPlay
+        card: ChallengeCard
     )
 
     case revealedPersistentBonusPlay(
         coachID: CoachID,
-        bonusPlay: BonusPlay
+        card: ChallengeCard
     )
 
     case discardedPersistentBonusPlay(
         coachID: CoachID,
-        bonusPlay: BonusPlay
+        card: ChallengeCard
     )
 
     case scoreUpdated(

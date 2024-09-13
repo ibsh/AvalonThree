@@ -116,7 +116,10 @@ struct HailMaryPassTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -167,7 +170,10 @@ struct HailMaryPassTests {
                     square: sq(9, 6)
                 ),
                 .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
             ]
         )
 
@@ -305,7 +311,10 @@ struct HailMaryPassTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -360,7 +369,10 @@ struct HailMaryPassTests {
                 .ballCameLoose(ballID: ballID),
                 .rolledForDirection(direction: .south),
                 .ballBounced(ballID: ballID, to: sq(9, 7)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
             ]
         )
 
@@ -498,7 +510,10 @@ struct HailMaryPassTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -549,7 +564,10 @@ struct HailMaryPassTests {
                 .ballCameLoose(ballID: ballID),
                 .rolledForDirection(direction: .south),
                 .ballBounced(ballID: ballID, to: sq(0, 7)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
             ]
         )
 
@@ -928,7 +946,10 @@ struct HailMaryPassTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
             ]
         )
 
@@ -971,7 +992,10 @@ struct HailMaryPassTests {
                     square: sq(2, 6)
                 ),
                 .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
             ]
         )
 
@@ -1146,7 +1170,10 @@ struct HailMaryPassTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
             ]
         )
 
@@ -1193,7 +1220,10 @@ struct HailMaryPassTests {
                 .ballCameLoose(ballID: ballID),
                 .rolledForDirection(direction: .south),
                 .ballBounced(ballID: ballID, to: sq(2, 7)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
             ]
         )
 

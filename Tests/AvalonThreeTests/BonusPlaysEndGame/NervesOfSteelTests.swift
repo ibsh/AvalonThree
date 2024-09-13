@@ -195,7 +195,10 @@ struct NervesOfSteelTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .nervesOfSteel),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .nervesOfSteel)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -245,7 +248,10 @@ struct NervesOfSteelTests {
                     square: sq(3, 6)
                 ),
                 .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .nervesOfSteel),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .nervesOfSteel)
+                ),
             ]
         )
 
@@ -439,8 +445,14 @@ struct NervesOfSteelTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .nervesOfSteel),
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .nervesOfSteel)
+                ),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -491,8 +503,14 @@ struct NervesOfSteelTests {
                     square: sq(9, 6)
                 ),
                 .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .nervesOfSteel),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .hailMaryPass),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .nervesOfSteel)
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                ),
             ]
         )
 
@@ -731,7 +749,10 @@ struct NervesOfSteelTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .nervesOfSteel),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .nervesOfSteel)
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: PlayerID(coachID: .away, index: 0),
@@ -917,7 +938,10 @@ struct NervesOfSteelTests {
                     square: sq(2, 8)
                 ),
                 .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .nervesOfSteel),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .nervesOfSteel)
+                ),
             ]
         )
 

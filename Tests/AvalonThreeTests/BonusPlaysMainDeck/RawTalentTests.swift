@@ -147,9 +147,9 @@ struct RawTalentTests {
                     ],
                     coinFlipWinnerHand: []
                 ),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
-                .dealtNewObjective(objectiveID: .third),
+                .dealtNewObjective(coachID: .home, objectiveID: .first),
+                .dealtNewObjective(coachID: .home, objectiveID: .second),
+                .dealtNewObjective(coachID: .home, objectiveID: .third),
             ]
         )
 
@@ -296,9 +296,9 @@ struct RawTalentTests {
                         ChallengeCard(challenge: .rookieBonus, bonusPlay: .rawTalent),
                     ]
                 ),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
-                .dealtNewObjective(objectiveID: .third),
+                .dealtNewObjective(coachID: .home, objectiveID: .first),
+                .dealtNewObjective(coachID: .home, objectiveID: .second),
+                .dealtNewObjective(coachID: .home, objectiveID: .third),
             ]
         )
 
@@ -443,9 +443,9 @@ struct RawTalentTests {
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: []
                 ),
-                .dealtNewObjective(objectiveID: .first),
-                .dealtNewObjective(objectiveID: .second),
-                .dealtNewObjective(objectiveID: .third),
+                .dealtNewObjective(coachID: .home, objectiveID: .first),
+                .dealtNewObjective(coachID: .home, objectiveID: .second),
+                .dealtNewObjective(coachID: .home, objectiveID: .third),
             ]
         )
 
@@ -617,7 +617,10 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .rawTalent),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                ),
                 .rolledForPass(die: .d6, unmodified: 4),
                 .changedPassResult(die: .d6, modified: 3, modifications: [.longDistance, .targetPlayerMarked]),
                 .playerPassedBall(
@@ -1192,7 +1195,10 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .rawTalent),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                ),
                 .rolledForHurlTeammate(die: .d6, unmodified: 5),
                 .playerHurledTeammate(
                     playerID: PlayerID(coachID: .away, index: 0),
@@ -1756,7 +1762,10 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .rawTalent),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                ),
                 .rolledForBlock(results: [.shove]),
                 .selectedBlockDieResult(coachID: .away, result: .shove),
                 .playerBlocked(
@@ -2584,7 +2593,10 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .rawTalent),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                ),
                 .rolledForBlock(results: [.smash, .kerrunch, .smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
@@ -3010,7 +3022,10 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .rawTalent),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                ),
                 .rolledForClaws(result: 6),
                 .playerBlocked(
                     playerID: PlayerID(coachID: .away, index: 0),
@@ -3202,7 +3217,10 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(coachID: .away, bonusPlay: .rawTalent),
+                .revealedInstantBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                ),
                 .rolledForBlock(results: [.miss, .miss, .tackle]),
             ]
         )
@@ -3598,7 +3616,10 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(coachID: .home, bonusPlay: .rawTalent),
+                .revealedInstantBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                ),
                 .rolledForArmour(die: .d6, unmodified: 4),
                 .changedArmourResult(die: .d6, modified: 3, modifications: [.kerrunch]),
             ]

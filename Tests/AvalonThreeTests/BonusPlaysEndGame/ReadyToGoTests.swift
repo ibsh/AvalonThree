@@ -228,7 +228,10 @@ struct ReadyToGoTests {
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
                 .scoreUpdated(coachID: .away, increment: 1),
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .readyToGo),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .readyToGo)
+                ),
             ]
         )
 
@@ -646,7 +649,10 @@ struct ReadyToGoTests {
                     isFree: true
                 ),
                 .playerStoodUp(playerID: PlayerID(coachID: .away, index: 2)),
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .readyToGo)
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .readyToGo)
+                )
             ]
         )
 
@@ -929,7 +935,10 @@ struct ReadyToGoTests {
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
                 .scoreUpdated(coachID: .away, increment: 1),
-                .revealedPersistentBonusPlay(coachID: .away, bonusPlay: .readyToGo),
+                .revealedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .readyToGo)
+                ),
             ]
         )
 
@@ -1041,7 +1050,10 @@ struct ReadyToGoTests {
 
         #expect(
             latestEvents == [
-                .discardedPersistentBonusPlay(coachID: .away, bonusPlay: .readyToGo)
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .readyToGo)
+                )
             ]
         )
 

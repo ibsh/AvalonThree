@@ -164,7 +164,7 @@ extension InGameTransaction {
             events.append(
                 .discardedPersistentBonusPlay(
                     coachID: coachID,
-                    bonusPlay: discardBonus.bonusPlay
+                    card: discardBonus
                 )
             )
         }

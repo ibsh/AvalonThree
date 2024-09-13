@@ -123,23 +123,23 @@ extension InGameTransaction {
         let turnContext = try history.latestTurnContext()
         let coachID = turnContext.coachID
 
-        let activeBonuses = table.getActiveBonuses(coachID: coachID)
-        var maintainBonuses = [ChallengeCard]()
-        var discardBonuses = [ChallengeCard]()
-        for activeBonus in activeBonuses {
-            if activeBonus.bonusPlay == bonusPlay {
-                discardBonuses.append(activeBonus)
+        let activeBonusCards = table.getActiveBonuses(coachID: coachID)
+        var maintainCards = [ChallengeCard]()
+        var discardCards = [ChallengeCard]()
+        for activeBonusCard in activeBonusCards {
+            if activeBonusCard.bonusPlay == bonusPlay {
+                discardCards.append(activeBonusCard)
             } else {
-                maintainBonuses.append(activeBonus)
+                maintainCards.append(activeBonusCard)
             }
         }
-        table.setActiveBonuses(coachID: coachID, activeBonuses: maintainBonuses)
-        table.discards.append(contentsOf: discardBonuses)
-        for discardBonus in discardBonuses {
+        table.setActiveBonuses(coachID: coachID, activeBonuses: maintainCards)
+        table.discards.append(contentsOf: discardCards)
+        for discardCard in discardCards {
             events.append(
                 .discardedPersistentBonusPlay(
                     coachID: coachID,
-                    bonusPlay: discardBonus.bonusPlay
+                    card: discardCard
                 )
             )
         }
