@@ -50,7 +50,7 @@ extension PlayerSpec {
 
     static var snotling_pumpWagon: PlayerSpec {
         PlayerSpec(
-            move: .random(.d6),
+            move: .d6,
             block: 3,
             pass: nil,
             armour: 3,

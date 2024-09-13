@@ -10,12 +10,6 @@ import Foundation
 extension PlayerSpec {
     enum Move: Equatable {
         case fixed(Int)
-        case random(RandomDistance)
-    }
-}
-
-extension PlayerSpec.Move {
-    enum RandomDistance {
         case d6
     }
 }

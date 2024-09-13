@@ -52,12 +52,9 @@ extension InGameTransaction {
             switch player.spec.move {
             case .fixed(let fixed):
                 maxRunDistance = fixed
-            case .random(let randomizer):
-                switch randomizer {
-                case .d6:
-                    maxRunDistance = randomizers.d6.roll()
-                    events.append(.rolledForMaxRunDistance(maxRunDistance: maxRunDistance))
-                }
+            case .d6:
+                maxRunDistance = randomizers.d6.roll()
+                events.append(.rolledForMaxRunDistance(maxRunDistance: maxRunDistance))
             }
         }
 
