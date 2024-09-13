@@ -24,6 +24,16 @@ extension Game {
         table?.objectives.getObjective(id: id)
     }
 
+    public var deck: (Challenge?, Int)? {
+        guard let table else { return nil }
+        return (table.deck.first?.challenge, table.deck.count)
+    }
+
+    public var discards: (BonusPlay?, Int)? {
+        guard let table else { return nil }
+        return (table.discards.last?.bonusPlay, table.discards.count)
+    }
+
     public func objectiveIndex(id: ObjectiveID) -> Int {
         switch id {
         case .first: 0

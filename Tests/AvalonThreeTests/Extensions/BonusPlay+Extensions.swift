@@ -8,7 +8,7 @@
 import Foundation
 @testable import AvalonThree
 
-extension BonusPlay: @retroactive Comparable {
+extension BonusPlay: Comparable {
     fileprivate var ordinal: Int {
         switch self {
         case .accuratePass: 1

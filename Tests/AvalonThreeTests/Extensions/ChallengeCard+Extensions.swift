@@ -8,7 +8,7 @@
 import Foundation
 @testable import AvalonThree
 
-extension ChallengeCard: @retroactive Comparable {
+extension ChallengeCard: Comparable {
 
     public static func == (lhs: ChallengeCard, rhs: ChallengeCard) -> Bool {
         lhs.challenge == rhs.challenge && lhs.bonusPlay == rhs.bonusPlay

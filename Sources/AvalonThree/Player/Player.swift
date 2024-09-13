@@ -15,13 +15,13 @@ struct Player {
 }
 
 public struct PlayerID: Hashable, Codable, Sendable {
-    let coachID: CoachID
-    let index: Int
+    public let coachID: CoachID
+    public let index: Int
 }
 
 public struct PlayerConfig: Hashable, Codable, Sendable {
-    let id: PlayerID
-    let specID: PlayerSpecID
+    public let id: PlayerID
+    public let specID: PlayerSpecID
 }
 
 extension Player {

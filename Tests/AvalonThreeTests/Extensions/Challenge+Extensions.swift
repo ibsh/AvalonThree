@@ -8,7 +8,7 @@
 import Foundation
 @testable import AvalonThree
 
-extension Challenge: @retroactive Comparable {
+extension Challenge: Comparable {
     fileprivate var ordinal: Int {
         switch self {
         case .breakSomeBones: 1

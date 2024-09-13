@@ -31,7 +31,7 @@ func squares(_ longString: String) -> Set<Square> {
     return output
 }
 
-extension ValidMoveSquares: @retroactive CustomStringConvertible {
+extension ValidMoveSquares: CustomStringConvertible {
     public var description: String {
         var result = "\nVMS:\nintermediate: squares(\"\"\"\n"
         for y in Square.Constants.yRange {

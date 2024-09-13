@@ -24,8 +24,8 @@ public struct ValidDeclaration: Hashable, Codable, Sendable {
 }
 
 public struct ActionDeclaration: Hashable, Codable, Sendable {
-    let playerID: PlayerID
-    let actionID: ActionID
+    public let playerID: PlayerID
+    public let actionID: ActionID
 }
 
 extension ValidDeclaration {

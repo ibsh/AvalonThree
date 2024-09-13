@@ -79,7 +79,7 @@ public enum PlayerSpecID: String, Codable, Sendable {
 }
 
 extension PlayerSpecID {
-    var spec: PlayerSpec {
+    public var spec: PlayerSpec {
         switch self {
         case .blackOrc_blackOrc: return PlayerSpec.blackOrc_blackOrc
         case .blackOrc_goblin: return PlayerSpec.blackOrc_goblin
