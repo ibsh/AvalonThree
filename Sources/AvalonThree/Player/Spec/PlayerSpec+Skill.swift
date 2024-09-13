@@ -8,7 +8,7 @@
 import Foundation
 
 extension PlayerSpec {
-    enum Skill {
+    enum Skill: Codable, Sendable {
         /// This player can make a special Block action while Open. Choose an Open or Marked
         /// opponent within 3 squares to be the target. The Block action cannot be assisted. Treat
         /// results of "Shove" as "Miss".
