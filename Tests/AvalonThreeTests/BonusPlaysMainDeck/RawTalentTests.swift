@@ -143,7 +143,7 @@ struct RawTalentTests {
                         ChallengeCard(challenge: .gangUp, bonusPlay: .inspiration),
                     ],
                     coinFlipLoserHand: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
+                        ChallengeCard(challenge: .rookieBonus, bonusPlay: .rawTalent),
                     ],
                     coinFlipWinnerHand: []
                 ),
@@ -154,7 +154,7 @@ struct RawTalentTests {
         )
 
         #expect(game.table.coinFlipLoserHand == [
-            ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
+            ChallengeCard(challenge: .rookieBonus, bonusPlay: .rawTalent),
         ])
         #expect(game.table.coinFlipWinnerHand == [])
     }
@@ -293,7 +293,7 @@ struct RawTalentTests {
                     ],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
+                        ChallengeCard(challenge: .rookieBonus, bonusPlay: .rawTalent),
                     ]
                 ),
                 .dealtNewObjective(objectiveID: .first),
@@ -304,7 +304,7 @@ struct RawTalentTests {
 
         #expect(game.table.coinFlipLoserHand == [])
         #expect(game.table.coinFlipWinnerHand == [
-            ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
+            ChallengeCard(challenge: .rookieBonus, bonusPlay: .rawTalent),
         ])
     }
 

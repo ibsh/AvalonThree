@@ -34,6 +34,7 @@ extension Challenge: @retroactive Comparable {
         case .showOffALittle: 21
         case .showSomeGrit: 22
         case .showThemHowItsDone: 23
+        case .rookieBonus: 24
         }
     }
 
