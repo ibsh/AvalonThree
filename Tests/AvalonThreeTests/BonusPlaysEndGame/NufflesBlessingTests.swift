@@ -215,7 +215,7 @@ struct NufflesBlessingTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 1),
                 .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(challenge: .getTheBall, bonusPlay: .nufflesBlessing)

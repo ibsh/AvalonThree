@@ -188,7 +188,7 @@ struct MultiBallTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
@@ -408,7 +408,7 @@ struct MultiBallTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
@@ -634,7 +634,7 @@ struct MultiBallTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
@@ -862,7 +862,7 @@ struct MultiBallTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
@@ -1094,7 +1094,7 @@ struct MultiBallTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
@@ -1345,7 +1345,7 @@ struct MultiBallTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)

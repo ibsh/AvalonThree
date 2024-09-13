@@ -821,7 +821,7 @@ struct CauseSomeCarnageTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 3),
+                .scoreUpdated(coachID: .away, increment: 3, total: 3),
             ]
         )
 

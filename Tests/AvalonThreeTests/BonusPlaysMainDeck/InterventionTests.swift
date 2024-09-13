@@ -2424,7 +2424,7 @@ struct InterventionTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 4),
             ]
         )
 

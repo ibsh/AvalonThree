@@ -220,7 +220,7 @@ struct DiscardFromHandTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
             ]
         )
 
@@ -393,7 +393,7 @@ struct DiscardFromHandTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 3),
             ]
         )
 
@@ -510,9 +510,9 @@ struct DiscardFromHandTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .third),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 4),
                 .earnedCleanSweep(coachID: .away),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 6),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan
             ]
@@ -791,7 +791,7 @@ struct DiscardFromHandTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
             ]
         )
 
@@ -964,7 +964,7 @@ struct DiscardFromHandTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 3),
             ]
         )
 
@@ -1081,9 +1081,9 @@ struct DiscardFromHandTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .third),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 4),
                 .earnedCleanSweep(coachID: .away),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 6),
             ]
         )
 

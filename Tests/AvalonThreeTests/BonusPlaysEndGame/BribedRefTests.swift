@@ -247,7 +247,7 @@ struct BribedRefTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .third),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 1),
                 .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(challenge: .getTheBall, bonusPlay: .bribedRef)

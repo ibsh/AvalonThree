@@ -397,7 +397,7 @@ struct MoveTheBallTests {
                     coachID: .away,
                     objectiveID: .first
                 ),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 1),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan,
             ]
@@ -626,12 +626,12 @@ struct MoveTheBallTests {
                     coachID: .away,
                     objectiveID: .first
                 ),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 1),
                 .playerScoredTouchdown(
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: heldBallID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 5),
             ]
         )
 

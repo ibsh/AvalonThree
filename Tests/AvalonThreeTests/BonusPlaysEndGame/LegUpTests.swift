@@ -197,7 +197,7 @@ struct LegUpTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 1),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan,
             ]
@@ -411,12 +411,12 @@ struct LegUpTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 1),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .legUp)
                 ),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 2),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan,
             ]
@@ -624,12 +624,12 @@ struct LegUpTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 4),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .legUp)
                 ),
-                .scoreUpdated(coachID: .away, increment: 1),
+                .scoreUpdated(coachID: .away, increment: 1, total: 5),
             ]
         )
 

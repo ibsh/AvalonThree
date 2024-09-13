@@ -29,7 +29,8 @@ extension InGameTransaction {
             events.append(
                 .scoreUpdated(
                     coachID: turnContext.coachID,
-                    increment: TableConstants.legUpBonusPlayScoreValue
+                    increment: TableConstants.legUpBonusPlayScoreValue,
+                    total: table.getScore(coachID: turnContext.coachID)
                 )
             )
         }

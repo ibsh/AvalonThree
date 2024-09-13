@@ -81,7 +81,8 @@ extension InGameTransaction {
             events.append(
                 .scoreUpdated(
                     coachID: scoringPlayer.coachID,
-                    increment: TableConstants.touchdownScoreValue
+                    increment: TableConstants.touchdownScoreValue,
+                    total: table.getScore(coachID: scoringPlayer.coachID)
                 )
             )
 

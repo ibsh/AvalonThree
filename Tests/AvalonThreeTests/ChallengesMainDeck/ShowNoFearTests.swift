@@ -570,7 +570,7 @@ struct ShowNoFearTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan,
             ]

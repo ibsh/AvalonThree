@@ -46,7 +46,8 @@ extension InGameTransaction {
             events.append(
                 .scoreUpdated(
                     coachID: turnContext.coachID,
-                    increment: objective.challenge.scoreIncrement
+                    increment: objective.challenge.scoreIncrement,
+                    total: table.getScore(coachID: turnContext.coachID)
                 )
             )
         }
@@ -135,7 +136,8 @@ extension InGameTransaction {
             events.append(
                 .scoreUpdated(
                     coachID: turnContext.coachID,
-                    increment: TableConstants.cleanSweepScoreValue
+                    increment: TableConstants.cleanSweepScoreValue,
+                    total: table.getScore(coachID: turnContext.coachID)
                 )
             )
         }

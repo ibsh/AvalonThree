@@ -562,7 +562,7 @@ struct GoDeepTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
             ]
         )
 
@@ -789,12 +789,12 @@ struct GoDeepTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .playerScoredTouchdown(
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 6),
             ]
         )
 

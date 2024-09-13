@@ -328,7 +328,8 @@ public enum Event: Equatable, Codable, Sendable {
 
     case scoreUpdated(
         coachID: CoachID,
-        increment: Int
+        increment: Int,
+        total: Int
     )
 
     case turnEnded(

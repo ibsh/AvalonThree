@@ -213,7 +213,7 @@ struct GetInThereTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 4),
                 .turnEnded(coachID: .away),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .trapdoor),
                 .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
@@ -537,7 +537,7 @@ struct GetInThereTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 4),
                 .turnEnded(coachID: .away),
                 .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .trapdoor),
                 .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
@@ -781,7 +781,7 @@ struct GetInThereTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 4),
                 .turnEnded(coachID: .away),
                 .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
                 .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
@@ -1105,7 +1105,7 @@ struct GetInThereTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 4),
                 .turnEnded(coachID: .away),
                 .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
                 .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
@@ -1347,7 +1347,7 @@ struct GetInThereTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 4),
             ]
         )
 
@@ -1375,7 +1375,7 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 6),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
@@ -1713,7 +1713,7 @@ struct GetInThereTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 4),
             ]
         )
 
@@ -1741,7 +1741,7 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 6),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
@@ -1994,7 +1994,7 @@ struct GetInThereTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 4),
             ]
         )
 
@@ -2022,7 +2022,7 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 6),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
@@ -2354,7 +2354,7 @@ struct GetInThereTests {
                     playerID: PlayerID(coachID: .away, index: 0),
                     ballID: ballID
                 ),
-                .scoreUpdated(coachID: .away, increment: 4),
+                .scoreUpdated(coachID: .away, increment: 4, total: 4),
             ]
         )
 
@@ -2382,7 +2382,7 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 6),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(

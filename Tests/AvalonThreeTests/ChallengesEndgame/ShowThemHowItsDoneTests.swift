@@ -878,7 +878,7 @@ struct ShowThemHowItsDoneTests {
         #expect(
             latestEvents == [
                 .claimedObjective(coachID: .away, objectiveID: .third),
-                .scoreUpdated(coachID: .away, increment: 2),
+                .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .turnEnded(coachID: .away),
                 .finalTurnBegan,
             ]
