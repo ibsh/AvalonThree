@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct GameError: Error, Equatable {
-    let message: String
+public struct GameError: Error, Equatable {
+    public let message: String
 
     init(_ message: String) {
         self.message = message
