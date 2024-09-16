@@ -43,7 +43,14 @@ extension Game {
     }
 
     public var coinFlipWinnerCoachID: CoachID? {
-        table?.coinFlipWinnerCoachID
+        switch phase {
+        case .config(let config):
+            config.coinFlipWinnerCoachID
+        case .setup(let table),
+             .active(let table, _),
+             .finished(let table):
+            table.coinFlipWinnerCoachID
+        }
     }
 
     public func playerIDInSquare(_ square: Square) -> PlayerID? {
