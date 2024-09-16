@@ -17,7 +17,7 @@ public enum BoardSpecID: String, Codable, Sendable {
 }
 
 extension BoardSpecID {
-    var spec: BoardSpec {
+    public var spec: BoardSpec {
         switch self {
         case .whiteWolfHolm: return BoardSpec.whiteWolfHolm
         case .altdorfOldTown: return BoardSpec.altdorfOldTown
