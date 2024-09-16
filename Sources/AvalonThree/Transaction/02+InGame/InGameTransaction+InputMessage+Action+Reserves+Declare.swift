@@ -14,7 +14,7 @@ extension InGameTransaction {
         isFree: Bool
     ) throws -> Prompt? {
 
-        let emptySquares = table
+        let emptySquares = Square
             .endZoneSquares(coachID: playerID.coachID)
             .filter({ square in
                 table.squareIsUnobstructed(square)
@@ -50,7 +50,7 @@ extension InGameTransaction {
 
         let validSquares = ValidMoveSquares(
             intermediate: [],
-            final: validFinalSquares
+            final: validFinalSquares.toSet()
         )
 
         history.append(.reservesValidSquares(validSquares))

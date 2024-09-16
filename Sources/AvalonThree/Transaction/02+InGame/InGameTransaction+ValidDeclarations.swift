@@ -371,7 +371,7 @@ extension InGameTransaction {
 
         guard
             player.isInReserves,
-            table
+            Square
                 .endZoneSquares(coachID: player.coachID)
                 .contains(where: { square in
                     table.squareIsUnobstructed(square) && table.squareIsEmptyOfPlayers(square)

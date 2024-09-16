@@ -48,7 +48,7 @@ extension InGameTransaction {
         // Check for touchdowns
 
         let scoringPlayersAndBalls = table.playersInSquares(
-            Array(table.endZoneSquares(coachID: turnContext.coachID.inverse))
+            Square.endZoneSquares(coachID: turnContext.coachID.inverse)
         )
             .compactMap({ player -> (Player, Ball)? in
                 guard

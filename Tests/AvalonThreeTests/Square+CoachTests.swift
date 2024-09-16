@@ -10,31 +10,9 @@ import Testing
 
 struct SquareCoachTests {
 
-    private let table = Table(
-        config: FinalizedConfig(
-            coinFlipWinnerCoachID: .home,
-            boardSpecID: .bilbaliHarbor,
-            challengeDeckID: .longRandomised,
-            rookieBonusRecipientID: .noOne,
-            coinFlipWinnerTeamID: .darkElf,
-            coinFlipLoserTeamID: .woodElf
-        ),
-        players: [],
-        coinFlipLoserHand: [],
-        coinFlipWinnerHand: [],
-        coinFlipLoserActiveBonuses: [],
-        coinFlipWinnerActiveBonuses: [],
-        coinFlipLoserScore: 0,
-        coinFlipWinnerScore: 0,
-        balls: [],
-        deck: [],
-        objectives: Objectives(),
-        discards: []
-    )
-
-    @Test func testEndZoneFirstCoach() async throws {
+    @Test func testEndZoneAwayCoach() async throws {
         #expect(
-            table.endZoneSquares(coachID: .away) == [
+            Square.endZoneSquares(coachID: .away) == [
                 sq(0, 0),
                 sq(1, 0),
                 sq(2, 0),
@@ -50,9 +28,9 @@ struct SquareCoachTests {
         )
     }
 
-    @Test func testEndZoneSecondCoach() async throws {
+    @Test func testEndZoneHomeCoach() async throws {
         #expect(
-            table.endZoneSquares(coachID: .home) == [
+            Square.endZoneSquares(coachID: .home) == [
                 sq(0, 14),
                 sq(1, 14),
                 sq(2, 14),
