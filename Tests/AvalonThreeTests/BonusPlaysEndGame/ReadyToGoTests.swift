@@ -21,7 +21,7 @@ struct ReadyToGoTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -728,7 +728,7 @@ struct ReadyToGoTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,

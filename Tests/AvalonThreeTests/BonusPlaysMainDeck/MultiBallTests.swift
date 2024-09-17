@@ -27,7 +27,7 @@ struct MultiBallTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .bilbaliHarbor,
+                        boardSpecID: .season3Board2,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -247,7 +247,7 @@ struct MultiBallTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .bilbaliHarbor,
+                        boardSpecID: .season3Board2,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -467,7 +467,7 @@ struct MultiBallTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .bilbaliHarbor,
+                        boardSpecID: .season3Board2,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -701,7 +701,7 @@ struct MultiBallTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .bilbaliHarbor,
+                        boardSpecID: .season3Board2,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -927,7 +927,7 @@ struct MultiBallTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .bilbaliHarbor,
+                        boardSpecID: .season3Board2,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -1168,7 +1168,7 @@ struct MultiBallTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .bilbaliHarbor,
+                        boardSpecID: .season3Board2,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,

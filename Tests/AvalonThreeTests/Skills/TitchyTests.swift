@@ -19,7 +19,7 @@ struct TitchyTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .ogre,
@@ -216,7 +216,7 @@ struct TitchyTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .orc,
@@ -370,7 +370,7 @@ struct TitchyTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,

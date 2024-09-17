@@ -8,7 +8,7 @@
 import Foundation
 
 extension BoardSpec {
-    static var altdorfOldTown: BoardSpec {
+    static var season1Board2: BoardSpec {
         BoardSpec(
             obstructedSquares: [
                 Square(x: 4, y: 4),

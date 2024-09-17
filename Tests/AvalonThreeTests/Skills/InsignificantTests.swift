@@ -19,7 +19,7 @@ struct InsignificantTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .orc,
@@ -167,7 +167,7 @@ struct InsignificantTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .snotling,
@@ -351,7 +351,7 @@ struct InsignificantTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .snotling,
@@ -553,7 +553,7 @@ struct InsignificantTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,

@@ -64,12 +64,12 @@ struct MyFirstGameTests {
                 coachID: .home,
                 payload: .specifyBoardSpec(
                     boardSpecIDs: [
-                        .whiteWolfHolm,
-                        .altdorfOldTown,
-                        .barakVarrFoundry,
-                        .ghrondGridiron,
-                        .oghamStoneCrush,
-                        .bilbaliHarbor,
+                        .season1Board1,
+                        .season1Board2,
+                        .season2Board1,
+                        .season2Board2,
+                        .season3Board1,
+                        .season3Board2,
                     ]
                 )
             )
@@ -80,13 +80,13 @@ struct MyFirstGameTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .specifyBoardSpec(boardSpecID: .whiteWolfHolm)
+                message: .specifyBoardSpec(boardSpecID: .season1Board1)
             )
         )
 
         #expect(
             latestEvents == [
-                .specifiedBoardSpec(boardSpecID: .whiteWolfHolm)
+                .specifiedBoardSpec(boardSpecID: .season1Board1)
             ]
         )
 
@@ -305,31 +305,13 @@ struct MyFirstGameTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .arrangePlayers(playerConfigs: [
-                    PlayerConfig(
-                        id: PlayerID(coachID: .away, index: 0),
-                        specID: .human_lineman
-                    ),
-                    PlayerConfig(
-                        id: PlayerID(coachID: .away, index: 1),
-                        specID: .human_lineman
-                    ),
-                    PlayerConfig(
-                        id: PlayerID(coachID: .away, index: 2),
-                        specID: .human_lineman
-                    ),
-                    PlayerConfig(
-                        id: PlayerID(coachID: .away, index: 3),
-                        specID: .human_passer
-                    ),
-                    PlayerConfig(
-                        id: PlayerID(coachID: .away, index: 4),
-                        specID: .human_catcher
-                    ),
-                    PlayerConfig(
-                        id: PlayerID(coachID: .away, index: 5),
-                        specID: .human_blitzer
-                    ),
+                payload: .arrangePlayers(playerIDs: [
+                    PlayerID(coachID: .away, index: 0),
+                    PlayerID(coachID: .away, index: 1),
+                    PlayerID(coachID: .away, index: 2),
+                    PlayerID(coachID: .away, index: 3),
+                    PlayerID(coachID: .away, index: 4),
+                    PlayerID(coachID: .away, index: 5),
                 ])
             )
         )
@@ -390,31 +372,13 @@ struct MyFirstGameTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .home,
-                payload: .arrangePlayers(playerConfigs: [
-                    PlayerConfig(
-                        id: PlayerID(coachID: .home, index: 0),
-                        specID: .skaven_lineman
-                    ),
-                    PlayerConfig(
-                        id: PlayerID(coachID: .home, index: 1),
-                        specID: .skaven_lineman
-                    ),
-                    PlayerConfig(
-                        id: PlayerID(coachID: .home, index: 2),
-                        specID: .skaven_lineman
-                    ),
-                    PlayerConfig(
-                        id: PlayerID(coachID: .home, index: 3),
-                        specID: .skaven_passer
-                    ),
-                    PlayerConfig(
-                        id: PlayerID(coachID: .home, index: 4),
-                        specID: .skaven_gutterRunner
-                    ),
-                    PlayerConfig(
-                        id: PlayerID(coachID: .home, index: 5),
-                        specID: .skaven_blitzer
-                    ),
+                payload: .arrangePlayers(playerIDs: [
+                    PlayerID(coachID: .home, index: 0),
+                    PlayerID(coachID: .home, index: 1),
+                    PlayerID(coachID: .home, index: 2),
+                    PlayerID(coachID: .home, index: 3),
+                    PlayerID(coachID: .home, index: 4),
+                    PlayerID(coachID: .home, index: 5),
                 ])
             )
         )

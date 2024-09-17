@@ -45,7 +45,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyBoardSpec(boardSpecID: .barakVarrFoundry)
+                message: .specifyBoardSpec(boardSpecID: .season2Board1)
             )
         )
 
@@ -194,7 +194,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyBoardSpec(boardSpecID: .barakVarrFoundry)
+                message: .specifyBoardSpec(boardSpecID: .season2Board1)
             )
         )
 
@@ -343,7 +343,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyBoardSpec(boardSpecID: .barakVarrFoundry)
+                message: .specifyBoardSpec(boardSpecID: .season2Board1)
             )
         )
 
@@ -466,7 +466,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -678,7 +678,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -887,7 +887,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -1263,7 +1263,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -1622,7 +1622,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -1804,7 +1804,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -1994,7 +1994,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -2203,7 +2203,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -2441,7 +2441,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -2671,7 +2671,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -2884,7 +2884,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -3069,7 +3069,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -3290,7 +3290,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -3468,7 +3468,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -3665,7 +3665,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
@@ -3848,7 +3848,7 @@ struct RawTalentTests {
                 Table(
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
-                        boardSpecID: .whiteWolfHolm,
+                        boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,

@@ -8,7 +8,7 @@
 import Foundation
 
 extension BoardSpec {
-    static var oghamStoneCrush: BoardSpec {
+    static var season3Board1: BoardSpec {
         BoardSpec(
             obstructedSquares: [
                 Square(x: 3, y: 2),
