@@ -35,9 +35,9 @@ public struct Square: Hashable, Codable, Sendable {
 }
 
 extension Square {
-    enum Constants {
-        static let xRange = 0...10
-        static let yRange = 0...14
+    public enum Constants {
+        public static let xRange = 0...10
+        public static let yRange = 0...14
     }
 }
 
