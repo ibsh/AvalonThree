@@ -39,7 +39,8 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     // MARK: - Table config
 
     case arrangePlayers(
-        playerIDs: Set<PlayerID>
+        playerIDs: Set<PlayerID>,
+        validSquares: Set<Square>
     )
 
     // MARK: - Turn

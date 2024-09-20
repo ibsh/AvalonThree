@@ -60,14 +60,21 @@ extension SetupTransaction {
             )
         }
 
+        let coinFlipWinnerCoachID = coinFlipLoserCoachID.inverse
         return Prompt(
-            coachID: coinFlipLoserCoachID.inverse,
+            coachID: coinFlipWinnerCoachID,
             payload: .arrangePlayers(
-                playerIDs: table.coinFlipWinnerTeamID.spec.playerConfigs(
-                    coachID: coinFlipLoserCoachID.inverse
-                )
-                .map { $0.id }
-                .toSet()
+                playerIDs: table
+                    .coinFlipWinnerTeamID
+                    .spec
+                    .playerConfigs(
+                        coachID: coinFlipWinnerCoachID
+                    )
+                    .map { $0.id }
+                    .toSet(),
+                validSquares: Square
+                    .endZoneSquares(coachID: coinFlipWinnerCoachID)
+                    .toSet()
             )
         )
     }
