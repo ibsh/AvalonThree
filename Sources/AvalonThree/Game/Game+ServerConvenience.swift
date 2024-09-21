@@ -57,6 +57,16 @@ extension Game {
         table?.playerInSquare(square)?.id
     }
 
+    public func squareContainingPlayer(_ playerID: PlayerID) -> Square? {
+        guard
+            let table,
+            let player = table.getPlayer(id: playerID)
+        else {
+            return nil
+        }
+        return player.square
+    }
+
     public func squareContainingBall(_ ballID: BallID) -> Square? {
         guard
             let table,
