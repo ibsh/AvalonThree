@@ -54,7 +54,9 @@ extension InGameTransaction {
         )
 
         history.append(.reservesValidSquares(validSquares))
-        events.append(.declaredAction(declaration: declaration, isFree: isFree))
+        events.append(
+            .declaredAction(declaration: declaration, isFree: isFree, playerSquare: nil)
+        )
 
         return Prompt(
             coachID: playerID.coachID,

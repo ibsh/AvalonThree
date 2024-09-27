@@ -14,7 +14,7 @@ struct SprintTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,18 +29,19 @@ struct SprintTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(7, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .sprint)
                     ],
@@ -52,7 +53,7 @@ struct SprintTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -75,7 +76,7 @@ struct SprintTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -85,7 +86,7 @@ struct SprintTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -97,11 +98,12 @@ struct SprintTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(7, 5)
+                )
             ]
         )
 
@@ -109,7 +111,7 @@ struct SprintTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForSprintBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -131,7 +133,7 @@ struct SprintTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -192,33 +194,51 @@ struct SprintTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(7, 5),
+                    to: sq(6, 5),
+                    direction: .west,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 5),
+                    to: sq(5, 5),
+                    direction: .west,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 5),
+                    to: sq(4, 6),
+                    direction: .southWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(3, 6),
+                    direction: .west,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(2, 7),
+                    direction: .southWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 7),
+                    to: sq(1, 7),
+                    direction: .west,
                     reason: .run
                 ),
             ]
@@ -231,7 +251,7 @@ struct SprintTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -247,7 +267,7 @@ struct SprintTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -262,18 +282,19 @@ struct SprintTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(7, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .sprint)
                     ],
@@ -285,7 +306,7 @@ struct SprintTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -308,7 +329,7 @@ struct SprintTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -318,7 +339,7 @@ struct SprintTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -330,11 +351,12 @@ struct SprintTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(7, 5)
+                )
             ]
         )
 
@@ -342,7 +364,7 @@ struct SprintTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForSprintBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -360,7 +382,11 @@ struct SprintTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .sprint)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .sprint
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -369,7 +395,7 @@ struct SprintTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -432,49 +458,77 @@ struct SprintTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(7, 5),
+                    to: sq(8, 6),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(7, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(8, 6),
+                    to: sq(7, 7),
+                    direction: .southWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 8),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(7, 7),
+                    to: sq(6, 8),
+                    direction: .southWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 8),
+                    to: sq(5, 7),
+                    direction: .northWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(3, 6),
+                    direction: .west,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(2, 7),
+                    direction: .southWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 7),
+                    to: sq(1, 7),
+                    direction: .west,
                     reason: .run
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .sprint)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .sprint
+                    )
                 ),
+                .updatedDiscards(top: .sprint, count: 1),
             ]
         )
 
@@ -485,7 +539,7 @@ struct SprintTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []

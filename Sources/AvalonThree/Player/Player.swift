@@ -19,11 +19,6 @@ public struct PlayerID: Hashable, Codable, Sendable {
     public let index: Int
 }
 
-public struct PlayerConfig: Hashable, Codable, Sendable {
-    public let id: PlayerID
-    public let specID: PlayerSpecID
-}
-
 extension Player {
     enum State {
         case inReserves

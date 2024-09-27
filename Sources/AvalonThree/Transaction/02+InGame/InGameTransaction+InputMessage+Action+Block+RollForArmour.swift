@@ -137,10 +137,10 @@ extension InGameTransaction {
 
         var modifier = 0
 
-        var modifications = Set<ArmourRollModification>()
+        var modifications = [ArmourRollModification]()
 
         if result == .kerrunch {
-            modifications.insert(.kerrunch)
+            modifications.append(.kerrunch)
             modifier -= 1
         }
 
@@ -151,7 +151,7 @@ extension InGameTransaction {
         ).contains(
             where: { $0.bonusPlay == .absoluteCarnage }
         ) {
-            modifications.insert(.absoluteCarnageBonusPlay)
+            modifications.append(.absoluteCarnageBonusPlay)
             modifier -= TableConstants.absoluteCarnageBonusPlayArmourDelta
         }
 
@@ -170,7 +170,11 @@ extension InGameTransaction {
 
         let unmodifiedRoll = randomizer.roll()
         events.append(
-            .rolledForArmour(die: randomizer.die, unmodified: unmodifiedRoll)
+            .rolledForArmour(
+                coachID: targetPlayer.coachID,
+                die: randomizer.die,
+                unmodified: unmodifiedRoll
+            )
         )
 
         let immediateSuccess: Int = {
@@ -193,6 +197,7 @@ extension InGameTransaction {
                 events.append(
                     .changedArmourResult(
                         die: randomizer.die,
+                        unmodified: unmodifiedRoll,
                         modified: modifiedRoll,
                         modifications: modifications
                     )

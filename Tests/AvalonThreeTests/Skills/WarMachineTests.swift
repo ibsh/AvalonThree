@@ -17,7 +17,7 @@ struct WarMachineTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -32,18 +32,19 @@ struct WarMachineTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_pumpWagon,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -53,7 +54,7 @@ struct WarMachineTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -79,7 +80,7 @@ struct WarMachineTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -91,7 +92,7 @@ struct WarMachineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -101,13 +102,17 @@ struct WarMachineTests {
 
         #expect(
             latestEvents == [
-                .rolledForMaxRunDistance(maxRunDistance: 4),
+                .rolledForMaxRunDistance(
+                    coachID: .away,
+                    maxRunDistance: 4
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 ),
             ]
         )
@@ -116,7 +121,7 @@ struct WarMachineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -174,22 +179,31 @@ struct WarMachineTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(3, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(4, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(5, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -200,7 +214,7 @@ struct WarMachineTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -219,7 +233,7 @@ struct WarMachineTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -234,18 +248,19 @@ struct WarMachineTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_pumpWagon,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -255,7 +270,7 @@ struct WarMachineTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -281,7 +296,7 @@ struct WarMachineTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -293,7 +308,7 @@ struct WarMachineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -303,13 +318,17 @@ struct WarMachineTests {
 
         #expect(
             latestEvents == [
-                .rolledForMaxRunDistance(maxRunDistance: 3),
+                .rolledForMaxRunDistance(
+                    coachID: .away,
+                    maxRunDistance: 3
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 ),
             ]
         )
@@ -318,7 +337,7 @@ struct WarMachineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 3,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -376,22 +395,31 @@ struct WarMachineTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(3, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(4, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(5, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -402,7 +430,7 @@ struct WarMachineTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -434,18 +462,19 @@ struct WarMachineTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_pumpWagon,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -476,7 +505,7 @@ struct WarMachineTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -488,7 +517,7 @@ struct WarMachineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -498,13 +527,17 @@ struct WarMachineTests {
 
         #expect(
             latestEvents == [
-                .rolledForMaxRunDistance(maxRunDistance: 4),
+                .rolledForMaxRunDistance(
+                    coachID: .away,
+                    maxRunDistance: 4
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 ),
             ]
         )
@@ -513,7 +546,7 @@ struct WarMachineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -571,18 +604,27 @@ struct WarMachineTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(1, 6),
+                    to: sq(2, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(3, 6),
+                    direction: .east,
                     reason: .run
                 ),
             ]
@@ -595,7 +637,7 @@ struct WarMachineTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -627,12 +669,13 @@ struct WarMachineTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_pumpWagon,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -663,7 +706,7 @@ struct WarMachineTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -675,7 +718,7 @@ struct WarMachineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -685,13 +728,17 @@ struct WarMachineTests {
 
         #expect(
             latestEvents == [
-                .rolledForMaxRunDistance(maxRunDistance: 4),
+                .rolledForMaxRunDistance(
+                    coachID: .away,
+                    maxRunDistance: 4
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 ),
             ]
         )
@@ -700,7 +747,7 @@ struct WarMachineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -778,18 +825,19 @@ struct WarMachineTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_pumpWagon,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -820,7 +868,7 @@ struct WarMachineTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -832,7 +880,7 @@ struct WarMachineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -842,13 +890,17 @@ struct WarMachineTests {
 
         #expect(
             latestEvents == [
-                .rolledForMaxRunDistance(maxRunDistance: 4),
+                .rolledForMaxRunDistance(
+                    coachID: .away,
+                    maxRunDistance: 4
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 ),
             ]
         )
@@ -857,7 +909,7 @@ struct WarMachineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -935,18 +987,19 @@ struct WarMachineTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_pumpWagon,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -977,7 +1030,7 @@ struct WarMachineTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -989,7 +1042,7 @@ struct WarMachineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -999,13 +1052,17 @@ struct WarMachineTests {
 
         #expect(
             latestEvents == [
-                .rolledForMaxRunDistance(maxRunDistance: 4),
+                .rolledForMaxRunDistance(
+                    coachID: .away,
+                    maxRunDistance: 4
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 ),
             ]
         )
@@ -1014,7 +1071,7 @@ struct WarMachineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1072,18 +1129,27 @@ struct WarMachineTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(1, 6),
+                    to: sq(2, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(3, 6),
+                    direction: .east,
                     reason: .run
                 ),
             ]
@@ -1096,7 +1162,7 @@ struct WarMachineTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -1128,18 +1194,19 @@ struct WarMachineTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_pumpWagon,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -1170,7 +1237,7 @@ struct WarMachineTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -1182,7 +1249,7 @@ struct WarMachineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1192,13 +1259,17 @@ struct WarMachineTests {
 
         #expect(
             latestEvents == [
-                .rolledForMaxRunDistance(maxRunDistance: 4),
+                .rolledForMaxRunDistance(
+                    coachID: .away,
+                    maxRunDistance: 4
+                ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 ),
             ]
         )
@@ -1207,7 +1278,7 @@ struct WarMachineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1265,18 +1336,27 @@ struct WarMachineTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(1, 6),
+                    to: sq(2, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
                     reason: .run
                 ),
             ]
@@ -1289,14 +1369,14 @@ struct WarMachineTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -1328,24 +1408,25 @@ struct WarMachineTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_pumpWagon,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .snotling_snotling,
                             state: .standing(square: sq(2, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -1376,7 +1457,7 @@ struct WarMachineTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -1386,7 +1467,7 @@ struct WarMachineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1398,10 +1479,11 @@ struct WarMachineTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -1410,9 +1492,9 @@ struct WarMachineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -1426,13 +1508,13 @@ struct WarMachineTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch, .tackle, .shove]),
+                .rolledForBlock(coachID: .away, results: [.kerrunch, .tackle, .shove]),
             ]
         )
 
@@ -1440,7 +1522,7 @@ struct WarMachineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.kerrunch, .tackle, .shove]
                 )
             )

@@ -10,7 +10,7 @@ import Foundation
 extension InGameTransaction {
 
     mutating func ballBouncesOntoPlayer(
-        ballID: BallID,
+        ballID: Int,
         playerID: PlayerID
     ) throws {
 
@@ -52,7 +52,9 @@ extension InGameTransaction {
             ball.state = .held(playerID: playerID)
             table.balls.update(with: ball)
 
-            events.append(.playerCaughtBouncingBall(playerID: player.id, ballID: ball.id))
+            events.append(
+                .playerCaughtBouncingBall(playerID: player.id, in: square, ballID: ball.id)
+            )
         }
     }
 }

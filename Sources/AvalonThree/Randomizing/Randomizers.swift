@@ -15,6 +15,7 @@ struct Randomizers: Sendable {
     let deck: DeckRandomizing
     let direction: DirectionRandomizing
     let foulDie: FoulDieRandomizing
+    let playerNumber: PlayerNumberRandomizing
     let trapdoor: TrapdoorRandomizing
 
     init(
@@ -25,6 +26,7 @@ struct Randomizers: Sendable {
         deck: DeckRandomizing = DefaultDeckRandomizer(),
         direction: DirectionRandomizing = DefaultDirectionRandomizer(),
         foulDie: FoulDieRandomizing = DefaultFoulDieRandomizer(),
+        playerNumber: PlayerNumberRandomizing = DefaultPlayerNumberRandomizer(),
         trapdoor: TrapdoorRandomizing = DefaultTrapdoorRandomizer()
     ) {
         self.blockDie = blockDie
@@ -34,6 +36,7 @@ struct Randomizers: Sendable {
         self.deck = deck
         self.direction = direction
         self.foulDie = foulDie
+        self.playerNumber = playerNumber
         self.trapdoor = trapdoor
     }
 }

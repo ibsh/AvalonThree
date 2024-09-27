@@ -16,7 +16,7 @@ struct BreakTheirLinesTests {
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -31,18 +31,19 @@ struct BreakTheirLinesTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -52,7 +53,7 @@ struct BreakTheirLinesTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -82,7 +83,7 @@ struct BreakTheirLinesTests {
             randomizers: Randomizers(
                 blockDie: blockDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -92,7 +93,7 @@ struct BreakTheirLinesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -104,10 +105,11 @@ struct BreakTheirLinesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -116,9 +118,9 @@ struct BreakTheirLinesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -131,23 +133,48 @@ struct BreakTheirLinesTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.miss]),
-                .selectedBlockDieResult(coachID: .away, result: .miss),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.miss]
                 ),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .turnEnded(coachID: .away),
-                .playerCanTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .discardedObjective(coachID: .home, objectiveID: .second),
-                .finalTurnBegan,
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6)
+                ), .turnEnded(coachID: .away),
+                .playerCanTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6)
+                ),
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: ChallengeCard(
+                        challenge: .breakTheirLines,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 1
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -158,14 +185,14 @@ struct BreakTheirLinesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -197,18 +224,19 @@ struct BreakTheirLinesTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -244,7 +272,7 @@ struct BreakTheirLinesTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -254,7 +282,7 @@ struct BreakTheirLinesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -266,10 +294,11 @@ struct BreakTheirLinesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -278,9 +307,9 @@ struct BreakTheirLinesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -294,20 +323,27 @@ struct BreakTheirLinesTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 6),
             ]
         )
 
@@ -318,14 +354,14 @@ struct BreakTheirLinesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -344,7 +380,7 @@ struct BreakTheirLinesTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -359,18 +395,19 @@ struct BreakTheirLinesTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -380,7 +417,7 @@ struct BreakTheirLinesTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -411,7 +448,7 @@ struct BreakTheirLinesTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -421,7 +458,7 @@ struct BreakTheirLinesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -433,10 +470,11 @@ struct BreakTheirLinesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -445,9 +483,9 @@ struct BreakTheirLinesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -461,20 +499,27 @@ struct BreakTheirLinesTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 6),
             ]
         )
 
@@ -498,7 +543,24 @@ struct BreakTheirLinesTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .breakTheirLines,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .breakTheirLines,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
             ]
         )
@@ -510,14 +572,14 @@ struct BreakTheirLinesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -536,7 +598,7 @@ struct BreakTheirLinesTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -551,18 +613,19 @@ struct BreakTheirLinesTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(6, 14)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 13)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -572,7 +635,7 @@ struct BreakTheirLinesTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -603,7 +666,7 @@ struct BreakTheirLinesTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -613,7 +676,7 @@ struct BreakTheirLinesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -625,10 +688,11 @@ struct BreakTheirLinesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 14)
                 )
             ]
         )
@@ -637,9 +701,9 @@ struct BreakTheirLinesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -653,20 +717,27 @@ struct BreakTheirLinesTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 13)
+                    playerID: pl(.away, 0),
+                    from: sq(6, 14),
+                    to: sq(6, 13),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(6, 13),
+                    reason: .blocked
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 6),
             ]
         )
 
@@ -690,11 +761,29 @@ struct BreakTheirLinesTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .breakTheirLines,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .breakTheirLines,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .playerScoredTouchdown(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(6, 14),
+                    ballID: 123
                 ),
                 .scoreUpdated(coachID: .away, increment: 4, total: 6),
             ]
@@ -707,7 +796,7 @@ struct BreakTheirLinesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []

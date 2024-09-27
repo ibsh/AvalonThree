@@ -36,8 +36,8 @@ extension Table {
         _ squares: [Square]
     ) -> Set<Player> {
         players.filter { player in
-            guard let square = player.square else { return false }
-            return squares.contains(square)
+            guard let playerSquare = player.square else { return false }
+            return squares.contains(playerSquare)
         }
     }
 

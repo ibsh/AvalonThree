@@ -27,18 +27,19 @@ struct RushTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .woodElf_wardancer,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -66,7 +67,7 @@ struct RushTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -76,7 +77,7 @@ struct RushTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -88,10 +89,11 @@ struct RushTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 5)
                 )
             ]
         )
@@ -100,7 +102,7 @@ struct RushTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -157,13 +159,19 @@ struct RushTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 5),
+                    to: sq(3, 6),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
                     reason: .run
                 ),
             ]
@@ -176,14 +184,14 @@ struct RushTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -212,18 +220,19 @@ struct RushTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .woodElf_wardancer,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -251,7 +260,7 @@ struct RushTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -261,7 +270,7 @@ struct RushTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -273,10 +282,11 @@ struct RushTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 5)
                 )
             ]
         )
@@ -285,7 +295,7 @@ struct RushTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -359,18 +369,19 @@ struct RushTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .woodElf_wardancer,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -398,7 +409,7 @@ struct RushTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -408,7 +419,7 @@ struct RushTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -420,10 +431,11 @@ struct RushTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 5)
                 )
             ]
         )
@@ -432,7 +444,7 @@ struct RushTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -508,30 +520,31 @@ struct RushTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .woodElf_wardancer,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(10, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -559,7 +572,7 @@ struct RushTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -569,7 +582,7 @@ struct RushTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -581,10 +594,11 @@ struct RushTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -593,7 +607,7 @@ struct RushTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""

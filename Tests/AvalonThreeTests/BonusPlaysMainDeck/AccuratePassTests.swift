@@ -5,6 +5,7 @@
 //  Created by Ibrahim Sha'ath on 7/3/24.
 //
 
+import Foundation
 import Testing
 @testable import AvalonThree
 
@@ -14,7 +15,7 @@ struct AccuratePassTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,18 +30,19 @@ struct AccuratePassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass),
                     ],
@@ -52,7 +54,7 @@ struct AccuratePassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -75,7 +77,7 @@ struct AccuratePassTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -85,7 +87,7 @@ struct AccuratePassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -97,10 +99,11 @@ struct AccuratePassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -109,7 +112,7 @@ struct AccuratePassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -169,18 +172,27 @@ struct AccuratePassTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6),
+                    playerID: pl(.away, 0),
+                    ballID: ballID,
+                    from: sq(2, 6),
+                    to: sq(3, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: ballID,
+                    from: sq(3, 6),
+                    to: sq(4, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: ballID,
+                    from: sq(4, 6),
+                    to: sq(5, 6),
+                    direction: .east,
                     reason: .run
                 ),
             ]
@@ -193,14 +205,14 @@ struct AccuratePassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -218,7 +230,7 @@ struct AccuratePassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -230,22 +242,23 @@ struct AccuratePassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                  isFree: false,
+                  playerSquare: sq(5, 6)
                 )
-            ]
+              ]
         )
 
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(6, 6),
                             distance: .handoff,
                             obstructingSquares: [],
@@ -261,18 +274,25 @@ struct AccuratePassTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
                 .playerHandedOffBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(5, 6),
+                    to: sq(6, 6),
+                    direction: .east,
+                    ballID: ballID
                 ),
-                .playerCaughtHandoff(playerID: PlayerID(coachID: .away, index: 1)),
-            ]
+                .playerCaughtHandoff(
+                    playerID: pl(.away, 1),
+                    in: sq(6, 6),
+                    ballID: ballID
+                ),
+              ]
         )
 
         #expect(
@@ -282,14 +302,14 @@ struct AccuratePassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -307,7 +327,7 @@ struct AccuratePassTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -322,18 +342,19 @@ struct AccuratePassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass),
                     ],
@@ -345,7 +366,7 @@ struct AccuratePassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -370,7 +391,7 @@ struct AccuratePassTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -380,7 +401,7 @@ struct AccuratePassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -392,19 +413,20 @@ struct AccuratePassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                  isFree: false,
+                  playerSquare: sq(2, 6)
                 )
-            ]
+              ]
         )
 
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -462,11 +484,14 @@ struct AccuratePassTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6),
-                    reason: .run
-                ),
-            ]
+                  playerID: pl(.away, 0),
+                  ballID: ballID,
+                  from: sq(2, 6),
+                  to: sq(1, 6),
+                  direction: .west,
+                  reason: .run
+                )
+              ]
         )
 
         #expect(
@@ -476,14 +501,14 @@ struct AccuratePassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -501,7 +526,7 @@ struct AccuratePassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -513,22 +538,23 @@ struct AccuratePassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                  isFree: false,
+                  playerSquare: sq(1, 6)
                 )
-            ]
+              ]
         )
 
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(6, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -546,19 +572,31 @@ struct AccuratePassTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 5),
-                .changedPassResult(die: .d6, modified: 4, modifications: [.longDistance]),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6)
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 5),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 5,
+                    modified: 4,
+                    modifications: [.longDistance]
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(1, 6),
+                    to: sq(6, 6),
+                    angle: 90,
+                    ballID: ballID
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(6, 6),
+                    ballID: ballID
+                ),
             ]
         )
 
@@ -569,14 +607,14 @@ struct AccuratePassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -594,7 +632,7 @@ struct AccuratePassTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -609,18 +647,19 @@ struct AccuratePassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .human_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass),
                     ],
@@ -632,7 +671,7 @@ struct AccuratePassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -657,7 +696,7 @@ struct AccuratePassTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -667,7 +706,7 @@ struct AccuratePassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -679,10 +718,11 @@ struct AccuratePassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -691,9 +731,9 @@ struct AccuratePassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -705,7 +745,7 @@ struct AccuratePassTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -718,7 +758,7 @@ struct AccuratePassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 3), sq(1, 3), sq(2, 4), sq(1, 4)]),
@@ -877,13 +917,20 @@ struct AccuratePassTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 6),
+                .rolledForHurlTeammate(coachID: .away, die: .d6, unmodified: 6),
                 .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 11)
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: ballID,
+                    from: sq(3, 6),
+                    to: sq(3, 11),
+                    angle: 180
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1))
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: ballID,
+                    in: sq(3, 11)
+                ),
             ]
         )
 
@@ -894,21 +941,21 @@ struct AccuratePassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -926,7 +973,7 @@ struct AccuratePassTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -941,18 +988,19 @@ struct AccuratePassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass),
                     ],
@@ -964,7 +1012,7 @@ struct AccuratePassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -989,7 +1037,7 @@ struct AccuratePassTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -999,7 +1047,7 @@ struct AccuratePassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1011,10 +1059,11 @@ struct AccuratePassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -1023,10 +1072,10 @@ struct AccuratePassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(6, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -1042,7 +1091,7 @@ struct AccuratePassTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
@@ -1054,7 +1103,7 @@ struct AccuratePassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionEligibleForAccuratePassBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -1074,17 +1123,39 @@ struct AccuratePassTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .accuratePass
+                    ),
+                    hand: []
                 ),
-                .rolledForPass(die: .d6, unmodified: 2),
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 2
+                ),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(6, 6),
+                    angle: 90,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(6, 6),
+                    ballID: 123
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .accuratePass
+                    )
+                ),
+                .updatedDiscards(
+                    top: .accuratePass,
+                    count: 1
                 ),
             ]
         )
@@ -1096,21 +1167,21 @@ struct AccuratePassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1128,7 +1199,7 @@ struct AccuratePassTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1143,18 +1214,19 @@ struct AccuratePassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .human_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass),
                     ],
@@ -1166,7 +1238,7 @@ struct AccuratePassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -1191,7 +1263,7 @@ struct AccuratePassTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -1201,7 +1273,7 @@ struct AccuratePassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -1213,10 +1285,11 @@ struct AccuratePassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1225,9 +1298,9 @@ struct AccuratePassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -1239,7 +1312,7 @@ struct AccuratePassTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -1252,7 +1325,7 @@ struct AccuratePassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 3), sq(1, 3), sq(2, 4), sq(1, 4)]),
@@ -1415,7 +1488,7 @@ struct AccuratePassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionEligibleForAccuratePassBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -1435,18 +1508,40 @@ struct AccuratePassTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .accuratePass
+                    ),
+                    hand: []
                 ),
-                .rolledForHurlTeammate(die: .d6, unmodified: 2),
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 2
+                ),
                 .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    angle: 270
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1)),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(2, 6)
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .accuratePass
+                    )
+                ),
+                .updatedDiscards(
+                    top: .accuratePass,
+                    count: 1
                 ),
             ]
         )
@@ -1458,21 +1553,21 @@ struct AccuratePassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1491,7 +1586,7 @@ struct AccuratePassTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1506,18 +1601,19 @@ struct AccuratePassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .accuratePass),
                     ],
@@ -1529,7 +1625,7 @@ struct AccuratePassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -1555,7 +1651,7 @@ struct AccuratePassTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -1565,7 +1661,7 @@ struct AccuratePassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1577,10 +1673,11 @@ struct AccuratePassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -1589,10 +1686,10 @@ struct AccuratePassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(6, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -1608,7 +1705,7 @@ struct AccuratePassTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
@@ -1620,7 +1717,7 @@ struct AccuratePassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionEligibleForAccuratePassBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -1639,15 +1736,27 @@ struct AccuratePassTests {
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 2),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 2),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(6, 6),
+                    angle: 90,
+                    ballID: ballID
                 ),
-                .playerFailedCatch(playerID: PlayerID(coachID: .away, index: 1)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .southEast),
-                .ballBounced(ballID: ballID, to: sq(7, 7))
+                .playerFailedCatch(
+                    playerID: pl(.away, 1),
+                    in: sq(6, 6),
+                    ballID: ballID
+                ),
+                .ballCameLoose(ballID: ballID, in: sq(6, 6)),
+                .rolledForDirection(coachID: .away, direction: .southEast),
+                .ballBounced(
+                    ballID: ballID,
+                    from: sq(6, 6),
+                    to: sq(7, 7),
+                    direction: .southEast
+                )
             ]
         )
 
@@ -1658,14 +1767,14 @@ struct AccuratePassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

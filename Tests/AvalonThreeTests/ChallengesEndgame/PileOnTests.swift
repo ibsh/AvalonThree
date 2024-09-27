@@ -16,7 +16,7 @@ struct PileOnTests {
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -31,30 +31,31 @@ struct PileOnTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -94,7 +95,7 @@ struct PileOnTests {
             randomizers: Randomizers(
                 blockDie: blockDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -104,7 +105,7 @@ struct PileOnTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -116,10 +117,11 @@ struct PileOnTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -128,9 +130,9 @@ struct PileOnTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -143,23 +145,48 @@ struct PileOnTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.miss]),
-                .selectedBlockDieResult(coachID: .away, result: .miss),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.miss]
                 ),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .turnEnded(coachID: .away),
-                .playerCanTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .discardedObjective(coachID: .home, objectiveID: .second),
-                .finalTurnBegan,
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6)
+                ), .turnEnded(coachID: .away),
+                .playerCanTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6)
+                ),
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: ChallengeCard(
+                        challenge: .pileOn,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 1
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -170,28 +197,28 @@ struct PileOnTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 2),
+                                playerID: pl(.home, 2),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -223,24 +250,25 @@ struct PileOnTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -276,7 +304,7 @@ struct PileOnTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -286,7 +314,7 @@ struct PileOnTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -298,10 +326,11 @@ struct PileOnTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -310,9 +339,9 @@ struct PileOnTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -326,20 +355,37 @@ struct PileOnTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -350,14 +396,14 @@ struct PileOnTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -389,24 +435,25 @@ struct PileOnTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -442,7 +489,7 @@ struct PileOnTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -452,7 +499,7 @@ struct PileOnTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -464,10 +511,11 @@ struct PileOnTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -476,9 +524,9 @@ struct PileOnTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -492,21 +540,42 @@ struct PileOnTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 1),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 1
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -530,8 +599,30 @@ struct PileOnTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2, total: 2),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .pileOn,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .pileOn,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 2
+                ),
             ]
         )
 
@@ -542,7 +633,7 @@ struct PileOnTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

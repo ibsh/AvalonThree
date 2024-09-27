@@ -14,7 +14,7 @@ struct SpreadOutTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,30 +29,31 @@ struct SpreadOutTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_blitzer,
                             state: .standing(square: sq(6, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(9, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(10, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -62,7 +63,7 @@ struct SpreadOutTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -90,7 +91,7 @@ struct SpreadOutTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -100,7 +101,7 @@ struct SpreadOutTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -112,10 +113,11 @@ struct SpreadOutTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 8)
                 )
             ]
         )
@@ -124,7 +126,7 @@ struct SpreadOutTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -182,18 +184,27 @@ struct SpreadOutTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 8),
+                    to: sq(6, 7),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 7),
+                    to: sq(6, 6),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 6),
+                    to: sq(6, 5),
+                    direction: .north,
                     reason: .run
                 ),
             ]
@@ -206,21 +217,21 @@ struct SpreadOutTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -236,7 +247,7 @@ struct SpreadOutTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -251,30 +262,31 @@ struct SpreadOutTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_blitzer,
                             state: .standing(square: sq(6, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(8, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(10, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -284,7 +296,7 @@ struct SpreadOutTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -312,7 +324,7 @@ struct SpreadOutTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -322,7 +334,7 @@ struct SpreadOutTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -334,10 +346,11 @@ struct SpreadOutTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 8)
                 )
             ]
         )
@@ -346,7 +359,7 @@ struct SpreadOutTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -402,13 +415,19 @@ struct SpreadOutTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 8),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 8),
+                    to: sq(5, 8),
+                    direction: .west,
                     reason: .mark
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 9),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 8),
+                    to: sq(6, 9),
+                    direction: .southEast,
                     reason: .mark
                 ),
             ]
@@ -421,35 +440,35 @@ struct SpreadOutTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -465,7 +484,7 @@ struct SpreadOutTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -480,30 +499,31 @@ struct SpreadOutTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_blitzer,
                             state: .standing(square: sq(6, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(8, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(10, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -513,7 +533,7 @@ struct SpreadOutTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -541,7 +561,7 @@ struct SpreadOutTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -551,7 +571,7 @@ struct SpreadOutTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -563,10 +583,11 @@ struct SpreadOutTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 8)
                 )
             ]
         )
@@ -575,7 +596,7 @@ struct SpreadOutTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -633,18 +654,27 @@ struct SpreadOutTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 8),
+                    to: sq(6, 7),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 7),
+                    to: sq(6, 6),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 6),
+                    to: sq(6, 5),
+                    direction: .north,
                     reason: .run
                 ),
             ]
@@ -670,8 +700,30 @@ struct SpreadOutTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1, total: 1)
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .spreadOut,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .spreadOut,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 1,
+                    total: 1
+                ),
             ]
         )
 
@@ -682,21 +734,21 @@ struct SpreadOutTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -712,7 +764,7 @@ struct SpreadOutTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -727,30 +779,31 @@ struct SpreadOutTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_blitzer,
                             state: .standing(square: sq(6, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(8, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(10, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 9)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -760,7 +813,7 @@ struct SpreadOutTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -788,7 +841,7 @@ struct SpreadOutTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare sidestep
@@ -798,7 +851,7 @@ struct SpreadOutTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -810,10 +863,11 @@ struct SpreadOutTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 8)
                 )
             ]
         )
@@ -822,7 +876,7 @@ struct SpreadOutTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(5, 7), sq(6, 7), sq(7, 7)]
@@ -843,10 +897,13 @@ struct SpreadOutTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 8),
+                    to: sq(6, 7),
+                    direction: .north,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -870,8 +927,30 @@ struct SpreadOutTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1, total: 1)
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .spreadOut,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .spreadOut,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 1,
+                    total: 1
+                ),
             ]
         )
 
@@ -882,35 +961,35 @@ struct SpreadOutTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

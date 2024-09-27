@@ -29,18 +29,19 @@ struct BodyCheckTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .bodyCheck),
                     ],
@@ -72,7 +73,7 @@ struct BodyCheckTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -82,7 +83,7 @@ struct BodyCheckTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -94,10 +95,11 @@ struct BodyCheckTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -106,9 +108,9 @@ struct BodyCheckTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -119,7 +121,7 @@ struct BodyCheckTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
@@ -131,7 +133,7 @@ struct BodyCheckTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForBodyCheckBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -151,20 +153,53 @@ struct BodyCheckTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .bodyCheck)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .bodyCheck
+                    ),
+                    hand: []
                 ),
-                .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.kerrunch]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 5),
-                .changedArmourResult(die: .d6, modified: 4, modifications: [.kerrunch]),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 5
+                ),
+                .changedArmourResult(
+                    die: .d6,
+                    unmodified: 5,
+                    modified: 4,
+                    modifications: [.kerrunch]
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .bodyCheck)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .bodyCheck
+                    )
+                ),
+                .updatedDiscards(
+                    top: .bodyCheck,
+                    count: 1
                 ),
             ]
         )
@@ -176,14 +211,14 @@ struct BodyCheckTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -215,18 +250,19 @@ struct BodyCheckTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .bodyCheck),
                     ],
@@ -259,7 +295,7 @@ struct BodyCheckTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -269,7 +305,7 @@ struct BodyCheckTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -281,10 +317,11 @@ struct BodyCheckTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -293,9 +330,9 @@ struct BodyCheckTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -306,7 +343,7 @@ struct BodyCheckTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
@@ -318,7 +355,7 @@ struct BodyCheckTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForBodyCheckBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -337,14 +374,21 @@ struct BodyCheckTests {
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 5),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 5),
             ]
         )
 
@@ -355,14 +399,14 @@ struct BodyCheckTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []

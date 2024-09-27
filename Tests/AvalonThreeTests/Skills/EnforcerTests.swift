@@ -18,7 +18,7 @@ struct EnforcerTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -33,24 +33,25 @@ struct EnforcerTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .khorne_bloodseeker,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .khorne_marauder,
                             state: .standing(square: sq(2, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -60,7 +61,7 @@ struct EnforcerTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -90,7 +91,7 @@ struct EnforcerTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -100,7 +101,7 @@ struct EnforcerTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -112,10 +113,11 @@ struct EnforcerTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -124,9 +126,9 @@ struct EnforcerTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -141,48 +143,105 @@ struct EnforcerTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch, .tackle, .shove]),
-                .selectedBlockDieResult(coachID: .away, result: .shove),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.kerrunch, .tackle, .shove]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerAssistedBlock(
-                    assistingPlayerID: PlayerID(coachID: .away, index: 1),
-                    blockingPlayerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    assistingPlayerID: pl(.away, 1),
+                    from: sq(2, 7),
+                    to: sq(1, 6),
+                    direction: .northWest,
+                    targetPlayerID: pl(.home, 0),
+                    blockingPlayerID: pl(.away, 0)
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(0, 6),
+                    playerID: pl(.home, 0),
+                    ballID: 123,
+                    from: sq(1, 6),
+                    to: sq(0, 6),
+                    direction: .west,
                     reason: .shoved
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
                     reason: .followUp
                 ),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .east),
-                .ballBounced(ballID: ballID, to: sq(1, 6)),
-                .playerCaughtBouncingBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch
                 ),
-                .rolledForArmour(die: .d6, unmodified: 4),
-                .changedArmourResult(die: .d6, modified: 3, modifications: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .tackle),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .rolledForArmour(die: .d6, unmodified: 2),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(0, 6),
+                    reason: .blocked
+                ),
+                .ballCameLoose(ballID: 123, in: sq(0, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .east
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(0, 6),
+                    to: sq(1, 6),
+                    direction: .east
+                ),
+                .playerCaughtBouncingBall(
+                    playerID: pl(.away, 0),
+                    in: sq(1, 6),
+                    ballID: 123
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 4
+                ),
+                .changedArmourResult(
+                    die: .d6,
+                    unmodified: 4,
+                    modified: 3,
+                    modifications: [.kerrunch]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .tackle
+                ),
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(1, 6)
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 2
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(0, 6),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -202,8 +261,29 @@ struct EnforcerTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2, total: 2),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .freeUpTheBall,
+                            bonusPlay: .blitz
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .freeUpTheBall,
+                                bonusPlay: .blitz
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 2
+                ),
             ]
         )
 
@@ -214,7 +294,7 @@ struct EnforcerTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -234,7 +314,7 @@ struct EnforcerTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -249,24 +329,25 @@ struct EnforcerTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .khorne_bloodseeker,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .khorne_marauder,
                             state: .standing(square: sq(2, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -276,7 +357,7 @@ struct EnforcerTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -303,7 +384,7 @@ struct EnforcerTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -313,7 +394,7 @@ struct EnforcerTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -325,10 +406,11 @@ struct EnforcerTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -337,9 +419,9 @@ struct EnforcerTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -354,32 +436,73 @@ struct EnforcerTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.miss, .smash, .smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.miss, .smash, .smash]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerAssistedBlock(
-                    assistingPlayerID: PlayerID(coachID: .away, index: 1),
-                    blockingPlayerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    assistingPlayerID: pl(.away, 1),
+                    from: sq(2, 7),
+                    to: sq(1, 6),
+                    direction: .northWest,
+                    targetPlayerID: pl(.home, 0),
+                    blockingPlayerID: pl(.away, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: ballID, to: sq(1, 7)),
-                .rolledForArmour(die: .d6, unmodified: 2),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .selectedBlockDieResult(coachID: .away, result: .miss),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: .blocked
+                ),
+                .ballCameLoose(ballID: 123, in: sq(1, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(1, 6),
+                    to: sq(1, 7),
+                    direction: .south
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 2
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: .blocked
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss
+                ),
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(2, 6)
+                ),
             ]
         )
 
@@ -390,7 +513,7 @@ struct EnforcerTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

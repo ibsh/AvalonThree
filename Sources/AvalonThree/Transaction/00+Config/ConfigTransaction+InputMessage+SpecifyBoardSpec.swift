@@ -25,7 +25,13 @@ extension ConfigTransaction {
             throw GameError("Invalid board spec choice")
         }
 
-        events.append(.specifiedBoardSpec(boardSpecID: boardSpecID))
+        events.append(
+            .specifiedBoardSpec(
+                coachID: coinFlipWinnerCoachID,
+                boardSpecID: boardSpecID,
+                boardSpec: boardSpecID.spec
+            )
+        )
 
         config.boardSpecID = boardSpecID
 

@@ -30,7 +30,7 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
-        guard let square = player.square else {
+        guard let playerSquare = player.square else {
             throw GameError("No square")
         }
 
@@ -48,8 +48,23 @@ extension InGameTransaction {
 
         let roll = randomizers.foulDie.rollFoulDie()
 
-        events.append(.rolledForFoul(result: roll))
-        events.append(.playerFouled(playerID: player.id, square: targetSquare))
+        events.append(
+            .rolledForFoul(coachID: actionContext.coachID, result: roll)
+        )
+
+        guard let direction = playerSquare.direction(to: targetSquare) else {
+            throw GameError("No foul direction")
+        }
+
+        events.append(
+            .playerFouled(
+                playerID: player.id,
+                from: playerSquare,
+                to: targetSquare,
+                direction: direction,
+                targetPlayerID: targetPlayerID
+            )
+        )
 
         // mutate player
         switch roll {
@@ -58,17 +73,19 @@ extension InGameTransaction {
             player.state = .inReserves
             table.players.update(with: player)
 
-            events.append(.playerSentOff(playerID: player.id))
+            events.append(
+                .playerSentOff(playerID: player.id, from: playerSquare)
+            )
 
             if let ball = table.playerHasABall(player) {
-                try ballComesLoose(id: ball.id, square: square)
+                try ballComesLoose(id: ball.id, square: playerSquare)
                 try bounceBall(id: ball.id)
             }
 
         case .slipped:
             player.canTakeActions = false
             table.players.update(with: player)
-            events.append(.playerCannotTakeActions(playerID: player.id))
+            events.append(.playerCannotTakeActions(playerID: player.id, in: playerSquare))
 
         case .gotThem:
             break

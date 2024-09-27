@@ -18,7 +18,7 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
-        guard let square = player.square else {
+        guard let playerSquare = player.square else {
             throw GameError("Player is in reserves")
         }
 
@@ -26,19 +26,21 @@ extension InGameTransaction {
         table.players.update(with: player)
 
         history.append(.playerInjured(playerID))
-        events.append(.playerInjured(playerID: playerID, reason: reason))
+        events.append(
+            .playerInjured(playerID: playerID, in: playerSquare, reason: reason)
+        )
 
         switch reason {
         case .blocked,
              .fouled,
              .fumbled:
             if let ball = table.playerHasABall(player) {
-                try ballComesLoose(id: ball.id, square: square)
+                try ballComesLoose(id: ball.id, square: playerSquare)
                 try bounceBall(id: ball.id)
             }
         case .trapdoor:
             if let ball = table.playerHasABall(player) {
-                try ballDisappears(id: ball.id)
+                try ballDisappears(id: ball.id, in: playerSquare)
             }
         }
     }

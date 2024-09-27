@@ -31,7 +31,7 @@ extension InGameTransaction {
 
         dealObjectives(turnContext: turnContext)
 
-        try newBall()
+        try newBall(turnContext: turnContext)
 
         // refresh context
         turnContext = try history.latestTurnContext()
@@ -56,13 +56,9 @@ extension InGameTransaction {
             return prompt
         }
 
-        if turnContext.isFirst {
-            events.append(.gameStarted)
-        }
-
-        if turnContext.isFinal {
-            events.append(.finalTurnBegan)
-        }
+        events.append(
+            .turnBegan(coachID: turnContext.coachID, isFinal: turnContext.isFinal)
+        )
 
         return try Prompt(
             coachID: turnContext.coachID,
@@ -160,7 +156,14 @@ extension InGameTransaction {
             table.objectives.remove(objectiveID)
             table.discards.append(objective)
             events.append(
-                .discardedObjective(coachID: turnContext.coachID, objectiveID: objectiveID)
+                .discardedObjective(
+                    coachID: turnContext.coachID,
+                    objectiveID: objectiveID,
+                    objective: objective
+                )
+            )
+            events.append(
+                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
             )
             return nil
         }
@@ -182,9 +185,45 @@ extension InGameTransaction {
         var objectives = table.objectives
         var deck = table.deck
 
-        for newObjectiveID in objectives.deal(from: &deck) {
+        if objectives.first == nil, let card = deck.popFirst() {
+            objectives.first = card
             events.append(
-                .dealtNewObjective(coachID: turnContext.coachID, objectiveID: newObjectiveID)
+                .dealtNewObjective(
+                    coachID: turnContext.coachID,
+                    objectiveID: .first,
+                    objective: card.challenge
+                )
+            )
+            events.append(
+                .updatedDeck(top: deck.first?.challenge, count: deck.count)
+            )
+        }
+
+        if objectives.second == nil, let card = deck.popFirst() {
+            objectives.second = card
+            events.append(
+                .dealtNewObjective(
+                    coachID: turnContext.coachID,
+                    objectiveID: .second,
+                    objective: card.challenge
+                )
+            )
+            events.append(
+                .updatedDeck(top: deck.first?.challenge, count: deck.count)
+            )
+        }
+
+        if objectives.third == nil, let card = deck.popFirst() {
+            objectives.third = card
+            events.append(
+                .dealtNewObjective(
+                    coachID: turnContext.coachID,
+                    objectiveID: .third,
+                    objective: card.challenge
+                )
+            )
+            events.append(
+                .updatedDeck(top: deck.first?.challenge, count: deck.count)
             )
         }
 
@@ -192,10 +231,12 @@ extension InGameTransaction {
         table.objectives = objectives
     }
 
-    private mutating func newBall() throws {
+    private mutating func newBall(
+        turnContext: TurnContext
+    ) throws {
 
         if table.balls.isEmpty {
-            try addNewBall()
+            try addNewBall(bounce: !turnContext.isFirst)
         }
     }
 

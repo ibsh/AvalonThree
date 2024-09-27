@@ -55,7 +55,7 @@ extension InGameTransaction {
         }
 
         var modifier = 0
-        var modifications = Set<HurlTeammateRollModification>()
+        var modifications = [HurlTeammateRollModification]()
 
         switch target.distance {
         case .handoff,
@@ -63,12 +63,12 @@ extension InGameTransaction {
             break
         case .long:
             modifier -= 1
-            modifications.insert(.longDistance)
+            modifications.append(.longDistance)
         }
 
         if !target.obstructingSquares.isEmpty {
             modifier -= 1
-            modifications.insert(.obstructed)
+            modifications.append(.obstructed)
         }
 
         modifier = max(-1, modifier)
@@ -88,7 +88,11 @@ extension InGameTransaction {
 
         let unmodifiedRoll = randomizer.roll()
         events.append(
-            .rolledForHurlTeammate(die: randomizer.die, unmodified: unmodifiedRoll)
+            .rolledForHurlTeammate(
+                coachID: actionContext.coachID,
+                die: randomizer.die,
+                unmodified: unmodifiedRoll
+            )
         )
 
         let modifiedRoll: Int
@@ -100,6 +104,7 @@ extension InGameTransaction {
             events.append(
                 .changedHurlTeammateResult(
                     die: randomizer.die,
+                    unmodified: unmodifiedRoll,
                     modified: modifiedRoll,
                     modifications: modifications
                 )

@@ -50,18 +50,18 @@ extension InGameTransaction {
         let scoringPlayersAndBalls = table.playersInSquares(
             Square.endZoneSquares(coachID: turnContext.coachID.inverse)
         )
-            .compactMap({ player -> (Player, Ball)? in
+            .compactMap({ player -> (Player, Square, Ball)? in
                 guard
                     player.coachID == turnContext.coachID,
-                    table.playerIsOpen(player) != nil,
+                    let square = table.playerIsOpen(player),
                     let ball = table.playerHasABall(player)
                 else {
                     return nil
                 }
-                return (player, ball)
+                return (player, square, ball)
             })
 
-        for (scoringPlayer, ball) in scoringPlayersAndBalls {
+        for (scoringPlayer, square, ball) in scoringPlayersAndBalls {
             var scoringPlayer = scoringPlayer
             scoringPlayer.state = .inReserves
             table.players.update(with: scoringPlayer)
@@ -75,6 +75,7 @@ extension InGameTransaction {
             events.append(
                 .playerScoredTouchdown(
                     playerID: scoringPlayer.id,
+                    in: square,
                     ballID: ball.id
                 )
             )
@@ -160,13 +161,16 @@ extension InGameTransaction {
             }
         }
         table.setActiveBonuses(coachID: coachID, activeBonuses: maintainBonuses)
-        table.discards.append(contentsOf: discardBonuses)
         for discardBonus in discardBonuses {
+            table.discards.append(discardBonus)
             events.append(
                 .discardedPersistentBonusPlay(
                     coachID: coachID,
                     card: discardBonus
                 )
+            )
+            events.append(
+                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
             )
         }
     }

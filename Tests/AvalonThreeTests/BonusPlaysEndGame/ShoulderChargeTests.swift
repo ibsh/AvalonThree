@@ -17,7 +17,7 @@ struct ShoulderChargeTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -32,18 +32,19 @@ struct ShoulderChargeTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .dwarf_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shoulderCharge)
                     ],
@@ -81,7 +82,7 @@ struct ShoulderChargeTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -91,7 +92,7 @@ struct ShoulderChargeTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -103,10 +104,11 @@ struct ShoulderChargeTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -115,7 +117,7 @@ struct ShoulderChargeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -172,10 +174,13 @@ struct ShoulderChargeTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -183,7 +188,7 @@ struct ShoulderChargeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForShoulderChargeBonusPlayBlockAction(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -201,15 +206,20 @@ struct ShoulderChargeTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shoulderCharge)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .shoulderCharge
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: true
-                )
+                    isFree: true,
+                    playerSquare: sq(2, 6)
+                ),
             ]
         )
 
@@ -217,9 +227,9 @@ struct ShoulderChargeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -233,25 +243,58 @@ struct ShoulderChargeTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.kerrunch]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 3),
-                .changedArmourResult(die: .d6, modified: 2, modifications: [.kerrunch]),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: PlayerFallDownReason.blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 3
+                ),
+                .changedArmourResult(
+                    die: .d6,
+                    unmodified: 3,
+                    modified: 2,
+                    modifications: [.kerrunch]
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: .blocked
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shoulderCharge)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .shoulderCharge
+                    )
+                ),
+                .updatedDiscards(
+                    top: .shoulderCharge,
+                    count: 1
                 ),
             ]
         )
@@ -263,7 +306,7 @@ struct ShoulderChargeTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -279,7 +322,7 @@ struct ShoulderChargeTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -294,18 +337,19 @@ struct ShoulderChargeTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .dwarf_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shoulderCharge)
                     ],
@@ -317,7 +361,7 @@ struct ShoulderChargeTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -340,7 +384,7 @@ struct ShoulderChargeTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -350,7 +394,7 @@ struct ShoulderChargeTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -362,10 +406,11 @@ struct ShoulderChargeTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -374,7 +419,7 @@ struct ShoulderChargeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -431,10 +476,13 @@ struct ShoulderChargeTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -442,7 +490,7 @@ struct ShoulderChargeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForShoulderChargeBonusPlayBlockAction(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -467,14 +515,14 @@ struct ShoulderChargeTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []

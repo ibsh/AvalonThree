@@ -45,7 +45,9 @@ extension InGameTransaction {
             history.append(.actionIsFree)
         }
         history.append(.sidestepValidSquares(validSquares))
-        events.append(.declaredAction(declaration: declaration, isFree: isFree))
+        events.append(
+            .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
+        )
 
         return Prompt(
             coachID: playerID.coachID,

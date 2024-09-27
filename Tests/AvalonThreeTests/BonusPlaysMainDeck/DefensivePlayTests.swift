@@ -17,7 +17,7 @@ struct DefensivePlayTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -32,30 +32,31 @@ struct DefensivePlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(10, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .standing(square: sq(9, 12)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay),
                     ],
@@ -67,7 +68,7 @@ struct DefensivePlayTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [
@@ -96,7 +97,7 @@ struct DefensivePlayTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare first run
@@ -106,7 +107,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -118,11 +119,12 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(9, 12)
+                )
             ]
         )
 
@@ -130,7 +132,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 1),
+                    playerID: pl(.home, 1),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -190,18 +192,27 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 11),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(9, 12),
+                    to: sq(10, 11),
+                    direction: .northEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 10),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 11),
+                    to: sq(10, 10),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 9),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 10),
+                    to: sq(10, 9),
+                    direction: .north,
                     reason: .run
                 ),
             ]
@@ -214,21 +225,21 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -246,7 +257,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -258,10 +269,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 7)
                 )
             ]
         )
@@ -270,7 +282,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -326,13 +338,19 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(4, 7),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(5, 7),
+                    to: sq(4, 7),
+                    direction: .west,
                     reason: .mark
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(3, 8),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(3, 8),
+                    direction: .southWest,
                     reason: .mark
                 ),
             ]
@@ -345,21 +363,21 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -377,7 +395,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -389,10 +407,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(10, 9)
                 )
             ]
         )
@@ -401,7 +420,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 1),
+                    playerID: pl(.home, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -456,8 +475,11 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 8),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 9),
+                    to: sq(10, 8),
+                    direction: .north,
                     reason: .mark
                 ),
                 .turnEnded(coachID: .home),
@@ -484,10 +506,25 @@ struct DefensivePlayTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .defensivePlay
+                    ),
+                    hand: []
                 ),
-                .dealtNewObjective(coachID: .away, objectiveID: .first),
-                .dealtNewObjective(coachID: .away, objectiveID: .second),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(top: .breakSomeBones, count: 1),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(top: nil, count: 0),
+                .turnBegan(coachID: .away, isFinal: false),
             ]
         )
 
@@ -498,28 +535,28 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -537,7 +574,7 @@ struct DefensivePlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -549,10 +586,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 7)
                 )
             ]
         )
@@ -561,9 +599,9 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -576,13 +614,13 @@ struct DefensivePlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch, .smash]),
+                .rolledForBlock(coachID: .away, results: [.kerrunch, .smash]),
             ]
         )
 
@@ -590,7 +628,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.kerrunch, .smash]
                 )
             )
@@ -604,7 +642,7 @@ struct DefensivePlayTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -619,30 +657,31 @@ struct DefensivePlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(10, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .standing(square: sq(9, 12)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay),
                     ],
@@ -654,7 +693,7 @@ struct DefensivePlayTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [
@@ -683,7 +722,7 @@ struct DefensivePlayTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare first run
@@ -693,7 +732,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -705,11 +744,12 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(9, 12)
+                )
             ]
         )
 
@@ -717,7 +757,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 1),
+                    playerID: pl(.home, 1),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -777,18 +817,27 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 11),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(9, 12),
+                    to: sq(10, 11),
+                    direction: .northEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 10),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 11),
+                    to: sq(10, 10),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 9),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 10),
+                    to: sq(10, 9),
+                    direction: .north,
                     reason: .run
                 ),
             ]
@@ -801,21 +850,21 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -833,7 +882,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -845,10 +894,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 7)
                 )
             ]
         )
@@ -857,7 +907,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -913,13 +963,19 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(4, 7),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(5, 7),
+                    to: sq(4, 7),
+                    direction: .west,
                     reason: .mark
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(3, 8),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(3, 8),
+                    direction: .southWest,
                     reason: .mark
                 ),
             ]
@@ -932,21 +988,21 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -964,7 +1020,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -976,10 +1032,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(10, 9)
                 )
             ]
         )
@@ -988,7 +1045,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 1),
+                    playerID: pl(.home, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1043,8 +1100,11 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 8),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 9),
+                    to: sq(10, 8),
+                    direction: .north,
                     reason: .mark
                 ),
                 .turnEnded(coachID: .home),
@@ -1069,8 +1129,19 @@ struct DefensivePlayTests {
 
         #expect(
             latestEvents == [
-                .dealtNewObjective(coachID: .away, objectiveID: .first),
-                .dealtNewObjective(coachID: .away, objectiveID: .second),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(top: .breakSomeBones, count: 1),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(top: nil, count: 0),
+                .turnBegan(coachID: .away, isFinal: false),
             ]
         )
 
@@ -1081,28 +1152,28 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -1120,7 +1191,7 @@ struct DefensivePlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1132,10 +1203,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 7)
                 )
             ]
         )
@@ -1144,9 +1216,9 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -1159,19 +1231,25 @@ struct DefensivePlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.miss]),
+                .rolledForBlock(coachID: .away, results: [.miss]),
                 .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 8)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 7),
+                    to: sq(3, 8),
+                    direction: .southEast,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0))
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(2, 7)
+                ),
             ]
         )
 
@@ -1182,14 +1260,14 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -1208,7 +1286,7 @@ struct DefensivePlayTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1223,30 +1301,31 @@ struct DefensivePlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(10, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .standing(square: sq(9, 12)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay),
                     ],
@@ -1258,7 +1337,7 @@ struct DefensivePlayTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [
@@ -1289,7 +1368,7 @@ struct DefensivePlayTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare first run
@@ -1299,7 +1378,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1311,11 +1390,12 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(9, 12)
+                )
             ]
         )
 
@@ -1323,7 +1403,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 1),
+                    playerID: pl(.home, 1),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1383,18 +1463,27 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 11),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(9, 12),
+                    to: sq(10, 11),
+                    direction: .northEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 10),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 11),
+                    to: sq(10, 10),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 9),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 10),
+                    to: sq(10, 9),
+                    direction: .north,
                     reason: .run
                 ),
             ]
@@ -1407,21 +1496,21 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -1439,7 +1528,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -1451,10 +1540,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 7)
                 )
             ]
         )
@@ -1463,7 +1553,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1519,13 +1609,19 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(4, 7),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(5, 7),
+                    to: sq(4, 7),
+                    direction: .west,
                     reason: .mark
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(3, 8),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(3, 8),
+                    direction: .southWest,
                     reason: .mark
                 ),
             ]
@@ -1538,21 +1634,21 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -1570,7 +1666,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -1582,10 +1678,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(10, 9)
                 )
             ]
         )
@@ -1594,7 +1691,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 1),
+                    playerID: pl(.home, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1649,8 +1746,11 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 8),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 9),
+                    to: sq(10, 8),
+                    direction: .north,
                     reason: .mark
                 ),
                 .turnEnded(coachID: .home),
@@ -1677,11 +1777,31 @@ struct DefensivePlayTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .defensivePlay
+                    ),
+                    hand: []
                 ),
-                .dealtNewObjective(coachID: .away, objectiveID: .first),
-                .dealtNewObjective(coachID: .away, objectiveID: .second),
-                .dealtNewObjective(coachID: .away, objectiveID: .third),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(top: .breakSomeBones, count: 3),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(top: .breakSomeBones, count: 2),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .third,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(top: .breakSomeBones, count: 1),
+                .turnBegan(coachID: .away, isFinal: false),
             ]
         )
 
@@ -1692,28 +1812,28 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -1731,7 +1851,7 @@ struct DefensivePlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1743,10 +1863,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 7)
                 )
             ]
         )
@@ -1755,9 +1876,9 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -1770,19 +1891,25 @@ struct DefensivePlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.miss, .miss]),
+                .rolledForBlock(coachID: .away, results: [.miss, .miss]),
                 .selectedBlockDieResult(coachID: .away, result: .miss),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 8)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 7),
+                    to: sq(3, 8),
+                    direction: .southEast,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0))
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(2, 7)
+                ),
             ]
         )
 
@@ -1793,14 +1920,14 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -1818,7 +1945,7 @@ struct DefensivePlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -1830,10 +1957,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(10, 7)
                 )
             ]
         )
@@ -1842,7 +1970,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(10, 6), sq(9, 6)]
@@ -1863,10 +1991,13 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(9, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(10, 7),
+                    to: sq(9, 6),
+                    direction: .northWest,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -1877,14 +2008,14 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -1902,7 +2033,7 @@ struct DefensivePlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -1914,10 +2045,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(9, 6)
                 )
             ]
         )
@@ -1926,7 +2058,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1981,15 +2113,28 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(9, 7),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(9, 6),
+                    to: sq(9, 7),
+                    direction: .south,
                     reason: .mark
                 ),
                 .turnEnded(coachID: .away),
-                .playerCanTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerCanTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(2, 7)
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .defensivePlay
+                    )
+                ),
+                .updatedDiscards(
+                    top: .defensivePlay,
+                    count: 1
                 ),
             ]
         )
@@ -2012,8 +2157,28 @@ struct DefensivePlayTests {
 
         #expect(
             latestEvents == [
-                .discardedObjective(coachID: .home, objectiveID: .second),
-                .dealtNewObjective(coachID: .home, objectiveID: .second),
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 2
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(top: nil, count: 0),
+                .turnBegan(
+                    coachID: .home,
+                    isFinal: false
+                ),
             ]
         )
 
@@ -2024,28 +2189,28 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -2063,7 +2228,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -2075,11 +2240,12 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .sidestep
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(10, 8)
+                )
             ]
         )
 
@@ -2087,7 +2253,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .home, index: 1),
+                    playerID: pl(.home, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(9, 9), sq(10, 9)]
@@ -2108,10 +2274,13 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 9),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 8),
+                    to: sq(10, 9),
+                    direction: .south,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -2122,28 +2291,28 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -2161,7 +2330,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -2173,10 +2342,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 8)
                 )
             ]
         )
@@ -2185,7 +2355,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(4, 7), sq(4, 8), sq(2, 9), sq(4, 9), sq(3, 9)]
@@ -2206,10 +2376,13 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(4, 9),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(3, 8),
+                    to: sq(4, 9),
+                    direction: .southEast,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -2220,28 +2393,28 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -2259,7 +2432,7 @@ struct DefensivePlayTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -2271,10 +2444,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 1),
+                        playerID: pl(.home, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(10, 9)
                 )
             ]
         )
@@ -2283,7 +2457,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 1),
+                    playerID: pl(.home, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -2338,8 +2512,11 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(10, 8),
+                    playerID: pl(.home, 1),
+                    ballID: nil,
+                    from: sq(10, 9),
+                    to: sq(10, 8),
+                    direction: .north,
                     reason: .mark
                 ),
                 .turnEnded(coachID: .home),
@@ -2364,8 +2541,19 @@ struct DefensivePlayTests {
 
         #expect(
             latestEvents == [
-                .discardedObjective(coachID: .away, objectiveID: .first),
-                .finalTurnBegan,
+                .discardedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 3
+                ),
+                .turnBegan(coachID: .away, isFinal: true),
             ]
         )
 
@@ -2376,35 +2564,35 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -2422,7 +2610,7 @@ struct DefensivePlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -2434,10 +2622,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(9, 7)
                 )
             ]
         )
@@ -2446,9 +2635,9 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 1),
+                        pl(.home, 1),
                     ]
                 )
             )
@@ -2462,20 +2651,27 @@ struct DefensivePlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 1))
+                message: .blockActionSpecifyTarget(target: pl(.home, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(10, 8)
+                    playerID: pl(.away, 1),
+                    from: sq(9, 7),
+                    to: sq(10, 8),
+                    direction: .southEast,
+                    targetPlayerID: pl(.home, 1)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 1), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 3),
+                .playerFellDown(
+                    playerID: pl(.home, 1),
+                    in: sq(10, 8),
+                    reason: .blocked
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 3),
             ]
         )
 
@@ -2486,35 +2682,35 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -2533,7 +2729,7 @@ struct DefensivePlayTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2548,18 +2744,19 @@ struct DefensivePlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(4, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay),
                     ],
@@ -2596,7 +2793,7 @@ struct DefensivePlayTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Use bonus play
@@ -2612,9 +2809,19 @@ struct DefensivePlayTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .defensivePlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .defensivePlay
+                    ),
+                    hand: []
                 ),
-                .dealtNewObjective(coachID: .away, objectiveID: .first),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .gangUp
+                ),
+                .updatedDeck(top: nil, count: 0),
+                .turnBegan(coachID: .away, isFinal: false),
             ]
         )
 
@@ -2625,14 +2832,14 @@ struct DefensivePlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -2650,7 +2857,7 @@ struct DefensivePlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -2662,10 +2869,11 @@ struct DefensivePlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 7)
                 )
             ]
         )
@@ -2674,9 +2882,9 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -2689,13 +2897,13 @@ struct DefensivePlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch, .smash]),
+                .rolledForBlock(coachID: .away, results: [.kerrunch, .smash]),
             ]
         )
 
@@ -2703,7 +2911,7 @@ struct DefensivePlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.kerrunch, .smash]
                 )
             )
@@ -2723,9 +2931,19 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .selectedBlockDieResult(coachID: .away, result: .kerrunch),
-                .playerBlocked(playerID: PlayerID(coachID: .away, index: 0), square: sq(4, 7)),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6)
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 7),
+                    to: sq(4, 7),
+                    direction: .east,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(4, 7),
+                    reason: .blocked
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 6),
             ]
         )
 

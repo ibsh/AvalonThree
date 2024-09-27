@@ -34,12 +34,7 @@ extension InGameTransaction {
             throw GameError("Invalid square")
         }
 
-        try playerMovesIntoSquare(
-            playerID: player.id,
-            newSquare: square,
-            isFinalSquare: true,
-            reason: .reserves
-        )
+        try playerMovesOutOfReservesIntoSquare(playerID: player.id, newSquare: square)
 
         // finish the action
         history.append(.actionFinished)

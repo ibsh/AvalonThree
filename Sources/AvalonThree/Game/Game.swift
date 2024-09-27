@@ -13,18 +13,18 @@ public struct Game: Sendable {
     var previousPrompt: Prompt?
 
     let randomizers: Randomizers
-    let uuidProvider: UUIDProviding
+    let ballIDProvider: BallIDProviding
 
     init(
         phase: Phase,
         previousPrompt: Prompt?,
         randomizers: Randomizers,
-        uuidProvider: UUIDProviding
+        ballIDProvider: BallIDProviding
     ) {
         self.phase = phase
         self.previousPrompt = previousPrompt
         self.randomizers = randomizers
-        self.uuidProvider = uuidProvider
+        self.ballIDProvider = ballIDProvider
     }
 
     public init() {
@@ -32,7 +32,7 @@ public struct Game: Sendable {
             phase: .config(Config()),
             previousPrompt: nil,
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
     }
 }

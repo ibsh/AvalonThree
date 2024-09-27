@@ -17,7 +17,7 @@ struct PlayAsATeamTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -32,30 +32,31 @@ struct PlayAsATeamTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(5, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(9, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(4, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -65,7 +66,7 @@ struct PlayAsATeamTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         ),
                     ],
                     deck: [],
@@ -96,7 +97,7 @@ struct PlayAsATeamTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare sidestep
@@ -106,7 +107,7 @@ struct PlayAsATeamTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -118,10 +119,11 @@ struct PlayAsATeamTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 6)
                 )
             ]
         )
@@ -130,7 +132,7 @@ struct PlayAsATeamTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(6, 5), sq(4, 5), sq(6, 6), sq(5, 5), sq(6, 7)]
@@ -151,10 +153,13 @@ struct PlayAsATeamTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 6),
+                    to: sq(5, 5),
+                    direction: .north,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -165,42 +170,42 @@ struct PlayAsATeamTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -218,7 +223,7 @@ struct PlayAsATeamTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -230,10 +235,11 @@ struct PlayAsATeamTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(7, 6)
                 )
             ]
         )
@@ -242,7 +248,7 @@ struct PlayAsATeamTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -298,10 +304,13 @@ struct PlayAsATeamTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(7, 5),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(7, 6),
+                    to: sq(7, 5),
+                    direction: .north,
                     reason: .run
-                ),
+                )
             ]
         )
 
@@ -312,35 +321,35 @@ struct PlayAsATeamTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -358,7 +367,7 @@ struct PlayAsATeamTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -370,10 +379,11 @@ struct PlayAsATeamTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(9, 6)
                 )
             ]
         )
@@ -382,7 +392,7 @@ struct PlayAsATeamTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 2),
+                    playerID: pl(.away, 2),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -438,13 +448,27 @@ struct PlayAsATeamTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(9, 5),
+                    playerID: pl(.away, 2),
+                    ballID: 123,
+                    from: sq(9, 6),
+                    to: sq(9, 5),
+                    direction: .north,
                     reason: .run
                 ),
                 .turnEnded(coachID: .away),
-                .discardedObjective(coachID: .home, objectiveID: .third),
-                .finalTurnBegan,
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .third,
+                    objective: ChallengeCard(
+                        challenge: .playAsATeam,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 1
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -455,14 +479,14 @@ struct PlayAsATeamTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -481,7 +505,7 @@ struct PlayAsATeamTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -496,30 +520,31 @@ struct PlayAsATeamTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(5, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(9, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(4, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -529,7 +554,7 @@ struct PlayAsATeamTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         ),
                     ],
                     deck: [],
@@ -560,7 +585,7 @@ struct PlayAsATeamTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare sidestep
@@ -570,7 +595,7 @@ struct PlayAsATeamTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -582,10 +607,11 @@ struct PlayAsATeamTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 6)
                 )
             ]
         )
@@ -594,7 +620,7 @@ struct PlayAsATeamTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(4, 5), sq(5, 5), sq(6, 5), sq(6, 7), sq(6, 6)]
@@ -615,10 +641,13 @@ struct PlayAsATeamTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 6),
+                    to: sq(5, 5),
+                    direction: .north,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -629,42 +658,42 @@ struct PlayAsATeamTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -682,7 +711,7 @@ struct PlayAsATeamTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -694,10 +723,11 @@ struct PlayAsATeamTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 5)
                 )
             ]
         )
@@ -706,7 +736,7 @@ struct PlayAsATeamTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -761,10 +791,13 @@ struct PlayAsATeamTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 5),
+                    to: sq(5, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -775,35 +808,35 @@ struct PlayAsATeamTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -821,7 +854,7 @@ struct PlayAsATeamTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -833,10 +866,11 @@ struct PlayAsATeamTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(9, 6)
                 )
             ]
         )
@@ -845,7 +879,7 @@ struct PlayAsATeamTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 2),
+                    playerID: pl(.away, 2),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -901,13 +935,27 @@ struct PlayAsATeamTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(9, 5),
+                    playerID: pl(.away, 2),
+                    ballID: 123,
+                    from: sq(9, 6),
+                    to: sq(9, 5),
+                    direction: .north,
                     reason: .run
                 ),
                 .turnEnded(coachID: .away),
-                .discardedObjective(coachID: .home, objectiveID: .third),
-                .finalTurnBegan,
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .third,
+                    objective: ChallengeCard(
+                        challenge: .playAsATeam,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 1
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -918,14 +966,14 @@ struct PlayAsATeamTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -944,7 +992,7 @@ struct PlayAsATeamTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -959,30 +1007,31 @@ struct PlayAsATeamTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(5, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(9, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(4, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -992,7 +1041,7 @@ struct PlayAsATeamTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         ),
                     ],
                     deck: [],
@@ -1023,7 +1072,7 @@ struct PlayAsATeamTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare sidestep
@@ -1033,7 +1082,7 @@ struct PlayAsATeamTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -1045,10 +1094,11 @@ struct PlayAsATeamTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 6)
                 )
             ]
         )
@@ -1057,7 +1107,7 @@ struct PlayAsATeamTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(6, 5), sq(6, 6), sq(4, 5), sq(5, 5), sq(6, 7)]
@@ -1078,10 +1128,13 @@ struct PlayAsATeamTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 6),
+                    to: sq(5, 5),
+                    direction: .north,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -1092,42 +1145,42 @@ struct PlayAsATeamTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1145,7 +1198,7 @@ struct PlayAsATeamTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -1157,10 +1210,11 @@ struct PlayAsATeamTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(7, 6)
                 )
             ]
         )
@@ -1169,7 +1223,7 @@ struct PlayAsATeamTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1225,13 +1279,19 @@ struct PlayAsATeamTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(7, 6),
+                    to: sq(6, 6),
+                    direction: .west,
                     reason: .mark
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(6, 6),
+                    to: sq(5, 6),
+                    direction: .west,
                     reason: .mark
                 ),
             ]
@@ -1244,42 +1304,42 @@ struct PlayAsATeamTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1297,7 +1357,7 @@ struct PlayAsATeamTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1309,10 +1369,11 @@ struct PlayAsATeamTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(9, 6)
                 )
             ]
         )
@@ -1321,7 +1382,7 @@ struct PlayAsATeamTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 2),
+                    playerID: pl(.away, 2),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1377,10 +1438,13 @@ struct PlayAsATeamTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(9, 5),
+                    playerID: pl(.away, 2),
+                    ballID: 123,
+                    from: sq(9, 6),
+                    to: sq(9, 5),
+                    direction: .north,
                     reason: .run
-                ),
+                )
             ]
         )
 
@@ -1404,10 +1468,32 @@ struct PlayAsATeamTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .third),
-                .scoreUpdated(coachID: .away, increment: 2, total: 2),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .third,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .playAsATeam,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .playAsATeam,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 2
+                ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -1418,14 +1504,14 @@ struct PlayAsATeamTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []

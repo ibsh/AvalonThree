@@ -27,24 +27,25 @@ struct GoDeepTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(3, 12)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -77,7 +78,7 @@ struct GoDeepTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -87,7 +88,7 @@ struct GoDeepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -99,10 +100,11 @@ struct GoDeepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 10)
                 )
             ]
         )
@@ -111,7 +113,7 @@ struct GoDeepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -166,10 +168,13 @@ struct GoDeepTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 11),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 10),
+                    to: sq(3, 11),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -180,21 +185,21 @@ struct GoDeepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -223,18 +228,19 @@ struct GoDeepTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 11)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -267,7 +273,7 @@ struct GoDeepTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -277,7 +283,7 @@ struct GoDeepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -289,10 +295,11 @@ struct GoDeepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 10)
                 )
             ]
         )
@@ -301,7 +308,7 @@ struct GoDeepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -357,10 +364,13 @@ struct GoDeepTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 10),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 10),
+                    to: sq(4, 10),
+                    direction: .east,
                     reason: .run
-                ),
+                )
             ]
         )
 
@@ -371,7 +381,7 @@ struct GoDeepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -400,18 +410,19 @@ struct GoDeepTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 11)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -444,7 +455,7 @@ struct GoDeepTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -454,7 +465,7 @@ struct GoDeepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -466,10 +477,11 @@ struct GoDeepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 10)
                 )
             ]
         )
@@ -478,7 +490,7 @@ struct GoDeepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -534,10 +546,13 @@ struct GoDeepTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 11),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 10),
+                    to: sq(3, 11),
+                    direction: .south,
                     reason: .run
-                ),
+                )
             ]
         )
 
@@ -561,8 +576,30 @@ struct GoDeepTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2, total: 2),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .goDeep,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .goDeep,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 2
+                ),
             ]
         )
 
@@ -573,7 +610,7 @@ struct GoDeepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -589,7 +626,7 @@ struct GoDeepTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -604,18 +641,19 @@ struct GoDeepTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 11)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -625,7 +663,7 @@ struct GoDeepTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -653,7 +691,7 @@ struct GoDeepTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -663,7 +701,7 @@ struct GoDeepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -675,10 +713,11 @@ struct GoDeepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 10)
                 )
             ]
         )
@@ -687,7 +726,7 @@ struct GoDeepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -746,23 +785,35 @@ struct GoDeepTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 11),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(3, 10),
+                    to: sq(3, 11),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 12),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(3, 11),
+                    to: sq(3, 12),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 13),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(3, 12),
+                    to: sq(3, 13),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 14),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(3, 13),
+                    to: sq(3, 14),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -788,13 +839,40 @@ struct GoDeepTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2, total: 2),
-                .playerScoredTouchdown(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .goDeep,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .goDeep,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
                 ),
-                .scoreUpdated(coachID: .away, increment: 4, total: 6),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 2
+                ),
+                .playerScoredTouchdown(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 14),
+                    ballID: 123
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 4,
+                    total: 6
+                ),
             ]
         )
 
@@ -805,14 +883,14 @@ struct GoDeepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

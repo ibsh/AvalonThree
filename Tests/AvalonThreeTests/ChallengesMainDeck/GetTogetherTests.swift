@@ -27,24 +27,25 @@ struct GetTogetherTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -77,7 +78,7 @@ struct GetTogetherTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -87,7 +88,7 @@ struct GetTogetherTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -99,10 +100,11 @@ struct GetTogetherTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -111,7 +113,7 @@ struct GetTogetherTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -169,18 +171,27 @@ struct GetTogetherTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(4, 5),
+                    direction: .northEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(4, 5),
+                    to: sq(5, 5),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 5),
+                    to: sq(6, 5),
+                    direction: .east,
                     reason: .run
                 ),
             ]
@@ -193,14 +204,14 @@ struct GetTogetherTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -229,24 +240,25 @@ struct GetTogetherTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .orc_lineman,
                             state: .prone(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -279,7 +291,7 @@ struct GetTogetherTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -289,7 +301,7 @@ struct GetTogetherTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -301,10 +313,11 @@ struct GetTogetherTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -313,7 +326,7 @@ struct GetTogetherTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -371,18 +384,27 @@ struct GetTogetherTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(4, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(5, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 6),
+                    to: sq(6, 6),
+                    direction: .east,
                     reason: .run
                 ),
             ]
@@ -395,14 +417,14 @@ struct GetTogetherTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
@@ -431,24 +453,25 @@ struct GetTogetherTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -481,7 +504,7 @@ struct GetTogetherTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -491,7 +514,7 @@ struct GetTogetherTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -503,10 +526,11 @@ struct GetTogetherTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -515,7 +539,7 @@ struct GetTogetherTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -573,18 +597,27 @@ struct GetTogetherTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(4, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(5, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 6),
+                    to: sq(6, 6),
+                    direction: .east,
                     reason: .run
                 ),
             ]
@@ -610,8 +643,30 @@ struct GetTogetherTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .third),
-                .scoreUpdated(coachID: .away, increment: 1, total: 1),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .third,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .getTogether,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .getTogether,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 1,
+                    total: 1
+                ),
             ]
         )
 
@@ -622,14 +677,14 @@ struct GetTogetherTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

@@ -67,9 +67,7 @@ extension SetupTransaction {
                 playerIDs: table
                     .coinFlipWinnerTeamID
                     .spec
-                    .playerConfigs(
-                        coachID: coinFlipWinnerCoachID
-                    )
+                    .playerSetups(coachID: coinFlipWinnerCoachID)
                     .map { $0.id }
                     .toSet(),
                 validSquares: Square

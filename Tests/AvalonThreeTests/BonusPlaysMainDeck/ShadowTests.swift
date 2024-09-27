@@ -27,18 +27,19 @@ struct ShadowTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shadow),
@@ -68,7 +69,7 @@ struct ShadowTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare sidestep
@@ -78,7 +79,7 @@ struct ShadowTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -90,10 +91,11 @@ struct ShadowTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 5)
                 )
             ]
         )
@@ -102,7 +104,7 @@ struct ShadowTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -155,10 +157,13 @@ struct ShadowTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 5),
+                    to: sq(6, 6),
+                    direction: .southEast,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -167,7 +172,7 @@ struct ShadowTests {
                 coachID: .home,
                 payload: .eligibleForShadowBonusPlayExtraMove(
                     validPlayers: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ],
                     square: sq(5, 5)
                 )
@@ -180,7 +185,7 @@ struct ShadowTests {
             InputMessageWrapper(
                 coachID: .home,
                 message: .useShadowBonusPlayExtraMove(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -189,11 +194,18 @@ struct ShadowTests {
             latestEvents == [
                 .revealedInstantBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shadow)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .shadow
+                    ),
+                    hand: []
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(5, 5),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(4, 5),
+                    to: sq(5, 5),
+                    direction: .east,
                     reason: .shadow
                 ),
             ]
@@ -206,7 +218,7 @@ struct ShadowTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
@@ -235,30 +247,31 @@ struct ShadowTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(5, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shadow),
@@ -288,7 +301,7 @@ struct ShadowTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare sidestep
@@ -298,7 +311,7 @@ struct ShadowTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -310,10 +323,11 @@ struct ShadowTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 5)
                 )
             ]
         )
@@ -322,7 +336,7 @@ struct ShadowTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -375,10 +389,13 @@ struct ShadowTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 4),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 5),
+                    to: sq(6, 4),
+                    direction: .northEast,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -387,9 +404,9 @@ struct ShadowTests {
                 coachID: .home,
                 payload: .eligibleForShadowBonusPlayExtraMove(
                     validPlayers: [
-                        PlayerID(coachID: .home, index: 0),
-                        PlayerID(coachID: .home, index: 1),
-                        PlayerID(coachID: .home, index: 2),
+                        pl(.home, 0),
+                        pl(.home, 1),
+                        pl(.home, 2),
                     ],
                     square: sq(5, 5)
                 )
@@ -402,7 +419,7 @@ struct ShadowTests {
             InputMessageWrapper(
                 coachID: .home,
                 message: .useShadowBonusPlayExtraMove(
-                    playerID: PlayerID(coachID: .home, index: 2)
+                    playerID: pl(.home, 2)
                 )
             )
         )
@@ -411,11 +428,18 @@ struct ShadowTests {
             latestEvents == [
                 .revealedInstantBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shadow)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .shadow
+                    ),
+                    hand: []
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 2),
-                    square: sq(5, 5),
+                    playerID: pl(.home, 2),
+                    ballID: nil,
+                    from: sq(5, 6),
+                    to: sq(5, 5),
+                    direction: .north,
                     reason: .shadow
                 ),
             ]
@@ -428,7 +452,7 @@ struct ShadowTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
@@ -457,18 +481,19 @@ struct ShadowTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .shadow),
@@ -498,7 +523,7 @@ struct ShadowTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare sidestep
@@ -508,7 +533,7 @@ struct ShadowTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -520,10 +545,11 @@ struct ShadowTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 5)
                 )
             ]
         )
@@ -532,7 +558,7 @@ struct ShadowTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -585,10 +611,13 @@ struct ShadowTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 5),
+                    to: sq(6, 5),
+                    direction: .east,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -597,7 +626,7 @@ struct ShadowTests {
                 coachID: .home,
                 payload: .eligibleForShadowBonusPlayExtraMove(
                     validPlayers: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ],
                     square: sq(5, 5)
                 )
@@ -624,14 +653,14 @@ struct ShadowTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []

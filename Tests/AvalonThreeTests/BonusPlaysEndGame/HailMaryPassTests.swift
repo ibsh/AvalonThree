@@ -16,7 +16,7 @@ struct HailMaryPassTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -31,18 +31,19 @@ struct HailMaryPassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_snotling,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .snotling_snotling,
                             state: .standing(square: sq(9, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
                     ],
@@ -54,7 +55,7 @@ struct HailMaryPassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -79,7 +80,7 @@ struct HailMaryPassTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Try to declare pass without bonus play
@@ -90,7 +91,7 @@ struct HailMaryPassTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .pass
                         ),
                         consumesBonusPlays: []
@@ -106,7 +107,7 @@ struct HailMaryPassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: [.hailMaryPass]
@@ -118,14 +119,19 @@ struct HailMaryPassTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .hailMaryPass
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 6)
                 ),
             ]
         )
@@ -134,10 +140,10 @@ struct HailMaryPassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(9, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -156,23 +162,46 @@ struct HailMaryPassTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
-                    target: PlayerID(coachID: .away, index: 1)
+                    target: pl(.away, 1)
                 )
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 4),
-                .changedPassResult(die: .d6, modified: 3, modifications: [.longDistance]),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(9, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 4
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 4,
+                    modified: 3,
+                    modifications: [.longDistance]
+                ),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(0, 6),
+                    to: sq(9, 6),
+                    angle: 90,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(9, 6),
+                    ballID: 123
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .hailMaryPass
+                    )
+                ),
+                .updatedDiscards(
+                    top: .hailMaryPass,
+                    count: 1
                 ),
             ]
         )
@@ -184,14 +213,14 @@ struct HailMaryPassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -210,7 +239,7 @@ struct HailMaryPassTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -225,18 +254,19 @@ struct HailMaryPassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_snotling,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .snotling_snotling,
                             state: .standing(square: sq(9, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
                     ],
@@ -248,7 +278,7 @@ struct HailMaryPassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -274,7 +304,7 @@ struct HailMaryPassTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Try to declare pass without bonus play
@@ -285,7 +315,7 @@ struct HailMaryPassTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .pass
                         ),
                         consumesBonusPlays: []
@@ -301,7 +331,7 @@ struct HailMaryPassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: [.hailMaryPass]
@@ -313,14 +343,19 @@ struct HailMaryPassTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .hailMaryPass
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 6)
                 ),
             ]
         )
@@ -329,10 +364,10 @@ struct HailMaryPassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(9, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -352,26 +387,57 @@ struct HailMaryPassTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
-                    target: PlayerID(coachID: .away, index: 1)
+                    target: pl(.away, 1)
                 )
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 3),
-                .changedPassResult(die: .d6, modified: 2, modifications: [.longDistance]),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(9, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 3
                 ),
-                .playerFailedCatch(playerID: PlayerID(coachID: .away, index: 1)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: ballID, to: sq(9, 7)),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 3,
+                    modified: 2,
+                    modifications: [.longDistance]
+                ),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(0, 6),
+                    to: sq(9, 6),
+                    angle: 90,
+                    ballID: 123
+                ),
+                .playerFailedCatch(
+                    playerID: pl(.away, 1),
+                    in: sq(9, 6),
+                    ballID: 123
+                ),
+                .ballCameLoose(ballID: 123, in: sq(9, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(9, 6),
+                    to: sq(9, 7),
+                    direction: .south
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .hailMaryPass
+                    )
+                ),
+                .updatedDiscards(
+                    top: .hailMaryPass,
+                    count: 1
                 ),
             ]
         )
@@ -383,14 +449,14 @@ struct HailMaryPassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -409,7 +475,7 @@ struct HailMaryPassTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -424,18 +490,19 @@ struct HailMaryPassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_snotling,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .snotling_snotling,
                             state: .standing(square: sq(9, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
                     ],
@@ -447,7 +514,7 @@ struct HailMaryPassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -473,7 +540,7 @@ struct HailMaryPassTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Try to declare pass without bonus play
@@ -484,7 +551,7 @@ struct HailMaryPassTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .pass
                         ),
                         consumesBonusPlays: []
@@ -500,7 +567,7 @@ struct HailMaryPassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: [.hailMaryPass]
@@ -512,14 +579,19 @@ struct HailMaryPassTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .hailMaryPass
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 6)
                 ),
             ]
         )
@@ -528,10 +600,10 @@ struct HailMaryPassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(9, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -551,22 +623,50 @@ struct HailMaryPassTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
-                    target: PlayerID(coachID: .away, index: 1)
+                    target: pl(.away, 1)
                 )
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 2),
-                .changedPassResult(die: .d6, modified: 1, modifications: [.longDistance]),
-                .playerFumbledBall(playerID: PlayerID(coachID: .away, index: 0)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: ballID, to: sq(0, 7)),
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 2
+                ),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 2,
+                    modified: 1,
+                    modifications: [.longDistance]
+                ),
+                .playerFumbledBall(
+                    playerID: pl(.away, 0),
+                    in: sq(0, 6),
+                    ballID: 123
+                ),
+                .ballCameLoose(ballID: 123, in: sq(0, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(0, 6),
+                    to: sq(0, 7),
+                    direction: .south
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .hailMaryPass
+                    )
+                ),
+                .updatedDiscards(
+                    top: .hailMaryPass,
+                    count: 1
                 ),
             ]
         )
@@ -578,14 +678,14 @@ struct HailMaryPassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -603,7 +703,7 @@ struct HailMaryPassTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -618,18 +718,19 @@ struct HailMaryPassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_runner,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
                     ],
@@ -641,7 +742,7 @@ struct HailMaryPassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -666,7 +767,7 @@ struct HailMaryPassTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Try to declare pass with bonus play
@@ -677,7 +778,7 @@ struct HailMaryPassTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .pass
                         ),
                         consumesBonusPlays: [.hailMaryPass]
@@ -693,7 +794,7 @@ struct HailMaryPassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -705,11 +806,12 @@ struct HailMaryPassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(0, 6)
+                )
             ]
         )
 
@@ -717,7 +819,7 @@ struct HailMaryPassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionEligibleForHailMaryPassBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -739,10 +841,10 @@ struct HailMaryPassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(2, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -761,19 +863,30 @@ struct HailMaryPassTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
-                    target: PlayerID(coachID: .away, index: 1)
+                    target: pl(.away, 1)
                 )
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 3),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 3
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(0, 6),
+                    to: sq(2, 6),
+                    angle: 90,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(2, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -784,21 +897,21 @@ struct HailMaryPassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -816,7 +929,7 @@ struct HailMaryPassTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -831,18 +944,19 @@ struct HailMaryPassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_runner,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
                     ],
@@ -854,7 +968,7 @@ struct HailMaryPassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -879,7 +993,7 @@ struct HailMaryPassTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Try to declare pass with bonus play
@@ -890,7 +1004,7 @@ struct HailMaryPassTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .pass
                         ),
                         consumesBonusPlays: [.hailMaryPass]
@@ -906,7 +1020,7 @@ struct HailMaryPassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -918,11 +1032,12 @@ struct HailMaryPassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(0, 6)
+                )
             ]
         )
 
@@ -930,7 +1045,7 @@ struct HailMaryPassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionEligibleForHailMaryPassBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -948,7 +1063,11 @@ struct HailMaryPassTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .hailMaryPass
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -957,10 +1076,10 @@ struct HailMaryPassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(2, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -979,22 +1098,40 @@ struct HailMaryPassTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
-                    target: PlayerID(coachID: .away, index: 1)
+                    target: pl(.away, 1)
                 )
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 4),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 4
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(0, 6),
+                    to: sq(2, 6),
+                    angle: 90,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(2, 6),
+                    ballID: 123
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .hailMaryPass
+                    )
+                ),
+                .updatedDiscards(
+                    top: .hailMaryPass,
+                    count: 1
                 ),
             ]
         )
@@ -1006,21 +1143,21 @@ struct HailMaryPassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1039,7 +1176,7 @@ struct HailMaryPassTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1054,18 +1191,19 @@ struct HailMaryPassTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_runner,
                             state: .standing(square: sq(0, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
                     ],
@@ -1077,7 +1215,7 @@ struct HailMaryPassTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -1103,7 +1241,7 @@ struct HailMaryPassTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Try to declare pass with bonus play
@@ -1114,7 +1252,7 @@ struct HailMaryPassTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .pass
                         ),
                         consumesBonusPlays: [.hailMaryPass]
@@ -1130,7 +1268,7 @@ struct HailMaryPassTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1142,11 +1280,12 @@ struct HailMaryPassTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(0, 6)
+                )
             ]
         )
 
@@ -1154,7 +1293,7 @@ struct HailMaryPassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionEligibleForHailMaryPassBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -1172,7 +1311,11 @@ struct HailMaryPassTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .hailMaryPass
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -1181,10 +1324,10 @@ struct HailMaryPassTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(2, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -1204,25 +1347,51 @@ struct HailMaryPassTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
-                    target: PlayerID(coachID: .away, index: 1)
+                    target: pl(.away, 1)
                 )
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 3),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 3
                 ),
-                .playerFailedCatch(playerID: PlayerID(coachID: .away, index: 1)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: ballID, to: sq(2, 7)),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(0, 6),
+                    to: sq(2, 6),
+                    angle: 90,
+                    ballID: 123
+                ),
+                .playerFailedCatch(
+                    playerID: pl(.away, 1),
+                    in: sq(2, 6),
+                    ballID: 123
+                ),
+                .ballCameLoose(ballID: 123, in: sq(2, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(2, 6),
+                    to: sq(2, 7),
+                    direction: .south
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .hailMaryPass)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .hailMaryPass
+                    )
+                ),
+                .updatedDiscards(
+                    top: .hailMaryPass,
+                    count: 1
                 ),
             ]
         )
@@ -1234,14 +1403,14 @@ struct HailMaryPassTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

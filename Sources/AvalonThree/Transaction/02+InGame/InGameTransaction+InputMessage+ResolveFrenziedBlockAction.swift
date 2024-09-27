@@ -44,9 +44,13 @@ extension InGameTransaction {
             )
 
         } else {
+            
+            guard let playerSquare = table.getPlayer(id: playerID)?.square else {
+                throw GameError("Player is in reserves")
+            }
 
             events.append(
-                .declinedFrenziedSkillBlockAction(playerID: playerID)
+                .declinedFrenziedSkillBlockAction(playerID: playerID, in: playerSquare)
             )
             return try endAction()
         }

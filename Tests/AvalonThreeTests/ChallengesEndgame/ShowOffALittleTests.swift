@@ -16,7 +16,7 @@ struct ShowOffALittleTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -31,18 +31,19 @@ struct ShowOffALittleTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .nurgle_pestigor,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .nurgle_lineman,
                             state: .standing(square: sq(8, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -52,7 +53,7 @@ struct ShowOffALittleTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -82,7 +83,7 @@ struct ShowOffALittleTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -92,7 +93,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -104,10 +105,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -116,10 +118,10 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(8, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -137,19 +139,35 @@ struct ShowOffALittleTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 5),
-                .changedPassResult(die: .d6, modified: 4, modifications: [.longDistance]),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(8, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 5,
+                    modified: 4,
+                    modifications: [.longDistance]
+                ),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(8, 6),
+                    angle: 90,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(8, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -160,21 +178,21 @@ struct ShowOffALittleTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -192,7 +210,7 @@ struct ShowOffALittleTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -207,18 +225,19 @@ struct ShowOffALittleTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .nurgle_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .nurgle_pestigor,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -228,7 +247,7 @@ struct ShowOffALittleTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -258,7 +277,7 @@ struct ShowOffALittleTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare handoff
@@ -268,7 +287,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -280,10 +299,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -292,10 +312,10 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(4, 6),
                             distance: .handoff,
                             obstructingSquares: [],
@@ -311,17 +331,24 @@ struct ShowOffALittleTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
                 .playerHandedOffBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(4, 6),
+                    direction: .east,
+                    ballID: 123
                 ),
-                .playerCaughtHandoff(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtHandoff(
+                    playerID: pl(.away, 1),
+                    in: sq(4, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -332,21 +359,21 @@ struct ShowOffALittleTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -364,7 +391,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -376,10 +403,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -388,7 +416,7 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -447,23 +475,35 @@ struct ShowOffALittleTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(4, 6),
+                    to: sq(5, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(5, 6),
+                    to: sq(6, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(7, 6),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(6, 6),
+                    to: sq(7, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(7, 6),
+                    to: sq(8, 6),
+                    direction: .east,
                     reason: .run
                 ),
             ]
@@ -476,14 +516,14 @@ struct ShowOffALittleTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -501,7 +541,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -513,10 +553,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 6)
                 )
             ]
         )
@@ -525,10 +566,10 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 0),
+                            targetPlayerID: pl(.away, 0),
                             targetSquare: sq(3, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -546,22 +587,49 @@ struct ShowOffALittleTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 0))
+                message: .passActionSpecifyTarget(target: pl(.away, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 5),
-                .changedPassResult(die: .d6, modified: 4, modifications: [.longDistance]),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 0)),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 5,
+                    modified: 4,
+                    modifications: [.longDistance]
+                ),
+                .playerPassedBall(
+                    playerID: pl(.away, 1),
+                    from: sq(8, 6),
+                    to: sq(3, 6),
+                    angle: 270,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6),
+                    ballID: 123
+                ),
                 .turnEnded(coachID: .away),
-                .discardedObjective(coachID: .home, objectiveID: .second),
-                .finalTurnBegan,
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: ChallengeCard(
+                        challenge: .showOffALittle,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 1
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -582,7 +650,7 @@ struct ShowOffALittleTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -597,18 +665,19 @@ struct ShowOffALittleTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .nurgle_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .nurgle_lineman,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -618,7 +687,7 @@ struct ShowOffALittleTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -648,7 +717,7 @@ struct ShowOffALittleTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -658,7 +727,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -670,10 +739,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -682,10 +752,10 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(6, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -703,18 +773,29 @@ struct ShowOffALittleTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 6),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 6
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(6, 6),
+                    angle: 90,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(6, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -725,21 +806,21 @@ struct ShowOffALittleTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -757,7 +838,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -769,10 +850,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 6)
                 )
             ]
         )
@@ -781,7 +863,7 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -838,13 +920,19 @@ struct ShowOffALittleTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(6, 6),
+                    to: sq(5, 6),
+                    direction: .west,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(5, 6),
+                    to: sq(4, 6),
+                    direction: .west,
                     reason: .run
                 ),
             ]
@@ -857,14 +945,14 @@ struct ShowOffALittleTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -882,7 +970,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -894,10 +982,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -906,10 +995,10 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 0),
+                            targetPlayerID: pl(.away, 0),
                             targetSquare: sq(3, 6),
                             distance: .handoff,
                             obstructingSquares: [],
@@ -925,20 +1014,38 @@ struct ShowOffALittleTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 0))
+                message: .passActionSpecifyTarget(target: pl(.away, 0))
             )
         )
 
         #expect(
             latestEvents == [
                 .playerHandedOffBall(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 6)
+                    playerID: pl(.away, 1),
+                    from: sq(4, 6),
+                    to: sq(3, 6),
+                    direction: .west,
+                    ballID: 123
                 ),
-                .playerCaughtHandoff(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerCaughtHandoff(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6),
+                    ballID: 123
+                ),
                 .turnEnded(coachID: .away),
-                .discardedObjective(coachID: .home, objectiveID: .second),
-                .finalTurnBegan,
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: ChallengeCard(
+                        challenge: .showOffALittle,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 1
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -959,7 +1066,7 @@ struct ShowOffALittleTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -974,18 +1081,19 @@ struct ShowOffALittleTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .nurgle_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .nurgle_lineman,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -995,7 +1103,7 @@ struct ShowOffALittleTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -1025,7 +1133,7 @@ struct ShowOffALittleTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare first pass
@@ -1035,7 +1143,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1047,10 +1155,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1059,10 +1168,10 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(6, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -1080,18 +1189,29 @@ struct ShowOffALittleTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 6),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 6
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(6, 6),
+                    angle: 90,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(6, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -1102,21 +1222,21 @@ struct ShowOffALittleTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1134,7 +1254,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1146,10 +1266,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 6)
                 )
             ]
         )
@@ -1158,10 +1279,10 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 0),
+                            targetPlayerID: pl(.away, 0),
                             targetSquare: sq(3, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -1179,18 +1300,29 @@ struct ShowOffALittleTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 0))
+                message: .passActionSpecifyTarget(target: pl(.away, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 6),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 6
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerPassedBall(
+                    playerID: pl(.away, 1),
+                    from: sq(6, 6),
+                    to: sq(3, 6),
+                    angle: 270,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -1201,14 +1333,14 @@ struct ShowOffALittleTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -1226,7 +1358,7 @@ struct ShowOffALittleTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1241,18 +1373,19 @@ struct ShowOffALittleTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .nurgle_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .nurgle_pestigor,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -1262,7 +1395,7 @@ struct ShowOffALittleTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -1292,7 +1425,7 @@ struct ShowOffALittleTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare first pass
@@ -1302,7 +1435,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1314,10 +1447,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1326,10 +1460,10 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(6, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -1347,18 +1481,29 @@ struct ShowOffALittleTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 6),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 6
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(6, 6),
+                    angle: 90,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(6, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -1369,21 +1514,21 @@ struct ShowOffALittleTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1401,7 +1546,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1413,10 +1558,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 6)
                 )
             ]
         )
@@ -1425,7 +1571,7 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1482,13 +1628,19 @@ struct ShowOffALittleTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(7, 6),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(6, 6),
+                    to: sq(7, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(7, 6),
+                    to: sq(8, 6),
+                    direction: .east,
                     reason: .run
                 ),
             ]
@@ -1501,14 +1653,14 @@ struct ShowOffALittleTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1526,7 +1678,7 @@ struct ShowOffALittleTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1538,10 +1690,11 @@ struct ShowOffALittleTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 6)
                 )
             ]
         )
@@ -1550,10 +1703,10 @@ struct ShowOffALittleTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 0),
+                            targetPlayerID: pl(.away, 0),
                             targetSquare: sq(3, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -1571,19 +1724,35 @@ struct ShowOffALittleTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 0))
+                message: .passActionSpecifyTarget(target: pl(.away, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 5),
-                .changedPassResult(die: .d6, modified: 4, modifications: [.longDistance]),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 0)),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 5,
+                    modified: 4,
+                    modifications: [.longDistance]
+                ),
+                .playerPassedBall(
+                    playerID: pl(.away, 1),
+                    from: sq(8, 6),
+                    to: sq(3, 6),
+                    angle: 270,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -1607,10 +1776,33 @@ struct ShowOffALittleTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 3, total: 3),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .showOffALittle,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .showOffALittle,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 3,
+                    total: 3
+                ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 

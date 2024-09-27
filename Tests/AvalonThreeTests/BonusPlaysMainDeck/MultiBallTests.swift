@@ -19,8 +19,8 @@ struct MultiBallTests {
         let directionRandomizer = DirectionRandomizerDouble()
         let trapdoorRandomizer = TrapdoorRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
-        let ballID = DefaultUUIDProvider().generate()
+        let ballIDProvider = BallIDProviderDouble()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -35,18 +35,19 @@ struct MultiBallTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 2)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 3)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -56,7 +57,7 @@ struct MultiBallTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -89,7 +90,7 @@ struct MultiBallTests {
                 direction: directionRandomizer,
                 trapdoor: trapdoorRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare block
@@ -99,7 +100,7 @@ struct MultiBallTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -111,10 +112,11 @@ struct MultiBallTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 2)
                 )
             ]
         )
@@ -123,9 +125,9 @@ struct MultiBallTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -139,20 +141,37 @@ struct MultiBallTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 3)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(2, 2),
+                    to: sq(2, 3),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 3),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -174,9 +193,9 @@ struct MultiBallTests {
 
         directionRandomizer.nextResults = [.south, .northEast]
 
-        let firstNewBallID = DefaultUUIDProvider().generate()
-        let secondNewBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [firstNewBallID, secondNewBallID]
+        let firstNewBallID = 456
+        let secondNewBallID = 789
+        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
@@ -187,20 +206,51 @@ struct MultiBallTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .multiBall
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .multiBall
+                            )
+                        )
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    ),
+                    hand: []
                 ),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
-                .newBallAppeared(ballID: firstNewBallID, square: sq(5, 5)),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: firstNewBallID, to: sq(5, 6)),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 9)),
-                .newBallAppeared(ballID: secondNewBallID, square: sq(5, 9)),
-                .rolledForDirection(direction: .northEast),
-                .ballBounced(ballID: secondNewBallID, to: sq(6, 8)),
+                .rolledForTrapdoor(coachID: .away, trapdoorSquare: sq(5, 5)),
+                .newBallAppeared(ballID: firstNewBallID, in: sq(5, 5)),
+                .rolledForDirection(coachID: .away, direction: .south),
+                .ballBounced(
+                    ballID: firstNewBallID,
+                    from: sq(5, 5),
+                    to: sq(5, 6),
+                    direction: .south
+                ),
+                .rolledForTrapdoor(coachID: .away, trapdoorSquare: sq(5, 9)),
+                .newBallAppeared(ballID: secondNewBallID, in: sq(5, 9)),
+                .rolledForDirection(coachID: .away, direction: .northEast),
+                .ballBounced(
+                    ballID: secondNewBallID,
+                    from: sq(5, 9),
+                    to: sq(6, 8),
+                    direction: .northEast
+                ),
             ]
         )
 
@@ -211,14 +261,14 @@ struct MultiBallTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -239,8 +289,8 @@ struct MultiBallTests {
         let directionRandomizer = DirectionRandomizerDouble()
         let trapdoorRandomizer = TrapdoorRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
-        let ballID = DefaultUUIDProvider().generate()
+        let ballIDProvider = BallIDProviderDouble()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -255,18 +305,19 @@ struct MultiBallTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 2)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 3)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -276,7 +327,7 @@ struct MultiBallTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -309,7 +360,7 @@ struct MultiBallTests {
                 direction: directionRandomizer,
                 trapdoor: trapdoorRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare block
@@ -319,7 +370,7 @@ struct MultiBallTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -331,10 +382,11 @@ struct MultiBallTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 2)
                 )
             ]
         )
@@ -343,9 +395,9 @@ struct MultiBallTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -359,20 +411,37 @@ struct MultiBallTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 3)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(2, 2),
+                    to: sq(2, 3),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 3),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -394,9 +463,9 @@ struct MultiBallTests {
 
         directionRandomizer.nextResults = [.south, .northEast]
 
-        let firstNewBallID = DefaultUUIDProvider().generate()
-        let secondNewBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [firstNewBallID, secondNewBallID]
+        let firstNewBallID = 456
+        let secondNewBallID = 789
+        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
@@ -407,20 +476,51 @@ struct MultiBallTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .multiBall
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .multiBall
+                            )
+                        )
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    ),
+                    hand: []
                 ),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 9)),
-                .newBallAppeared(ballID: firstNewBallID, square: sq(5, 9)),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: firstNewBallID, to: sq(5, 10)),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
-                .newBallAppeared(ballID: secondNewBallID, square: sq(5, 5)),
-                .rolledForDirection(direction: .northEast),
-                .ballBounced(ballID: secondNewBallID, to: sq(6, 4)),
+                .rolledForTrapdoor(coachID: .away, trapdoorSquare: sq(5, 9)),
+                .newBallAppeared(ballID: firstNewBallID, in: sq(5, 9)),
+                .rolledForDirection(coachID: .away, direction: .south),
+                .ballBounced(
+                    ballID: firstNewBallID,
+                    from: sq(5, 9),
+                    to: sq(5, 10),
+                    direction: .south
+                ),
+                .rolledForTrapdoor(coachID: .away, trapdoorSquare: sq(5, 5)),
+                .newBallAppeared(ballID: secondNewBallID, in: sq(5, 5)),
+                .rolledForDirection(coachID: .away, direction: .northEast),
+                .ballBounced(
+                    ballID: secondNewBallID,
+                    from: sq(5, 5),
+                    to: sq(6, 4),
+                    direction: .northEast
+                ),
             ]
         )
 
@@ -431,14 +531,14 @@ struct MultiBallTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -459,8 +559,8 @@ struct MultiBallTests {
         let directionRandomizer = DirectionRandomizerDouble()
         let trapdoorRandomizer = TrapdoorRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
-        let ballID = DefaultUUIDProvider().generate()
+        let ballIDProvider = BallIDProviderDouble()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -475,24 +575,25 @@ struct MultiBallTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 2)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 3)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -502,7 +603,7 @@ struct MultiBallTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -535,7 +636,7 @@ struct MultiBallTests {
                 direction: directionRandomizer,
                 trapdoor: trapdoorRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare block
@@ -545,7 +646,7 @@ struct MultiBallTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -557,10 +658,11 @@ struct MultiBallTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 2)
                 )
             ]
         )
@@ -569,9 +671,9 @@ struct MultiBallTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -585,20 +687,37 @@ struct MultiBallTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 3)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(2, 2),
+                    to: sq(2, 3),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 3),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -620,9 +739,9 @@ struct MultiBallTests {
 
         directionRandomizer.nextResults = [.south, .northEast]
 
-        let firstNewBallID = DefaultUUIDProvider().generate()
-        let secondNewBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [firstNewBallID, secondNewBallID]
+        let firstNewBallID = 456
+        let secondNewBallID = 789
+        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
@@ -633,21 +752,56 @@ struct MultiBallTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .multiBall
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .multiBall
+                            )
+                        )
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    ),
+                    hand: []
                 ),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
-                .newBallAppeared(ballID: firstNewBallID, square: sq(5, 5)),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: firstNewBallID, to: sq(5, 6)),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
-                .newBallAppeared(ballID: secondNewBallID, square: sq(5, 5)),
-                .rolledForDirection(direction: .northEast),
-                .ballBounced(ballID: secondNewBallID, to: sq(6, 4)),
+                .rolledForTrapdoor(coachID: .away, trapdoorSquare: sq(5, 5)),
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(5, 5),
+                    reason: .trapdoor
+                ),
+                .newBallAppeared(ballID: firstNewBallID, in: sq(5, 5)),
+                .rolledForDirection(coachID: .away, direction: .south),
+                .ballBounced(
+                    ballID: firstNewBallID,
+                    from: sq(5, 5),
+                    to: sq(5, 6),
+                    direction: .south
+                ),
+                .rolledForTrapdoor(coachID: .away, trapdoorSquare: sq(5, 5)),
+                .newBallAppeared(ballID: secondNewBallID, in: sq(5, 5)),
+                .rolledForDirection(coachID: .away, direction: .northEast),
+                .ballBounced(
+                    ballID: secondNewBallID,
+                    from: sq(5, 5),
+                    to: sq(6, 4),
+                    direction: .northEast
+                ),
             ]
         )
 
@@ -658,21 +812,21 @@ struct MultiBallTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -693,8 +847,8 @@ struct MultiBallTests {
         let directionRandomizer = DirectionRandomizerDouble()
         let trapdoorRandomizer = TrapdoorRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
-        let ballID = DefaultUUIDProvider().generate()
+        let ballIDProvider = BallIDProviderDouble()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -709,18 +863,19 @@ struct MultiBallTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 2)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 3)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -763,7 +918,7 @@ struct MultiBallTests {
                 direction: directionRandomizer,
                 trapdoor: trapdoorRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare block
@@ -773,7 +928,7 @@ struct MultiBallTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -785,10 +940,11 @@ struct MultiBallTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 2)
                 )
             ]
         )
@@ -797,9 +953,9 @@ struct MultiBallTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -813,20 +969,37 @@ struct MultiBallTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 3)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(2, 2),
+                    to: sq(2, 3),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 3),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -848,9 +1021,9 @@ struct MultiBallTests {
 
         directionRandomizer.nextResults = [.south, .northEast]
 
-        let firstNewBallID = DefaultUUIDProvider().generate()
-        let secondNewBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [firstNewBallID, secondNewBallID]
+        let firstNewBallID = 123
+        let secondNewBallID = 123
+        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
@@ -861,21 +1034,77 @@ struct MultiBallTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2, total: 2),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .multiBall
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .multiBall
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 2
+                ),
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    ),
+                    hand: []
                 ),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
-                .ballDisappeared(ballID: ballID),
-                .newBallAppeared(ballID: firstNewBallID, square: sq(5, 5)),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: firstNewBallID, to: sq(5, 6)),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 9)),
-                .newBallAppeared(ballID: secondNewBallID, square: sq(5, 9)),
-                .rolledForDirection(direction: .northEast),
-                .ballBounced(ballID: secondNewBallID, to: sq(6, 8)),
+                .rolledForTrapdoor(
+                    coachID: .away,
+                    trapdoorSquare: sq(5, 5)
+                ),
+                .ballDisappeared(
+                    ballID: 123,
+                    in: sq(5, 5)
+                ),
+                .newBallAppeared(
+                    ballID: 123,
+                    in: sq(5, 5)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(5, 5),
+                    to: sq(5, 6),
+                    direction: .south
+                ),
+                .rolledForTrapdoor(
+                    coachID: .away,
+                    trapdoorSquare: sq(5, 9)
+                ),
+                .newBallAppeared(
+                    ballID: 123,
+                    in: sq(5, 9)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .northEast
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(5, 6),
+                    to: sq(6, 5),
+                    direction: .northEast
+                ),
             ]
         )
 
@@ -886,14 +1115,14 @@ struct MultiBallTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -919,8 +1148,8 @@ struct MultiBallTests {
         let directionRandomizer = DirectionRandomizerDouble()
         let trapdoorRandomizer = TrapdoorRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
-        let ballID = DefaultUUIDProvider().generate()
+        let ballIDProvider = BallIDProviderDouble()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -935,24 +1164,25 @@ struct MultiBallTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 2)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 3)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -962,7 +1192,7 @@ struct MultiBallTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         )
                     ],
                     deck: [],
@@ -995,7 +1225,7 @@ struct MultiBallTests {
                 direction: directionRandomizer,
                 trapdoor: trapdoorRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare block
@@ -1005,7 +1235,7 @@ struct MultiBallTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1017,10 +1247,11 @@ struct MultiBallTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 2)
                 )
             ]
         )
@@ -1029,9 +1260,9 @@ struct MultiBallTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -1045,20 +1276,37 @@ struct MultiBallTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 3)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(2, 2),
+                    to: sq(2, 3),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 3),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -1080,9 +1328,9 @@ struct MultiBallTests {
 
         directionRandomizer.nextResults = [.south, .northEast]
 
-        let firstNewBallID = DefaultUUIDProvider().generate()
-        let secondNewBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [firstNewBallID, secondNewBallID]
+        let firstNewBallID = 123
+        let secondNewBallID = 123
+        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
@@ -1093,23 +1341,83 @@ struct MultiBallTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2, total: 2),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .multiBall
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .multiBall
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 2
+                ),
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    ),
+                    hand: []
                 ),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
-                .ballCameLoose(ballID: ballID),
-                .ballDisappeared(ballID: ballID),
-                .newBallAppeared(ballID: firstNewBallID, square: sq(5, 5)),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: firstNewBallID, to: sq(5, 6)),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
-                .newBallAppeared(ballID: secondNewBallID, square: sq(5, 5)),
-                .rolledForDirection(direction: .northEast),
-                .ballBounced(ballID: secondNewBallID, to: sq(6, 4)),
+                .rolledForTrapdoor(
+                    coachID: .away,
+                    trapdoorSquare: sq(5, 5)
+                ),
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(5, 5),
+                    reason: .trapdoor
+                ),
+                .ballCameLoose(ballID: 123, in: sq(5, 5)),
+                .ballDisappeared(
+                    ballID: 123,
+                    in: sq(5, 5)
+                ),
+                .newBallAppeared(
+                    ballID: 123,
+                    in: sq(5, 5)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(5, 5),
+                    to: sq(5, 6),
+                    direction: .south
+                ),
+                .rolledForTrapdoor(
+                    coachID: .away,
+                    trapdoorSquare: sq(5, 5)
+                ),
+                .newBallAppeared(
+                    ballID: 123,
+                    in: sq(5, 5)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .northEast
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(5, 6),
+                    to: sq(6, 5),
+                    direction: .northEast
+                ),
             ]
         )
 
@@ -1120,21 +1428,21 @@ struct MultiBallTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -1160,8 +1468,8 @@ struct MultiBallTests {
         let directionRandomizer = DirectionRandomizerDouble()
         let trapdoorRandomizer = TrapdoorRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
-        let ballID = DefaultUUIDProvider().generate()
+        let ballIDProvider = BallIDProviderDouble()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1176,30 +1484,31 @@ struct MultiBallTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 2)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 3)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .prone(square: sq(6, 5)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -1209,7 +1518,7 @@ struct MultiBallTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         )
                     ],
                     deck: [],
@@ -1242,7 +1551,7 @@ struct MultiBallTests {
                 direction: directionRandomizer,
                 trapdoor: trapdoorRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare block
@@ -1252,7 +1561,7 @@ struct MultiBallTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1264,10 +1573,11 @@ struct MultiBallTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 2)
                 )
             ]
         )
@@ -1276,9 +1586,9 @@ struct MultiBallTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -1292,20 +1602,37 @@ struct MultiBallTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 3)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(2, 2),
+                    to: sq(2, 3),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 3),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -1331,9 +1658,9 @@ struct MultiBallTests {
             .southEast,
         ]
 
-        let firstNewBallID = DefaultUUIDProvider().generate()
-        let secondNewBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [firstNewBallID, secondNewBallID]
+        let firstNewBallID = 123
+        let secondNewBallID = 123
+        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
@@ -1344,26 +1671,97 @@ struct MultiBallTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 2, total: 2),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .multiBall
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .multiBall
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 2
+                ),
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .multiBall)
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    ),
+                    hand: []
                 ),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
-                .ballCameLoose(ballID: ballID),
-                .ballDisappeared(ballID: ballID),
-                .newBallAppeared(ballID: firstNewBallID, square: sq(5, 5)),
-                .rolledForDirection(direction: .east),
-                .ballBounced(ballID: firstNewBallID, to: sq(6, 5)),
-                .rolledForDirection(direction: .west),
-                .ballBounced(ballID: firstNewBallID, to: sq(5, 5)),
-                .rolledForTrapdoor(trapdoorSquare: sq(5, 5)),
-                .ballDisappeared(ballID: firstNewBallID),
-                .newBallAppeared(ballID: secondNewBallID, square: sq(5, 5)),
-                .rolledForDirection(direction: .southEast),
-                .ballBounced(ballID: secondNewBallID, to: sq(6, 6)),
+                .rolledForTrapdoor(
+                    coachID: .away,
+                    trapdoorSquare: sq(5, 5)
+                ),
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(5, 5),
+                    reason: .trapdoor
+                ),
+                .ballCameLoose(ballID: 123, in: sq(5, 5)),
+                .ballDisappeared(
+                    ballID: 123,
+                    in: sq(5, 5)
+                ),
+                .newBallAppeared(
+                    ballID: 123,
+                    in: sq(5, 5)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .east
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(5, 5),
+                    to: sq(6, 5),
+                    direction: .east
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .west
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(6, 5),
+                    to: sq(5, 5),
+                    direction: .west
+                ),
+                .rolledForTrapdoor(
+                    coachID: .away,
+                    trapdoorSquare: sq(5, 5)
+                ),
+                .ballDisappeared(
+                    ballID: 123,
+                    in: sq(5, 5)
+                ),
+                .newBallAppeared(
+                    ballID: 123,
+                    in: sq(5, 5)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .southEast
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(5, 5),
+                    to: sq(6, 6),
+                    direction: .southEast
+                ),
             ]
         )
 
@@ -1374,21 +1772,21 @@ struct MultiBallTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []

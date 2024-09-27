@@ -73,8 +73,13 @@ extension InGameTransaction {
 
             history.append(.actionFinished)
 
-            events.append(.playerFumbledBall(playerID: player.id))
-            events.append(.ballCameLoose(ballID: ball.id))
+            events.append(
+                .playerFumbledBall(playerID: player.id, in: playerSquare, ballID: ball.id)
+            )
+            events.append(
+                .ballCameLoose(ballID: ball.id, in: playerSquare)
+            )
+
             try bounceBall(id: ball.id)
 
             return try endAction()
@@ -86,6 +91,10 @@ extension InGameTransaction {
             throw GameError("No target player")
         }
 
+        guard let angle = playerSquare.angle(to: target.targetSquare) else {
+            throw GameError("No throw angle")
+        }
+
         if targetPlayer.spec.pass != nil {
             if unmodifiedRoll >= immediateSuccess || (!hailMary && modifiedRoll >= effectivePassStat) {
 
@@ -95,8 +104,22 @@ extension InGameTransaction {
                 ball.state = .held(playerID: target.targetPlayerID)
                 table.balls.update(with: ball)
 
-                events.append(.playerPassedBall(playerID: player.id, square: target.targetSquare))
-                events.append(.playerCaughtPass(playerID: target.targetPlayerID))
+                events.append(
+                    .playerPassedBall(
+                        playerID: player.id,
+                        from: playerSquare,
+                        to: target.targetSquare,
+                        angle: angle,
+                        ballID: ball.id
+                    )
+                )
+                events.append(
+                    .playerCaughtPass(
+                        playerID: target.targetPlayerID,
+                        in: target.targetSquare,
+                        ballID: ball.id
+                    )
+                )
 
                 return try endAction()
             }
@@ -106,8 +129,22 @@ extension InGameTransaction {
 
         history.append(.actionFinished)
 
-        events.append(.playerPassedBall(playerID: player.id, square: target.targetSquare))
-        events.append(.playerFailedCatch(playerID: target.targetPlayerID))
+        events.append(
+            .playerPassedBall(
+                playerID: player.id,
+                from: playerSquare,
+                to: target.targetSquare,
+                angle: angle,
+                ballID: ball.id
+            )
+        )
+        events.append(
+            .playerFailedCatch(
+                playerID: target.targetPlayerID,
+                in: target.targetSquare,
+                ballID: ball.id
+            )
+        )
 
         try ballComesLoose(id: ball.id, square: target.targetSquare)
         try bounceBall(id: ball.id)

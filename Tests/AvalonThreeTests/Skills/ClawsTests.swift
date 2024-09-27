@@ -30,18 +30,19 @@ struct ClawsTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .necromantic_werewolf,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -72,7 +73,7 @@ struct ClawsTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -82,7 +83,7 @@ struct ClawsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -94,10 +95,11 @@ struct ClawsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -106,9 +108,9 @@ struct ClawsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -122,21 +124,28 @@ struct ClawsTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForClaws(result: 5),
-                .rolledForBlock(results: [.smash]),
+                .rolledForClaws(coachID: .away, result: 5),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 6),
             ]
         )
 
@@ -147,14 +156,14 @@ struct ClawsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -186,24 +195,25 @@ struct ClawsTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .necromantic_werewolf,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .necromantic_zombie,
                             state: .standing(square: sq(2, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -234,7 +244,7 @@ struct ClawsTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -244,7 +254,7 @@ struct ClawsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -256,10 +266,11 @@ struct ClawsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -268,9 +279,9 @@ struct ClawsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -284,24 +295,38 @@ struct ClawsTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForClaws(result: 6),
+                .rolledForClaws(coachID: .away, result: 6),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerAssistedBlock(
-                    assistingPlayerID: PlayerID(coachID: .away, index: 1),
-                    blockingPlayerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    assistingPlayerID: pl(.away, 1),
+                    from: sq(2, 5),
+                    to: sq(1, 6),
+                    direction: .southWest,
+                    targetPlayerID: pl(.home, 0),
+                    blockingPlayerID: pl(.away, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: .blocked
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -312,14 +337,14 @@ struct ClawsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

@@ -16,7 +16,7 @@ struct StandFirmTests {
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -31,18 +31,19 @@ struct StandFirmTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .noble_guard,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -52,7 +53,7 @@ struct StandFirmTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -77,7 +78,7 @@ struct StandFirmTests {
             randomizers: Randomizers(
                 blockDie: blockDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -87,7 +88,7 @@ struct StandFirmTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -99,10 +100,11 @@ struct StandFirmTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -111,9 +113,9 @@ struct StandFirmTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -126,23 +128,42 @@ struct StandFirmTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.shove]),
-                .changedBlockResults(results: [.miss], modifications: [.opponentHasStandFirm]),
-                .selectedBlockDieResult(coachID: .away, result: .miss),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.shove]
                 ),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
+                .changedBlockResults(
+                    from: [.shove],
+                    to: [.miss],
+                    modifications: [.opponentHasStandFirm]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(3, 6),
+                    direction: .east,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(2, 6)
+                ),
                 .turnEnded(coachID: .away),
-                .playerCanTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .finalTurnBegan
+                .playerCanTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(2, 6)
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -153,14 +174,14 @@ struct StandFirmTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []

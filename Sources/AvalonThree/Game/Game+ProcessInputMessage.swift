@@ -45,7 +45,7 @@ extension Game {
             var transaction = SetupTransaction(
                 table: table,
                 randomizers: randomizers,
-                uuidProvider: uuidProvider
+                ballIDProvider: ballIDProvider
             )
             if let prompt = try transaction.processInputMessageWrapper(messageWrapper) {
                 phase = .setup(transaction.table)
@@ -81,7 +81,7 @@ extension Game {
                 history: history,
                 previousPromptPayload: previousPrompt.payload,
                 randomizers: randomizers,
-                uuidProvider: uuidProvider
+                ballIDProvider: ballIDProvider
             )
             if let prompt = try transaction.processInputMessageWrapper(messageWrapper) {
                 phase = .active(transaction.table, transaction.history)

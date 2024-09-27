@@ -14,6 +14,10 @@ extension InGameTransaction {
         isFree: Bool
     ) throws -> Prompt? {
 
+        guard let playerSquare = table.getPlayer(id: playerID)?.square else {
+            throw GameError("Player is in reserves")
+        }
+
         let basicValidTargets = try getValidPassTargets(
             playerID: playerID,
             hailMaryPass: false
@@ -35,7 +39,13 @@ extension InGameTransaction {
             history.append(.actionIsFree)
         }
 
-        events.append(.declaredAction(declaration: declaration, isFree: isFree))
+        events.append(
+            .declaredAction(
+                declaration: declaration,
+                isFree: isFree,
+                playerSquare: playerSquare
+            )
+        )
 
         if table.getActiveBonuses(coachID: playerID.coachID).contains(where: { $0.bonusPlay == .hailMaryPass}) {
 

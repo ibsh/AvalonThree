@@ -30,11 +30,25 @@ extension InGameTransaction {
             throw GameError("Invalid objective")
         }
 
+        let newHand = table.getHand(coachID: turnContext.coachID) + [objective]
+
+        table.setHand(
+            coachID: turnContext.coachID,
+            hand: newHand
+        )
+
         history.append(
             .claimedObjective(objectiveID: objectiveID)
         )
         table.objectives.remove(objectiveID)
-        events.append(.claimedObjective(coachID: turnContext.coachID, objectiveID: objectiveID))
+        events.append(
+            .claimedObjective(
+                coachID: turnContext.coachID,
+                objectiveID: objectiveID,
+                objective: .open(card: objective),
+                hand: newHand.map { .open(card: $0) }
+            )
+        )
 
         if objective.challenge.scoreIncrement != 0 {
 
@@ -51,11 +65,6 @@ extension InGameTransaction {
                 )
             )
         }
-
-        table.setHand(
-            coachID: turnContext.coachID,
-            hand: table.getHand(coachID: turnContext.coachID) + [objective]
-        )
 
         switch objective.bonusPlay {
         case .multiBall:

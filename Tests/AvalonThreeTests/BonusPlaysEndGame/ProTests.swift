@@ -16,7 +16,7 @@ struct ProTests {
 
         let d8Randomizer = D8RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -31,18 +31,19 @@ struct ProTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .elf_lineman,
                             state: .standing(square: sq(1, 1)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .elf_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro),
                     ],
@@ -54,7 +55,7 @@ struct ProTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -79,7 +80,7 @@ struct ProTests {
             randomizers: Randomizers(
                 d8: d8Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -89,7 +90,7 @@ struct ProTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -101,10 +102,11 @@ struct ProTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(1, 1)
                 )
             ]
         )
@@ -113,10 +115,10 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(3, 6),
                             distance: .long,
                             obstructingSquares: [sq(2, 3), sq(1, 3), sq(1, 4), sq(2, 4)],
@@ -132,7 +134,7 @@ struct ProTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
@@ -144,7 +146,7 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionEligibleForProBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -164,23 +166,45 @@ struct ProTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .pro
+                    ),
+                    hand: []
                 ),
-                .rolledForPass(die: .d8, unmodified: 5),
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d8,
+                    unmodified: 5
+                ),
                 .changedPassResult(
                     die: .d8,
+                    unmodified: 5,
                     modified: 4,
-                    modifications: [.longDistance, .obstructed]
+                    modifications: [
+                        .longDistance, .obstructed,
+                    ]
                 ),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(1, 1),
+                    to: sq(3, 6),
+                    angle: 158,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(3, 6),
+                    ballID: 123
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .pro
+                    )
                 ),
+                .updatedDiscards(top: .pro, count: 1),
             ]
         )
 
@@ -191,21 +215,21 @@ struct ProTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -223,7 +247,7 @@ struct ProTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -238,18 +262,19 @@ struct ProTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .elf_lineman,
                             state: .standing(square: sq(1, 1)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .elf_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro),
                     ],
@@ -261,7 +286,7 @@ struct ProTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -286,7 +311,7 @@ struct ProTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -296,7 +321,7 @@ struct ProTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -308,10 +333,11 @@ struct ProTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(1, 1)
                 )
             ]
         )
@@ -320,10 +346,10 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(3, 6),
                             distance: .long,
                             obstructingSquares: [sq(2, 3), sq(1, 3), sq(1, 4), sq(2, 4)],
@@ -339,7 +365,7 @@ struct ProTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
@@ -351,7 +377,7 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionEligibleForProBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -369,17 +395,31 @@ struct ProTests {
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 5),
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
+                ),
                 .changedPassResult(
                     die: .d6,
+                    unmodified: 5,
                     modified: 4,
-                    modifications: [.longDistance, .obstructed]
+                    modifications: [
+                        .longDistance, .obstructed,
+                    ]
                 ),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(1, 1),
+                    to: sq(3, 6),
+                    angle: 158,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(3, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -390,21 +430,21 @@ struct ProTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -422,7 +462,7 @@ struct ProTests {
 
         let d8Randomizer = D8RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -437,18 +477,19 @@ struct ProTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .ogre_ogre,
                             state: .standing(square: sq(2, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .ogre_gnoblar,
                             state: .standing(square: sq(3, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro),
                     ],
@@ -460,7 +501,7 @@ struct ProTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         )
                     ],
                     deck: [],
@@ -485,7 +526,7 @@ struct ProTests {
             randomizers: Randomizers(
                 d8: d8Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -495,7 +536,7 @@ struct ProTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -507,10 +548,11 @@ struct ProTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 7)
                 )
             ]
         )
@@ -519,9 +561,9 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -533,7 +575,7 @@ struct ProTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -546,7 +588,7 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(1, 4), sq(1, 3), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 4), sq(1, 3), sq(2, 4)]),
@@ -703,7 +745,7 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionEligibleForProBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -723,19 +765,38 @@ struct ProTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .pro
+                    ),
+                    hand: []
                 ),
-                .rolledForHurlTeammate(die: .d8, unmodified: 5),
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d8,
+                    unmodified: 5
+                ),
                 .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6)
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(2, 7),
+                    to: sq(1, 6),
+                    angle: 315
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1)),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(1, 6)
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .pro
+                    )
                 ),
+                .updatedDiscards(top: .pro, count: 1),
             ]
         )
 
@@ -746,21 +807,21 @@ struct ProTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -778,7 +839,7 @@ struct ProTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -793,18 +854,19 @@ struct ProTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .ogre_ogre,
                             state: .standing(square: sq(2, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .ogre_gnoblar,
                             state: .standing(square: sq(3, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro),
                     ],
@@ -816,7 +878,7 @@ struct ProTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         )
                     ],
                     deck: [],
@@ -841,7 +903,7 @@ struct ProTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -851,7 +913,7 @@ struct ProTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -863,10 +925,11 @@ struct ProTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 7)
                 )
             ]
         )
@@ -875,9 +938,9 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -889,7 +952,7 @@ struct ProTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -902,7 +965,7 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(1, 4), sq(1, 3), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 4), sq(1, 3), sq(2, 4)]),
@@ -1059,7 +1122,7 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionEligibleForProBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -1077,13 +1140,24 @@ struct ProTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 5),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(2, 7),
+                    to: sq(1, 6),
+                    angle: 315
+                ),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(1, 6)
+                ),
             ]
         )
 
@@ -1094,21 +1168,21 @@ struct ProTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1140,18 +1214,19 @@ struct ProTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro),
@@ -1184,7 +1259,7 @@ struct ProTests {
                 blockDie: blockDieRandomizer,
                 d8: d8Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -1194,7 +1269,7 @@ struct ProTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1206,10 +1281,11 @@ struct ProTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1218,9 +1294,9 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -1233,19 +1309,32 @@ struct ProTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -1253,7 +1342,7 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForProBonusPlay(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -1273,13 +1362,25 @@ struct ProTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .pro
+                    ),
+                    hand: []
                 ),
-                .rolledForArmour(die: .d8, unmodified: 4),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d8,
+                    unmodified: 4
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .pro
+                    )
                 ),
+                .updatedDiscards(top: .pro, count: 1),
             ]
         )
 
@@ -1290,14 +1391,14 @@ struct ProTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -1329,18 +1430,19 @@ struct ProTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .pro),
@@ -1373,7 +1475,7 @@ struct ProTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -1383,7 +1485,7 @@ struct ProTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1395,10 +1497,11 @@ struct ProTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1407,9 +1510,9 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -1422,19 +1525,32 @@ struct ProTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -1442,7 +1558,7 @@ struct ProTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForProBonusPlay(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -1460,7 +1576,7 @@ struct ProTests {
 
         #expect(
             latestEvents == [
-                .rolledForArmour(die: .d6, unmodified: 4),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 4),
             ]
         )
 
@@ -1471,14 +1587,14 @@ struct ProTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []

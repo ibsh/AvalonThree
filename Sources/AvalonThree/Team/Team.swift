@@ -14,17 +14,17 @@ struct Team {
 }
 
 extension Team {
-    func playerConfigs(coachID: CoachID) -> Set<PlayerConfig> {
+    func playerSetups(coachID: CoachID) -> [PlayerSetup] {
         playerSpecIDs
             .enumerated()
             .reduce([]) { partialResult, indexAndSpecID in
                 partialResult + [
-                    PlayerConfig(
+                    PlayerSetup(
                         id: PlayerID(coachID: coachID, index: indexAndSpecID.0),
-                        specID: indexAndSpecID.1
+                        specID: indexAndSpecID.1,
+                        spec: indexAndSpecID.1.spec
                     )
                 ]
             }
-            .toSet()
     }
 }

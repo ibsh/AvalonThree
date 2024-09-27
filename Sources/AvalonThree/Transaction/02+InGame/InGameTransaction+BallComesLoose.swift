@@ -10,7 +10,7 @@ import Foundation
 extension InGameTransaction {
 
     mutating func ballComesLoose(
-        id ballID: BallID,
+        id ballID: Int,
         square: Square
     ) throws {
 
@@ -21,6 +21,6 @@ extension InGameTransaction {
         ball.state = .loose(square: square)
         table.balls.update(with: ball)
 
-        events.append(.ballCameLoose(ballID: ballID))
+        events.append(.ballCameLoose(ballID: ballID, in: square))
     }
 }

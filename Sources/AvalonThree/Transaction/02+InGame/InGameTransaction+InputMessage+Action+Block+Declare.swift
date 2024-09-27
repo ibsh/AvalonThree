@@ -69,8 +69,12 @@ extension InGameTransaction {
             history.append(.blockIsDivingTackle)
         }
 
-        history.append(.blockValidTargets(validTargets))
-        events.append(.declaredAction(declaration: declaration, isFree: isFree))
+        history.append(
+            .blockValidTargets(validTargets)
+        )
+        events.append(
+            .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
+        )
 
         return Prompt(
             coachID: playerID.coachID,

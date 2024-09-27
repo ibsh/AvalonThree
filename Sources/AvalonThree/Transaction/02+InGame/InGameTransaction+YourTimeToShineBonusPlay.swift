@@ -134,13 +134,16 @@ extension InGameTransaction {
             }
         }
         table.setActiveBonuses(coachID: coachID, activeBonuses: maintainCards)
-        table.discards.append(contentsOf: discardCards)
         for discardCard in discardCards {
+            table.discards.append(discardCard)
             events.append(
                 .discardedPersistentBonusPlay(
                     coachID: coachID,
                     card: discardCard
                 )
+            )
+            events.append(
+                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
             )
         }
 

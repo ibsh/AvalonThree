@@ -14,7 +14,7 @@ struct ReadyToGoTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,48 +29,49 @@ struct ReadyToGoTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .lizardmen_skinkRunner,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .lizardmen_skinkRunner,
                             state: .standing(square: sq(5, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .lizardmen_chameleonSkinkCatcher,
                             state: .prone(square: sq(3, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .lizardmen_saurusBlocker,
                             state: .standing(square: sq(6, 13)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .lizardmen_saurusBlocker,
                             state: .standing(square: sq(9, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .lizardmen_saurusBlocker,
                             state: .standing(square: sq(8, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 12)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -85,7 +86,10 @@ struct ReadyToGoTests {
                     ],
                     deck: [],
                     objectives: Objectives(
-                        first: ChallengeCard(challenge: .getTheBall, bonusPlay: .readyToGo)
+                        first: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .readyToGo
+                        )
                     ),
                     discards: []
                 ),
@@ -105,7 +109,7 @@ struct ReadyToGoTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -115,7 +119,7 @@ struct ReadyToGoTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -127,10 +131,11 @@ struct ReadyToGoTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 7)
                 )
             ]
         )
@@ -139,7 +144,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -197,12 +202,16 @@ struct ReadyToGoTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 7),
+                    to: sq(5, 6),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
+                    in: sq(5, 6),
                     ballID: ballID
                 ),
             ]
@@ -226,11 +235,36 @@ struct ReadyToGoTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1, total: 1),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .readyToGo
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .getTheBall,
+                                bonusPlay: .readyToGo
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 1,
+                    total: 1
+                ),
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .readyToGo)
+                    card: ChallengeCard(
+                        challenge: .getTheBall,
+                        bonusPlay: .readyToGo
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -239,7 +273,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForReadyToGoBonusPlayRunAction(
-                    playerID: PlayerID(coachID: .away, index: 1)
+                    playerID: pl(.away, 1)
                 )
             )
         )
@@ -257,10 +291,11 @@ struct ReadyToGoTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(5, 11)
                 )
             ]
         )
@@ -269,7 +304,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 1,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -327,10 +362,13 @@ struct ReadyToGoTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 12),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(5, 11),
+                    to: sq(4, 12),
+                    direction: .southWest,
                     reason: .run
-                ),
+                )
             ]
         )
 
@@ -338,7 +376,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForReadyToGoBonusPlayRunAction(
-                    playerID: PlayerID(coachID: .away, index: 4)
+                    playerID: pl(.away, 4)
                 )
             )
         )
@@ -356,10 +394,11 @@ struct ReadyToGoTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 4),
+                        playerID: pl(.away, 4),
                         actionID: .run
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(9, 9)
                 )
             ]
         )
@@ -368,7 +407,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 4),
+                    playerID: pl(.away, 4),
                     maxRunDistance: 1,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -426,10 +465,13 @@ struct ReadyToGoTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 4),
-                    square: sq(10, 9),
+                    playerID: pl(.away, 4),
+                    ballID: nil,
+                    from: sq(9, 9),
+                    to: sq(10, 9),
+                    direction: .east,
                     reason: .run
-                ),
+                )
             ]
         )
 
@@ -437,7 +479,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForReadyToGoBonusPlaySidestepAction(
-                    playerID: PlayerID(coachID: .away, index: 3)
+                    playerID: pl(.away, 3)
                 )
             )
         )
@@ -455,10 +497,11 @@ struct ReadyToGoTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .sidestep
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(6, 13)
                 )
             ]
         )
@@ -467,7 +510,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -520,10 +563,13 @@ struct ReadyToGoTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(5, 13),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(6, 13),
+                    to: sq(5, 13),
+                    direction: .west,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -531,7 +577,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForReadyToGoBonusPlaySidestepAction(
-                    playerID: PlayerID(coachID: .away, index: 5)
+                    playerID: pl(.away, 5)
                 )
             )
         )
@@ -549,10 +595,11 @@ struct ReadyToGoTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .sidestep
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(8, 11)
                 )
             ]
         )
@@ -561,7 +608,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -614,10 +661,13 @@ struct ReadyToGoTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(9, 12),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 11),
+                    to: sq(9, 12),
+                    direction: .southEast,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -625,7 +675,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForReadyToGoBonusPlayStandUpAction(
-                    playerID: PlayerID(coachID: .away, index: 2)
+                    playerID: pl(.away, 2)
                 )
             )
         )
@@ -643,16 +693,27 @@ struct ReadyToGoTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .standUp
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(3, 8)
                 ),
-                .playerStoodUp(playerID: PlayerID(coachID: .away, index: 2)),
+                .playerStoodUp(
+                    playerID: pl(.away, 2),
+                    in: sq(3, 8)
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .readyToGo)
-                )
+                    card: ChallengeCard(
+                        challenge: .getTheBall,
+                        bonusPlay: .readyToGo
+                    )
+                ),
+                .updatedDiscards(
+                    top: .readyToGo,
+                    count: 1
+                ),
             ]
         )
 
@@ -663,49 +724,49 @@ struct ReadyToGoTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 0),
+                                playerID: pl(CoachID.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 1),
+                                playerID: pl(CoachID.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 2),
+                                playerID: pl(CoachID.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 3),
+                                playerID: pl(CoachID.away, 3),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 3),
+                                playerID: pl(CoachID.away, 3),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 5),
+                                playerID: pl(CoachID.away, 5),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 5),
+                                playerID: pl(CoachID.away, 5),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -721,7 +782,7 @@ struct ReadyToGoTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -736,48 +797,49 @@ struct ReadyToGoTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .lizardmen_skinkRunner,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .lizardmen_skinkRunner,
                             state: .standing(square: sq(5, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .lizardmen_chameleonSkinkCatcher,
                             state: .prone(square: sq(3, 8)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .lizardmen_saurusBlocker,
                             state: .standing(square: sq(6, 13)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .lizardmen_saurusBlocker,
                             state: .standing(square: sq(9, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .lizardmen_saurusBlocker,
                             state: .standing(square: sq(8, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 12)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -792,7 +854,10 @@ struct ReadyToGoTests {
                     ],
                     deck: [],
                     objectives: Objectives(
-                        first: ChallengeCard(challenge: .getTheBall, bonusPlay: .readyToGo)
+                        first: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .readyToGo
+                        )
                     ),
                     discards: []
                 ),
@@ -812,7 +877,7 @@ struct ReadyToGoTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -822,7 +887,7 @@ struct ReadyToGoTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -834,10 +899,11 @@ struct ReadyToGoTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 7)
                 )
             ]
         )
@@ -846,7 +912,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -904,12 +970,16 @@ struct ReadyToGoTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 7),
+                    to: sq(5, 6),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
+                    in: sq(5, 6),
                     ballID: ballID
                 ),
             ]
@@ -933,11 +1003,36 @@ struct ReadyToGoTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1, total: 1),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .readyToGo
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .getTheBall,
+                                bonusPlay: .readyToGo
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 1,
+                    total: 1
+                ),
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .readyToGo)
+                    card: ChallengeCard(
+                        challenge: .getTheBall,
+                        bonusPlay: .readyToGo
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -946,7 +1041,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForReadyToGoBonusPlayRunAction(
-                    playerID: PlayerID(coachID: .away, index: 1)
+                    playerID: pl(.away, 1)
                 )
             )
         )
@@ -968,7 +1063,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForReadyToGoBonusPlayRunAction(
-                    playerID: PlayerID(coachID: .away, index: 4)
+                    playerID: pl(.away, 4)
                 )
             )
         )
@@ -990,7 +1085,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForReadyToGoBonusPlaySidestepAction(
-                    playerID: PlayerID(coachID: .away, index: 3)
+                    playerID: pl(.away, 3)
                 )
             )
         )
@@ -1012,7 +1107,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForReadyToGoBonusPlaySidestepAction(
-                    playerID: PlayerID(coachID: .away, index: 5)
+                    playerID: pl(.away, 5)
                 )
             )
         )
@@ -1034,7 +1129,7 @@ struct ReadyToGoTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForReadyToGoBonusPlayStandUpAction(
-                    playerID: PlayerID(coachID: .away, index: 2)
+                    playerID: pl(.away, 2)
                 )
             )
         )
@@ -1052,8 +1147,15 @@ struct ReadyToGoTests {
             latestEvents == [
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .readyToGo)
-                )
+                    card: ChallengeCard(
+                        challenge: .getTheBall,
+                        bonusPlay: .readyToGo
+                    )
+                ),
+                .updatedDiscards(
+                    top: .readyToGo,
+                    count: 1
+                ),
             ]
         )
 
@@ -1064,63 +1166,63 @@ struct ReadyToGoTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 0),
+                                playerID: pl(CoachID.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 1),
+                                playerID: pl(CoachID.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 1),
+                                playerID: pl(CoachID.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 2),
+                                playerID: pl(CoachID.away, 2),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 3),
+                                playerID: pl(CoachID.away, 3),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 4),
+                                playerID: pl(CoachID.away, 4),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 3),
+                                playerID: pl(CoachID.away, 3),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 5),
+                                playerID: pl(CoachID.away, 5),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 5),
+                                playerID: pl(CoachID.away, 5),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []

@@ -14,7 +14,7 @@ struct FrenziedTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,18 +29,19 @@ struct FrenziedTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .dwarf_trollslayer,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -50,7 +51,7 @@ struct FrenziedTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -73,7 +74,7 @@ struct FrenziedTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -83,7 +84,7 @@ struct FrenziedTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -95,10 +96,11 @@ struct FrenziedTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -107,7 +109,7 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -164,10 +166,13 @@ struct FrenziedTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -175,7 +180,7 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForFrenziedSkillBlockAction(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -192,7 +197,8 @@ struct FrenziedTests {
         #expect(
             latestEvents == [
                 .declinedFrenziedSkillBlockAction(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0),
+                    in: sq(2, 6)
                 )
             ]
         )
@@ -204,14 +210,14 @@ struct FrenziedTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -229,7 +235,7 @@ struct FrenziedTests {
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -244,18 +250,19 @@ struct FrenziedTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .dwarf_trollslayer,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -265,7 +272,7 @@ struct FrenziedTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -290,7 +297,7 @@ struct FrenziedTests {
             randomizers: Randomizers(
                 blockDie: blockDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -300,7 +307,7 @@ struct FrenziedTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -312,10 +319,11 @@ struct FrenziedTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -324,7 +332,7 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -381,10 +389,13 @@ struct FrenziedTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -392,7 +403,7 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForFrenziedSkillBlockAction(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -410,10 +421,11 @@ struct FrenziedTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -422,9 +434,9 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -437,23 +449,35 @@ struct FrenziedTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(coachID: .away, result: .shove),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.shove]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(0, 6),
+                    playerID: pl(.home, 0),
+                    ballID: 123,
+                    from: sq(1, 6),
+                    to: sq(0, 6),
+                    direction: .west,
                     reason: .shoved
-                )
+                ),
             ]
         )
 
@@ -461,7 +485,7 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     square: sq(1, 6)
                 )
             )
@@ -479,10 +503,13 @@ struct FrenziedTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
                     reason: .followUp
-                ),
+                )
             ]
         )
 
@@ -493,7 +520,7 @@ struct FrenziedTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -513,7 +540,7 @@ struct FrenziedTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -525,10 +552,11 @@ struct FrenziedTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(1, 6)
                 )
             ]
         )
@@ -537,7 +565,7 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: squares("""
@@ -574,10 +602,13 @@ struct FrenziedTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(1, 6),
+                    to: sq(2, 6),
+                    direction: .east,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -588,7 +619,7 @@ struct FrenziedTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -606,7 +637,7 @@ struct FrenziedTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -618,10 +649,11 @@ struct FrenziedTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -630,7 +662,7 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -687,17 +719,23 @@ struct FrenziedTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(3, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(4, 6),
+                    direction: .east,
                     reason: .run
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -710,7 +748,7 @@ struct FrenziedTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -728,7 +766,7 @@ struct FrenziedTests {
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -743,36 +781,37 @@ struct FrenziedTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .dwarf_trollslayer,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .dwarf_lineman,
                             state: .standing(square: sq(1, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -812,7 +851,7 @@ struct FrenziedTests {
             randomizers: Randomizers(
                 blockDie: blockDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -822,7 +861,7 @@ struct FrenziedTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -834,10 +873,11 @@ struct FrenziedTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -846,7 +886,7 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -903,10 +943,13 @@ struct FrenziedTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -914,7 +957,7 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForFrenziedSkillBlockAction(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -934,10 +977,11 @@ struct FrenziedTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -946,11 +990,11 @@ struct FrenziedTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
-                        PlayerID(coachID: .home, index: 1),
-                        PlayerID(coachID: .home, index: 2),
+                        pl(.home, 0),
+                        pl(.home, 1),
+                        pl(.home, 2),
                     ]
                 )
             )
@@ -963,19 +1007,31 @@ struct FrenziedTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.miss]),
-                .selectedBlockDieResult(coachID: .away, result: .miss),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.miss]
                 ),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(2, 6)
+                ),
             ]
         )
 
@@ -986,14 +1042,14 @@ struct FrenziedTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -1015,7 +1071,10 @@ struct FrenziedTests {
 
         #expect(
             latestEvents == [
-                .declinedFrenziedSkillBlockAction(playerID: PlayerID(coachID: .away, index: 0)),
+                .declinedFrenziedSkillBlockAction(
+                    playerID: pl(.away, 0),
+                    in: sq(2, 6)
+                )
             ]
         )
 

@@ -30,18 +30,19 @@ struct AbsolutelyNailsTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absoluteCarnage),
                     ],
@@ -77,7 +78,7 @@ struct AbsolutelyNailsTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -87,7 +88,7 @@ struct AbsolutelyNailsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -99,10 +100,11 @@ struct AbsolutelyNailsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -111,9 +113,9 @@ struct AbsolutelyNailsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -126,19 +128,26 @@ struct AbsolutelyNailsTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -146,7 +155,7 @@ struct AbsolutelyNailsTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForAbsolutelyNailsBonusPlay(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -166,12 +175,35 @@ struct AbsolutelyNailsTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absolutelyNails)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .absolutelyNails
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .breakSomeBones,
+                                bonusPlay: .toughEnough
+                            )
+                        )
+                    ]
                 ),
-                .rolledForArmour(die: .d6, unmodified: 2),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 2
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absolutelyNails)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .absolutelyNails
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absolutelyNails,
+                    count: 1
                 ),
             ]
         )
@@ -183,14 +215,14 @@ struct AbsolutelyNailsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -222,18 +254,19 @@ struct AbsolutelyNailsTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absoluteCarnage),
                     ],
@@ -269,7 +302,7 @@ struct AbsolutelyNailsTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -279,7 +312,7 @@ struct AbsolutelyNailsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -291,10 +324,9 @@ struct AbsolutelyNailsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
-                        actionID: .block
-                    ),
-                    isFree: false
+                        playerID: pl(.away, 0), actionID: .block),
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -303,9 +335,9 @@ struct AbsolutelyNailsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -318,19 +350,26 @@ struct AbsolutelyNailsTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -338,7 +377,7 @@ struct AbsolutelyNailsTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForAbsolutelyNailsBonusPlay(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -360,7 +399,7 @@ struct AbsolutelyNailsTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForToughEnoughBonusPlay(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -382,7 +421,7 @@ struct AbsolutelyNailsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForAbsoluteCarnageBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -400,7 +439,7 @@ struct AbsolutelyNailsTests {
 
         #expect(
             latestEvents == [
-                .rolledForArmour(die: .d6, unmodified: 4),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 4),
             ]
         )
 
@@ -411,14 +450,14 @@ struct AbsolutelyNailsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []

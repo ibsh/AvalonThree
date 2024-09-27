@@ -13,8 +13,6 @@ extension InGameTransaction {
         playerPositions: [Square]
     ) throws -> Prompt? {
 
-        try addNewBall(bounce: false)
-
         history.append(
             .prepareForTurn(
                 coachID: coinFlipLoserCoachID,

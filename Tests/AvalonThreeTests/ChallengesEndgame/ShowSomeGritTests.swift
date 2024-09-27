@@ -14,7 +14,7 @@ struct ShowSomeGritTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,30 +29,31 @@ struct ShowSomeGritTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(10, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(3, 3)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -62,7 +63,7 @@ struct ShowSomeGritTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -82,7 +83,7 @@ struct ShowSomeGritTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -90,7 +91,7 @@ struct ShowSomeGritTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .block
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -106,7 +107,7 @@ struct ShowSomeGritTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -116,7 +117,7 @@ struct ShowSomeGritTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -128,10 +129,11 @@ struct ShowSomeGritTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(10, 10)
                 )
             ]
         )
@@ -140,7 +142,7 @@ struct ShowSomeGritTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -196,12 +198,25 @@ struct ShowSomeGritTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(10, 9),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(10, 10),
+                    to: sq(10, 9),
+                    direction: .north,
                     reason: .run
+                ), .turnEnded(coachID: .away),
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: ChallengeCard(
+                        challenge: .showSomeGrit,
+                        bonusPlay: .absoluteCarnage
+                    )
                 ),
-                .turnEnded(coachID: .away),
-                .discardedObjective(coachID: .home, objectiveID: .second)
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 1
+                ),
             ]
         )
 
@@ -209,8 +224,8 @@ struct ShowSomeGritTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .declareEmergencyReservesAction(validPlayers: [
-                    PlayerID(coachID: .home, index: 1),
-                    PlayerID(coachID: .home, index: 2),
+                    pl(.home, 1),
+                    pl(.home, 2),
                 ])
             )
         )
@@ -221,7 +236,7 @@ struct ShowSomeGritTests {
             InputMessageWrapper(
                 coachID: .home,
                 message: .declareEmergencyReservesAction(
-                    playerID: PlayerID(coachID: .home, index: 2)
+                    playerID: pl(.home, 2)
                 )
             )
         )
@@ -230,10 +245,11 @@ struct ShowSomeGritTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 2),
+                        playerID: pl(.home, 2),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -242,7 +258,7 @@ struct ShowSomeGritTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .home, index: 2),
+                    playerID: pl(.home, 2),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(7, 14), sq(2, 14), sq(0, 14), sq(3, 14), sq(1, 14), sq(8, 14), sq(5, 14), sq(4, 14), sq(10, 14), sq(9, 14), sq(6, 14)]
@@ -262,12 +278,11 @@ struct ShowSomeGritTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 2),
-                    square: sq(5, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 2),
+                    to: sq(5, 14)
                 ),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -278,21 +293,21 @@ struct ShowSomeGritTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 2),
+                                playerID: pl(.home, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -308,7 +323,7 @@ struct ShowSomeGritTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -323,30 +338,31 @@ struct ShowSomeGritTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(10, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(3, 3)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(7, 3)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -356,7 +372,7 @@ struct ShowSomeGritTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -376,7 +392,7 @@ struct ShowSomeGritTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -384,7 +400,7 @@ struct ShowSomeGritTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .block
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -400,7 +416,7 @@ struct ShowSomeGritTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -410,7 +426,7 @@ struct ShowSomeGritTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -422,10 +438,11 @@ struct ShowSomeGritTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(10, 10)
                 )
             ]
         )
@@ -434,7 +451,7 @@ struct ShowSomeGritTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -490,13 +507,27 @@ struct ShowSomeGritTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(10, 9),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(10, 10),
+                    to: sq(10, 9),
+                    direction: .north,
                     reason: .run
                 ),
                 .turnEnded(coachID: .away),
-                .discardedObjective(coachID: .home, objectiveID: .second),
-                .finalTurnBegan,
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: ChallengeCard(
+                        challenge: .showSomeGrit,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 1
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -507,21 +538,21 @@ struct ShowSomeGritTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 2),
+                                playerID: pl(.home, 2),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -539,7 +570,7 @@ struct ShowSomeGritTests {
                 coachID: .home,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -551,10 +582,11 @@ struct ShowSomeGritTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 3)
                 )
             ]
         )
@@ -563,7 +595,7 @@ struct ShowSomeGritTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -619,8 +651,11 @@ struct ShowSomeGritTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(3, 2),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(3, 3),
+                    to: sq(3, 2),
+                    direction: .north,
                     reason: .run
                 )
             ]
@@ -633,14 +668,14 @@ struct ShowSomeGritTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 2),
+                                playerID: pl(.home, 2),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -656,7 +691,7 @@ struct ShowSomeGritTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -671,30 +706,31 @@ struct ShowSomeGritTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(10, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(3, 3)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -704,7 +740,7 @@ struct ShowSomeGritTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -728,7 +764,7 @@ struct ShowSomeGritTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -736,7 +772,7 @@ struct ShowSomeGritTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .block
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -752,7 +788,7 @@ struct ShowSomeGritTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -762,7 +798,7 @@ struct ShowSomeGritTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -774,10 +810,11 @@ struct ShowSomeGritTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(10, 10)
                 )
             ]
         )
@@ -786,7 +823,7 @@ struct ShowSomeGritTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -842,11 +879,14 @@ struct ShowSomeGritTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(10, 9),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(10, 10),
+                    to: sq(10, 9),
+                    direction: .north,
                     reason: .run
                 ),
-                .turnEnded(coachID: .away)
+                .turnEnded(coachID: .away),
             ]
         )
 
@@ -868,7 +908,18 @@ struct ShowSomeGritTests {
 
         #expect(
             latestEvents == [
-                .discardedObjective(coachID: .home, objectiveID: .third),
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .third,
+                    objective: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 1
+                ),
             ]
         )
 
@@ -876,8 +927,8 @@ struct ShowSomeGritTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .declareEmergencyReservesAction(validPlayers: [
-                    PlayerID(coachID: .home, index: 1),
-                    PlayerID(coachID: .home, index: 2),
+                    pl(.home, 1),
+                    pl(.home, 2),
                 ])
             )
         )
@@ -888,7 +939,7 @@ struct ShowSomeGritTests {
             InputMessageWrapper(
                 coachID: .home,
                 message: .declareEmergencyReservesAction(
-                    playerID: PlayerID(coachID: .home, index: 2)
+                    playerID: pl(.home, 2)
                 )
             )
         )
@@ -897,10 +948,11 @@ struct ShowSomeGritTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 2),
+                        playerID: pl(.home, 2),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -909,7 +961,7 @@ struct ShowSomeGritTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .home, index: 2),
+                    playerID: pl(.home, 2),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(10, 14), sq(3, 14), sq(0, 14), sq(5, 14), sq(6, 14), sq(4, 14), sq(8, 14), sq(1, 14), sq(2, 14), sq(7, 14), sq(9, 14)]
@@ -929,10 +981,9 @@ struct ShowSomeGritTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 2),
-                    square: sq(5, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 2),
+                    to: sq(5, 14)
                 ),
             ]
         )
@@ -957,8 +1008,26 @@ struct ShowSomeGritTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .home, objectiveID: .second),
-                .finalTurnBegan,
+                .claimedObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .showSomeGrit,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .showSomeGrit,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -969,21 +1038,21 @@ struct ShowSomeGritTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 2),
+                                playerID: pl(.home, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

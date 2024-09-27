@@ -10,7 +10,8 @@ import Foundation
 extension InGameTransaction {
 
     mutating func ballDisappears(
-        id ballID: BallID
+        id ballID: Int,
+        in square: Square
     ) throws {
 
         guard let ball = table.getBall(id: ballID) else {
@@ -21,11 +22,11 @@ extension InGameTransaction {
 
         switch ball.state {
         case .held:
-            events.append(.ballCameLoose(ballID: ballID))
+            events.append(.ballCameLoose(ballID: ballID, in: square))
         case .loose:
             break
         }
 
-        events.append(.ballDisappeared(ballID: ballID))
+        events.append(.ballDisappeared(ballID: ballID, in: square))
     }
 }

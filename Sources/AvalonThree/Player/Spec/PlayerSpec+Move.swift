@@ -8,7 +8,7 @@
 import Foundation
 
 extension PlayerSpec {
-    enum Move: Equatable, Codable, Sendable {
+    enum Move: Hashable, Codable, Sendable {
         case fixed(Int)
         case d6
     }

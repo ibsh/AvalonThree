@@ -16,7 +16,7 @@ struct PassingTests {
 
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -31,18 +31,19 @@ struct PassingTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .necromantic_zombie,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .necromantic_wraith,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -52,7 +53,7 @@ struct PassingTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -77,7 +78,7 @@ struct PassingTests {
             randomizers: Randomizers(
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare handoff
@@ -87,7 +88,7 @@ struct PassingTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -99,10 +100,11 @@ struct PassingTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 5)
                 )
             ]
         )
@@ -111,10 +113,10 @@ struct PassingTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(4, 5),
                             distance: .handoff,
                             obstructingSquares: [],
@@ -132,20 +134,35 @@ struct PassingTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
                 .playerHandedOffBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 5)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 5),
+                    to: sq(4, 5),
+                    direction: .east,
+                    ballID: 123
                 ),
-                .playerFailedCatch(playerID: PlayerID(coachID: .away, index: 1)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: ballID, to: sq(4, 6)),
+                .playerFailedCatch(
+                    playerID: pl(.away, 1),
+                    in: sq(4, 5),
+                    ballID: 123
+                ),
+                .ballCameLoose(ballID: 123, in: sq(4, 5)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(4, 5),
+                    to: sq(4, 6),
+                    direction: .south
+                ),
             ]
         )
 
@@ -156,14 +173,14 @@ struct PassingTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -182,7 +199,7 @@ struct PassingTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -197,18 +214,19 @@ struct PassingTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .necromantic_zombie,
                             state: .standing(square: sq(2, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .necromantic_wraith,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -218,7 +236,7 @@ struct PassingTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -244,7 +262,7 @@ struct PassingTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -254,7 +272,7 @@ struct PassingTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -266,10 +284,11 @@ struct PassingTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 5)
                 )
             ]
         )
@@ -278,10 +297,10 @@ struct PassingTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(4, 5),
                             distance: .short,
                             obstructingSquares: [],
@@ -300,24 +319,40 @@ struct PassingTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
                 .rolledForPass(
+                    coachID: .away,
                     die: .d6,
                     unmodified: 6
                 ),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 5)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 5),
+                    to: sq(4, 5),
+                    angle: 90,
+                    ballID: 123
                 ),
-                .playerFailedCatch(playerID: PlayerID(coachID: .away, index: 1)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: ballID, to: sq(4, 6)),
+                .playerFailedCatch(
+                    playerID: pl(.away, 1),
+                    in: sq(4, 5),
+                    ballID: 123
+                ),
+                .ballCameLoose(ballID: 123, in: sq(4, 5)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(4, 5),
+                    to: sq(4, 6),
+                    direction: .south
+                ),
             ]
         )
 
@@ -328,14 +363,14 @@ struct PassingTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

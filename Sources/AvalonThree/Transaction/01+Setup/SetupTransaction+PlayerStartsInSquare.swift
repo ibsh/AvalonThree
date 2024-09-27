@@ -34,7 +34,7 @@ extension SetupTransaction {
         table.players.update(with: player)
 
         events.append(
-            .playerMoved(playerID: playerID, square: square, reason: .reserves)
+            .playerMovedOutOfReserves(playerID: playerID, to: square)
         )
     }
 }

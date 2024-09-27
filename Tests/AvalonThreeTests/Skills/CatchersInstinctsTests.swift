@@ -14,7 +14,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,24 +29,25 @@ struct CatchersInstinctsTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .woodElf_catcher,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .woodElf_passer,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -56,7 +57,7 @@ struct CatchersInstinctsTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         )
                     ],
                     deck: [],
@@ -79,7 +80,7 @@ struct CatchersInstinctsTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare sidestep
@@ -89,7 +90,7 @@ struct CatchersInstinctsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -101,10 +102,11 @@ struct CatchersInstinctsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -113,7 +115,7 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(3, 7), sq(3, 6), sq(3, 5)]
@@ -134,10 +136,13 @@ struct CatchersInstinctsTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 7),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(2, 6),
+                    to: sq(3, 7),
+                    direction: .southEast,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -148,28 +153,28 @@ struct CatchersInstinctsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -187,7 +192,7 @@ struct CatchersInstinctsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -199,10 +204,11 @@ struct CatchersInstinctsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 7)
                 )
             ]
         )
@@ -211,7 +217,7 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 7,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -269,18 +275,27 @@ struct CatchersInstinctsTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 7),
+                    to: sq(4, 7),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(5, 7),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(4, 7),
+                    to: sq(5, 7),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(6, 7),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(5, 7),
+                    to: sq(6, 7),
+                    direction: .east,
                     reason: .run
                 ),
             ]
@@ -293,14 +308,14 @@ struct CatchersInstinctsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -318,7 +333,7 @@ struct CatchersInstinctsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -330,10 +345,11 @@ struct CatchersInstinctsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 7)
                 )
             ]
         )
@@ -342,10 +358,10 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 0),
+                            targetPlayerID: pl(.away, 0),
                             targetSquare: sq(6, 6),
                             distance: .handoff,
                             obstructingSquares: [],
@@ -361,19 +377,26 @@ struct CatchersInstinctsTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 0))
+                message: .passActionSpecifyTarget(target: pl(.away, 0))
             )
         )
 
         #expect(
             latestEvents == [
                 .playerHandedOffBall(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(6, 6)
+                    playerID: pl(.away, 1),
+                    from: sq(6, 7),
+                    to: sq(6, 6),
+                    direction: .north,
+                    ballID: 123
                 ),
-                .playerCaughtHandoff(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerCaughtHandoff(
+                    playerID: pl(.away, 0),
+                    in: sq(6, 6),
+                    ballID: 123
+                ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -384,7 +407,7 @@ struct CatchersInstinctsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -402,7 +425,7 @@ struct CatchersInstinctsTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -417,24 +440,25 @@ struct CatchersInstinctsTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .woodElf_catcher,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .woodElf_passer,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -444,7 +468,7 @@ struct CatchersInstinctsTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         )
                     ],
                     deck: [],
@@ -469,7 +493,7 @@ struct CatchersInstinctsTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare sidestep
@@ -479,7 +503,7 @@ struct CatchersInstinctsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -491,10 +515,11 @@ struct CatchersInstinctsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -503,7 +528,7 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(3, 7), sq(3, 6), sq(3, 5)]
@@ -524,10 +549,13 @@ struct CatchersInstinctsTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 7),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(2, 6),
+                    to: sq(3, 7),
+                    direction: .southEast,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -538,28 +566,28 @@ struct CatchersInstinctsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -577,7 +605,7 @@ struct CatchersInstinctsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -589,10 +617,11 @@ struct CatchersInstinctsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 7)
                 )
             ]
         )
@@ -601,7 +630,7 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 7,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -659,18 +688,27 @@ struct CatchersInstinctsTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 7),
+                    to: sq(4, 7),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(5, 8),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(4, 7),
+                    to: sq(5, 8),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(6, 9),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(5, 8),
+                    to: sq(6, 9),
+                    direction: .southEast,
                     reason: .run
                 ),
             ]
@@ -683,14 +721,14 @@ struct CatchersInstinctsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -708,7 +746,7 @@ struct CatchersInstinctsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -720,10 +758,11 @@ struct CatchersInstinctsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 9)
                 )
             ]
         )
@@ -732,10 +771,10 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 0),
+                            targetPlayerID: pl(.away, 0),
                             targetSquare: sq(6, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -753,18 +792,25 @@ struct CatchersInstinctsTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 0))
+                message: .passActionSpecifyTarget(target: pl(.away, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 2),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 2),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(6, 6)
+                    playerID: pl(.away, 1),
+                    from: sq(6, 9),
+                    to: sq(6, 6),
+                    angle: 0,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 0),
+                    in: sq(6, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -772,7 +818,7 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForCatchersInstinctsSkillRunAction(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -789,10 +835,11 @@ struct CatchersInstinctsTests {
         #expect(
             latestEvents == [
                 .declinedCatchersInstinctsSkillRunAction(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0),
+                    in: sq(6, 6)
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -803,7 +850,7 @@ struct CatchersInstinctsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -822,7 +869,7 @@ struct CatchersInstinctsTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -837,24 +884,25 @@ struct CatchersInstinctsTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .woodElf_catcher,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .woodElf_passer,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -864,7 +912,7 @@ struct CatchersInstinctsTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         )
                     ],
                     deck: [],
@@ -890,7 +938,7 @@ struct CatchersInstinctsTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare sidestep
@@ -900,7 +948,7 @@ struct CatchersInstinctsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -912,10 +960,11 @@ struct CatchersInstinctsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .sidestep
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -924,7 +973,7 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(3, 7), sq(3, 6), sq(3, 5)]
@@ -945,10 +994,13 @@ struct CatchersInstinctsTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 7),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(2, 6),
+                    to: sq(3, 7),
+                    direction: .southEast,
                     reason: .sidestep
-                ),
+                )
             ]
         )
 
@@ -959,28 +1011,28 @@ struct CatchersInstinctsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -998,7 +1050,7 @@ struct CatchersInstinctsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1010,10 +1062,11 @@ struct CatchersInstinctsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 7)
                 )
             ]
         )
@@ -1022,7 +1075,7 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 7,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1080,18 +1133,27 @@ struct CatchersInstinctsTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 7),
+                    to: sq(4, 7),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(5, 8),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(4, 7),
+                    to: sq(5, 8),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(6, 9),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(5, 8),
+                    to: sq(6, 9),
+                    direction: .southEast,
                     reason: .run
                 ),
             ]
@@ -1104,14 +1166,14 @@ struct CatchersInstinctsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1129,7 +1191,7 @@ struct CatchersInstinctsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1141,10 +1203,11 @@ struct CatchersInstinctsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 9)
                 )
             ]
         )
@@ -1153,10 +1216,10 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 0),
+                            targetPlayerID: pl(.away, 0),
                             targetSquare: sq(6, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -1174,18 +1237,25 @@ struct CatchersInstinctsTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 0))
+                message: .passActionSpecifyTarget(target: pl(.away, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 2),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 2),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(6, 6)
+                    playerID: pl(.away, 1),
+                    from: sq(6, 9),
+                    to: sq(6, 6),
+                    angle: 0,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 0),
+                    in: sq(6, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -1193,7 +1263,7 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForCatchersInstinctsSkillRunAction(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -1211,10 +1281,11 @@ struct CatchersInstinctsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(6, 6)
                 )
             ]
         )
@@ -1223,7 +1294,7 @@ struct CatchersInstinctsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1282,17 +1353,23 @@ struct CatchersInstinctsTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(7, 7),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(6, 6),
+                    to: sq(7, 7),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(8, 8),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(7, 7),
+                    to: sq(8, 8),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -1303,7 +1380,7 @@ struct CatchersInstinctsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

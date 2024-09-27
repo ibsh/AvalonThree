@@ -13,12 +13,16 @@ extension InGameTransaction {
 
     mutating func blockActionUseBodyCheckBonusPlay() throws -> Prompt? {
 
+        let coachID = try history.latestTurnContext().coachID
+
         try useBonusPlay(
             bonusPlay: bonusPlay,
-            coachID: try history.latestTurnContext().coachID
+            coachID: coachID
         )
 
-        events.append(.rolledForBlock(results: [.kerrunch]))
+        events.append(
+            .rolledForBlock(coachID: coachID, results: [.kerrunch])
+        )
         history.append(.blockResults([.kerrunch]))
         return try blockActionSelectResult(result: .kerrunch)
     }

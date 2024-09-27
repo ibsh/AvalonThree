@@ -18,11 +18,11 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
-        guard let square = player.isProne else {
+        guard let playerSquare = player.isProne else {
             throw GameError("Player is not prone")
         }
 
-        player.state = .standing(square: square)
+        player.state = .standing(square: playerSquare)
         table.players.update(with: player)
 
         let declaration = ActionDeclaration(
@@ -41,8 +41,12 @@ extension InGameTransaction {
             history.append(.actionIsFree)
         }
         history.append(.actionFinished)
-        events.append(.declaredAction(declaration: declaration, isFree: isFree))
-        events.append(.playerStoodUp(playerID: playerID))
+        events.append(
+            .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
+        )
+        events.append(
+            .playerStoodUp(playerID: playerID, in: playerSquare)
+        )
 
         return try endAction()
     }

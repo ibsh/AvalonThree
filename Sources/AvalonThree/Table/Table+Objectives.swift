@@ -29,23 +29,6 @@ extension Objectives {
         }
     }
 
-    mutating func deal(from deck: inout [ChallengeCard]) -> [ObjectiveID] {
-        var response = [ObjectiveID]()
-        if first == nil, let card = deck.popFirst() {
-            first = card
-            response.append(.first)
-        }
-        if second == nil, let card = deck.popFirst() {
-            second = card
-            response.append(.second)
-        }
-        if third == nil, let card = deck.popFirst() {
-            third = card
-            response.append(.third)
-        }
-        return response
-    }
-
     mutating func remove(_ id: ObjectiveID) {
         switch id {
         case .first: first = nil

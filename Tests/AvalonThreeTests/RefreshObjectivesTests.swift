@@ -18,7 +18,7 @@ struct RefreshObjectivesTests {
         let d6Randomizer = D6RandomizerDouble()
         let foulDieRandomizer = FoulDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -33,18 +33,19 @@ struct RefreshObjectivesTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -112,7 +113,7 @@ struct RefreshObjectivesTests {
                 d6: d6Randomizer,
                 foulDie: foulDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -122,7 +123,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -134,10 +135,11 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 5)
                 )
             ]
         )
@@ -146,7 +148,7 @@ struct RefreshObjectivesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -201,10 +203,13 @@ struct RefreshObjectivesTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 5),
+                    to: sq(5, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -215,14 +220,14 @@ struct RefreshObjectivesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -240,7 +245,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -252,10 +257,11 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 6)
                 )
             ]
         )
@@ -264,9 +270,9 @@ struct RefreshObjectivesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -280,20 +286,37 @@ struct RefreshObjectivesTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 7)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(5, 6),
+                    to: sq(5, 7),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 7),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -317,8 +340,30 @@ struct RefreshObjectivesTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 2, total: 2),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 2
+                ),
             ]
         )
 
@@ -329,14 +374,14 @@ struct RefreshObjectivesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -354,7 +399,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .foul
                     ),
                     consumesBonusPlays: []
@@ -366,10 +411,11 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .foul
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 6)
                 )
             ]
         )
@@ -378,9 +424,9 @@ struct RefreshObjectivesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .foulActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -393,20 +439,38 @@ struct RefreshObjectivesTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .foulActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .foulActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForFoul(result: .spotted),
-                .playerFouled(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 7)
+                .rolledForFoul(
+                    coachID: .away,
+                    result: .spotted
                 ),
-                .playerSentOff(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerFouled(
+                    playerID: pl(.away, 0),
+                    from: sq(5, 6),
+                    to: sq(5, 7),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerSentOff(
+                    playerID: pl(.away, 0),
+                    from: sq(5, 6)
+                ),
                 .turnEnded(coachID: .away),
-                .dealtNewObjective(coachID: .home, objectiveID: .first),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .first,
+                    objective: .goDeep
+                ),
+                .updatedDeck(top: .lastChance, count: 2),
+                .turnBegan(
+                    coachID: .home,
+                    isFinal: false
+                ),
             ]
         )
 
@@ -417,7 +481,7 @@ struct RefreshObjectivesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
@@ -481,7 +545,7 @@ struct RefreshObjectivesTests {
         let d6Randomizer = D6RandomizerDouble()
         let foulDieRandomizer = FoulDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -496,18 +560,19 @@ struct RefreshObjectivesTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -571,7 +636,7 @@ struct RefreshObjectivesTests {
                 d6: d6Randomizer,
                 foulDie: foulDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -581,7 +646,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -593,10 +658,11 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 5)
                 )
             ]
         )
@@ -605,7 +671,7 @@ struct RefreshObjectivesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -660,10 +726,13 @@ struct RefreshObjectivesTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 5),
+                    to: sq(5, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -674,14 +743,14 @@ struct RefreshObjectivesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -699,7 +768,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -711,10 +780,11 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 6)
                 )
             ]
         )
@@ -723,9 +793,9 @@ struct RefreshObjectivesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -739,20 +809,37 @@ struct RefreshObjectivesTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 7)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(5, 6),
+                    to: sq(5, 7),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 7),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -763,14 +850,14 @@ struct RefreshObjectivesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -788,7 +875,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .foul
                     ),
                     consumesBonusPlays: []
@@ -800,10 +887,11 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .foul
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 6)
                 )
             ]
         )
@@ -812,9 +900,9 @@ struct RefreshObjectivesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .foulActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -827,18 +915,27 @@ struct RefreshObjectivesTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .foulActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .foulActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForFoul(result: .spotted),
-                .playerFouled(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 7)
+                .rolledForFoul(
+                    coachID: .away,
+                    result: .spotted
                 ),
-                .playerSentOff(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerFouled(
+                    playerID: pl(.away, 0),
+                    from: sq(5, 6),
+                    to: sq(5, 7),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerSentOff(
+                    playerID: pl(.away, 0),
+                    from: sq(5, 6)
+                ),
                 .turnEnded(coachID: .away),
             ]
         )
@@ -858,7 +955,7 @@ struct RefreshObjectivesTests {
                     coachID: .home,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .home, index: 0),
+                            playerID: pl(.home, 0),
                             actionID: .standUp
                         ),
                     consumesBonusPlays: []
@@ -889,9 +986,34 @@ struct RefreshObjectivesTests {
 
         #expect(
             latestEvents == [
-                .discardedObjective(coachID: .home, objectiveID: .second),
-                .dealtNewObjective(coachID: .home, objectiveID: .first),
-                .dealtNewObjective(coachID: .home, objectiveID: .second),
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: ChallengeCard(
+                        challenge: .spreadOut,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 2
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .first,
+                    objective: .goDeep
+                ),
+                .updatedDeck(top: .lastChance, count: 2),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: .lastChance
+                ),
+                .updatedDeck(top: .pileOn, count: 1),
+                .turnBegan(
+                    coachID: .home,
+                    isFinal: false
+                ),
             ]
         )
 
@@ -902,7 +1024,7 @@ struct RefreshObjectivesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
@@ -961,7 +1083,7 @@ struct RefreshObjectivesTests {
         let d6Randomizer = D6RandomizerDouble()
         let foulDieRandomizer = FoulDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -976,18 +1098,19 @@ struct RefreshObjectivesTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -1055,7 +1178,7 @@ struct RefreshObjectivesTests {
                 d6: d6Randomizer,
                 foulDie: foulDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -1065,7 +1188,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -1077,10 +1200,11 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 5)
                 )
             ]
         )
@@ -1089,7 +1213,7 @@ struct RefreshObjectivesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1144,10 +1268,13 @@ struct RefreshObjectivesTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 5),
+                    to: sq(5, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -1158,14 +1285,14 @@ struct RefreshObjectivesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -1183,7 +1310,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1195,10 +1322,11 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 6)
                 )
             ]
         )
@@ -1207,9 +1335,9 @@ struct RefreshObjectivesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -1223,20 +1351,37 @@ struct RefreshObjectivesTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 7)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(5, 6),
+                    to: sq(5, 7),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 7),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -1247,14 +1392,14 @@ struct RefreshObjectivesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -1272,7 +1417,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .foul
                     ),
                     consumesBonusPlays: []
@@ -1284,10 +1429,11 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .foul
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 6)
                 )
             ]
         )
@@ -1296,9 +1442,9 @@ struct RefreshObjectivesTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .foulActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -1311,18 +1457,27 @@ struct RefreshObjectivesTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .foulActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .foulActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForFoul(result: .spotted),
-                .playerFouled(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 7)
+                .rolledForFoul(
+                    coachID: .away,
+                    result: .spotted
                 ),
-                .playerSentOff(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerFouled(
+                    playerID: pl(.away, 0),
+                    from: sq(5, 6),
+                    to: sq(5, 7),
+                    direction: .south,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerSentOff(
+                    playerID: pl(.away, 0),
+                    from: sq(5, 6)
+                ),
                 .turnEnded(coachID: .away),
             ]
         )
@@ -1342,7 +1497,7 @@ struct RefreshObjectivesTests {
                     coachID: .home,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .home, index: 0),
+                            playerID: pl(.home, 0),
                             actionID: .standUp
                         ),
                     consumesBonusPlays: []
@@ -1362,8 +1517,28 @@ struct RefreshObjectivesTests {
 
         #expect(
             latestEvents == [
-                .discardedObjective(coachID: .home, objectiveID: .second),
-                .dealtNewObjective(coachID: .home, objectiveID: .second),
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: ChallengeCard(
+                        challenge: .spreadOut,
+                        bonusPlay: .absoluteCarnage
+                    )
+                ),
+                .updatedDiscards(
+                    top: .absoluteCarnage,
+                    count: 2
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: .goDeep
+                ),
+                .updatedDeck(top: .lastChance, count: 2),
+                .turnBegan(
+                    coachID: .home,
+                    isFinal: false
+                ),
             ]
         )
 
@@ -1374,7 +1549,7 @@ struct RefreshObjectivesTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []

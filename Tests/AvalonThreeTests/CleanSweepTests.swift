@@ -18,7 +18,7 @@ struct CleanSweepTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -33,24 +33,25 @@ struct CleanSweepTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .undead_wight,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .undead_ghoul,
                             state: .standing(square: sq(6, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -60,7 +61,7 @@ struct CleanSweepTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -96,7 +97,7 @@ struct CleanSweepTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -106,7 +107,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -118,10 +119,11 @@ struct CleanSweepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 6)
                 )
             ]
         )
@@ -130,9 +132,9 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -145,13 +147,13 @@ struct CleanSweepTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
             ]
         )
 
@@ -159,7 +161,7 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.smash]
                 )
             )
@@ -180,18 +182,35 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .usedOffensiveSpecialistSkillReroll(playerID: PlayerID(coachID: .away, index: 0)),
-                .rolledForBlock(results: [.smash]),
+                .usedOffensiveSpecialistSkillReroll(
+                    playerID: pl(.away, 0),
+                    in: sq(6, 6)
+                ),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(7, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(6, 6),
+                    to: sq(7, 6),
+                    direction: .east,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: ballID, to: sq(6, 5)),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(7, 6),
+                    reason: .blocked
+                ), .ballCameLoose(ballID: 123, in: sq(7, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(7, 6),
+                    to: sq(6, 5),
+                    direction: .northWest
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 6),
             ]
         )
 
@@ -202,21 +221,21 @@ struct CleanSweepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -234,7 +253,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -246,10 +265,11 @@ struct CleanSweepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 6)
                 )
             ]
         )
@@ -258,7 +278,7 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -317,27 +337,40 @@ struct CleanSweepTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 6),
+                    to: sq(6, 5),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(6, 5),
+                    ballID: 123
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(6, 5),
+                    to: sq(6, 6),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 7),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(6, 6),
+                    to: sq(6, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 8),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(6, 7),
+                    to: sq(6, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -363,7 +396,24 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .getTheBall,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 1, total: 1),
             ]
         )
@@ -375,14 +425,14 @@ struct CleanSweepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -400,7 +450,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -412,10 +462,11 @@ struct CleanSweepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 8)
                 )
             ]
         )
@@ -424,10 +475,10 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(6, 12),
                             distance: .short,
                             obstructingSquares: [],
@@ -445,18 +496,25 @@ struct CleanSweepTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 5),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 5),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 12)
+                    playerID: pl(.away, 0),
+                    from: sq(6, 8),
+                    to: sq(6, 12),
+                    angle: 180,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(6, 12),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -480,10 +538,33 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .third),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .third,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .moveTheBall,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .getTheBall,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        ),
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .moveTheBall,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        ),
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 1, total: 2),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -494,7 +575,7 @@ struct CleanSweepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
@@ -517,7 +598,7 @@ struct CleanSweepTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -532,24 +613,25 @@ struct CleanSweepTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .undead_wight,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .undead_ghoul,
                             state: .standing(square: sq(6, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -559,7 +641,7 @@ struct CleanSweepTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -599,7 +681,7 @@ struct CleanSweepTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -609,7 +691,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -621,10 +703,11 @@ struct CleanSweepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 6)
                 )
             ]
         )
@@ -633,9 +716,9 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -648,13 +731,13 @@ struct CleanSweepTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
             ]
         )
 
@@ -662,7 +745,7 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.smash]
                 )
             )
@@ -683,18 +766,36 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .usedOffensiveSpecialistSkillReroll(playerID: PlayerID(coachID: .away, index: 0)),
-                .rolledForBlock(results: [.smash]),
+                .usedOffensiveSpecialistSkillReroll(
+                    playerID: pl(.away, 0),
+                    in: sq(6, 6)
+                ),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(7, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(6, 6),
+                    to: sq(7, 6),
+                    direction: .east,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: ballID, to: sq(6, 5)),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(7, 6),
+                    reason: .blocked
+                ),
+                .ballCameLoose(ballID: 123, in: sq(7, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(7, 6),
+                    to: sq(6, 5),
+                    direction: .northWest
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 6),
             ]
         )
 
@@ -718,7 +819,24 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
             ]
         )
@@ -730,21 +848,21 @@ struct CleanSweepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -762,7 +880,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -774,10 +892,11 @@ struct CleanSweepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 6)
                 )
             ]
         )
@@ -786,7 +905,7 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -845,27 +964,40 @@ struct CleanSweepTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 6),
+                    to: sq(6, 5),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(6, 5),
+                    ballID: 123
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(6, 5),
+                    to: sq(6, 6),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 7),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(6, 6),
+                    to: sq(6, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 8),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(6, 7),
+                    to: sq(6, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -891,7 +1023,12 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .declinedObjectives(coachID: .away, objectiveIDs: [.first])
+                .declinedObjectives(
+                    coachID: .away,
+                    objectives: [
+                        .first: .getTheBall,
+                    ]
+                )
             ]
         )
 
@@ -902,14 +1039,14 @@ struct CleanSweepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -927,7 +1064,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -939,10 +1076,11 @@ struct CleanSweepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 8)
                 )
             ]
         )
@@ -951,10 +1089,10 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(6, 12),
                             distance: .short,
                             obstructingSquares: [],
@@ -972,18 +1110,25 @@ struct CleanSweepTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 5),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 5),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 12)
+                    playerID: pl(.away, 0),
+                    from: sq(6, 8),
+                    to: sq(6, 12),
+                    angle: 180,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(6, 12),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -1007,10 +1152,33 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .third),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .third,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .moveTheBall,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        ),
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .moveTheBall,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        ),
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 1, total: 3),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -1021,7 +1189,7 @@ struct CleanSweepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
@@ -1044,7 +1212,7 @@ struct CleanSweepTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1059,24 +1227,25 @@ struct CleanSweepTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .undead_wight,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .undead_ghoul,
                             state: .standing(square: sq(6, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -1086,7 +1255,7 @@ struct CleanSweepTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -1126,7 +1295,7 @@ struct CleanSweepTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -1136,7 +1305,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1148,10 +1317,11 @@ struct CleanSweepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 6)
                 )
             ]
         )
@@ -1160,9 +1330,9 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -1175,13 +1345,13 @@ struct CleanSweepTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
             ]
         )
 
@@ -1189,7 +1359,7 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.smash]
                 )
             )
@@ -1210,18 +1380,33 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .usedOffensiveSpecialistSkillReroll(playerID: PlayerID(coachID: .away, index: 0)),
-                .rolledForBlock(results: [.smash]),
+                .usedOffensiveSpecialistSkillReroll(
+                    playerID: pl(.away, 0),
+                    in: sq(6, 6)
+                ),
+                .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(coachID: .away, result: .smash),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(7, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(6, 6),
+                    to: sq(7, 6),
+                    direction: .east,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: ballID, to: sq(6, 5)),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(7, 6),
+                    reason: .blocked
+                ),
+                .ballCameLoose(ballID: 123, in: sq(7, 6)),
+                .rolledForDirection(coachID: .away, direction: .northWest),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(7, 6),
+                    to: sq(6, 5),
+                    direction: .northWest
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 6),
             ]
         )
 
@@ -1245,7 +1430,24 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
             ]
         )
@@ -1257,21 +1459,21 @@ struct CleanSweepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -1289,7 +1491,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1301,10 +1503,11 @@ struct CleanSweepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 6)
                 )
             ]
         )
@@ -1313,7 +1516,7 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1372,27 +1575,40 @@ struct CleanSweepTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(6, 6),
+                    to: sq(6, 5),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(6, 5),
+                    ballID: 123
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(6, 5),
+                    to: sq(6, 6),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 7),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(6, 6),
+                    to: sq(6, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 8),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(6, 7),
+                    to: sq(6, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -1418,7 +1634,30 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        ),
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .getTheBall,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        ),
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 1, total: 3),
             ]
         )
@@ -1430,14 +1669,14 @@ struct CleanSweepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -1455,7 +1694,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1467,10 +1706,11 @@ struct CleanSweepTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(6, 8)
                 )
             ]
         )
@@ -1479,10 +1719,10 @@ struct CleanSweepTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(6, 12),
                             distance: .short,
                             obstructingSquares: [],
@@ -1500,18 +1740,25 @@ struct CleanSweepTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 5),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 5),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 12)
+                    playerID: pl(.away, 0),
+                    from: sq(6, 8),
+                    to: sq(6, 12),
+                    angle: 180,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(6, 12),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -1535,12 +1782,41 @@ struct CleanSweepTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .third),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .third,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .moveTheBall,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .takeThemDown,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        ),
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .getTheBall,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        ),
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .moveTheBall,
+                                bonusPlay: .absoluteCarnage
+                            )
+                        ),
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 1, total: 4),
                 .earnedCleanSweep(coachID: .away),
                 .scoreUpdated(coachID: .away, increment: 2, total: 6),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -1551,7 +1827,7 @@ struct CleanSweepTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []

@@ -22,9 +22,10 @@ struct MyFirstGameTests {
         let deckRandomizer = DeckRandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
         let foulDieRandomizer = FoulDieRandomizerDouble()
+        let playerNumberRandomizer = PlayerNumberRandomizerDouble()
         let trapdoorRandomizer = TrapdoorRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
         var game = Game(
             phase: .config(Config()),
@@ -37,9 +38,10 @@ struct MyFirstGameTests {
                 deck: deckRandomizer,
                 direction: directionRandomizer,
                 foulDie: foulDieRandomizer,
+                playerNumber: playerNumberRandomizer,
                 trapdoor: trapdoorRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         coachIDRandomizer.nextResult = .home
@@ -86,7 +88,11 @@ struct MyFirstGameTests {
 
         #expect(
             latestEvents == [
-                .specifiedBoardSpec(boardSpecID: .season1Board1)
+                .specifiedBoardSpec(
+                    coachID: .home,
+                    boardSpecID: .season1Board1,
+                    boardSpec: .season1Board1
+                )
             ]
         )
 
@@ -115,7 +121,7 @@ struct MyFirstGameTests {
 
         #expect(
             latestEvents == [
-                .specifiedChallengeDeck(challengeDeckID: .shortStandard)
+                .specifiedChallengeDeck(coachID: .home, challengeDeckID: .shortStandard)
             ]
         )
 
@@ -141,10 +147,9 @@ struct MyFirstGameTests {
             )
         )
 
-
         #expect(
             latestEvents == [
-                .specifiedRookieBonusRecipient(rookieBonusRecipientID: .noOne)
+                .specifiedRookieBonusRecipient(coachID: .home, recipientCoachID: nil)
             ]
         )
 
@@ -188,7 +193,7 @@ struct MyFirstGameTests {
 
         #expect(
             latestEvents == [
-                .specifiedCoinFlipWinnerTeam(teamID: .skaven)
+                .specifiedTeam(coachID: .home, teamID: .skaven)
             ]
         )
 
@@ -225,6 +230,8 @@ struct MyFirstGameTests {
 
         deckRandomizer.nextResult = Array(ChallengeCard.standardShortDeck.prefix(5))
 
+        playerNumberRandomizer.nextResults = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -234,85 +241,310 @@ struct MyFirstGameTests {
 
         #expect(
             latestEvents == [
-                .specifiedCoinFlipLoserTeam(teamID: .human),
-                .tableWasSetUp(
-                    playerConfigs: [
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 0),
-                            specID: .human_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 1),
-                            specID: .human_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 2),
-                            specID: .human_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 3),
-                            specID: .human_passer
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 4),
-                            specID: .human_catcher
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 5),
-                            specID: .human_blitzer
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 0),
-                            specID: .skaven_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 1),
-                            specID: .skaven_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 2),
-                            specID: .skaven_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 3),
-                            specID: .skaven_passer
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 4),
-                            specID: .skaven_gutterRunner
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 5),
-                            specID: .skaven_blitzer
-                        ),
-                    ],
-                    deck: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay),
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .stepAside),
-                        ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .blitz),
-                        ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .intervention),
-                        ChallengeCard(challenge: .gangUp, bonusPlay: .inspiration),
-                    ],
-                    coinFlipLoserHand: [],
-                    coinFlipWinnerHand: []
+                .specifiedTeam(
+                    coachID: .away,
+                    teamID: TeamID.human
                 ),
-                .dealtNewObjective(coachID: .away, objectiveID: .first),
-                .dealtNewObjective(coachID: .away, objectiveID: .second),
-                .dealtNewObjective(coachID: .away, objectiveID: .third),
+                .startingHandWasSetUp(
+                    coachID: .home,
+                    hand: []
+                ),
+                .startingHandWasSetUp(
+                    coachID: .away,
+                    hand: []
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 0),
+                    number: 1
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 1),
+                    number: 2
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 2),
+                    number: 3
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 3),
+                    number: 4
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 4),
+                    number: 5
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 5),
+                    number: 6
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 0),
+                    number: 7
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 1),
+                    number: 8
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 2),
+                    number: 9
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 3),
+                    number: 10
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 4),
+                    number: 11
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 5),
+                    number: 12
+                ),
+                .startingPlayersWereSetUp(
+                    coachID: .home,
+                    playerSetups: [
+                        PlayerSetup(
+                            id: pl(.home, 0),
+                            specID: PlayerSpecID
+                                .skaven_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(7),
+                                block: 1,
+                                pass: 4,
+                                armour: 4,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 1),
+                            specID: PlayerSpecID
+                                .skaven_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(7),
+                                block: 1,
+                                pass: 4,
+                                armour: 4,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 2),
+                            specID: PlayerSpecID
+                                .skaven_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(7),
+                                block: 1,
+                                pass: 4,
+                                armour: 4,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 3),
+                            specID: PlayerSpecID
+                                .skaven_passer,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(7),
+                                block: 1,
+                                pass: 3,
+                                armour: 4,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .handlingSkills
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 4),
+                            specID: PlayerSpecID
+                                .skaven_gutterRunner,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(9),
+                                block: 1,
+                                pass: 4,
+                                armour: 5,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .safeHands
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 5),
+                            specID: PlayerSpecID
+                                .skaven_blitzer,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(7),
+                                block: 1,
+                                pass: 5,
+                                armour: 3,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .offensiveSpecialist
+                                ]
+                            )
+                        ),
+                    ]
+                ),
+                .startingPlayersWereSetUp(
+                    coachID: .away,
+                    playerSetups: [
+                        PlayerSetup(
+                            id: pl(.away, 0),
+                            specID: PlayerSpecID
+                                .human_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 1,
+                                pass: 4,
+                                armour: 3,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 1),
+                            specID: PlayerSpecID
+                                .human_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 1,
+                                pass: 4,
+                                armour: 3,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 2),
+                            specID: PlayerSpecID
+                                .human_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 1,
+                                pass: 4,
+                                armour: 3,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 3),
+                            specID: PlayerSpecID
+                                .human_passer,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 1,
+                                pass: 3,
+                                armour: 3,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .handlingSkills
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 4),
+                            specID: PlayerSpecID
+                                .human_catcher,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(8),
+                                block: 1,
+                                pass: 4,
+                                armour: 5,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .catchersInstincts
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 5),
+                            specID: PlayerSpecID
+                                .human_blitzer,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(7),
+                                block: 1,
+                                pass: 4,
+                                armour: 3,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .offensiveSpecialist
+                                ]
+                            )
+                        ),
+                    ]
+                ),
+                .updatedDeck(
+                    top: .breakSomeBones,
+                    count: 5
+                ),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(
+                    top: .breakSomeBones,
+                    count: 4
+                ),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(
+                    top: .freeUpTheBall,
+                    count: 3
+                ),
+                .dealtNewObjective(
+                    coachID: .away,
+                    objectiveID: .third,
+                    objective: .freeUpTheBall
+                ),
+                .updatedDeck(
+                    top: .freeUpTheBall,
+                    count: 2
+                ),
             ]
         )
 
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .arrangePlayers(playerIDs: [
-                    PlayerID(coachID: .away, index: 0),
-                    PlayerID(coachID: .away, index: 1),
-                    PlayerID(coachID: .away, index: 2),
-                    PlayerID(coachID: .away, index: 3),
-                    PlayerID(coachID: .away, index: 4),
-                    PlayerID(coachID: .away, index: 5),
-                ])
+                payload: .arrangePlayers(
+                    playerIDs: [
+                        pl(.away, 0),
+                        pl(.away, 1),
+                        pl(.away, 2),
+                        pl(.away, 3),
+                        pl(.away, 4),
+                        pl(.away, 5),
+                    ],
+                    validSquares: [
+                        sq(0, 0),
+                        sq(1, 0),
+                        sq(2, 0),
+                        sq(3, 0),
+                        sq(4, 0),
+                        sq(5, 0),
+                        sq(6, 0),
+                        sq(7, 0),
+                        sq(8, 0),
+                        sq(9, 0),
+                        sq(10, 0),
+                    ]
+                )
             )
         )
 
@@ -336,35 +568,29 @@ struct MyFirstGameTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(0, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 0),
+                    to: sq(0, 0)
                 ),
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 1),
+                    to: sq(1, 0)
                 ),
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(4, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 2),
+                    to: sq(4, 0)
                 ),
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(6, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 3),
+                    to: sq(6, 0)
                 ),
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 4),
-                    square: sq(9, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 4),
+                    to: sq(9, 0)
                 ),
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(10, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 5),
+                    to: sq(10, 0)
                 )
             ]
         )
@@ -372,21 +598,36 @@ struct MyFirstGameTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .home,
-                payload: .arrangePlayers(playerIDs: [
-                    PlayerID(coachID: .home, index: 0),
-                    PlayerID(coachID: .home, index: 1),
-                    PlayerID(coachID: .home, index: 2),
-                    PlayerID(coachID: .home, index: 3),
-                    PlayerID(coachID: .home, index: 4),
-                    PlayerID(coachID: .home, index: 5),
-                ])
+                payload: .arrangePlayers(
+                    playerIDs: [
+                        pl(.home, 0),
+                        pl(.home, 1),
+                        pl(.home, 2),
+                        pl(.home, 3),
+                        pl(.home, 4),
+                        pl(.home, 5),
+                    ],
+                    validSquares: [
+                        sq(0, 14),
+                        sq(1, 14),
+                        sq(2, 14),
+                        sq(3, 14),
+                        sq(4, 14),
+                        sq(5, 14),
+                        sq(6, 14),
+                        sq(7, 14),
+                        sq(8, 14),
+                        sq(9, 14),
+                        sq(10, 14),
+                    ]
+                )
             )
         )
 
         // MARK: - Second coach arrange players
 
-        let newBallID = UUID()
-        uuidProvider.nextResults = [newBallID]
+        let newBallID = Int()
+        ballIDProvider.nextResults = [newBallID]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
@@ -406,38 +647,32 @@ struct MyFirstGameTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(2, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 0),
+                    to: sq(2, 14)
                 ),
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    square: sq(3, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 1),
+                    to: sq(3, 14)
                 ),
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 2),
-                    square: sq(4, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 2),
+                    to: sq(4, 14)
                 ),
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 3),
-                    square: sq(6, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 3),
+                    to: sq(6, 14)
                 ),
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 4),
-                    square: sq(7, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 4),
+                    to: sq(7, 14)
                 ),
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 5),
-                    square: sq(8, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 5),
+                    to: sq(8, 14)
                 ),
-                .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
-                .gameStarted
+                .newBallAppeared(ballID: newBallID, in: sq(5, 7)),
+                .turnBegan(coachID: .away, isFinal: false)
             ]
         )
 
@@ -448,42 +683,42 @@ struct MyFirstGameTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 3),
+                                playerID: pl(.away, 3),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 4),
+                                playerID: pl(.away, 4),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 5),
+                                playerID: pl(.away, 5),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -501,7 +736,7 @@ struct MyFirstGameTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -513,11 +748,12 @@ struct MyFirstGameTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(4, 0)
+                )
             ]
         )
 
@@ -525,7 +761,7 @@ struct MyFirstGameTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 2),
+                    playerID: pl(.away, 2),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -586,33 +822,51 @@ struct MyFirstGameTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(4, 1),
+                    playerID: pl(.away, 2),
+                    ballID: nil,
+                    from: sq(4, 0),
+                    to: sq(4, 1),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(4, 2),
+                    playerID: pl(.away, 2),
+                    ballID: nil,
+                    from: sq(4, 1),
+                    to: sq(4, 2),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(4, 3),
+                    playerID: pl(.away, 2),
+                    ballID: nil,
+                    from: sq(4, 2),
+                    to: sq(4, 3),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(4, 4),
+                    playerID: pl(.away, 2),
+                    ballID: nil,
+                    from: sq(4, 3),
+                    to: sq(4, 4),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(4, 5),
+                    playerID: pl(.away, 2),
+                    ballID: nil,
+                    from: sq(4, 4),
+                    to: sq(4, 5),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 2),
+                    ballID: nil,
+                    from: sq(4, 5),
+                    to: sq(4, 6),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -625,35 +879,35 @@ struct MyFirstGameTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 3),
+                                playerID: pl(.away, 3),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 4),
+                                playerID: pl(.away, 4),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 5),
+                                playerID: pl(.away, 5),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -671,7 +925,7 @@ struct MyFirstGameTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -683,11 +937,12 @@ struct MyFirstGameTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(6, 0)
+                )
             ]
         )
 
@@ -695,7 +950,7 @@ struct MyFirstGameTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -756,33 +1011,51 @@ struct MyFirstGameTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(6, 1),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(6, 0),
+                    to: sq(6, 1),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(6, 2),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(6, 1),
+                    to: sq(6, 2),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(6, 3),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(6, 2),
+                    to: sq(6, 3),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(6, 4),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(6, 3),
+                    to: sq(6, 4),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(6, 5),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(6, 4),
+                    to: sq(6, 5),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(6, 5),
+                    to: sq(6, 6),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -795,28 +1068,28 @@ struct MyFirstGameTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 4),
+                                playerID: pl(.away, 4),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 5),
+                                playerID: pl(.away, 5),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -834,7 +1107,7 @@ struct MyFirstGameTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -846,11 +1119,12 @@ struct MyFirstGameTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(1, 0)
+                )
             ]
         )
 
@@ -858,7 +1132,7 @@ struct MyFirstGameTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -919,36 +1193,58 @@ struct MyFirstGameTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 1),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(1, 0),
+                    to: sq(1, 1),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 2),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(1, 1),
+                    to: sq(1, 2),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(0, 3),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(1, 2),
+                    to: sq(0, 3),
+                    direction: .southWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(0, 4),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 3),
+                    to: sq(0, 4),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 5),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 4),
+                    to: sq(1, 5),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(1, 5),
+                    to: sq(1, 6),
+                    direction: .south,
                     reason: .run
                 ),
-                .turnEnded(coachID: .away)
+                .turnEnded(coachID: .away),
+                .turnBegan(
+                    coachID: .home,
+                    isFinal: false
+                ),
             ]
         )
 
@@ -959,42 +1255,42 @@ struct MyFirstGameTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 2),
+                                playerID: pl(.home, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 3),
+                                playerID: pl(.home, 3),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 4),
+                                playerID: pl(.home, 4),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 5),
+                                playerID: pl(.home, 5),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

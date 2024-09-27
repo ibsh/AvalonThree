@@ -13,7 +13,7 @@ struct InGameTransaction: Transaction {
     var history: [HistoryEntry]
     let previousPromptPayload: PromptPayload
     let randomizers: Randomizers
-    let uuidProvider: UUIDProviding
+    let ballIDProvider: BallIDProviding
 
     var events = [Event]()
 
@@ -22,13 +22,13 @@ struct InGameTransaction: Transaction {
         history: [HistoryEntry],
         previousPromptPayload: PromptPayload,
         randomizers: Randomizers,
-        uuidProvider: UUIDProviding
+        ballIDProvider: BallIDProviding
     ) {
         self.table = table
         self.history = history
         self.previousPromptPayload = previousPromptPayload
         self.randomizers = randomizers
-        self.uuidProvider = uuidProvider
+        self.ballIDProvider = ballIDProvider
     }
 }
 

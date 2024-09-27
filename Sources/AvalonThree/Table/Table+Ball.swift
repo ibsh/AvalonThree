@@ -10,7 +10,7 @@ import Foundation
 extension Table {
 
     func getBall(
-        id: BallID
+        id: Int
     ) -> Ball? {
         balls.first(
             where: { $0.id == id }

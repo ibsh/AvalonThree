@@ -7,10 +7,8 @@
 
 import Foundation
 
-public typealias BallID = UUID
-
 struct Ball {
-    public let id: BallID
+    public let id: Int
     public var state: State
 }
 
@@ -23,7 +21,7 @@ extension Ball {
 
 extension Ball {
     init(
-        idProvider: UUIDProviding,
+        idProvider: BallIDProviding,
         state: State
     ) {
         id = idProvider.generate()

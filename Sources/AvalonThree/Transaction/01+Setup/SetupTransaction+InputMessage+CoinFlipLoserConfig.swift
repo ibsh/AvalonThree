@@ -18,7 +18,7 @@ extension SetupTransaction {
                     .config
                     .coinFlipLoserTeamID
                     .spec
-                    .playerConfigs(
+                    .playerSetups(
                         coachID: table.coinFlipLoserCoachID
                     )
                     .map { $0.id }

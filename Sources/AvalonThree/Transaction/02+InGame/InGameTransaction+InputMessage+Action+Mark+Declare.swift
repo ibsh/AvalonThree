@@ -18,6 +18,10 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
+        guard let playerSquare = player.square else {
+            throw GameError("Player is in reserves")
+        }
+
         let declaration = ActionDeclaration(
             playerID: playerID,
             actionID: .mark
@@ -83,7 +87,13 @@ extension InGameTransaction {
                 )
             )
 
-            events.append(.declaredAction(declaration: declaration, isFree: isFree))
+            events.append(
+                .declaredAction(
+                    declaration: declaration,
+                    isFree: isFree,
+                    playerSquare: playerSquare
+                )
+            )
 
             return Prompt(
                 coachID: playerID.coachID,
@@ -100,7 +110,13 @@ extension InGameTransaction {
                 validSquares: basicValidSquares
             )
         )
-        events.append(.declaredAction(declaration: declaration, isFree: isFree))
+        events.append(
+            .declaredAction(
+                declaration: declaration,
+                isFree: isFree,
+                playerSquare: playerSquare
+            )
+        )
 
         let bonusPlay = BonusPlay.interference
 

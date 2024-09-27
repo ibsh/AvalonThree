@@ -49,7 +49,11 @@ extension InGameTransaction {
         }
 
         events.append(
-            .selectedLooseBallDirection(coachID: targetPlayerID.coachID, direction: direction)
+            .selectedLooseBallDirection(
+                playerID: targetPlayerID,
+                in: targetSquare,
+                direction: direction
+            )
         )
 
         try bounceBall(id: newBallID, direction: direction)

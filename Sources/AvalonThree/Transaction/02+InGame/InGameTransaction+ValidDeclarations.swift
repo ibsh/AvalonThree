@@ -302,7 +302,7 @@ extension InGameTransaction {
         player: Player
     ) throws -> CanDeclareAction {
 
-        guard let square = player.square else { return .cannotDeclare }
+        guard let playerSquare = player.square else { return .cannotDeclare }
 
         if player.spec.skills.contains(.bomber),
             table.playerIsMarked(player) == nil
@@ -312,7 +312,7 @@ extension InGameTransaction {
                 .contains(where: { opponent in
                     guard let targetSquare = opponent.isStanding else { return false }
                     return targetSquare
-                        .naiveDistance(to: square) <= TableConstants.maxBombDistance
+                        .naiveDistance(to: playerSquare) <= TableConstants.maxBombDistance
                 })
             {
                 return .canDeclare(consumesBonusPlays: [])
@@ -330,9 +330,9 @@ extension InGameTransaction {
         player: Player
     ) throws -> CanDeclareAction {
 
-        guard let square = table.playerIsMarked(player) else { return .cannotDeclare }
+        guard let playerSquare = table.playerIsMarked(player) else { return .cannotDeclare }
 
-        let validSquares = try square
+        let validSquares = try playerSquare
             .adjacentSquares
             .filter { destination in
                 switch try playerCanMoveIntoSquare(

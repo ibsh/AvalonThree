@@ -245,7 +245,7 @@ extension InGameTransaction {
         }
 
         let oldBallYLocations = try lastActionContext.snapshot.balls
-            .reduce([BallID: Int]()) { partialResult, ball in
+            .reduce([Int: Int]()) { partialResult, ball in
                 var partialResult = partialResult
                 switch ball.state {
                 case .held(let playerID):
@@ -256,10 +256,10 @@ extension InGameTransaction {
                     else {
                         throw GameError("No player")
                     }
-                    guard let square = player.square else {
+                    guard let playerSquare = player.square else {
                         throw GameError("No square")
                     }
-                    partialResult[ball.id] = square.y
+                    partialResult[ball.id] = playerSquare.y
                 case .loose(let square):
                     partialResult[ball.id] = square.y
                 }
@@ -267,24 +267,24 @@ extension InGameTransaction {
             }
 
         let newBallYLocations = try table.balls
-            .reduce([BallID: Int]()) { partialResult, ball in
+            .reduce([Int: Int]()) { partialResult, ball in
                 var partialResult = partialResult
                 switch ball.state {
                 case .held(let playerID):
                     guard let player = table.getPlayer(id: playerID) else {
                         throw GameError("No player")
                     }
-                    guard let square = player.square else {
+                    guard let playerSquare = player.square else {
                         throw GameError("No square")
                     }
-                    partialResult[ball.id] = square.y
+                    partialResult[ball.id] = playerSquare.y
                 case .loose(let square):
                     partialResult[ball.id] = square.y
                 }
                 return partialResult
             }
 
-        var newBallYDeltas = [BallID: Int]()
+        var newBallYDeltas = [Int: Int]()
         newBallYLocations.forEach { newBallID, newBallYLocation in
             if let oldBallYLocation = oldBallYLocations[newBallID] {
                 newBallYDeltas[newBallID] = newBallYLocation - oldBallYLocation
@@ -471,8 +471,8 @@ extension InGameTransaction {
         return table
             .players(coachID: lastActionContext.coachID)
             .count(where: { player in
-                guard let square = table.playerIsOpen(player) else { return false }
-                return abs(square.y - targetY) <= TableConstants.goDeepTargetDeltaY
+                guard let playerSquare = table.playerIsOpen(player) else { return false }
+                return abs(playerSquare.y - targetY) <= TableConstants.goDeepTargetDeltaY
             }) >= TableConstants.goDeepPlayerCount
     }
 

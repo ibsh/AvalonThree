@@ -25,9 +25,13 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
+        guard let oldSquare = player.square else {
+            throw GameError("No square")
+        }
+
         switch reason {
         case .run:
-            guard let oldSquare = player.isStanding else {
+            guard player.isStanding != nil else {
                 throw GameError("Player is not standing")
             }
 
@@ -36,7 +40,7 @@ extension InGameTransaction {
             }
 
         case .sidestep:
-            guard let oldSquare = player.isStanding else {
+            guard player.isStanding != nil else {
                 throw GameError("Player is not standing")
             }
 
@@ -45,7 +49,7 @@ extension InGameTransaction {
             }
 
         case .mark:
-            guard let oldSquare = player.isStanding else {
+            guard player.isStanding != nil else {
                 throw GameError("Player is not standing")
             }
 
@@ -53,19 +57,20 @@ extension InGameTransaction {
                 throw GameError("New square is not adjacent to old square")
             }
 
-        case .shoved,
-             .followUp,
+        case .shoved:
+            guard newSquare.isAdjacent(to: oldSquare) else {
+                throw GameError("New square is not adjacent to old square")
+            }
+
+        case .followUp,
              .shadow:
-            guard let oldSquare = player.isStanding else {
+            guard player.isStanding != nil else {
                 throw GameError("Player is not standing")
             }
 
             guard newSquare.isAdjacent(to: oldSquare) else {
                 throw GameError("New square is not adjacent to old square")
             }
-
-        case .reserves:
-            break
         }
 
         switch try playerCanMoveIntoSquare(
@@ -83,8 +88,19 @@ extension InGameTransaction {
         player.state = .standing(square: newSquare)
         table.players.update(with: player)
 
+        guard let direction = oldSquare.direction(to: newSquare) else {
+            throw GameError("No move direction")
+        }
+
         events.append(
-            .playerMoved(playerID: playerID, square: newSquare, reason: reason)
+            .playerMoved(
+                playerID: playerID,
+                ballID: table.playerHasABall(player)?.id,
+                from: oldSquare,
+                to: newSquare,
+                direction: direction,
+                reason: reason
+            )
         )
 
         while true {
@@ -114,8 +130,7 @@ extension InGameTransaction {
                             player: player,
                             ball: ball
                         )
-                    case .reserves,
-                         .sidestep,
+                    case .sidestep,
                          .mark,
                          .shoved,
                          .followUp,
@@ -127,18 +142,81 @@ extension InGameTransaction {
         }
     }
 
+    mutating func playerMovesOutOfReservesIntoSquare(
+        playerID: PlayerID,
+        newSquare: Square
+    ) throws {
+
+        guard var player = table.getPlayer(id: playerID) else {
+            throw GameError("No player")
+        }
+
+        switch try playerCanMoveOutOfReservesIntoSquare(
+            playerID: playerID,
+            newSquare: newSquare
+        ) {
+        case .canMove:
+            break
+        case .cannotMove(let reason):
+            throw GameError(reason)
+        }
+
+        player.state = .standing(square: newSquare)
+        table.players.update(with: player)
+
+        events.append(
+            .playerMovedOutOfReserves(playerID: playerID, to: newSquare)
+        )
+
+        while true {
+
+            let looseBalls = table.looseBalls(in: newSquare)
+
+            if looseBalls.isEmpty {
+                break
+            }
+            
+            // This should only ever be one, but still
+            for ball in looseBalls {
+                guard let newPlayer = table.getPlayer(id: playerID) else {
+                    throw GameError("No player")
+                }
+                player = newPlayer
+
+                if player.spec.skills.contains(.handlingSkills) {
+                    try pickUpLooseBall(
+                        player: player,
+                        ball: ball
+                    )
+                } else {
+                    try bounceBall(id: ball.id)
+                }
+            }
+        }
+    }
+
     private mutating func pickUpLooseBall(
         player: Player,
         ball: Ball
     ) throws {
-        if table.playerHasABall(player) != nil || player.spec.pass == nil {
+        if
+            table.playerHasABall(player) != nil
+                || player.spec.pass == nil
+                || player.isStanding == nil
+        {
             try bounceBall(id: ball.id)
         } else {
             var ball = ball
             ball.state = .held(playerID: player.id)
             table.balls.update(with: ball)
 
-            events.append(.playerPickedUpLooseBall(playerID: player.id, ballID: ball.id))
+            guard let playerSquare = player.isStanding else {
+                throw GameError("No square")
+            }
+
+            events.append(
+                .playerPickedUpLooseBall(playerID: player.id, in: playerSquare, ballID: ball.id)
+            )
         }
     }
 
@@ -275,8 +353,16 @@ extension InGameTransaction {
                 }
             }
 
-        case .shoved,
-             .followUp,
+        case .shoved:
+            guard table.squareIsUnobstructed(newSquare) else {
+                return .cannotMove(reason: "New square is obstructed")
+            }
+
+            guard table.squareIsEmptyOfPlayers(newSquare) else {
+                return .cannotMove(reason: "New square is not empty")
+            }
+
+        case .followUp,
              .shadow:
             guard player.isStanding != nil else {
                 throw GameError("Player is not standing")
@@ -289,19 +375,29 @@ extension InGameTransaction {
             guard table.squareIsEmptyOfPlayers(newSquare) else {
                 return .cannotMove(reason: "New square is not empty")
             }
+        }
 
-        case .reserves:
-            guard player.isInReserves else {
-                throw GameError("Player is not in reserves")
-            }
+        return .canMove
+    }
 
-            guard table.squareIsUnobstructed(newSquare) else {
-                return .cannotMove(reason: "New square is obstructed")
-            }
+    func playerCanMoveOutOfReservesIntoSquare(
+        playerID: PlayerID,
+        newSquare: Square
+    ) throws -> CanMoveIntoSquare {
+        guard let player = table.getPlayer(id: playerID) else {
+            throw GameError("No player")
+        }
 
-            guard table.squareIsEmptyOfPlayers(newSquare) else {
-                return .cannotMove(reason: "New square is not empty")
-            }
+        guard player.isInReserves else {
+            throw GameError("Player is not in reserves")
+        }
+
+        guard table.squareIsUnobstructed(newSquare) else {
+            return .cannotMove(reason: "New square is obstructed")
+        }
+
+        guard table.squareIsEmptyOfPlayers(newSquare) else {
+            return .cannotMove(reason: "New square is not empty")
         }
 
         return .canMove

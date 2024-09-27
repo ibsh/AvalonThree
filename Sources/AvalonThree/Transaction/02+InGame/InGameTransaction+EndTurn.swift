@@ -73,7 +73,9 @@ extension InGameTransaction {
                 var player = player
                 player.canTakeActions = true
                 table.players.update(with: player)
-                events.append(.playerCanTakeActions(playerID: player.id))
+                events.append(
+                    .playerCanTakeActions(playerID: player.id, in: player.square)
+                )
             }
         }
 
@@ -94,13 +96,16 @@ extension InGameTransaction {
             }
         }
         table.setActiveBonuses(coachID: oldTurnCoachID, activeBonuses: maintainCards)
-        table.discards.append(contentsOf: discardCards)
         for discardCard in discardCards {
+            table.discards.append(discardCard)
             events.append(
                 .discardedPersistentBonusPlay(
                     coachID: oldTurnCoachID,
                     card: discardCard
                 )
+            )
+            events.append(
+                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
             )
         }
 

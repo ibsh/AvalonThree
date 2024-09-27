@@ -41,28 +41,13 @@ extension ConfigTransaction {
             throw GameError("Invalid coin flip loser team choice")
         }
 
-        events.append(.specifiedCoinFlipLoserTeam(teamID: coinFlipLoserTeamID))
+        let coinFlipLoserCoachID = coinFlipWinnerCoachID.inverse
+
+        events.append(
+            .specifiedTeam(coachID: coinFlipLoserCoachID, teamID: coinFlipLoserTeamID)
+        )
 
         config.coinFlipLoserTeamID = coinFlipLoserTeamID
-
-        let coinFlipLoserPlayerConfigs = coinFlipLoserTeamID.spec
-            .playerConfigs(coachID: coinFlipWinnerCoachID.inverse)
-
-        let coinFlipWinnerPlayerConfigs = coinFlipWinnerTeamID.spec
-            .playerConfigs(coachID: coinFlipWinnerCoachID)
-
-        let playerConfigs = coinFlipLoserPlayerConfigs.union(coinFlipWinnerPlayerConfigs)
-
-        var deck = randomizers.deck.deal(challengeDeckID)
-
-        let players = playerConfigs.map { playerConfig in
-            Player(
-                id: playerConfig.id,
-                spec: playerConfig.specID.spec,
-                state: .inReserves,
-                canTakeActions: true
-            )
-        }.toSet()
 
         var coinFlipLoserHand = [ChallengeCard]()
         var coinFlipWinnerHand = [ChallengeCard]()
@@ -78,21 +63,107 @@ extension ConfigTransaction {
         }
 
         events.append(
-            .tableWasSetUp(
-                playerConfigs: playerConfigs,
-                deck: deck,
-                coinFlipLoserHand: coinFlipLoserHand,
-                coinFlipWinnerHand: coinFlipWinnerHand
+            .startingHandWasSetUp(
+                coachID: coinFlipWinnerCoachID,
+                hand: coinFlipWinnerHand.map { .open(card: $0) }
+            )
+        )
+        events.append(
+            .startingHandWasSetUp(
+                coachID: coinFlipLoserCoachID,
+                hand: coinFlipLoserHand.map { .open(card: $0) }
             )
         )
 
+        let coinFlipLoserPlayerSetups = coinFlipLoserTeamID.spec
+            .playerSetups(coachID: coinFlipWinnerCoachID.inverse)
+
+        let coinFlipWinnerPlayerSetups = coinFlipWinnerTeamID.spec
+            .playerSetups(coachID: coinFlipWinnerCoachID)
+
+        let playerSetups = coinFlipLoserPlayerSetups + coinFlipWinnerPlayerSetups
+
+        var deck = randomizers.deck.deal(challengeDeckID)
+
+        let players = playerSetups.map { playerSetup in
+            Player(
+                id: playerSetup.id,
+                spec: playerSetup.specID.spec,
+                state: .inReserves,
+                canTakeActions: true
+            )
+        }
+
+        var playerNumberData = randomizers.playerNumber.getPlayerNumbers(count: players.count)
+
+        let playerNumbers: [PlayerID: Int] = players.reduce([:]) { partialResult, player in
+            var partialResult = partialResult
+            let number = playerNumberData.removeFirst()
+            partialResult[player.id] = number
+            events.append(
+                .playerReceivedNumber(playerID: player.id, number: number)
+            )
+            return partialResult
+        }
+
+        events.append(
+            .startingPlayersWereSetUp(
+                coachID: coinFlipWinnerCoachID,
+                playerSetups: playerSetups.filter { $0.id.coachID == coinFlipWinnerCoachID }
+            )
+        )
+        events.append(
+            .startingPlayersWereSetUp(
+                coachID: coinFlipLoserCoachID,
+                playerSetups: playerSetups.filter { $0.id.coachID == coinFlipLoserCoachID }
+            )
+        )
+
+        events.append(
+            .updatedDeck(top: deck.first?.challenge, count: deck.count)
+        )
+
         var objectives = Objectives()
-        for newObjectiveID in objectives.deal(from: &deck) {
+
+        if objectives.first == nil, let card = deck.popFirst() {
+            objectives.first = card
             events.append(
                 .dealtNewObjective(
                     coachID: coinFlipWinnerCoachID.inverse,
-                    objectiveID: newObjectiveID
+                    objectiveID: .first,
+                    objective: card.challenge
                 )
+            )
+            events.append(
+                .updatedDeck(top: deck.first?.challenge, count: deck.count)
+            )
+        }
+
+        if objectives.second == nil, let card = deck.popFirst() {
+            objectives.second = card
+            events.append(
+                .dealtNewObjective(
+                    coachID: coinFlipWinnerCoachID.inverse,
+                    objectiveID: .second,
+                    objective: card.challenge
+                )
+            )
+            events.append(
+                .updatedDeck(top: deck.first?.challenge, count: deck.count)
+            )
+        }
+
+        if objectives.third == nil, let card = deck.popFirst() {
+            objectives.third = card
+            events.append(
+                .dealtNewObjective(
+                    coachID: coinFlipWinnerCoachID.inverse,
+                    objectiveID: .third,
+                    objective: card.challenge
+                )
+            )
+            events.append(
+                .updatedDeck(top: deck.first?.challenge, count: deck.count)
             )
         }
 
@@ -105,7 +176,8 @@ extension ConfigTransaction {
                 coinFlipWinnerTeamID: coinFlipWinnerTeamID,
                 coinFlipLoserTeamID: coinFlipLoserTeamID
             ),
-            players: players,
+            players: players.toSet(),
+            playerNumbers: playerNumbers,
             coinFlipLoserHand: coinFlipLoserHand,
             coinFlipWinnerHand: coinFlipWinnerHand,
             coinFlipLoserActiveBonuses: [],

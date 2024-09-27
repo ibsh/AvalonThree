@@ -29,7 +29,9 @@ extension InGameTransaction {
             player.state = .prone(square: playerSquare)
             table.players.update(with: player)
 
-            events.append(.playerFellDown(playerID: player.id, reason: .divingTackle))
+            events.append(
+                .playerFellDown(playerID: player.id, in: playerSquare, reason: .divingTackle)
+            )
 
             if let ball = table.playerHasABall(player) {
                 try ballComesLoose(id: ball.id, square: playerSquare)

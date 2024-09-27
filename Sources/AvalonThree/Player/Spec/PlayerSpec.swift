@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct PlayerSpec: Equatable, Codable, Sendable {
+public struct PlayerSpec: Hashable, Codable, Sendable {
     let move: Move
     let block: Int
     let pass: Int?

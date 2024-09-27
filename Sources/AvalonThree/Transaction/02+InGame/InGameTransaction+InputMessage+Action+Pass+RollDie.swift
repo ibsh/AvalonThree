@@ -28,6 +28,10 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
+        guard let playerSquare = player.square else {
+            throw GameError("Player is in reserves")
+        }
+
         guard var effectivePassStat = player.spec.pass else {
             throw GameError("Player has no pass stat")
         }
@@ -59,13 +63,17 @@ extension InGameTransaction {
         }
 
         var modifier = 0
-        var modifications = Set<PassRollModification>()
+        var modifications = [PassRollModification]()
 
         switch target.distance {
         case .handoff:
 
             guard let targetPlayer = table.getPlayer(id: target.targetPlayerID) else {
                 throw GameError("No target player")
+            }
+
+            guard let direction = playerSquare.direction(to: target.targetSquare) else {
+                throw GameError("No handoff direction")
             }
 
             if targetPlayer.spec.pass != nil {
@@ -76,8 +84,22 @@ extension InGameTransaction {
                 history.append(.passSuccessful)
                 history.append(.actionFinished)
 
-                events.append(.playerHandedOffBall(playerID: player.id, square: target.targetSquare))
-                events.append(.playerCaughtHandoff(playerID: target.targetPlayerID))
+                events.append(
+                    .playerHandedOffBall(
+                        playerID: player.id,
+                        from: playerSquare,
+                        to: target.targetSquare,
+                        direction: direction,
+                        ballID: ball.id
+                    )
+                )
+                events.append(
+                    .playerCaughtHandoff(
+                        playerID: target.targetPlayerID,
+                        in: target.targetSquare,
+                        ballID: ball.id
+                    )
+                )
 
             } else {
 
@@ -86,8 +108,22 @@ extension InGameTransaction {
 
                 history.append(.actionFinished)
 
-                events.append(.playerHandedOffBall(playerID: player.id, square: target.targetSquare))
-                events.append(.playerFailedCatch(playerID: target.targetPlayerID))
+                events.append(
+                    .playerHandedOffBall(
+                        playerID: player.id,
+                        from: playerSquare,
+                        to: target.targetSquare,
+                        direction: direction,
+                        ballID: ball.id
+                    )
+                )
+                events.append(
+                    .playerFailedCatch(
+                        playerID: target.targetPlayerID,
+                        in: target.targetSquare,
+                        ballID: ball.id
+                    )
+                )
 
                 try ballComesLoose(id: ball.id, square: target.targetSquare)
                 try bounceBall(id: ball.id)
@@ -100,17 +136,17 @@ extension InGameTransaction {
 
         case .long:
             modifier -= 1
-            modifications.insert(.longDistance)
+            modifications.append(.longDistance)
         }
 
         if !target.obstructingSquares.isEmpty {
             modifier -= 1
-            modifications.insert(.obstructed)
+            modifications.append(.obstructed)
         }
 
         if !target.markedTargetSquares.isEmpty {
             modifier -= 1
-            modifications.insert(.targetPlayerMarked)
+            modifications.append(.targetPlayerMarked)
         }
 
         modifier = max(-1, modifier)
@@ -130,7 +166,11 @@ extension InGameTransaction {
 
         let unmodifiedRoll = randomizer.roll()
         events.append(
-            .rolledForPass(die: randomizer.die, unmodified: unmodifiedRoll)
+            .rolledForPass(
+                coachID: actionContext.coachID,
+                die: randomizer.die,
+                unmodified: unmodifiedRoll
+            )
         )
 
         let modifiedRoll: Int
@@ -142,6 +182,7 @@ extension InGameTransaction {
             events.append(
                 .changedPassResult(
                     die: randomizer.die,
+                    unmodified: unmodifiedRoll,
                     modified: modifiedRoll,
                     modifications: modifications
                 )

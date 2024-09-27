@@ -20,15 +20,15 @@ extension InGameTransaction {
 
         let playerSquare: Square = try {
             if player.spec.skills.contains(.warMachine) {
-                guard let square = player.isStanding else {
+                guard let playerSquare = player.isStanding else {
                     throw GameError("Player is not standing")
                 }
-                return square
+                return playerSquare
             } else {
-                guard let square = table.playerIsOpen(player) else {
+                guard let playerSquare = table.playerIsOpen(player) else {
                     throw GameError("Player is not open")
                 }
-                return square
+                return playerSquare
             }
         }()
 
@@ -54,7 +54,12 @@ extension InGameTransaction {
                 maxRunDistance = fixed
             case .d6:
                 maxRunDistance = randomizers.d6.roll()
-                events.append(.rolledForMaxRunDistance(maxRunDistance: maxRunDistance))
+                events.append(
+                    .rolledForMaxRunDistance(
+                        coachID: playerID.coachID,
+                        maxRunDistance: maxRunDistance
+                    )
+                )
             }
         }
 
@@ -86,7 +91,9 @@ extension InGameTransaction {
                 validSquares: validSquares
             )
         )
-        events.append(.declaredAction(declaration: declaration, isFree: isFree))
+        events.append(
+            .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
+        )
 
         return try declaredRunAction()
     }

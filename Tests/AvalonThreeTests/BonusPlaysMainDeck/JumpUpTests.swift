@@ -18,7 +18,7 @@ struct JumpUpTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
         var game = Game(
             phase: .active(
@@ -33,13 +33,13 @@ struct JumpUpTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(10, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .orc_lineman,
                             state: .prone(
                                 square: sq(4, 4)
@@ -47,18 +47,19 @@ struct JumpUpTests {
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(8, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .jumpUp),
@@ -92,7 +93,7 @@ struct JumpUpTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare run
@@ -102,7 +103,7 @@ struct JumpUpTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -114,10 +115,11 @@ struct JumpUpTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(10, 10)
                 )
             ]
         )
@@ -126,7 +128,7 @@ struct JumpUpTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -185,13 +187,19 @@ struct JumpUpTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(10, 9),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(10, 10),
+                    to: sq(10, 9),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(9, 8),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(10, 9),
+                    to: sq(9, 8),
+                    direction: .northWest,
                     reason: .run
                 ),
             ]
@@ -204,7 +212,7 @@ struct JumpUpTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -222,7 +230,7 @@ struct JumpUpTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -234,10 +242,11 @@ struct JumpUpTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(9, 8)
                 )
             ]
         )
@@ -246,7 +255,7 @@ struct JumpUpTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -301,10 +310,13 @@ struct JumpUpTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(8, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(9, 8),
+                    to: sq(8, 7),
+                    direction: .northWest,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -315,14 +327,14 @@ struct JumpUpTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -340,7 +352,7 @@ struct JumpUpTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -352,10 +364,11 @@ struct JumpUpTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 7)
                 )
             ]
         )
@@ -364,9 +377,9 @@ struct JumpUpTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 2)
+                        pl(.home, 2)
                     ]
                 )
             )
@@ -376,34 +389,63 @@ struct JumpUpTests {
 
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [4]
-        let newBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [newBallID]
+        let newBallID = 123
+        ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.northWest]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 2))
+                message: .blockActionSpecifyTarget(target: pl(.home, 2))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(8, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 2), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 4),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(8, 7),
+                    to: sq(8, 6),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 2)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 2),
+                    in: sq(8, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 4
+                ),
                 .turnEnded(coachID: .away),
-                .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: newBallID, to: sq(4, 6)),
+                .newBallAppeared(
+                    ballID: 123,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .home,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest
+                ),
                 .playerCaughtBouncingBall(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    ballID: newBallID
+                    playerID: pl(.home, 1),
+                    in: sq(4, 6),
+                    ballID: 123
                 ),
             ]
         )
@@ -412,8 +454,8 @@ struct JumpUpTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForJumpUpBonusPlayStandUpAction(validPlayers: [
-                    PlayerID(coachID: .home, index: 0),
-                    PlayerID(coachID: .home, index: 2),
+                    pl(.home, 0),
+                    pl(.home, 2),
                 ])
             )
         )
@@ -424,7 +466,7 @@ struct JumpUpTests {
             InputMessageWrapper(
                 coachID: .home,
                 message: .useJumpUpBonusPlayStandUpAction(
-                    playerID: PlayerID(coachID: .home, index: 2)
+                    playerID: pl(.home, 2)
                 )
             )
         )
@@ -433,21 +475,33 @@ struct JumpUpTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .jumpUp)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .jumpUp
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 2),
+                        playerID: pl(.home, 2),
                         actionID: .standUp
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(8, 6)
                 ),
-                .playerStoodUp(playerID: PlayerID(coachID: .home, index: 2)),
+                .playerStoodUp(
+                    playerID: pl(.home, 2),
+                    in: sq(8, 6)
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .jumpUp)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .jumpUp
+                    )
                 ),
-                .finalTurnBegan,
+                .updatedDiscards(top: .jumpUp, count: 1),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -458,35 +512,35 @@ struct JumpUpTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 2),
+                                playerID: pl(.home, 2),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 2),
+                                playerID: pl(.home, 2),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -506,7 +560,7 @@ struct JumpUpTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
         var game = Game(
             phase: .active(
@@ -521,13 +575,13 @@ struct JumpUpTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(10, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .orc_lineman,
                             state: .prone(
                                 square: sq(4, 4)
@@ -535,18 +589,19 @@ struct JumpUpTests {
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .orc_lineman,
                             state: .standing(square: sq(8, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .jumpUp),
@@ -580,7 +635,7 @@ struct JumpUpTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare run
@@ -590,7 +645,7 @@ struct JumpUpTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -602,10 +657,11 @@ struct JumpUpTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(10, 10)
                 )
             ]
         )
@@ -614,7 +670,7 @@ struct JumpUpTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -673,13 +729,19 @@ struct JumpUpTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(10, 9),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(10, 10),
+                    to: sq(10, 9),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(9, 8),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(10, 9),
+                    to: sq(9, 8),
+                    direction: .northWest,
                     reason: .run
                 ),
             ]
@@ -692,7 +754,7 @@ struct JumpUpTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -710,7 +772,7 @@ struct JumpUpTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -722,10 +784,11 @@ struct JumpUpTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(9, 8)
                 )
             ]
         )
@@ -734,7 +797,7 @@ struct JumpUpTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -789,10 +852,13 @@ struct JumpUpTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(8, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(9, 8),
+                    to: sq(8, 7),
+                    direction: .northWest,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -803,14 +869,14 @@ struct JumpUpTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -828,7 +894,7 @@ struct JumpUpTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -840,10 +906,11 @@ struct JumpUpTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 7)
                 )
             ]
         )
@@ -852,9 +919,9 @@ struct JumpUpTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 2)
+                        pl(.home, 2)
                     ]
                 )
             )
@@ -864,34 +931,63 @@ struct JumpUpTests {
 
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [4]
-        let newBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [newBallID]
+        let newBallID = 123
+        ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.northWest]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 2))
+                message: .blockActionSpecifyTarget(target: pl(.home, 2))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(8, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 2), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 4),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(8, 7),
+                    to: sq(8, 6),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 2)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 2),
+                    in: sq(8, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 4
+                ),
                 .turnEnded(coachID: .away),
-                .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: newBallID, to: sq(4, 6)),
+                .newBallAppeared(
+                    ballID: 123,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .home,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest
+                ),
                 .playerCaughtBouncingBall(
-                    playerID: PlayerID(coachID: .home, index: 1),
-                    ballID: newBallID
+                    playerID: pl(.home, 1),
+                    in: sq(4, 6),
+                    ballID: 123
                 ),
             ]
         )
@@ -900,8 +996,8 @@ struct JumpUpTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForJumpUpBonusPlayStandUpAction(validPlayers: [
-                    PlayerID(coachID: .home, index: 0),
-                    PlayerID(coachID: .home, index: 2),
+                    pl(.home, 0),
+                    pl(.home, 2),
                 ])
             )
         )
@@ -917,7 +1013,7 @@ struct JumpUpTests {
 
         #expect(
             latestEvents == [
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -928,21 +1024,21 @@ struct JumpUpTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 2),
+                                playerID: pl(.home, 2),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []

@@ -16,9 +16,9 @@ struct GetInThereTests {
 
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -33,24 +33,25 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .undead_skeleton,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .undead_skeleton,
                             state: .prone(square: sq(1, 1)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
@@ -62,7 +63,7 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -77,7 +78,7 @@ struct GetInThereTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -85,7 +86,7 @@ struct GetInThereTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .sidestep
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -103,7 +104,7 @@ struct GetInThereTests {
             randomizers: Randomizers(
                 direction: directionRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare run
@@ -113,7 +114,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -125,10 +126,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -137,7 +139,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -181,8 +183,8 @@ struct GetInThereTests {
 
         // MARK: - Specify run
 
-        let newBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [newBallID]
+        let newBallID = 456
+        ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.northWest]
 
         (latestEvents, latestPayload) = try game.process(
@@ -200,25 +202,50 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 13),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 12),
+                    to: sq(5, 13),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 14),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 13),
+                    to: sq(5, 14),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerScoredTouchdown(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(5, 14),
+                    ballID: 123
                 ),
-                .scoreUpdated(coachID: .away, increment: 4, total: 4),
-                .turnEnded(coachID: .away),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .trapdoor),
-                .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: newBallID, to: sq(4, 6))
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 4,
+                    total: 4
+                ), .turnEnded(coachID: .away),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 7),
+                    reason: .trapdoor
+                ),
+                .newBallAppeared(
+                    ballID: 456,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .home,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 456,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest
+                ),
             ]
         )
 
@@ -226,7 +253,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -244,14 +271,19 @@ struct GetInThereTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -260,7 +292,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -312,14 +344,20 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(3, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 0),
+                    to: sq(3, 14)
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    )
+                ),
+                .updatedDiscards(
+                    top: .getInThere,
+                    count: 1
                 ),
             ]
         )
@@ -328,7 +366,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
-                    playerID: PlayerID(coachID: .home, index: 1)
+                    playerID: pl(.home, 1)
                 )
             )
         )
@@ -340,9 +378,9 @@ struct GetInThereTests {
 
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -357,24 +395,25 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .undead_skeleton,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .undead_skeleton,
                             state: .prone(square: sq(1, 1)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
@@ -386,7 +425,7 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -401,7 +440,7 @@ struct GetInThereTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -409,7 +448,7 @@ struct GetInThereTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .sidestep
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -427,7 +466,7 @@ struct GetInThereTests {
             randomizers: Randomizers(
                 direction: directionRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare run
@@ -437,7 +476,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -449,10 +488,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -461,7 +501,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -505,8 +545,8 @@ struct GetInThereTests {
 
         // MARK: - Specify run
 
-        let newBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [newBallID]
+        let newBallID = 456
+        ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.northWest]
 
         (latestEvents, latestPayload) = try game.process(
@@ -524,25 +564,50 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 13),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 12),
+                    to: sq(5, 13),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 14),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 13),
+                    to: sq(5, 14),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerScoredTouchdown(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(5, 14),
+                    ballID: 123
                 ),
-                .scoreUpdated(coachID: .away, increment: 4, total: 4),
-                .turnEnded(coachID: .away),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .trapdoor),
-                .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: newBallID, to: sq(4, 6))
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 4,
+                    total: 4
+                ), .turnEnded(coachID: .away),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 7),
+                    reason: .trapdoor
+                ),
+                .newBallAppeared(
+                    ballID: 456,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .home,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 456,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest
+                ),
             ]
         )
 
@@ -550,7 +615,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -572,7 +637,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
-                    playerID: PlayerID(coachID: .home, index: 1)
+                    playerID: pl(.home, 1)
                 )
             )
         )
@@ -584,9 +649,9 @@ struct GetInThereTests {
 
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -601,24 +666,25 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .undead_skeleton,
                             state: .prone(square: sq(1, 1)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
                     ],
@@ -630,7 +696,7 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -645,7 +711,7 @@ struct GetInThereTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -653,7 +719,7 @@ struct GetInThereTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .sidestep
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -671,7 +737,7 @@ struct GetInThereTests {
             randomizers: Randomizers(
                 direction: directionRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare run
@@ -681,7 +747,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -693,10 +759,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -705,7 +772,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -749,8 +816,8 @@ struct GetInThereTests {
 
         // MARK: - Specify run
 
-        let newBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [newBallID]
+        let newBallID = 456
+        ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.northWest]
 
         (latestEvents, latestPayload) = try game.process(
@@ -768,25 +835,50 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 13),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 12),
+                    to: sq(5, 13),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 14),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 13),
+                    to: sq(5, 14),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerScoredTouchdown(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(5, 14),
+                    ballID: 123
                 ),
-                .scoreUpdated(coachID: .away, increment: 4, total: 4),
-                .turnEnded(coachID: .away),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
-                .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: newBallID, to: sq(4, 6))
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 4,
+                    total: 4
+                ), .turnEnded(coachID: .away),
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(5, 7),
+                    reason: .trapdoor
+                ),
+                .newBallAppeared(
+                    ballID: 456,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .home,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 456,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest
+                ),
             ]
         )
 
@@ -794,7 +886,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .away, index: 1)
+                    playerID: pl(.away, 1)
                 )
             )
         )
@@ -812,14 +904,19 @@ struct GetInThereTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -828,7 +925,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -880,14 +977,20 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 1),
+                    to: sq(3, 0)
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    )
+                ),
+                .updatedDiscards(
+                    top: .getInThere,
+                    count: 1
                 ),
             ]
         )
@@ -896,7 +999,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
-                    playerID: PlayerID(coachID: .home, index: 1)
+                    playerID: pl(.home, 1)
                 )
             )
         )
@@ -908,9 +1011,9 @@ struct GetInThereTests {
 
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID =  123
 
         var game = Game(
             phase: .active(
@@ -925,24 +1028,25 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .undead_skeleton,
                             state: .prone(square: sq(1, 1)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
                     ],
@@ -954,7 +1058,7 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -969,7 +1073,7 @@ struct GetInThereTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -977,7 +1081,7 @@ struct GetInThereTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .sidestep
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -995,7 +1099,7 @@ struct GetInThereTests {
             randomizers: Randomizers(
                 direction: directionRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare run
@@ -1005,7 +1109,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1017,10 +1121,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -1029,7 +1134,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1073,8 +1178,8 @@ struct GetInThereTests {
 
         // MARK: - Specify run
 
-        let newBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [newBallID]
+        let newBallID = 456
+        ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.northWest]
 
         (latestEvents, latestPayload) = try game.process(
@@ -1092,25 +1197,51 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 13),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 12),
+                    to: sq(5, 13),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 14),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 13),
+                    to: sq(5, 14),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerScoredTouchdown(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(5, 14),
+                    ballID: 123
                 ),
-                .scoreUpdated(coachID: .away, increment: 4, total: 4),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 4,
+                    total: 4
+                ),
                 .turnEnded(coachID: .away),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
-                .newBallAppeared(ballID: newBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: newBallID, to: sq(4, 6))
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(5, 7),
+                    reason: .trapdoor
+                ),
+                .newBallAppeared(
+                    ballID: 456,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .home,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 456,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest
+                ),
             ]
         )
 
@@ -1118,7 +1249,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .away, index: 1)
+                    playerID: pl(.away, 1)
                 )
             )
         )
@@ -1140,7 +1271,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
-                    playerID: PlayerID(coachID: .home, index: 1)
+                    playerID: pl(.home, 1)
                 )
             )
         )
@@ -1152,9 +1283,9 @@ struct GetInThereTests {
 
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1169,24 +1300,25 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .undead_skeleton,
                             state: .prone(square: sq(1, 1)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
                     ],
@@ -1198,12 +1330,15 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
                     objectives: Objectives(
-                        first: ChallengeCard(challenge: .showThemHowItsDone, bonusPlay: .multiBall)
+                        first: ChallengeCard(
+                            challenge: .showThemHowItsDone,
+                            bonusPlay: .multiBall
+                        )
                     ),
                     discards: []
                 ),
@@ -1215,7 +1350,7 @@ struct GetInThereTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -1223,7 +1358,7 @@ struct GetInThereTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .sidestep
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -1241,7 +1376,7 @@ struct GetInThereTests {
             randomizers: Randomizers(
                 direction: directionRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare run
@@ -1251,7 +1386,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1263,10 +1398,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -1275,7 +1411,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1334,20 +1470,31 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 13),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 12),
+                    to: sq(5, 13),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 14),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 13),
+                    to: sq(5, 14),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerScoredTouchdown(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(5, 14),
+                    ballID: 123
                 ),
-                .scoreUpdated(coachID: .away, increment: 4, total: 4),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 4,
+                    total: 4
+                ),
             ]
         )
 
@@ -1360,9 +1507,9 @@ struct GetInThereTests {
 
         // MARK: - Claim objective
 
-        let firstNewBallID = DefaultUUIDProvider().generate()
-        let secondNewBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [firstNewBallID, secondNewBallID]
+        let firstNewBallID = 456
+        let secondNewBallID = 789
+        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
         directionRandomizer.nextResults = [.northWest, .east]
 
         (latestEvents, latestPayload) = try game.process(
@@ -1374,22 +1521,87 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 2, total: 6),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge:
+                                .showThemHowItsDone,
+                            bonusPlay: .multiBall
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .breakSomeBones,
+                                bonusPlay: .getInThere
+                            )
+                        ),
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .showThemHowItsDone,
+                                bonusPlay: .multiBall
+                            )
+                        ),
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 6
+                ),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .showThemHowItsDone,
                         bonusPlay: .multiBall
-                    )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .breakSomeBones,
+                                bonusPlay: .getInThere
+                            )
+                        )
+                    ]
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
-                .newBallAppeared(ballID: firstNewBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: firstNewBallID, to: sq(4, 6)),
-                .newBallAppeared(ballID: secondNewBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .east),
-                .ballBounced(ballID: secondNewBallID, to: sq(6, 7)),
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(5, 7),
+                    reason: .trapdoor
+                ),
+                .newBallAppeared(
+                    ballID: 456,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 456,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest
+                ),
+                .newBallAppeared(
+                    ballID: 789,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .east
+                ),
+                .ballBounced(
+                    ballID: 789,
+                    from: sq(5, 7),
+                    to: sq(6, 7),
+                    direction: .east
+                ),
             ]
         )
 
@@ -1397,7 +1609,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .away, index: 1)
+                    playerID: pl(.away, 1)
                 )
             )
         )
@@ -1418,14 +1630,16 @@ struct GetInThereTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .getInThere
-                    )
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -1434,7 +1648,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1486,10 +1700,9 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 1),
+                    to: sq(3, 0)
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
@@ -1498,7 +1711,11 @@ struct GetInThereTests {
                         bonusPlay: .getInThere
                     )
                 ),
-                .turnEnded(coachID: .away)
+                .updatedDiscards(
+                    top: .getInThere,
+                    count: 1
+                ),
+                .turnEnded(coachID: .away),
             ]
         )
 
@@ -1506,7 +1723,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
-                    playerID: PlayerID(coachID: .home, index: 1)
+                    playerID: pl(.home, 1)
                 )
             )
         )
@@ -1518,9 +1735,9 @@ struct GetInThereTests {
 
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1535,24 +1752,25 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .undead_skeleton,
                             state: .prone(square: sq(1, 1)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
                     ],
@@ -1564,12 +1782,15 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
                     objectives: Objectives(
-                        first: ChallengeCard(challenge: .showThemHowItsDone, bonusPlay: .multiBall)
+                        first: ChallengeCard(
+                            challenge: .showThemHowItsDone,
+                            bonusPlay: .multiBall
+                        )
                     ),
                     discards: []
                 ),
@@ -1581,7 +1802,7 @@ struct GetInThereTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -1589,7 +1810,7 @@ struct GetInThereTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .sidestep
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -1607,7 +1828,7 @@ struct GetInThereTests {
             randomizers: Randomizers(
                 direction: directionRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare run
@@ -1617,7 +1838,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1629,10 +1850,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -1641,7 +1863,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1700,20 +1922,31 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 13),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 12),
+                    to: sq(5, 13),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 14),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 13),
+                    to: sq(5, 14),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerScoredTouchdown(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(5, 14),
+                    ballID: 123
                 ),
-                .scoreUpdated(coachID: .away, increment: 4, total: 4),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 4,
+                    total: 4
+                ),
             ]
         )
 
@@ -1726,9 +1959,9 @@ struct GetInThereTests {
 
         // MARK: - Claim objective
 
-        let firstNewBallID = DefaultUUIDProvider().generate()
-        let secondNewBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [firstNewBallID, secondNewBallID]
+        let firstNewBallID = 456
+        let secondNewBallID = 789
+        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
         directionRandomizer.nextResults = [.northWest, .east]
 
         (latestEvents, latestPayload) = try game.process(
@@ -1740,22 +1973,87 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 2, total: 6),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge:
+                                .showThemHowItsDone,
+                            bonusPlay: .multiBall
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .breakSomeBones,
+                                bonusPlay: .getInThere
+                            )
+                        ),
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .showThemHowItsDone,
+                                bonusPlay: .multiBall
+                            )
+                        ),
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 6
+                ),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .showThemHowItsDone,
                         bonusPlay: .multiBall
-                    )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .breakSomeBones,
+                                bonusPlay: .getInThere
+                            )
+                        )
+                    ]
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .trapdoor),
-                .newBallAppeared(ballID: firstNewBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: firstNewBallID, to: sq(4, 6)),
-                .newBallAppeared(ballID: secondNewBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .east),
-                .ballBounced(ballID: secondNewBallID, to: sq(6, 7)),
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(5, 7),
+                    reason: .trapdoor
+                ),
+                .newBallAppeared(
+                    ballID: 456,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 456,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest
+                ),
+                .newBallAppeared(
+                    ballID: 789,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .east
+                ),
+                .ballBounced(
+                    ballID: 789,
+                    from: sq(5, 7),
+                    to: sq(6, 7),
+                    direction: .east
+                ),
             ]
         )
 
@@ -1763,7 +2061,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .away, index: 1)
+                    playerID: pl(.away, 1)
                 )
             )
         )
@@ -1787,7 +2085,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
-                    playerID: PlayerID(coachID: .home, index: 1)
+                    playerID: pl(.home, 1)
                 )
             )
         )
@@ -1799,9 +2097,9 @@ struct GetInThereTests {
 
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1816,24 +2114,25 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .undead_skeleton,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .undead_skeleton,
                             state: .prone(square: sq(1, 1)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
@@ -1845,12 +2144,15 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
                     objectives: Objectives(
-                        first: ChallengeCard(challenge: .showThemHowItsDone, bonusPlay: .multiBall)
+                        first: ChallengeCard(
+                            challenge: .showThemHowItsDone,
+                            bonusPlay: .multiBall
+                        )
                     ),
                     discards: []
                 ),
@@ -1862,7 +2164,7 @@ struct GetInThereTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -1870,7 +2172,7 @@ struct GetInThereTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .sidestep
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -1888,7 +2190,7 @@ struct GetInThereTests {
             randomizers: Randomizers(
                 direction: directionRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare run
@@ -1898,7 +2200,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1910,10 +2212,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -1922,7 +2225,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1981,20 +2284,31 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 13),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 12),
+                    to: sq(5, 13),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 14),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 13),
+                    to: sq(5, 14),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerScoredTouchdown(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(5, 14),
+                    ballID: 123
                 ),
-                .scoreUpdated(coachID: .away, increment: 4, total: 4),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 4,
+                    total: 4
+                ),
             ]
         )
 
@@ -2007,9 +2321,9 @@ struct GetInThereTests {
 
         // MARK: - Claim objective
 
-        let firstNewBallID = DefaultUUIDProvider().generate()
-        let secondNewBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [firstNewBallID, secondNewBallID]
+        let firstNewBallID = 456
+        let secondNewBallID = 789
+        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
         directionRandomizer.nextResults = [.northWest, .east]
 
         (latestEvents, latestPayload) = try game.process(
@@ -2021,22 +2335,72 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 2, total: 6),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge:
+                                .showThemHowItsDone,
+                            bonusPlay: .multiBall
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .showThemHowItsDone,
+                                bonusPlay: .multiBall
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 6
+                ),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .showThemHowItsDone,
                         bonusPlay: .multiBall
-                    )
+                    ),
+                    hand: []
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .trapdoor),
-                .newBallAppeared(ballID: firstNewBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: firstNewBallID, to: sq(4, 6)),
-                .newBallAppeared(ballID: secondNewBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .east),
-                .ballBounced(ballID: secondNewBallID, to: sq(6, 7)),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 7),
+                    reason: .trapdoor
+                ),
+                .newBallAppeared(
+                    ballID: 456,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 456,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest
+                ),
+                .newBallAppeared(
+                    ballID: 789,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .east
+                ),
+                .ballBounced(
+                    ballID: 789,
+                    from: sq(5, 7),
+                    to: sq(6, 7),
+                    direction: .east
+                ),
             ]
         )
 
@@ -2044,7 +2408,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -2062,14 +2426,19 @@ struct GetInThereTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -2078,7 +2447,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -2130,16 +2499,22 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(3, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 0),
+                    to: sq(3, 14)
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    )
                 ),
-                .turnEnded(coachID: .away)
+                .updatedDiscards(
+                    top: .getInThere,
+                    count: 1
+                ),
+                .turnEnded(coachID: .away),
             ]
         )
 
@@ -2147,7 +2522,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
-                    playerID: PlayerID(coachID: .home, index: 1)
+                    playerID: pl(.home, 1)
                 )
             )
         )
@@ -2159,9 +2534,9 @@ struct GetInThereTests {
 
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2176,24 +2551,25 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .undead_skeleton,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .undead_skeleton,
                             state: .prone(square: sq(1, 1)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
@@ -2205,12 +2581,15 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
                     objectives: Objectives(
-                        first: ChallengeCard(challenge: .showThemHowItsDone, bonusPlay: .multiBall)
+                        first: ChallengeCard(
+                            challenge: .showThemHowItsDone,
+                            bonusPlay: .multiBall
+                        )
                     ),
                     discards: []
                 ),
@@ -2222,7 +2601,7 @@ struct GetInThereTests {
                     ),
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .mark
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -2230,7 +2609,7 @@ struct GetInThereTests {
                     .actionFinished,
                     .actionDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .sidestep
                         ),
                         snapshot: ActionSnapshot(balls: [], players: [])
@@ -2248,7 +2627,7 @@ struct GetInThereTests {
             randomizers: Randomizers(
                 direction: directionRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         // MARK: - Declare run
@@ -2258,7 +2637,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -2270,10 +2649,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -2282,7 +2662,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -2341,20 +2721,31 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 13),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 12),
+                    to: sq(5, 13),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 14),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 13),
+                    to: sq(5, 14),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerScoredTouchdown(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(5, 14),
+                    ballID: 123
                 ),
-                .scoreUpdated(coachID: .away, increment: 4, total: 4),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 4,
+                    total: 4
+                ),
             ]
         )
 
@@ -2367,9 +2758,9 @@ struct GetInThereTests {
 
         // MARK: - Claim objective
 
-        let firstNewBallID = DefaultUUIDProvider().generate()
-        let secondNewBallID = DefaultUUIDProvider().generate()
-        uuidProvider.nextResults = [firstNewBallID, secondNewBallID]
+        let firstNewBallID = 456
+        let secondNewBallID = 789
+        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
         directionRandomizer.nextResults = [.northWest, .east]
 
         (latestEvents, latestPayload) = try game.process(
@@ -2381,22 +2772,72 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 2, total: 6),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge:
+                                .showThemHowItsDone,
+                            bonusPlay: .multiBall
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .showThemHowItsDone,
+                                bonusPlay: .multiBall
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 2,
+                    total: 6
+                ),
                 .revealedInstantBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .showThemHowItsDone,
                         bonusPlay: .multiBall
-                    )
+                    ),
+                    hand: []
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .trapdoor),
-                .newBallAppeared(ballID: firstNewBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .northWest),
-                .ballBounced(ballID: firstNewBallID, to: sq(4, 6)),
-                .newBallAppeared(ballID: secondNewBallID, square: sq(5, 7)),
-                .rolledForDirection(direction: .east),
-                .ballBounced(ballID: secondNewBallID, to: sq(6, 7)),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 7),
+                    reason: .trapdoor
+                ),
+                .newBallAppeared(
+                    ballID: 456,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 456,
+                    from: sq(5, 7),
+                    to: sq(4, 6),
+                    direction: .northWest
+                ),
+                .newBallAppeared(
+                    ballID: 789,
+                    in: sq(5, 7)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .east
+                ),
+                .ballBounced(
+                    ballID: 789,
+                    from: sq(5, 7),
+                    to: sq(6, 7),
+                    direction: .east
+                ),
             ]
         )
 
@@ -2404,7 +2845,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -2428,7 +2869,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
-                    playerID: PlayerID(coachID: .home, index: 1)
+                    playerID: pl(.home, 1)
                 )
             )
         )
@@ -2441,7 +2882,7 @@ struct GetInThereTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2456,18 +2897,19 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .undead_skeleton,
                             state: .standing(square: sq(5, 11)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
@@ -2479,7 +2921,7 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -2505,7 +2947,7 @@ struct GetInThereTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -2515,7 +2957,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -2527,10 +2969,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -2539,9 +2982,9 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -2555,22 +2998,38 @@ struct GetInThereTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch]),
+                .rolledForBlock(coachID: .away, results: [.kerrunch]),
                 .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 11)
+                    playerID: pl(.away, 0),
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 4),
-                .changedArmourResult(die: .d6, modified: 3, modifications: [.kerrunch]),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 11),
+                    reason: .blocked
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 4),
+                .changedArmourResult(
+                    die: .d6,
+                    unmodified: 4,
+                    modified: 3,
+                    modifications: [.kerrunch]
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 11),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -2578,7 +3037,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -2596,14 +3055,19 @@ struct GetInThereTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -2612,7 +3076,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -2664,14 +3128,20 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(3, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 0),
+                    to: sq(3, 14)
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    )
+                ),
+                .updatedDiscards(
+                    top: .getInThere,
+                    count: 1
                 ),
             ]
         )
@@ -2683,14 +3153,14 @@ struct GetInThereTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -2709,7 +3179,7 @@ struct GetInThereTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2724,18 +3194,19 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .undead_skeleton,
                             state: .standing(square: sq(5, 11)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
@@ -2747,7 +3218,7 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -2773,7 +3244,7 @@ struct GetInThereTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -2783,7 +3254,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -2795,10 +3266,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -2807,9 +3279,9 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -2823,22 +3295,38 @@ struct GetInThereTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch]),
+                .rolledForBlock(coachID: .away, results: [.kerrunch]),
                 .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 11)
+                    playerID: pl(.away, 0),
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 4),
-                .changedArmourResult(die: .d6, modified: 3, modifications: [.kerrunch]),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 11),
+                    reason: .blocked
+                ),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 4),
+                .changedArmourResult(
+                    die: .d6,
+                    unmodified: 4,
+                    modified: 3,
+                    modifications: [.kerrunch]
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 11),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -2846,7 +3334,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -2871,7 +3359,7 @@ struct GetInThereTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -2889,7 +3377,7 @@ struct GetInThereTests {
 
         let foulDieRandomizer = FoulDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2904,18 +3392,19 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .undead_skeleton,
                             state: .prone(square: sq(5, 11)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
@@ -2927,7 +3416,7 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -2952,7 +3441,7 @@ struct GetInThereTests {
             randomizers: Randomizers(
                 foulDie: foulDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare foul
@@ -2962,7 +3451,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .foul
                     ),
                     consumesBonusPlays: []
@@ -2974,10 +3463,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .foul
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -2986,9 +3476,9 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .foulActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -3001,18 +3491,25 @@ struct GetInThereTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .foulActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .foulActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForFoul(result: .gotThem),
+                .rolledForFoul(coachID: .away, result: .gotThem),
                 .playerFouled(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 11)
+                    playerID: pl(.away, 0),
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .fouled),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 11),
+                    reason: .fouled
+                ),
             ]
         )
 
@@ -3020,7 +3517,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -3038,14 +3535,19 @@ struct GetInThereTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .home, index: 0),
+                        playerID: pl(.home, 0),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -3054,7 +3556,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -3106,14 +3608,20 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(3, 14),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.home, 0),
+                    to: sq(3, 14)
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    )
+                ),
+                .updatedDiscards(
+                    top: .getInThere,
+                    count: 1
                 ),
             ]
         )
@@ -3125,14 +3633,14 @@ struct GetInThereTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -3150,7 +3658,7 @@ struct GetInThereTests {
 
         let foulDieRandomizer = FoulDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3165,18 +3673,19 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .undead_skeleton,
                             state: .prone(square: sq(5, 11)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere),
@@ -3188,7 +3697,7 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -3213,7 +3722,7 @@ struct GetInThereTests {
             randomizers: Randomizers(
                 foulDie: foulDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare foul
@@ -3223,7 +3732,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .foul
                     ),
                     consumesBonusPlays: []
@@ -3235,10 +3744,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .foul
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -3247,9 +3757,9 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .foulActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -3262,18 +3772,25 @@ struct GetInThereTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .foulActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .foulActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForFoul(result: .gotThem),
+                .rolledForFoul(coachID: .away, result: .gotThem),
                 .playerFouled(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 11)
+                    playerID: pl(.away, 0),
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .fouled),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(5, 11),
+                    reason: .fouled
+                ),
             ]
         )
 
@@ -3281,7 +3798,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .home, index: 0)
+                    playerID: pl(.home, 0)
                 )
             )
         )
@@ -3306,7 +3823,7 @@ struct GetInThereTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -3325,7 +3842,7 @@ struct GetInThereTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3340,24 +3857,25 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
                     ],
@@ -3369,7 +3887,7 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -3395,7 +3913,7 @@ struct GetInThereTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -3405,7 +3923,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -3417,10 +3935,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -3429,9 +3948,9 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -3443,7 +3962,7 @@ struct GetInThereTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -3456,7 +3975,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -3615,15 +4134,33 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 1),
-                .playerFumbledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 1
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .fumbled),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .west),
-                .ballBounced(ballID: ballID, to: sq(2, 6)),
+                .playerFumbledTeammate(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6),
+                    teammateID: pl(.away, 1),
+                    ballID: 123
+                ),
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(3, 6),
+                    reason: .fumbled
+                ),
+                .ballCameLoose(ballID: 123, in: sq(3, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .west
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west
+                ),
             ]
         )
 
@@ -3631,7 +4168,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .away, index: 1)
+                    playerID: pl(.away, 1)
                 )
             )
         )
@@ -3649,14 +4186,19 @@ struct GetInThereTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -3665,7 +4207,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -3717,14 +4259,20 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 1),
+                    to: sq(3, 0)
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .getInThere
+                    )
+                ),
+                .updatedDiscards(
+                    top: .getInThere,
+                    count: 1
                 ),
             ]
         )
@@ -3736,14 +4284,14 @@ struct GetInThereTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -3762,7 +4310,7 @@ struct GetInThereTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3777,24 +4325,25 @@ struct GetInThereTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .getInThere)
                     ],
@@ -3806,7 +4355,7 @@ struct GetInThereTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -3832,7 +4381,7 @@ struct GetInThereTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -3842,7 +4391,7 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -3854,10 +4403,11 @@ struct GetInThereTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -3866,9 +4416,9 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -3880,7 +4430,7 @@ struct GetInThereTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -3893,7 +4443,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4052,15 +4602,33 @@ struct GetInThereTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 1),
-                .playerFumbledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 1
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .fumbled),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .west),
-                .ballBounced(ballID: ballID, to: sq(2, 6)),
+                .playerFumbledTeammate(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6),
+                    teammateID: pl(.away, 1),
+                    ballID: 123
+                ),
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(3, 6),
+                    reason: .fumbled
+                ),
+                .ballCameLoose(ballID: 123, in: sq(3, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .west
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west
+                ),
             ]
         )
 
@@ -4068,7 +4636,7 @@ struct GetInThereTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .away, index: 1)
+                    playerID: pl(.away, 1)
                 )
             )
         )
@@ -4093,14 +4661,14 @@ struct GetInThereTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []

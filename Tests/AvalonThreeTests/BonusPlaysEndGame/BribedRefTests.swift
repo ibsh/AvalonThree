@@ -17,7 +17,7 @@ struct BribedRefTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -32,54 +32,55 @@ struct BribedRefTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -94,7 +95,10 @@ struct BribedRefTests {
                     ],
                     deck: [],
                     objectives: Objectives(
-                        third: ChallengeCard(challenge: .getTheBall, bonusPlay: .bribedRef)
+                        third: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .bribedRef
+                        )
                     ),
                     discards: []
                 ),
@@ -117,7 +121,7 @@ struct BribedRefTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -127,7 +131,7 @@ struct BribedRefTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -139,10 +143,11 @@ struct BribedRefTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -151,7 +156,7 @@ struct BribedRefTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -210,17 +215,24 @@ struct BribedRefTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(4, 7),
+                    ballID: 123
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(4, 7),
+                    to: sq(4, 6),
+                    direction: .north,
                     reason: .run
                 ),
             ]
@@ -246,11 +258,32 @@ struct BribedRefTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .third),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .third,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .bribedRef
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .getTheBall,
+                                bonusPlay: .bribedRef
+                            )
+                        )
+                    ]
+                ),
                 .scoreUpdated(coachID: .away, increment: 1, total: 1),
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .bribedRef)
+                    card: ChallengeCard(
+                        challenge: .getTheBall,
+                        bonusPlay: .bribedRef
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -262,28 +295,28 @@ struct BribedRefTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 3),
+                                playerID: pl(.away, 3),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -301,7 +334,7 @@ struct BribedRefTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -313,10 +346,11 @@ struct BribedRefTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -325,7 +359,7 @@ struct BribedRefTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -380,10 +414,13 @@ struct BribedRefTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(4, 6),
+                    to: sq(5, 6),
+                    direction: .east,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -394,35 +431,35 @@ struct BribedRefTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 3),
+                                playerID: pl(.away, 3),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -440,7 +477,7 @@ struct BribedRefTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -452,11 +489,12 @@ struct BribedRefTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(5, 6)
+                )
             ]
         )
 
@@ -464,7 +502,7 @@ struct BribedRefTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(4, 5), sq(4, 6), sq(4, 7)]
@@ -485,12 +523,15 @@ struct BribedRefTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 6),
+                    to: sq(4, 6),
+                    direction: .west,
                     reason: .sidestep
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -501,35 +542,35 @@ struct BribedRefTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 1),
+                                playerID: pl(.home, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 2),
+                                playerID: pl(.home, 2),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 3),
+                                playerID: pl(.home, 3),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -548,7 +589,7 @@ struct BribedRefTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -563,54 +604,55 @@ struct BribedRefTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(6, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -625,7 +667,10 @@ struct BribedRefTests {
                     ],
                     deck: [],
                     objectives: Objectives(
-                        third: ChallengeCard(challenge: .getTheBall, bonusPlay: .bribedRef)
+                        third: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .bribedRef
+                        )
                     ),
                     discards: []
                 ),
@@ -648,7 +693,7 @@ struct BribedRefTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -658,7 +703,7 @@ struct BribedRefTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -670,10 +715,11 @@ struct BribedRefTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -682,7 +728,7 @@ struct BribedRefTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -741,17 +787,24 @@ struct BribedRefTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(4, 7),
+                    ballID: 123
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(4, 7),
+                    to: sq(4, 6),
+                    direction: .north,
                     reason: .run
                 ),
             ]
@@ -777,7 +830,12 @@ struct BribedRefTests {
 
         #expect(
             latestEvents == [
-                .declinedObjectives(coachID: .away, objectiveIDs: [.third]),
+                .declinedObjectives(
+                    coachID: .away,
+                    objectives: [
+                        .third: .getTheBall
+                    ]
+                ),
             ]
         )
 
@@ -788,28 +846,28 @@ struct BribedRefTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 3),
+                                playerID: pl(.away, 3),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -827,7 +885,7 @@ struct BribedRefTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -839,10 +897,11 @@ struct BribedRefTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -851,7 +910,7 @@ struct BribedRefTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -906,10 +965,13 @@ struct BribedRefTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(4, 6),
+                    to: sq(5, 6),
+                    direction: .east,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -920,35 +982,35 @@ struct BribedRefTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 2),
+                                playerID: pl(.away, 2),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 3),
+                                playerID: pl(.away, 3),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -966,7 +1028,7 @@ struct BribedRefTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
                     consumesBonusPlays: []
@@ -978,11 +1040,12 @@ struct BribedRefTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .sidestep
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(5, 6)
+                )
             ]
         )
 
@@ -990,7 +1053,7 @@ struct BribedRefTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(4, 5), sq(4, 6), sq(4, 7)]
@@ -1011,12 +1074,26 @@ struct BribedRefTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(5, 6),
+                    to: sq(4, 6),
+                    direction: .west,
                     reason: .sidestep
                 ),
                 .turnEnded(coachID: .away),
-                .discardedObjective(coachID: .home, objectiveID: .third),
+                .discardedObjective(
+                    coachID: .home,
+                    objectiveID: .third,
+                    objective: ChallengeCard(
+                        challenge: .getTheBall,
+                        bonusPlay: .bribedRef
+                    )
+                ),
+                .updatedDiscards(
+                    top: .bribedRef,
+                    count: 1
+                ),
             ]
         )
 
@@ -1024,9 +1101,9 @@ struct BribedRefTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .declareEmergencyReservesAction(validPlayers: [
-                    PlayerID(coachID: .home, index: 1),
-                    PlayerID(coachID: .home, index: 2),
-                    PlayerID(coachID: .home, index: 3),
+                    pl(.home, 1),
+                    pl(.home, 2),
+                    pl(.home, 3),
                 ])
             )
         )

@@ -43,8 +43,15 @@ extension InGameTransaction {
 
         } else {
 
+            guard let targetPlayerSquare = table.getPlayer(id: targetPlayerID)?.square else {
+                throw GameError("Target is in reserves")
+            }
+
             events.append(
-                .declinedCatchersInstinctsSkillRunAction(playerID: targetPlayerID)
+                .declinedCatchersInstinctsSkillRunAction(
+                    playerID: targetPlayerID,
+                    in: targetPlayerSquare
+                )
             )
             return try endAction()
         }

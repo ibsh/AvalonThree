@@ -14,7 +14,7 @@ struct InspirationTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,84 +29,85 @@ struct InspirationTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .halfling_catcher,
                             state: .prone(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .halfling_hefty,
                             state: .standing(square: sq(8, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 6),
+                            id: pl(.away, 6),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .human_passer,
                             state: .standing(square: sq(4, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 4),
+                            id: pl(.home, 4),
                             spec: .human_catcher,
                             state: .prone(square: sq(3, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 5),
+                            id: pl(.home, 5),
                             spec: .human_blitzer,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
                     ],
@@ -118,7 +119,7 @@ struct InspirationTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         )
                     ],
                     deck: [],
@@ -141,7 +142,7 @@ struct InspirationTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -151,7 +152,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -163,10 +164,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 5)
                 )
             ]
         )
@@ -175,7 +177,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -230,10 +232,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(1, 6),
+                    direction: .southEast,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -242,20 +247,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 2
                 )
@@ -269,7 +274,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -281,10 +286,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 5)
                 )
             ]
         )
@@ -293,7 +299,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -348,10 +354,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 5),
+                    to: sq(8, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -360,20 +369,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 1
                 )
@@ -387,7 +396,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -399,10 +408,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -411,7 +421,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -470,13 +480,19 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 8),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(4, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -486,20 +502,20 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForInspirationBonusPlayFreeAction(validDeclarations: [
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .foul), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .foul), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                 ])
             )
         )
@@ -516,7 +532,7 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -525,16 +541,16 @@ struct InspirationTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 1), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 1), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .sidestep), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 3
                 )
@@ -546,7 +562,7 @@ struct InspirationTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -561,84 +577,85 @@ struct InspirationTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .halfling_catcher,
                             state: .prone(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .halfling_hefty,
                             state: .standing(square: sq(8, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 6),
+                            id: pl(.away, 6),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .human_passer,
                             state: .standing(square: sq(4, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 4),
+                            id: pl(.home, 4),
                             spec: .human_catcher,
                             state: .prone(square: sq(3, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 5),
+                            id: pl(.home, 5),
                             spec: .human_blitzer,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
                     ],
@@ -650,7 +667,7 @@ struct InspirationTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         )
                     ],
                     deck: [],
@@ -673,7 +690,7 @@ struct InspirationTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -683,7 +700,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -695,10 +712,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 5)
                 )
             ]
         )
@@ -707,7 +725,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -762,10 +780,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(1, 6),
+                    direction: .southEast,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -774,20 +795,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 2
                 )
@@ -801,7 +822,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -813,10 +834,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 5)
                 )
             ]
         )
@@ -825,7 +847,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -880,10 +902,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 5),
+                    to: sq(8, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -892,20 +917,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 1
                 )
@@ -919,7 +944,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -931,10 +956,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -943,7 +969,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1002,13 +1028,19 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 8),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(4, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -1018,20 +1050,20 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForInspirationBonusPlayFreeAction(validDeclarations: [
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .foul), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .foul), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                 ])
             )
         )
@@ -1043,7 +1075,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .useInspirationBonusPlayFreeAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .run
                     )
                 )
@@ -1054,14 +1086,19 @@ struct InspirationTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .run
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(5, 4)
                 ),
             ]
         )
@@ -1070,7 +1107,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 2),
+                    playerID: pl(.away, 2),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1130,36 +1167,58 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(6, 4),
+                    playerID: pl(.away, 2),
+                    ballID: 123,
+                    from: sq(5, 4),
+                    to: sq(6, 4),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(7, 5),
+                    playerID: pl(.away, 2),
+                    ballID: 123,
+                    from: sq(6, 4),
+                    to: sq(7, 5),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(8, 5),
+                    playerID: pl(.away, 2),
+                    ballID: 123,
+                    from: sq(7, 5),
+                    to: sq(8, 5),
+                    direction: .east,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(9, 6),
+                    playerID: pl(.away, 2),
+                    ballID: 123,
+                    from: sq(8, 5),
+                    to: sq(9, 6),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(10, 7),
+                    playerID: pl(.away, 2),
+                    ballID: 123,
+                    from: sq(9, 6),
+                    to: sq(10, 7),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    )
+                ),
+                .updatedDiscards(
+                    top: .inspiration,
+                    count: 1
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -1168,16 +1227,16 @@ struct InspirationTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 1), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 1), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .sidestep), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 3
                 )
@@ -1189,7 +1248,7 @@ struct InspirationTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1204,84 +1263,85 @@ struct InspirationTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .halfling_catcher,
                             state: .prone(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .halfling_hefty,
                             state: .standing(square: sq(8, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 6),
+                            id: pl(.away, 6),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .human_passer,
                             state: .standing(square: sq(4, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 4),
+                            id: pl(.home, 4),
                             spec: .human_catcher,
                             state: .prone(square: sq(3, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 5),
+                            id: pl(.home, 5),
                             spec: .human_blitzer,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
                     ],
@@ -1293,7 +1353,7 @@ struct InspirationTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         )
                     ],
                     deck: [],
@@ -1316,7 +1376,7 @@ struct InspirationTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -1326,7 +1386,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -1338,10 +1398,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 5)
                 )
             ]
         )
@@ -1350,7 +1411,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1405,10 +1466,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(1, 6),
+                    direction: .southEast,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -1417,20 +1481,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 2
                 )
@@ -1444,7 +1508,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -1456,10 +1520,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 5)
                 )
             ]
         )
@@ -1468,7 +1533,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1523,10 +1588,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 5),
+                    to: sq(8, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -1535,20 +1603,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 1
                 )
@@ -1562,7 +1630,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1574,10 +1642,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -1586,7 +1655,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1645,13 +1714,19 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 8),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(4, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -1661,20 +1736,20 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForInspirationBonusPlayFreeAction(validDeclarations: [
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .foul), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .foul), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                 ])
             )
         )
@@ -1686,7 +1761,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .useInspirationBonusPlayFreeAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 6),
+                        playerID: pl(.away, 6),
                         actionID: .mark
                     )
                 )
@@ -1697,14 +1772,19 @@ struct InspirationTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 6),
+                        playerID: pl(.away, 6),
                         actionID: .mark
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(4, 4)
                 ),
             ]
         )
@@ -1713,7 +1793,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 6),
+                    playerID: pl(.away, 6),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1769,21 +1849,34 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 6),
-                    square: sq(5, 5),
+                    playerID: pl(.away, 6),
+                    ballID: nil,
+                    from: sq(4, 4),
+                    to: sq(5, 5),
+                    direction: .southEast,
                     reason: .mark
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 6),
-                    square: sq(6, 6),
+                    playerID: pl(.away, 6),
+                    ballID: nil,
+                    from: sq(5, 5),
+                    to: sq(6, 6),
+                    direction: .southEast,
                     reason: .mark
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    )
+                ),
+                .updatedDiscards(
+                    top: .inspiration,
+                    count: 1
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -1792,16 +1885,16 @@ struct InspirationTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 1), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 1), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .sidestep), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 3
                 )
@@ -1816,7 +1909,7 @@ struct InspirationTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1831,84 +1924,85 @@ struct InspirationTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .halfling_catcher,
                             state: .prone(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .halfling_hefty,
                             state: .standing(square: sq(8, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 6),
+                            id: pl(.away, 6),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .human_passer,
                             state: .standing(square: sq(4, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 4),
+                            id: pl(.home, 4),
                             spec: .human_catcher,
                             state: .prone(square: sq(3, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 5),
+                            id: pl(.home, 5),
                             spec: .human_blitzer,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
                     ],
@@ -1920,7 +2014,7 @@ struct InspirationTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         )
                     ],
                     deck: [],
@@ -1946,7 +2040,7 @@ struct InspirationTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -1956,7 +2050,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -1968,10 +2062,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 5)
                 )
             ]
         )
@@ -1980,7 +2075,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -2035,10 +2130,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(1, 6),
+                    direction: .southEast,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -2047,20 +2145,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 2
                 )
@@ -2074,7 +2172,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -2086,10 +2184,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 5)
                 )
             ]
         )
@@ -2098,7 +2197,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -2153,10 +2252,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 5),
+                    to: sq(8, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -2165,20 +2267,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 1
                 )
@@ -2192,7 +2294,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -2204,10 +2306,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -2216,7 +2319,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -2275,13 +2378,19 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 8),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(4, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -2291,20 +2400,20 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForInspirationBonusPlayFreeAction(validDeclarations: [
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .foul), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .foul), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                 ])
             )
         )
@@ -2316,7 +2425,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .useInspirationBonusPlayFreeAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .pass
                     )
                 )
@@ -2327,14 +2436,19 @@ struct InspirationTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .pass
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(5, 4)
                 ),
             ]
         )
@@ -2343,31 +2457,31 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 2),
+                    playerID: pl(.away, 2),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 3),
+                            targetPlayerID: pl(.away, 3),
                             targetSquare: sq(4, 8),
                             distance: .short,
                             obstructingSquares: [],
                             markedTargetSquares: []
                         ),
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(1, 6),
                             distance: .short,
                             obstructingSquares: [],
                             markedTargetSquares: [sq(1, 7)]
                         ),
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 6),
+                            targetPlayerID: pl(.away, 6),
                             targetSquare: sq(4, 4),
                             distance: .handoff,
                             obstructingSquares: [],
                             markedTargetSquares: []
                         ),
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 5),
+                            targetPlayerID: pl(.away, 5),
                             targetSquare: sq(8, 6),
                             distance: .short,
                             obstructingSquares: [],
@@ -2387,29 +2501,58 @@ struct InspirationTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
-                    target: PlayerID(coachID: CoachID.away, index: 5)
+                    target: pl(CoachID.away, 5)
                 )
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 2),
-                .changedPassResult(die: .d6, modified: 1, modifications: [.targetPlayerMarked]),
-                .playerFumbledBall(playerID: PlayerID(coachID: .away, index: 2)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .west),
-                .ballBounced(ballID: ballID, to: sq(4, 4)),
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 2
+                ),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 2,
+                    modified: 1,
+                    modifications: [.targetPlayerMarked]
+                ),
+                .playerFumbledBall(
+                    playerID: pl(.away, 2),
+                    in: sq(5, 4),
+                    ballID: 123
+                ),
+                .ballCameLoose(ballID: 123, in: sq(5, 4)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .west
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(5, 4),
+                    to: sq(4, 4),
+                    direction: .west
+                ),
                 .playerCaughtBouncingBall(
-                    playerID: PlayerID(coachID: .away, index: 6),
-                    ballID: ballID
+                    playerID: pl(.away, 6),
+                    in: sq(4, 4),
+                    ballID: 123
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    )
+                ),
+                .updatedDiscards(
+                    top: .inspiration,
+                    count: 1
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -2418,16 +2561,16 @@ struct InspirationTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 1), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 1), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .sidestep), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 3
                 )
@@ -2442,7 +2585,7 @@ struct InspirationTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2457,84 +2600,85 @@ struct InspirationTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .halfling_catcher,
                             state: .prone(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .halfling_hefty,
                             state: .standing(square: sq(8, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 6),
+                            id: pl(.away, 6),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .human_passer,
                             state: .standing(square: sq(4, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 4),
+                            id: pl(.home, 4),
                             spec: .human_catcher,
                             state: .prone(square: sq(3, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 5),
+                            id: pl(.home, 5),
                             spec: .human_blitzer,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
                     ],
@@ -2546,7 +2690,7 @@ struct InspirationTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         )
                     ],
                     deck: [],
@@ -2572,7 +2716,7 @@ struct InspirationTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -2582,7 +2726,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -2594,10 +2738,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 5)
                 )
             ]
         )
@@ -2606,7 +2751,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -2661,10 +2806,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(1, 6),
+                    direction: .southEast,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -2673,20 +2821,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 2
                 )
@@ -2700,7 +2848,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -2712,10 +2860,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 5)
                 )
             ]
         )
@@ -2724,7 +2873,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -2779,10 +2928,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 5),
+                    to: sq(8, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -2791,20 +2943,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 1
                 )
@@ -2818,7 +2970,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -2830,10 +2982,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -2842,7 +2995,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -2901,13 +3054,19 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 8),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(4, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -2917,20 +3076,20 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForInspirationBonusPlayFreeAction(validDeclarations: [
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .foul), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .foul), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                 ])
             )
         )
@@ -2942,7 +3101,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .useInspirationBonusPlayFreeAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 6),
+                        playerID: pl(.away, 6),
                         actionID: .hurlTeammate
                     )
                 )
@@ -2953,14 +3112,19 @@ struct InspirationTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 6),
+                        playerID: pl(.away, 6),
                         actionID: .hurlTeammate
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(4, 4)
                 ),
             ]
         )
@@ -2969,9 +3133,9 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 6),
+                    playerID: pl(.away, 6),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 2),
+                        pl(.away, 2),
                     ]
                 )
             )
@@ -2981,7 +3145,7 @@ struct InspirationTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 2)
+                    teammate: pl(.away, 2)
                 )
             )
         )
@@ -2994,7 +3158,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 6),
+                    playerID: pl(.away, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 3), sq(1, 3)]),
@@ -3128,24 +3292,63 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 4),
-                .changedHurlTeammateResult(die: .d6, modified: 3, modifications: [.longDistance, .obstructed]),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 6),
-                    teammateID: PlayerID(coachID: .away, index: 2),
-                    square: sq(10, 10)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 4
                 ),
-                .hurledTeammateCrashed(playerID: PlayerID(coachID: CoachID.away, index: 2)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: Direction.southEast),
-                .changedDirection(direction: Direction.south),
-                .ballBounced(ballID: ballID, to: sq(10, 11)),
+                .changedHurlTeammateResult(
+                    die: .d6,
+                    unmodified: 4,
+                    modified: 3,
+                    modifications: [
+                        .longDistance, .obstructed,
+                    ]
+                ),
+                .playerHurledTeammate(
+                    playerID: pl(.away, 6),
+                    teammateID: pl(.away, 2),
+                    ballID: 123,
+                    from: sq(4, 4),
+                    to: sq(10, 10),
+                    angle: 135
+                ),
+                .hurledTeammateCrashed(
+                    playerID: pl(.away, 2),
+                    ballID: 123,
+                    in: sq(10, 10)
+                ),
+                .ballCameLoose(
+                    ballID: 123,
+                    in: sq(10, 10)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .southEast
+                ),
+                .changedDirection(
+                    from: .southEast,
+                    to: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(10, 10),
+                    to: sq(10, 11),
+                    direction: .south
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    )
+                ),
+                .updatedDiscards(
+                    top: .inspiration,
+                    count: 1
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan,
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -3154,16 +3357,16 @@ struct InspirationTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 1), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 1), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .sidestep), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 3
                 )
@@ -3175,7 +3378,7 @@ struct InspirationTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         let foulDieRandomizer = FoulDieRandomizerDouble()
 
@@ -3192,84 +3395,85 @@ struct InspirationTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .halfling_catcher,
                             state: .prone(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .halfling_hefty,
                             state: .standing(square: sq(8, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 6),
+                            id: pl(.away, 6),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .human_passer,
                             state: .standing(square: sq(4, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 4),
+                            id: pl(.home, 4),
                             spec: .human_catcher,
                             state: .prone(square: sq(3, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 5),
+                            id: pl(.home, 5),
                             spec: .human_blitzer,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
                     ],
@@ -3281,7 +3485,7 @@ struct InspirationTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         )
                     ],
                     deck: [],
@@ -3306,7 +3510,7 @@ struct InspirationTests {
             randomizers: Randomizers(
                 foulDie: foulDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -3316,7 +3520,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -3328,10 +3532,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 5)
                 )
             ]
         )
@@ -3340,7 +3545,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -3395,10 +3600,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(1, 6),
+                    direction: .southEast,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -3407,20 +3615,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 2
                 )
@@ -3434,7 +3642,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -3446,10 +3654,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 5)
                 )
             ]
         )
@@ -3458,7 +3667,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -3513,10 +3722,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 5),
+                    to: sq(8, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -3525,20 +3737,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 1
                 )
@@ -3552,7 +3764,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -3564,10 +3776,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -3576,7 +3789,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -3635,13 +3848,19 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 8),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(4, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -3651,20 +3870,20 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForInspirationBonusPlayFreeAction(validDeclarations: [
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .foul), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .foul), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                 ])
             )
         )
@@ -3676,7 +3895,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .useInspirationBonusPlayFreeAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .foul
                     )
                 )
@@ -3687,14 +3906,19 @@ struct InspirationTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .foul
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(4, 8)
                 ),
             ]
         )
@@ -3703,9 +3927,9 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .foulActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 4),
+                        pl(.home, 4),
                     ]
                 )
             )
@@ -3719,25 +3943,42 @@ struct InspirationTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .foulActionSpecifyTarget(
-                    target: PlayerID(coachID: .home, index: 4)
+                    target: pl(.home, 4)
                 )
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForFoul(result: .gotThem),
-                .playerFouled(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(3, 9)
+                .rolledForFoul(
+                    coachID: .away,
+                    result: .gotThem
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 4), reason: .fouled),
+                .playerFouled(
+                    playerID: pl(.away, 3),
+                    from: sq(4, 8),
+                    to: sq(3, 9),
+                    direction: .southWest,
+                    targetPlayerID: pl(.home, 4)
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 4),
+                    in: sq(3, 9),
+                    reason: .fouled
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    )
+                ),
+                .updatedDiscards(
+                    top: .inspiration,
+                    count: 1
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -3746,16 +3987,16 @@ struct InspirationTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 1), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 4), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 1), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 4), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .sidestep), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 3
                 )
@@ -3769,7 +4010,7 @@ struct InspirationTests {
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3784,84 +4025,85 @@ struct InspirationTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .halfling_catcher,
                             state: .prone(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .halfling_hefty,
                             state: .standing(square: sq(8, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 6),
+                            id: pl(.away, 6),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .human_passer,
                             state: .standing(square: sq(4, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 4),
+                            id: pl(.home, 4),
                             spec: .human_catcher,
                             state: .prone(square: sq(3, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 5),
+                            id: pl(.home, 5),
                             spec: .human_blitzer,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
                     ],
@@ -3873,7 +4115,7 @@ struct InspirationTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         )
                     ],
                     deck: [],
@@ -3898,7 +4140,7 @@ struct InspirationTests {
             randomizers: Randomizers(
                 blockDie: blockDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -3908,7 +4150,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -3920,10 +4162,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 5)
                 )
             ]
         )
@@ -3932,7 +4175,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -3987,10 +4230,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(1, 6),
+                    direction: .southEast,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -3999,20 +4245,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 2
                 )
@@ -4026,7 +4272,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -4038,10 +4284,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 5)
                 )
             ]
         )
@@ -4050,7 +4297,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -4105,10 +4352,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 5),
+                    to: sq(8, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -4117,20 +4367,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 1
                 )
@@ -4144,7 +4394,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -4156,10 +4406,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -4168,7 +4419,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -4227,13 +4478,19 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 8),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(4, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -4243,20 +4500,20 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForInspirationBonusPlayFreeAction(validDeclarations: [
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .foul), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .foul), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                 ])
             )
         )
@@ -4268,7 +4525,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .useInspirationBonusPlayFreeAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .block
                     )
                 )
@@ -4279,14 +4536,19 @@ struct InspirationTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .block
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(8, 6)
                 ),
             ]
         )
@@ -4295,9 +4557,9 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 5),
+                        pl(.home, 5),
                     ]
                 )
             )
@@ -4311,22 +4573,34 @@ struct InspirationTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSpecifyTarget(
-                    target: PlayerID(coachID: .home, index: 5)
+                    target: pl(.home, 5)
                 )
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(coachID: .away, result: .shove),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.shove]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(7, 7)
+                    playerID: pl(.away, 5),
+                    from: sq(8, 6),
+                    to: sq(7, 7),
+                    direction: .southWest,
+                    targetPlayerID: pl(.home, 5)
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 5),
-                    square: sq(6, 8),
+                    playerID: pl(.home, 5),
+                    ballID: nil,
+                    from: sq(7, 7),
+                    to: sq(6, 8),
+                    direction: .southWest,
                     reason: .shoved
                 ),
             ]
@@ -4336,7 +4610,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     square: sq(7, 7)
                 )
             )
@@ -4353,13 +4627,23 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .declinedFollowUp(playerID: PlayerID(coachID: .away, index: 5)),
+                .declinedFollowUp(
+                    playerID: pl(.away, 5),
+                    in: sq(8, 6)
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    )
+                ),
+                .updatedDiscards(
+                    top: .inspiration,
+                    count: 1
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -4368,16 +4652,16 @@ struct InspirationTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 1), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 1), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .mark), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 3
                 )
@@ -4389,7 +4673,7 @@ struct InspirationTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -4404,84 +4688,85 @@ struct InspirationTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .halfling_catcher,
                             state: .prone(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .halfling_hefty,
                             state: .standing(square: sq(8, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 6),
+                            id: pl(.away, 6),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .human_passer,
                             state: .standing(square: sq(4, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 4),
+                            id: pl(.home, 4),
                             spec: .human_catcher,
                             state: .prone(square: sq(3, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 5),
+                            id: pl(.home, 5),
                             spec: .human_blitzer,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
                     ],
@@ -4493,7 +4778,7 @@ struct InspirationTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         )
                     ],
                     deck: [],
@@ -4516,7 +4801,7 @@ struct InspirationTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -4526,7 +4811,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -4538,10 +4823,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 5)
                 )
             ]
         )
@@ -4550,7 +4836,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -4605,10 +4891,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(1, 6),
+                    direction: .southEast,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -4617,20 +4906,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 2
                 )
@@ -4644,7 +4933,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -4656,10 +4945,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 5)
                 )
             ]
         )
@@ -4668,7 +4958,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -4723,10 +5013,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 5),
+                    to: sq(8, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -4735,20 +5028,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 1
                 )
@@ -4762,7 +5055,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -4774,10 +5067,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -4786,7 +5080,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -4845,13 +5139,19 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 8),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(4, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -4861,20 +5161,20 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForInspirationBonusPlayFreeAction(validDeclarations: [
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .foul), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .foul), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                 ])
             )
         )
@@ -4886,7 +5186,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .useInspirationBonusPlayFreeAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .sidestep
                     )
                 )
@@ -4897,14 +5197,19 @@ struct InspirationTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .sidestep
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(8, 6)
                 ),
             ]
         )
@@ -4913,7 +5218,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: [],
                         final: [sq(7, 5), sq(8, 5), sq(9, 5), sq(9, 6), sq(9, 7)]
@@ -4934,16 +5239,26 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(9, 7),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 6),
+                    to: sq(9, 7),
+                    direction: .southEast,
                     reason: .sidestep
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    )
+                ),
+                .updatedDiscards(
+                    top: .inspiration,
+                    count: 1
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -4952,17 +5267,17 @@ struct InspirationTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 1), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .foul), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 1), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .foul), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 3
                 )
@@ -4974,7 +5289,7 @@ struct InspirationTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -4989,84 +5304,85 @@ struct InspirationTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .halfling_catcher,
                             state: .prone(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .halfling_hefty,
                             state: .standing(square: sq(8, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 6),
+                            id: pl(.away, 6),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .human_passer,
                             state: .standing(square: sq(4, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 4),
+                            id: pl(.home, 4),
                             spec: .human_catcher,
                             state: .prone(square: sq(3, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 5),
+                            id: pl(.home, 5),
                             spec: .human_blitzer,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
                     ],
@@ -5078,7 +5394,7 @@ struct InspirationTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         )
                     ],
                     deck: [],
@@ -5101,7 +5417,7 @@ struct InspirationTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -5111,7 +5427,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -5123,10 +5439,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 5)
                 )
             ]
         )
@@ -5135,7 +5452,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -5190,10 +5507,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(1, 6),
+                    direction: .southEast,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -5202,20 +5522,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 2
                 )
@@ -5229,7 +5549,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -5241,10 +5561,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 5)
                 )
             ]
         )
@@ -5253,7 +5574,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -5308,10 +5629,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 5),
+                    to: sq(8, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -5320,20 +5644,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 1
                 )
@@ -5347,7 +5671,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -5359,10 +5683,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -5371,7 +5696,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -5430,13 +5755,19 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 8),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(4, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -5446,20 +5777,20 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForInspirationBonusPlayFreeAction(validDeclarations: [
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .foul), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .foul), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                 ])
             )
         )
@@ -5471,7 +5802,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .useInspirationBonusPlayFreeAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 4),
+                        playerID: pl(.away, 4),
                         actionID: .standUp
                     )
                 )
@@ -5482,22 +5813,37 @@ struct InspirationTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 4),
+                        playerID: pl(.away, 4),
                         actionID: .standUp
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(7, 6)
                 ),
-                .playerStoodUp(playerID: PlayerID(coachID: .away, index: 4)),
+                .playerStoodUp(
+                    playerID: pl(.away, 4),
+                    in: sq(7, 6)
+                ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    )
+                ),
+                .updatedDiscards(
+                    top: .inspiration,
+                    count: 1
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -5506,16 +5852,16 @@ struct InspirationTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 1), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 1), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .sidestep), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 3
                 )
@@ -5527,7 +5873,7 @@ struct InspirationTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -5542,84 +5888,85 @@ struct InspirationTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .halfling_catcher,
                             state: .prone(square: sq(7, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .halfling_hefty,
                             state: .standing(square: sq(8, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 6),
+                            id: pl(.away, 6),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(4, 4)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 1),
+                            id: pl(.home, 1),
                             spec: .human_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 2),
+                            id: pl(.home, 2),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 10)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 3),
+                            id: pl(.home, 3),
                             spec: .human_passer,
                             state: .standing(square: sq(4, 11)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 4),
+                            id: pl(.home, 4),
                             spec: .human_catcher,
                             state: .prone(square: sq(3, 9)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 5),
+                            id: pl(.home, 5),
                             spec: .human_blitzer,
                             state: .standing(square: sq(7, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
                     ],
@@ -5631,7 +5978,7 @@ struct InspirationTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         )
                     ],
                     deck: [],
@@ -5654,7 +6001,7 @@ struct InspirationTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare mark
@@ -5664,7 +6011,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -5676,10 +6023,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 5)
                 )
             ]
         )
@@ -5688,7 +6036,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -5743,10 +6091,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(1, 6),
+                    direction: .southEast,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -5755,20 +6106,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 2
                 )
@@ -5782,7 +6133,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
                     consumesBonusPlays: []
@@ -5794,10 +6145,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 5),
+                        playerID: pl(.away, 5),
                         actionID: .mark
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 5)
                 )
             ]
         )
@@ -5806,7 +6158,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 5),
+                    playerID: pl(.away, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -5861,10 +6213,13 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 5),
-                    square: sq(8, 6),
+                    playerID: pl(.away, 5),
+                    ballID: nil,
+                    from: sq(8, 5),
+                    to: sq(8, 6),
+                    direction: .south,
                     reason: .mark
-                ),
+                )
             ]
         )
 
@@ -5873,20 +6228,20 @@ struct InspirationTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 1
                 )
@@ -5900,7 +6255,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -5912,10 +6267,11 @@ struct InspirationTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(4, 6)
                 )
             ]
         )
@@ -5924,7 +6280,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -5983,13 +6339,19 @@ struct InspirationTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(4, 8),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(4, 7),
+                    to: sq(4, 8),
+                    direction: .south,
                     reason: .run
                 ),
             ]
@@ -5999,20 +6361,20 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .eligibleForInspirationBonusPlayFreeAction(validDeclarations: [
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .reserves), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 1), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 2), actionID: .pass), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .foul), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .block), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .sidestep), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .run), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .mark), consumesBonusPlays: []),
-                    ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 6), actionID: .hurlTeammate), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 0), actionID: .reserves), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 1), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 2), actionID: .pass), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 3), actionID: .foul), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 4), actionID: .standUp), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .block), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 5), actionID: .sidestep), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .run), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .mark), consumesBonusPlays: []),
+                    ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.away, 6), actionID: .hurlTeammate), consumesBonusPlays: []),
                 ])
             )
         )
@@ -6024,7 +6386,7 @@ struct InspirationTests {
                 coachID: .away,
                 message: .useInspirationBonusPlayFreeAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .reserves
                     )
                 )
@@ -6035,14 +6397,19 @@ struct InspirationTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 ),
             ]
         )
@@ -6051,7 +6418,7 @@ struct InspirationTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -6103,17 +6470,23 @@ struct InspirationTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(6, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 0),
+                    to: sq(6, 0)
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .inspiration
+                    )
+                ),
+                .updatedDiscards(
+                    top: .inspiration,
+                    count: 1
                 ),
                 .turnEnded(coachID: .away),
-                .finalTurnBegan
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -6122,16 +6495,16 @@ struct InspirationTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 0), actionID: .sidestep), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 1), actionID: .reserves), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 2), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .run), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 3), actionID: .mark), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 4), actionID: .standUp), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .block), consumesBonusPlays: []),
-                        ValidDeclaration(declaration: ActionDeclaration(playerID: PlayerID(coachID: .home, index: 5), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 0), actionID: .sidestep), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 1), actionID: .reserves), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 2), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .run), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 3), actionID: .mark), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 4), actionID: .standUp), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .block), consumesBonusPlays: []),
+                        ValidDeclaration(declaration: ActionDeclaration(playerID: pl(.home, 5), actionID: .sidestep), consumesBonusPlays: []),
                     ],
                     playerActionsLeft: 3
                 )

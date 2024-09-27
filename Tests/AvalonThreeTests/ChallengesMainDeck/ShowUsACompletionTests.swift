@@ -17,7 +17,7 @@ struct ShowUsACompletionTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -32,18 +32,19 @@ struct ShowUsACompletionTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_passer,
                             state: .standing(square: sq(8, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -53,7 +54,7 @@ struct ShowUsACompletionTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -84,7 +85,7 @@ struct ShowUsACompletionTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -94,7 +95,7 @@ struct ShowUsACompletionTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -106,10 +107,11 @@ struct ShowUsACompletionTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 6)
                 )
             ]
         )
@@ -118,10 +120,10 @@ struct ShowUsACompletionTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(2, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -140,22 +142,46 @@ struct ShowUsACompletionTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 3),
-                .changedPassResult(die: .d6, modified: 2, modifications: [.longDistance]),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 3
                 ),
-                .playerFailedCatch(playerID: PlayerID(coachID: .away, index: 1)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .west),
-                .ballBounced(ballID: ballID, to: sq(1, 6)),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 3,
+                    modified: 2,
+                    modifications: [.longDistance]
+                ),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(8, 6),
+                    to: sq(2, 6),
+                    angle: 270,
+                    ballID: 123
+                ),
+                .playerFailedCatch(
+                    playerID: pl(.away, 1),
+                    in: sq(2, 6),
+                    ballID: 123
+                ),
+                .ballCameLoose(ballID: 123, in: sq(2, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .west
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west
+                ),
             ]
         )
 
@@ -166,14 +192,14 @@ struct ShowUsACompletionTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -189,7 +215,7 @@ struct ShowUsACompletionTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -204,18 +230,19 @@ struct ShowUsACompletionTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_passer,
                             state: .standing(square: sq(8, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(7, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -225,7 +252,7 @@ struct ShowUsACompletionTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -253,7 +280,7 @@ struct ShowUsACompletionTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -263,7 +290,7 @@ struct ShowUsACompletionTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -275,10 +302,11 @@ struct ShowUsACompletionTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 6)
                 )
             ]
         )
@@ -287,12 +315,12 @@ struct ShowUsACompletionTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(7, 6),
-distance: .handoff,
+                            distance: .handoff,
                             obstructingSquares: [],
                             markedTargetSquares: []
                         )
@@ -306,17 +334,24 @@ distance: .handoff,
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
                 .playerHandedOffBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(7, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(8, 6),
+                    to: sq(7, 6),
+                    direction: .west,
+                    ballID: 123
                 ),
-                .playerCaughtHandoff(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtHandoff(
+                    playerID: pl(.away, 1),
+                    in: sq(7, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -327,21 +362,21 @@ distance: .handoff,
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -360,7 +395,7 @@ distance: .handoff,
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -375,18 +410,19 @@ distance: .handoff,
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_passer,
                             state: .standing(square: sq(8, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -396,7 +432,7 @@ distance: .handoff,
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -427,7 +463,7 @@ distance: .handoff,
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -437,7 +473,7 @@ distance: .handoff,
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -449,10 +485,11 @@ distance: .handoff,
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 6)
                 )
             ]
         )
@@ -461,10 +498,10 @@ distance: .handoff,
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(2, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -482,19 +519,35 @@ distance: .handoff,
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 4),
-                .changedPassResult(die: .d6, modified: 3, modifications: [.longDistance]),
-                .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 4
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 4,
+                    modified: 3,
+                    modifications: [.longDistance]
+                ),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(8, 6),
+                    to: sq(2, 6),
+                    angle: 270,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(2, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -518,8 +571,31 @@ distance: .handoff,
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .second),
-                .scoreUpdated(coachID: .away, increment: 1, total: 1),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .second,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .showUsACompletion,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge:
+                                    .showUsACompletion,
+                                bonusPlay:
+                                    .absoluteCarnage
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 1,
+                    total: 1
+                ),
             ]
         )
 
@@ -530,21 +606,21 @@ distance: .handoff,
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []

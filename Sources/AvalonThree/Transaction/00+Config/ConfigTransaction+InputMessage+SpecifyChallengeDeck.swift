@@ -29,7 +29,12 @@ extension ConfigTransaction {
             throw GameError("Invalid challenge deck choice")
         }
 
-        events.append(.specifiedChallengeDeck(challengeDeckID: challengeDeckID))
+        events.append(
+            .specifiedChallengeDeck(
+                coachID: coinFlipWinnerCoachID,
+                challengeDeckID: challengeDeckID
+            )
+        )
 
         config.challengeDeckID = challengeDeckID
 

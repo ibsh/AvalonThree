@@ -30,7 +30,16 @@ extension ConfigTransaction {
         }
 
         events.append(
-            .specifiedRookieBonusRecipient(rookieBonusRecipientID: rookieBonusRecipientID)
+            .specifiedRookieBonusRecipient(
+                coachID: coinFlipWinnerCoachID,
+                recipientCoachID: {
+                    switch (rookieBonusRecipientID) {
+                    case (.noOne): nil
+                    case (.coinFlipWinner): coinFlipWinnerCoachID
+                    case (.coinFlipLoser): coinFlipWinnerCoachID.inverse
+                    }
+                }()
+            )
         )
 
         config.rookieBonusRecipientID = rookieBonusRecipientID

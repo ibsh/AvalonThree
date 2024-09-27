@@ -28,24 +28,32 @@ extension InGameTransaction {
             throw GameError("Invalid cards")
         }
 
-        let newHand = hand.filter { !cards.contains($0) }
+        var newHand = hand
 
-        guard newHand.count == TableConstants.maxHandCount else {
-            throw GameError("Invalid card count")
+
+        for card in cards {
+            _ = newHand.removeFirst(where: { $0 == card })
+            events.append(
+                .discardedCardFromHand(
+                    coachID: turnContext.coachID,
+                    card: card,
+                    hand: newHand.map { .open(card: $0) }
+                )
+            )
+            table.discards.append(card)
+            events.append(
+                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
+            )
         }
 
         table.setHand(
             coachID: turnContext.coachID,
             hand: newHand
         )
-        table.discards.append(contentsOf: cards)
 
-        events.append(
-            .discardedCardsFromHand(
-                coachID: turnContext.coachID,
-                cards: cards
-            )
-        )
+        guard newHand.count == TableConstants.maxHandCount else {
+            throw GameError("Invalid card count")
+        }
 
         return try endTurn()
     }

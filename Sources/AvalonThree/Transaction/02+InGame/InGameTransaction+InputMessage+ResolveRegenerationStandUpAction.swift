@@ -45,8 +45,12 @@ extension InGameTransaction {
 
         } else {
 
+            guard let playerSquare = table.getPlayer(id: playerID)?.square else {
+                throw GameError("Player is in reserves")
+            }
+
             events.append(
-                .declinedRegenerationSkillStandUpAction(playerID: playerID)
+                .declinedRegenerationSkillStandUpAction(playerID: playerID, in: playerSquare)
             )
             return try endAction()
         }

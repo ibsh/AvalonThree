@@ -11,6 +11,7 @@ struct Table: Sendable {
     let config: FinalizedConfig
 
     var players: Set<Player>
+    var playerNumbers: [PlayerID: Int]
 
     var coinFlipLoserHand: [ChallengeCard]
     var coinFlipWinnerHand: [ChallengeCard]

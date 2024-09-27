@@ -56,6 +56,12 @@ extension InGameTransaction {
             throw GameError("No teammate")
         }
 
+        guard let angle = playerSquare.angle(to: target.targetSquare) else {
+            throw GameError("No hurl teammate angle")
+        }
+
+        let teammatesBallID = table.playerHasABall(teammate)?.id
+
         // Fumble?
 
         if
@@ -63,7 +69,14 @@ extension InGameTransaction {
                 && unmodifiedRoll < TableConstants.rollOfSix
         {
 
-            events.append(.playerFumbledTeammate(playerID: player.id, teammateID: teammateID))
+            events.append(
+                .playerFumbledTeammate(
+                    playerID: player.id,
+                    in: playerSquare,
+                    teammateID: teammateID,
+                    ballID: teammatesBallID
+                )
+            )
 
             // finish the action
             history.append(.actionFinished)
@@ -97,10 +110,19 @@ extension InGameTransaction {
                 .playerHurledTeammate(
                     playerID: player.id,
                     teammateID: teammate.id,
-                    square: target.targetSquare
+                    ballID: teammatesBallID,
+                    from: playerSquare,
+                    to: target.targetSquare,
+                    angle: angle
                 )
             )
-            events.append(.hurledTeammateLanded(playerID: teammateID))
+            events.append(
+                .hurledTeammateLanded(
+                    playerID: teammateID,
+                    ballID: teammatesBallID,
+                    in: target.targetSquare
+                )
+            )
 
             while true {
                 if let looseBall = table.looseBalls(in: target.targetSquare).first {
@@ -124,10 +146,19 @@ extension InGameTransaction {
             .playerHurledTeammate(
                 playerID: player.id,
                 teammateID: teammate.id,
-                square: target.targetSquare
+                ballID: teammatesBallID,
+                from: playerSquare,
+                to: target.targetSquare,
+                angle: angle
             )
         )
-        events.append(.hurledTeammateCrashed(playerID: teammateID))
+        events.append(
+            .hurledTeammateCrashed(
+                playerID: teammateID,
+                ballID: teammatesBallID,
+                in: target.targetSquare
+            )
+        )
 
         while true {
             if let looseBall = table.looseBalls(in: target.targetSquare).first {

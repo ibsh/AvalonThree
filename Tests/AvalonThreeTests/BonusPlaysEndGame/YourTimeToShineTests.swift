@@ -14,7 +14,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,42 +29,43 @@ struct YourTimeToShineTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .noble_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .noble_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .noble_passer,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .noble_guard,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .noble_guard,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .noble_blitzer,
                             state: .standing(square: sq(8, 11)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -79,7 +80,10 @@ struct YourTimeToShineTests {
                     ],
                     deck: [],
                     objectives: Objectives(
-                        first: ChallengeCard(challenge: .getTheBall, bonusPlay: .yourTimeToShine)
+                        first: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .yourTimeToShine
+                        )
                     ),
                     discards: []
                 ),
@@ -99,7 +103,7 @@ struct YourTimeToShineTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare reserves
@@ -109,7 +113,7 @@ struct YourTimeToShineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .reserves
                     ),
                     consumesBonusPlays: []
@@ -121,10 +125,11 @@ struct YourTimeToShineTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 2),
+                        playerID: pl(.away, 2),
                         actionID: .reserves
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: nil
                 )
             ]
         )
@@ -133,7 +138,7 @@ struct YourTimeToShineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 2),
+                    playerID: pl(.away, 2),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -185,10 +190,9 @@ struct YourTimeToShineTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 2),
-                    square: sq(6, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 2),
+                    to: sq(6, 0)
                 )
             ]
         )
@@ -200,42 +204,42 @@ struct YourTimeToShineTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 0),
+                                playerID: pl(CoachID.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 1),
+                                playerID: pl(CoachID.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 2),
+                                playerID: pl(CoachID.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 3),
+                                playerID: pl(CoachID.away, 3),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 4),
+                                playerID: pl(CoachID.away, 4),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 5),
+                                playerID: pl(CoachID.away, 5),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -253,7 +257,7 @@ struct YourTimeToShineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -265,10 +269,11 @@ struct YourTimeToShineTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 7)
                 )
             ]
         )
@@ -277,7 +282,7 @@ struct YourTimeToShineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -335,12 +340,16 @@ struct YourTimeToShineTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 7),
+                    to: sq(5, 6),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
+                    in: sq(5, 6),
                     ballID: ballID
                 ),
             ]
@@ -364,11 +373,37 @@ struct YourTimeToShineTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1, total: 1),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .yourTimeToShine
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .getTheBall,
+                                bonusPlay:
+                                    .yourTimeToShine
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 1,
+                    total: 1
+                ),
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .yourTimeToShine)
+                    card: ChallengeCard(
+                        challenge: .getTheBall,
+                        bonusPlay: .yourTimeToShine
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -378,9 +413,9 @@ struct YourTimeToShineTests {
                 coachID: .away,
                 payload: .eligibleForYourTimeToShineBonusPlayReservesAction(
                     validPlayers: [
-                        PlayerID(coachID: .away, index: 1),
-                        PlayerID(coachID: .away, index: 3),
-                        PlayerID(coachID: .away, index: 4),
+                        pl(.away, 1),
+                        pl(.away, 3),
+                        pl(.away, 4),
                     ]
                 )
             )
@@ -392,7 +427,7 @@ struct YourTimeToShineTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .useYourTimeToShineBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .away, index: 3)
+                    playerID: pl(.away, 3)
                 )
             )
         )
@@ -401,10 +436,11 @@ struct YourTimeToShineTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -413,7 +449,7 @@ struct YourTimeToShineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -465,10 +501,9 @@ struct YourTimeToShineTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(2, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 3),
+                    to: sq(2, 0)
                 )
             ]
         )
@@ -478,8 +513,8 @@ struct YourTimeToShineTests {
                 coachID: .away,
                 payload: .eligibleForYourTimeToShineBonusPlayReservesAction(
                     validPlayers: [
-                        PlayerID(coachID: .away, index: 1),
-                        PlayerID(coachID: .away, index: 4),
+                        pl(.away, 1),
+                        pl(.away, 4),
                     ]
                 )
             )
@@ -491,7 +526,7 @@ struct YourTimeToShineTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .useYourTimeToShineBonusPlayReservesAction(
-                    playerID: PlayerID(coachID: .away, index: 4)
+                    playerID: pl(.away, 4)
                 )
             )
         )
@@ -500,10 +535,11 @@ struct YourTimeToShineTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 4),
+                        playerID: pl(.away, 4),
                         actionID: .reserves
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: nil
                 )
             ]
         )
@@ -512,7 +548,7 @@ struct YourTimeToShineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 4),
+                    playerID: pl(.away, 4),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -564,10 +600,9 @@ struct YourTimeToShineTests {
 
         #expect(
             latestEvents == [
-                .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 4),
-                    square: sq(8, 0),
-                    reason: .reserves
+                .playerMovedOutOfReserves(
+                    playerID: pl(.away, 4),
+                    to: sq(8, 0)
                 )
             ]
         )
@@ -577,9 +612,9 @@ struct YourTimeToShineTests {
                 coachID: .away,
                 payload: .eligibleForYourTimeToShineBonusPlayRunAction(
                     validPlayers: [
-                        PlayerID(coachID: .away, index: 2),
-                        PlayerID(coachID: .away, index: 3),
-                        PlayerID(coachID: .away, index: 4),
+                        pl(.away, 2),
+                        pl(.away, 3),
+                        pl(.away, 4),
                     ]
                 )
             )
@@ -591,7 +626,7 @@ struct YourTimeToShineTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .useYourTimeToShineBonusPlayRunAction(
-                    playerID: PlayerID(coachID: .away, index: 3)
+                    playerID: pl(.away, 3)
                 )
             )
         )
@@ -600,10 +635,11 @@ struct YourTimeToShineTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 3),
+                        playerID: pl(.away, 3),
                         actionID: .run
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(2, 0)
                 )
             ]
         )
@@ -612,7 +648,7 @@ struct YourTimeToShineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 3),
+                    playerID: pl(.away, 3),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -675,38 +711,63 @@ struct YourTimeToShineTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(1, 1),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(2, 0),
+                    to: sq(1, 1),
+                    direction: .southWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(0, 2),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(1, 1),
+                    to: sq(0, 2),
+                    direction: .southWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(0, 3),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(0, 2),
+                    to: sq(0, 3),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(0, 4),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(0, 3),
+                    to: sq(0, 4),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(1, 5),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(0, 4),
+                    to: sq(1, 5),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 3),
-                    square: sq(2, 6),
+                    playerID: pl(.away, 3),
+                    ballID: nil,
+                    from: sq(1, 5),
+                    to: sq(2, 6),
+                    direction: .southEast,
                     reason: .run
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .yourTimeToShine)
+                    card: ChallengeCard(
+                        challenge: .getTheBall,
+                        bonusPlay: .yourTimeToShine
+                    )
+                ),
+                .updatedDiscards(
+                    top: .yourTimeToShine,
+                    count: 1
                 ),
             ]
         )
@@ -718,42 +779,42 @@ struct YourTimeToShineTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 0),
+                                playerID: pl(CoachID.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 1),
+                                playerID: pl(CoachID.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 2),
+                                playerID: pl(CoachID.away, 2),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 4),
+                                playerID: pl(CoachID.away, 4),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 5),
+                                playerID: pl(CoachID.away, 5),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 5),
+                                playerID: pl(CoachID.away, 5),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -769,7 +830,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -784,42 +845,43 @@ struct YourTimeToShineTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .noble_lineman,
                             state: .standing(square: sq(5, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .noble_lineman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .noble_passer,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 3),
+                            id: pl(.away, 3),
                             spec: .noble_guard,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 4),
+                            id: pl(.away, 4),
                             spec: .noble_guard,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 5),
+                            id: pl(.away, 5),
                             spec: .noble_blitzer,
                             state: .standing(square: sq(8, 11)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -834,7 +896,10 @@ struct YourTimeToShineTests {
                     ],
                     deck: [],
                     objectives: Objectives(
-                        first: ChallengeCard(challenge: .getTheBall, bonusPlay: .yourTimeToShine)
+                        first: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .yourTimeToShine
+                        )
                     ),
                     discards: []
                 ),
@@ -854,7 +919,7 @@ struct YourTimeToShineTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -864,7 +929,7 @@ struct YourTimeToShineTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -876,10 +941,11 @@ struct YourTimeToShineTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(5, 7)
                 )
             ]
         )
@@ -888,7 +954,7 @@ struct YourTimeToShineTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -946,12 +1012,16 @@ struct YourTimeToShineTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(5, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(5, 7),
+                    to: sq(5, 6),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
+                    in: sq(5, 6),
                     ballID: ballID
                 ),
             ]
@@ -975,11 +1045,37 @@ struct YourTimeToShineTests {
 
         #expect(
             latestEvents == [
-                .claimedObjective(coachID: .away, objectiveID: .first),
-                .scoreUpdated(coachID: .away, increment: 1, total: 1),
+                .claimedObjective(
+                    coachID: .away,
+                    objectiveID: .first,
+                    objective: .open(
+                        card: ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .yourTimeToShine
+                        )
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .getTheBall,
+                                bonusPlay:
+                                    .yourTimeToShine
+                            )
+                        )
+                    ]
+                ),
+                .scoreUpdated(
+                    coachID: .away,
+                    increment: 1,
+                    total: 1
+                ),
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .yourTimeToShine)
+                    card: ChallengeCard(
+                        challenge: .getTheBall,
+                        bonusPlay: .yourTimeToShine
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -989,10 +1085,10 @@ struct YourTimeToShineTests {
                 coachID: .away,
                 payload: .eligibleForYourTimeToShineBonusPlayReservesAction(
                     validPlayers: [
-                        PlayerID(coachID: .away, index: 1),
-                        PlayerID(coachID: .away, index: 2),
-                        PlayerID(coachID: .away, index: 3),
-                        PlayerID(coachID: .away, index: 4),
+                        pl(.away, 1),
+                        pl(.away, 2),
+                        pl(.away, 3),
+                        pl(.away, 4),
                     ]
                 )
             )
@@ -1016,10 +1112,10 @@ struct YourTimeToShineTests {
                 coachID: .away,
                 payload: .eligibleForYourTimeToShineBonusPlayReservesAction(
                     validPlayers: [
-                        PlayerID(coachID: .away, index: 1),
-                        PlayerID(coachID: .away, index: 2),
-                        PlayerID(coachID: .away, index: 3),
-                        PlayerID(coachID: .away, index: 4),
+                        pl(.away, 1),
+                        pl(.away, 2),
+                        pl(.away, 3),
+                        pl(.away, 4),
                     ]
                 )
             )
@@ -1038,7 +1134,14 @@ struct YourTimeToShineTests {
             latestEvents == [
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .getTheBall, bonusPlay: .yourTimeToShine)
+                    card: ChallengeCard(
+                        challenge: .getTheBall,
+                        bonusPlay: .yourTimeToShine
+                    )
+                ),
+                .updatedDiscards(
+                    top: .yourTimeToShine,
+                    count: 1
                 ),
             ]
         )
@@ -1050,42 +1153,42 @@ struct YourTimeToShineTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 0),
+                                playerID: pl(CoachID.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 1),
+                                playerID: pl(CoachID.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 2),
+                                playerID: pl(CoachID.away, 2),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 3),
+                                playerID: pl(CoachID.away, 3),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 4),
+                                playerID: pl(CoachID.away, 4),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: CoachID.away, index: 5),
+                                playerID: pl(CoachID.away, 5),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []

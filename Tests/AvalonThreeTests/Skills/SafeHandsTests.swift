@@ -17,7 +17,7 @@ struct SafeHandsTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -32,18 +32,19 @@ struct SafeHandsTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .lizardmen_skinkRunner,
                             state: .standing(square: sq(3, 4)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -53,7 +54,7 @@ struct SafeHandsTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -79,7 +80,7 @@ struct SafeHandsTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -89,7 +90,7 @@ struct SafeHandsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -101,10 +102,11 @@ struct SafeHandsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 5)
                 )
             ]
         )
@@ -113,9 +115,9 @@ struct SafeHandsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -129,20 +131,27 @@ struct SafeHandsTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch]),
+                .rolledForBlock(coachID: .away, results: [.kerrunch]),
                 .selectedBlockDieResult(coachID: .away, result: .kerrunch),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(3, 4)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 5),
+                    to: sq(3, 4),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .ballCameLoose(ballID: ballID),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(3, 4),
+                    reason: .blocked
+                ),
+                .ballCameLoose(ballID: ballID, in: sq(3, 4)),
             ]
         )
 
@@ -150,7 +159,7 @@ struct SafeHandsTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .blockActionSelectSafeHandsLooseBallDirection(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     directions: [
                         .north,
                         .northEast,
@@ -174,9 +183,22 @@ struct SafeHandsTests {
 
         #expect(
             latestEvents == [
-                .selectedLooseBallDirection(coachID: .home, direction: .east),
-                .ballBounced(ballID: ballID, to: sq(4, 4)),
-                .rolledForArmour(die: .d6, unmodified: 6),
+                .selectedLooseBallDirection(
+                    playerID: pl(.home, 0),
+                    in: sq(3, 4),
+                    direction: .east
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(3, 4),
+                    to: sq(4, 4),
+                    direction: .east
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
             ]
         )
 
@@ -187,14 +209,14 @@ struct SafeHandsTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []

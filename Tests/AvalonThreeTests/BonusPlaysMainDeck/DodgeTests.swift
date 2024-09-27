@@ -14,7 +14,7 @@ struct DodgeTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,18 +29,19 @@ struct DodgeTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
                     ],
@@ -52,7 +53,7 @@ struct DodgeTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -75,7 +76,7 @@ struct DodgeTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -85,7 +86,7 @@ struct DodgeTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -97,11 +98,12 @@ struct DodgeTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(3, 5)
+                )
             ]
         )
 
@@ -109,7 +111,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForDodgeBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -131,7 +133,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -195,7 +197,7 @@ struct DodgeTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -210,18 +212,19 @@ struct DodgeTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
                     ],
@@ -256,7 +259,7 @@ struct DodgeTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -266,7 +269,7 @@ struct DodgeTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -278,11 +281,12 @@ struct DodgeTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(3, 5)
+                )
             ]
         )
 
@@ -290,7 +294,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForDodgeBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -308,7 +312,11 @@ struct DodgeTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .dodge
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -317,7 +325,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -377,38 +385,58 @@ struct DodgeTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 5),
+                    to: sq(2, 5),
+                    direction: .west,
                     reason: .run
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(2, 5),
+                    ballID: 123
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(2, 5),
+                    to: sq(1, 6),
+                    direction: .southWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(0, 5),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(1, 6),
+                    to: sq(0, 5),
+                    direction: .northWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(0, 4),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(0, 5),
+                    to: sq(0, 4),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(0, 3),
+                    playerID: pl(.away, 0),
+                    ballID: 123,
+                    from: sq(0, 4),
+                    to: sq(0, 3),
+                    direction: .north,
                     reason: .run
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .dodge
+                    )
                 ),
+                .updatedDiscards(top: .dodge, count: 1),
             ]
         )
 
@@ -419,7 +447,7 @@ struct DodgeTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
@@ -435,7 +463,7 @@ struct DodgeTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -450,18 +478,19 @@ struct DodgeTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
                     ],
@@ -473,7 +502,7 @@ struct DodgeTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -496,7 +525,7 @@ struct DodgeTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -506,7 +535,7 @@ struct DodgeTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -518,11 +547,12 @@ struct DodgeTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(3, 5)
+                )
             ]
         )
 
@@ -530,7 +560,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForDodgeBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -548,7 +578,11 @@ struct DodgeTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .dodge
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -557,7 +591,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -620,7 +654,7 @@ struct DodgeTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -635,18 +669,19 @@ struct DodgeTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
                     ],
@@ -658,7 +693,7 @@ struct DodgeTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -681,7 +716,7 @@ struct DodgeTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -691,7 +726,7 @@ struct DodgeTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -703,11 +738,12 @@ struct DodgeTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(3, 5)
+                )
             ]
         )
 
@@ -715,7 +751,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForDodgeBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -733,7 +769,11 @@ struct DodgeTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .dodge
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -742,7 +782,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -805,7 +845,7 @@ struct DodgeTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -820,18 +860,19 @@ struct DodgeTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge),
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay),
@@ -844,7 +885,7 @@ struct DodgeTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -867,7 +908,7 @@ struct DodgeTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -877,7 +918,7 @@ struct DodgeTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -889,11 +930,12 @@ struct DodgeTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(3, 5)
+                )
             ]
         )
 
@@ -901,7 +943,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForBlockingPlayBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -923,7 +965,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForDodgeBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -933,7 +975,7 @@ struct DodgeTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -948,18 +990,19 @@ struct DodgeTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge),
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay),
@@ -972,7 +1015,7 @@ struct DodgeTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         )
                     ],
                     deck: [],
@@ -995,7 +1038,7 @@ struct DodgeTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare run
@@ -1005,7 +1048,7 @@ struct DodgeTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
                     consumesBonusPlays: []
@@ -1017,11 +1060,12 @@ struct DodgeTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .run
                     ),
-                    isFree: false
-                ),
+                    isFree: false,
+                    playerSquare: sq(3, 5)
+                )
             ]
         )
 
@@ -1029,7 +1073,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForBlockingPlayBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -1047,8 +1091,19 @@ struct DodgeTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay)
-                ),
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .blockingPlay
+                    ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .breakSomeBones,
+                                bonusPlay: .dodge
+                            )
+                        )
+                    ]
+                )
             ]
         )
 
@@ -1056,7 +1111,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForDodgeBonusPlay(
-                    playerID: PlayerID(coachID: .away, index: 0)
+                    playerID: pl(.away, 0)
                 )
             )
         )
@@ -1074,7 +1129,11 @@ struct DodgeTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .dodge
+                    ),
+                    hand: []
                 ),
             ]
         )
@@ -1083,7 +1142,7 @@ struct DodgeTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1143,34 +1202,53 @@ struct DodgeTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(3, 5),
+                    to: sq(2, 5),
+                    direction: .west,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 5),
+                    to: sq(1, 6),
+                    direction: .southWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(0, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(1, 6),
+                    to: sq(0, 5),
+                    direction: .northWest,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(0, 4),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(0, 5),
+                    to: sq(0, 4),
+                    direction: .north,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(0, 5),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(0, 4),
+                    to: sq(0, 5),
+                    direction: .south,
                     reason: .run
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .dodge)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .dodge
+                    )
                 ),
+                .updatedDiscards(top: .dodge, count: 1),
             ]
         )
 
@@ -1181,7 +1259,7 @@ struct DodgeTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []

@@ -35,7 +35,16 @@ extension InGameTransaction {
 
         table.objectives.remove(objectiveID)
         table.discards.append(objective)
-        events.append(.discardedObjective(coachID: turnContext.coachID, objectiveID: objectiveID))
+        events.append(
+            .discardedObjective(
+                coachID: turnContext.coachID,
+                objectiveID: objectiveID,
+                objective: objective
+            )
+        )
+        events.append(
+            .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
+        )
 
         return try beginTurn()
     }

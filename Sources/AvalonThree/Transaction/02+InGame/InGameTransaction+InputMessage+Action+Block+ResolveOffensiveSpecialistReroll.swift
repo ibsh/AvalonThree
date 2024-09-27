@@ -14,8 +14,15 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
+        guard let playerSquare = table.getPlayer(id: actionContext.playerID)?.square else {
+            throw GameError("Player is in reserves")
+        }
+
         events.append(
-            .usedOffensiveSpecialistSkillReroll(playerID: actionContext.playerID)
+            .usedOffensiveSpecialistSkillReroll(
+                playerID: actionContext.playerID,
+                in: playerSquare
+            )
         )
 
         return try blockActionRollDice()
@@ -31,8 +38,15 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
+        guard let playerSquare = table.getPlayer(id: actionContext.playerID)?.square else {
+            throw GameError("Player is in reserves")
+        }
+
         events.append(
-            .declinedOffensiveSpecialistSkillReroll(playerID: actionContext.playerID)
+            .declinedOffensiveSpecialistSkillReroll(
+                playerID: actionContext.playerID,
+                in: playerSquare
+            )
         )
 
         // update the action

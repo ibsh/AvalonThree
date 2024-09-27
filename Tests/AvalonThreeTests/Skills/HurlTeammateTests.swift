@@ -14,7 +14,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,18 +29,19 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -50,7 +51,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -73,7 +74,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -84,7 +85,7 @@ struct HurlTeammateTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .hurlTeammate
                         ),
                         consumesBonusPlays: []
@@ -98,7 +99,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -113,18 +114,19 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -134,7 +136,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -157,7 +159,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -168,7 +170,7 @@ struct HurlTeammateTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .hurlTeammate
                         ),
                         consumesBonusPlays: []
@@ -182,7 +184,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -197,18 +199,19 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .prone(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -218,7 +221,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -241,7 +244,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -252,7 +255,7 @@ struct HurlTeammateTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .hurlTeammate
                         ),
                         consumesBonusPlays: []
@@ -266,7 +269,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -281,25 +284,26 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
 
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -309,7 +313,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -332,7 +336,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -343,7 +347,7 @@ struct HurlTeammateTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .hurlTeammate
                         ),
                         consumesBonusPlays: []
@@ -357,7 +361,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -372,18 +376,19 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -393,7 +398,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -416,7 +421,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -427,7 +432,7 @@ struct HurlTeammateTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .hurlTeammate
                         ),
                         consumesBonusPlays: []
@@ -441,7 +446,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -456,18 +461,19 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -477,7 +483,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -500,7 +506,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -511,7 +517,7 @@ struct HurlTeammateTests {
                     coachID: .away,
                     message: .declarePlayerAction(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 0),
+                            playerID: pl(.away, 0),
                             actionID: .hurlTeammate
                         ),
                         consumesBonusPlays: []
@@ -525,7 +531,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -540,24 +546,25 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .inReserves,
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -567,7 +574,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 2))
+                            state: .held(playerID: pl(.away, 2))
                         ),
                     ],
                     deck: [],
@@ -590,7 +597,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -600,7 +607,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -612,10 +619,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -624,9 +632,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 2),
+                        pl(.away, 2),
                     ]
                 )
             )
@@ -639,7 +647,7 @@ struct HurlTeammateTests {
                 InputMessageWrapper(
                     coachID: .away,
                     message: .hurlTeammateActionSpecifyTeammate(
-                        teammate: PlayerID(coachID: .away, index: 1)
+                        teammate: pl(.away, 1)
                     )
                 )
             )
@@ -650,7 +658,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -665,24 +673,25 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 2),
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -692,7 +701,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -715,7 +724,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -725,7 +734,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -737,10 +746,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -749,9 +759,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 2),
+                        pl(.away, 2),
                     ]
                 )
             )
@@ -764,7 +774,7 @@ struct HurlTeammateTests {
                 InputMessageWrapper(
                     coachID: .away,
                     message: .hurlTeammateActionSpecifyTeammate(
-                        teammate: PlayerID(coachID: .away, index: 1)
+                        teammate: pl(.away, 1)
                     )
                 )
             )
@@ -775,7 +785,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -790,18 +800,19 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -811,7 +822,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -834,7 +845,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -844,7 +855,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -856,10 +867,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -868,9 +880,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -882,7 +894,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -895,7 +907,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 3), sq(2, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
@@ -1059,7 +1071,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1074,24 +1086,25 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -1101,7 +1114,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -1124,7 +1137,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -1134,7 +1147,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -1146,10 +1159,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1158,9 +1172,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -1172,7 +1186,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -1185,7 +1199,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1348,7 +1362,7 @@ struct HurlTeammateTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1363,24 +1377,25 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -1390,7 +1405,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -1413,7 +1428,7 @@ struct HurlTeammateTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -1423,7 +1438,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -1435,10 +1450,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1447,9 +1463,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -1461,7 +1477,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -1474,7 +1490,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1639,7 +1655,7 @@ struct HurlTeammateTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1654,24 +1670,25 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -1681,7 +1698,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -1706,7 +1723,7 @@ struct HurlTeammateTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -1716,7 +1733,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -1728,10 +1745,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1740,9 +1758,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -1754,7 +1772,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -1767,7 +1785,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1927,13 +1945,24 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 5),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(2, 6)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1))
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    angle: 270
+                ),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(2, 6)
+                ),
             ]
         )
 
@@ -1944,21 +1973,21 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1976,7 +2005,7 @@ struct HurlTeammateTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1991,24 +2020,25 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -2018,7 +2048,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -2043,7 +2073,7 @@ struct HurlTeammateTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -2053,7 +2083,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -2065,10 +2095,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -2077,9 +2108,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -2091,7 +2122,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -2104,7 +2135,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2262,13 +2293,24 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 5),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(7, 6)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1))
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(7, 6),
+                    angle: 90
+                ),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(7, 6)
+                ),
             ]
         )
 
@@ -2279,28 +2321,28 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -2318,7 +2360,7 @@ struct HurlTeammateTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2335,7 +2377,7 @@ struct HurlTeammateTests {
                         // We need a fake treeman who's better at throwing, so we can test
                         // modified rolls
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: PlayerSpec(
                                 move: .fixed(2),
                                 block: 2,
@@ -2347,24 +2389,25 @@ struct HurlTeammateTests {
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -2374,7 +2417,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -2399,7 +2442,7 @@ struct HurlTeammateTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -2409,7 +2452,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -2421,10 +2464,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -2433,9 +2477,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -2447,7 +2491,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -2460,7 +2504,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2620,14 +2664,30 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 5),
-                .changedHurlTeammateResult(die: .d6, modified: 4, modifications: [.longDistance]),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 11)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1))
+                .changedHurlTeammateResult(
+                    die: .d6,
+                    unmodified: 5,
+                    modified: 4,
+                    modifications: [.longDistance]
+                ),
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(3, 11),
+                    angle: 180
+                ),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(3, 11)
+                ),
             ]
         )
 
@@ -2638,21 +2698,21 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -2670,7 +2730,7 @@ struct HurlTeammateTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2687,7 +2747,7 @@ struct HurlTeammateTests {
                         // We need a fake treeman who's better at throwing, so we can test
                         // modified rolls
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: PlayerSpec(
                                 move: .fixed(2),
                                 block: 2,
@@ -2699,18 +2759,19 @@ struct HurlTeammateTests {
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -2720,7 +2781,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -2745,7 +2806,7 @@ struct HurlTeammateTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -2755,7 +2816,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -2767,10 +2828,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -2779,9 +2841,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -2793,7 +2855,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -2806,7 +2868,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2964,14 +3026,30 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 5),
-                .changedHurlTeammateResult(die: .d6, modified: 4, modifications: [.obstructed]),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(0, 4)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1))
+                .changedHurlTeammateResult(
+                    die: .d6,
+                    unmodified: 5,
+                    modified: 4,
+                    modifications: [.obstructed]
+                ),
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(0, 4),
+                    angle: 304
+                ),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(0, 4)
+                ),
             ]
         )
 
@@ -2982,21 +3060,21 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -3014,7 +3092,7 @@ struct HurlTeammateTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3031,7 +3109,7 @@ struct HurlTeammateTests {
                         // We need a fake treeman who's better at throwing, so we can test
                         // modified rolls
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: PlayerSpec(
                                 move: .fixed(2),
                                 block: 2,
@@ -3043,18 +3121,19 @@ struct HurlTeammateTests {
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(4, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -3064,7 +3143,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -3089,7 +3168,7 @@ struct HurlTeammateTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -3099,7 +3178,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -3111,10 +3190,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -3123,9 +3203,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -3137,7 +3217,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -3150,7 +3230,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(2, 4), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 3), sq(1, 3), sq(2, 4), sq(1, 4)]),
@@ -3310,14 +3390,30 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 5),
-                .changedHurlTeammateResult(die: .d6, modified: 4, modifications: [.obstructed]),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 10)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1))
+                .changedHurlTeammateResult(
+                    die: .d6,
+                    unmodified: 5,
+                    modified: 4,
+                    modifications: [.obstructed]
+                ),
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(4, 10),
+                    angle: 166
+                ),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(4, 10)
+                ),
             ]
         )
 
@@ -3328,35 +3424,35 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -3374,7 +3470,7 @@ struct HurlTeammateTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3389,24 +3485,25 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 11)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -3416,7 +3513,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -3441,7 +3538,7 @@ struct HurlTeammateTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -3451,7 +3548,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -3463,10 +3560,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -3475,9 +3573,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -3489,7 +3587,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -3502,7 +3600,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(2, 4), sq(1, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 4), sq(1, 3), sq(2, 4), sq(2, 3)]),
@@ -3662,13 +3760,24 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 5),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 10)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1))
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(4, 10),
+                    angle: 166
+                ),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(4, 10)
+                ),
             ]
         )
 
@@ -3679,7 +3788,7 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -3687,14 +3796,14 @@ struct HurlTeammateTests {
 
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -3712,7 +3821,7 @@ struct HurlTeammateTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3729,7 +3838,7 @@ struct HurlTeammateTests {
                         // We need a fake treeman who's better at throwing, so we can test
                         // modified rolls
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: PlayerSpec(
                                 move: .fixed(2),
                                 block: 2,
@@ -3741,18 +3850,19 @@ struct HurlTeammateTests {
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(0, 1)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(3, 7)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -3762,7 +3872,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -3787,7 +3897,7 @@ struct HurlTeammateTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -3797,7 +3907,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -3809,10 +3919,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(0, 0)
                 )
             ]
         )
@@ -3821,9 +3932,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -3835,7 +3946,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -3848,7 +3959,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 2), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(0, 3), distance: .short, obstructingSquares: []),
@@ -3931,14 +4042,32 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 5),
-                .changedHurlTeammateResult(die: .d6, modified: 4, modifications: [.longDistance, .obstructed]),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 8)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1))
+                .changedHurlTeammateResult(
+                    die: .d6,
+                    unmodified: 5,
+                    modified: 4,
+                    modifications: [
+                        .longDistance, .obstructed,
+                    ]
+                ),
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(0, 0),
+                    to: sq(3, 8),
+                    angle: 159
+                ),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(3, 8)
+                ),
             ]
         )
 
@@ -3949,21 +4078,21 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -3982,7 +4111,7 @@ struct HurlTeammateTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3997,24 +4126,25 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -4024,7 +4154,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -4050,7 +4180,7 @@ struct HurlTeammateTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -4060,7 +4190,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -4072,10 +4202,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -4084,9 +4215,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -4098,7 +4229,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -4111,7 +4242,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4270,15 +4401,33 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 1),
-                .playerFumbledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 1
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .fumbled),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .west),
-                .ballBounced(ballID: ballID, to: sq(2, 6)),
+                .playerFumbledTeammate(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6),
+                    teammateID: pl(.away, 1),
+                    ballID: 123
+                ),
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(3, 6),
+                    reason: .fumbled
+                ),
+                .ballCameLoose(ballID: 123, in: sq(3, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .west
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west
+                ),
             ]
         )
 
@@ -4289,14 +4438,14 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -4315,7 +4464,7 @@ struct HurlTeammateTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -4330,24 +4479,25 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -4357,7 +4507,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -4383,7 +4533,7 @@ struct HurlTeammateTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -4393,7 +4543,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -4405,10 +4555,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -4417,9 +4568,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -4431,7 +4582,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -4444,7 +4595,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4603,16 +4754,35 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 3),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(7, 6)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 3
                 ),
-                .hurledTeammateCrashed(playerID: PlayerID(coachID: .away, index: 1)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .west),
-                .ballBounced(ballID: ballID, to: sq(6, 6)),
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(7, 6),
+                    angle: 90
+                ),
+                .hurledTeammateCrashed(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(7, 6)
+                ),
+                .ballCameLoose(ballID: 123, in: sq(7, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .west
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(7, 6),
+                    to: sq(6, 6),
+                    direction: .west
+                ),
             ]
         )
 
@@ -4623,14 +4793,14 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
@@ -4649,8 +4819,8 @@ struct HurlTeammateTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let heldBallID = DefaultUUIDProvider().generate()
-        let looseBallID = DefaultUUIDProvider().generate()
+        let heldBallID = 123
+        let looseBallID = 456
 
         var game = Game(
             phase: .active(
@@ -4665,24 +4835,25 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -4692,7 +4863,7 @@ struct HurlTeammateTests {
                     balls: [
                         Ball(
                             id: heldBallID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                         Ball(
                             id: looseBallID,
@@ -4722,7 +4893,7 @@ struct HurlTeammateTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -4732,7 +4903,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -4744,10 +4915,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -4756,9 +4928,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -4770,7 +4942,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -4783,7 +4955,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4942,20 +5114,55 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 3),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(7, 6)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 3
                 ),
-                .hurledTeammateCrashed(playerID: PlayerID(coachID: .away, index: 1)),
-                .rolledForDirection(direction: .east),
-                .ballBounced(ballID: looseBallID, to: sq(8, 6)),
-                .ballCameLoose(ballID: heldBallID),
-                .rolledForDirection(direction: .east),
-                .ballBounced(ballID: heldBallID, to: sq(8, 6)),
-                .rolledForDirection(direction: .south),
-                .ballBounced(ballID: heldBallID, to: sq(8, 7)),
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(7, 6),
+                    angle: 90
+                ),
+                .hurledTeammateCrashed(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(7, 6)
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .east
+                ),
+                .ballBounced(
+                    ballID: 456,
+                    from: sq(7, 6),
+                    to: sq(8, 6),
+                    direction: .east
+                ),
+                .ballCameLoose(ballID: 123, in: sq(7, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .east
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(7, 6),
+                    to: sq(8, 6),
+                    direction: .east
+                ),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(8, 6),
+                    to: sq(8, 7),
+                    direction: .south
+                ),
             ]
         )
 
@@ -4966,14 +5173,14 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
@@ -5004,13 +5211,13 @@ struct HurlTeammateTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .prone(
                                 square: sq(4, 6)
@@ -5018,12 +5225,13 @@ struct HurlTeammateTests {
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -5053,7 +5261,7 @@ struct HurlTeammateTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -5063,7 +5271,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -5075,10 +5283,11 @@ struct HurlTeammateTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -5087,9 +5296,9 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -5101,7 +5310,7 @@ struct HurlTeammateTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -5114,7 +5323,7 @@ struct HurlTeammateTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -5272,13 +5481,24 @@ struct HurlTeammateTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 5),
-                .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(7, 6)
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1))
+                .playerHurledTeammate(
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: nil,
+                    from: sq(3, 6),
+                    to: sq(7, 6),
+                    angle: 90
+                ),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: nil,
+                    in: sq(7, 6)
+                ),
             ]
         )
 
@@ -5289,14 +5509,14 @@ struct HurlTeammateTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .standUp
                             ),
                             consumesBonusPlays: []
@@ -5309,7 +5529,7 @@ struct HurlTeammateTests {
 
         guard
             let player = game.table.players.first(where: { player in
-                player.id == PlayerID(coachID: .away, index: 1)
+                player.id == pl(.away, 1)
             }),
             case .prone(square: sq(7, 6)) = player.state
         else {

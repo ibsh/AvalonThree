@@ -14,7 +14,7 @@ struct ComboPlayTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -29,24 +29,25 @@ struct ComboPlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
                     ],
@@ -58,7 +59,7 @@ struct ComboPlayTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -81,7 +82,7 @@ struct ComboPlayTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare handoff
@@ -91,7 +92,7 @@ struct ComboPlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -103,10 +104,11 @@ struct ComboPlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 5)
                 )
             ]
         )
@@ -115,10 +117,10 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(4, 5),
                             distance: .handoff,
                             obstructingSquares: [],
@@ -134,17 +136,24 @@ struct ComboPlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
                 .playerHandedOffBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 5)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 5),
+                    to: sq(4, 5),
+                    direction: .east,
+                    ballID: 123
                 ),
-                .playerCaughtHandoff(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtHandoff(
+                    playerID: pl(.away, 1),
+                    in: sq(4, 5),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -154,7 +163,7 @@ struct ComboPlayTests {
                 payload: .eligibleForComboPlayBonusPlayFreeAction(
                     validDeclaration: ValidDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 1),
+                            playerID: pl(.away, 1),
                             actionID: .run
                         ),
                         consumesBonusPlays: []
@@ -176,14 +185,19 @@ struct ComboPlayTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .comboPlay
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(4, 5)
                 ),
             ]
         )
@@ -192,7 +206,7 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -251,18 +265,31 @@ struct ComboPlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(4, 5),
+                    to: sq(4, 6),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .comboPlay
+                    )
+                ),
+                .updatedDiscards(
+                    top: .comboPlay,
+                    count: 1
                 ),
             ]
         )
@@ -274,28 +301,28 @@ struct ComboPlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -313,7 +340,7 @@ struct ComboPlayTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -328,24 +355,25 @@ struct ComboPlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(2, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
                     ],
@@ -357,7 +385,7 @@ struct ComboPlayTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -382,7 +410,7 @@ struct ComboPlayTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -392,7 +420,7 @@ struct ComboPlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -404,10 +432,11 @@ struct ComboPlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 5)
                 )
             ]
         )
@@ -416,10 +445,10 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(4, 5),
                             distance: .short,
                             obstructingSquares: [],
@@ -437,18 +466,25 @@ struct ComboPlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 4),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 4),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 5)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 5),
+                    to: sq(4, 5),
+                    angle: 90,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(4, 5),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -458,7 +494,7 @@ struct ComboPlayTests {
                 payload: .eligibleForComboPlayBonusPlayFreeAction(
                     validDeclaration: ValidDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 1),
+                            playerID: pl(.away, 1),
                             actionID: .run
                         ),
                         consumesBonusPlays: []
@@ -480,14 +516,19 @@ struct ComboPlayTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .comboPlay
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .run
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(4, 5)
                 ),
             ]
         )
@@ -496,7 +537,7 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -555,18 +596,31 @@ struct ComboPlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 6),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(4, 5),
+                    to: sq(4, 6),
+                    direction: .south,
                     reason: .run
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(4, 7),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(4, 6),
+                    to: sq(4, 7),
+                    direction: .south,
                     reason: .run
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .comboPlay
+                    )
+                ),
+                .updatedDiscards(
+                    top: .comboPlay,
+                    count: 1
                 ),
             ]
         )
@@ -578,21 +632,21 @@ struct ComboPlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -608,7 +662,7 @@ struct ComboPlayTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -623,24 +677,25 @@ struct ComboPlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
                     ],
@@ -652,7 +707,7 @@ struct ComboPlayTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -675,7 +730,7 @@ struct ComboPlayTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare handoff
@@ -685,7 +740,7 @@ struct ComboPlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -697,10 +752,11 @@ struct ComboPlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 5)
                 )
             ]
         )
@@ -709,10 +765,10 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(4, 5),
                             distance: .handoff,
                             obstructingSquares: [],
@@ -728,17 +784,24 @@ struct ComboPlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
                 .playerHandedOffBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 5)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 5),
+                    to: sq(4, 5),
+                    direction: .east,
+                    ballID: 123
                 ),
-                .playerCaughtHandoff(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtHandoff(
+                    playerID: pl(.away, 1),
+                    in: sq(4, 5),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -748,7 +811,7 @@ struct ComboPlayTests {
                 payload: .eligibleForComboPlayBonusPlayFreeAction(
                     validDeclaration: ValidDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 1),
+                            playerID: pl(.away, 1),
                             actionID: .sidestep
                         ),
                         consumesBonusPlays: []
@@ -770,14 +833,19 @@ struct ComboPlayTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .comboPlay
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .sidestep
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(4, 5)
                 ),
             ]
         )
@@ -786,7 +854,7 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -839,13 +907,23 @@ struct ComboPlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 4),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(4, 5),
+                    to: sq(3, 4),
+                    direction: .northWest,
                     reason: .sidestep
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .comboPlay
+                    )
+                ),
+                .updatedDiscards(
+                    top: .comboPlay,
+                    count: 1
                 ),
             ]
         )
@@ -857,35 +935,35 @@ struct ComboPlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -903,7 +981,7 @@ struct ComboPlayTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -918,24 +996,25 @@ struct ComboPlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(2, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(5, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
                     ],
@@ -947,7 +1026,7 @@ struct ComboPlayTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -972,7 +1051,7 @@ struct ComboPlayTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -982,7 +1061,7 @@ struct ComboPlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -994,10 +1073,11 @@ struct ComboPlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 5)
                 )
             ]
         )
@@ -1006,10 +1086,10 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(4, 5),
                             distance: .short,
                             obstructingSquares: [],
@@ -1027,23 +1107,31 @@ struct ComboPlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 5),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 5),
                 .changedPassResult(
                     die: .d6,
+                    unmodified: 5,
                     modified: 4,
                     modifications: [.targetPlayerMarked]
                 ),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 5)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 5),
+                    to: sq(4, 5),
+                    angle: 90,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(4, 5),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -1053,7 +1141,7 @@ struct ComboPlayTests {
                 payload: .eligibleForComboPlayBonusPlayFreeAction(
                     validDeclaration: ValidDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 1),
+                            playerID: pl(.away, 1),
                             actionID: .sidestep
                         ),
                         consumesBonusPlays: []
@@ -1075,14 +1163,19 @@ struct ComboPlayTests {
             latestEvents == [
                 .revealedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .comboPlay
+                    ),
+                    hand: []
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 1),
+                        playerID: pl(.away, 1),
                         actionID: .sidestep
                     ),
-                    isFree: true
+                    isFree: true,
+                    playerSquare: sq(4, 5)
                 ),
             ]
         )
@@ -1091,7 +1184,7 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
-                    playerID: PlayerID(coachID: .away, index: 1),
+                    playerID: pl(.away, 1),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1144,13 +1237,23 @@ struct ComboPlayTests {
         #expect(
             latestEvents == [
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 1),
-                    square: sq(3, 4),
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(4, 5),
+                    to: sq(3, 4),
+                    direction: .northWest,
                     reason: .sidestep
                 ),
                 .discardedPersistentBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .comboPlay
+                    )
+                ),
+                .updatedDiscards(
+                    top: .comboPlay,
+                    count: 1
                 ),
             ]
         )
@@ -1162,35 +1265,35 @@ struct ComboPlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1206,7 +1309,7 @@ struct ComboPlayTests {
 
         // MARK: - Init
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1221,24 +1324,25 @@ struct ComboPlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(3, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
                     ],
@@ -1250,7 +1354,7 @@ struct ComboPlayTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -1273,7 +1377,7 @@ struct ComboPlayTests {
                 )
             ),
             randomizers: Randomizers(),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare handoff
@@ -1283,7 +1387,7 @@ struct ComboPlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1295,10 +1399,11 @@ struct ComboPlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 5)
                 )
             ]
         )
@@ -1307,10 +1412,10 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(4, 5),
                             distance: .handoff,
                             obstructingSquares: [],
@@ -1326,17 +1431,24 @@ struct ComboPlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
                 .playerHandedOffBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 5)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 5),
+                    to: sq(4, 5),
+                    direction: .east,
+                    ballID: 123
                 ),
-                .playerCaughtHandoff(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtHandoff(
+                    playerID: pl(.away, 1),
+                    in: sq(4, 5),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -1346,7 +1458,7 @@ struct ComboPlayTests {
                 payload: .eligibleForComboPlayBonusPlayFreeAction(
                     validDeclaration: ValidDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 1),
+                            playerID: pl(.away, 1),
                             actionID: .run
                         ),
                         consumesBonusPlays: []
@@ -1375,35 +1487,35 @@ struct ComboPlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1421,7 +1533,7 @@ struct ComboPlayTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1436,24 +1548,25 @@ struct ComboPlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(2, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
                     ],
@@ -1465,7 +1578,7 @@ struct ComboPlayTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -1490,7 +1603,7 @@ struct ComboPlayTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -1500,7 +1613,7 @@ struct ComboPlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1512,10 +1625,11 @@ struct ComboPlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 5)
                 )
             ]
         )
@@ -1524,10 +1638,10 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(4, 5),
                             distance: .short,
                             obstructingSquares: [],
@@ -1545,18 +1659,25 @@ struct ComboPlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 4),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 4),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(4, 5)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 5),
+                    to: sq(4, 5),
+                    angle: 90,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1)),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(4, 5),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -1566,7 +1687,7 @@ struct ComboPlayTests {
                 payload: .eligibleForComboPlayBonusPlayFreeAction(
                     validDeclaration: ValidDeclaration(
                         declaration: ActionDeclaration(
-                            playerID: PlayerID(coachID: .away, index: 1),
+                            playerID: pl(.away, 1),
                             actionID: .run
                         ),
                         consumesBonusPlays: []
@@ -1595,28 +1716,28 @@ struct ComboPlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1635,7 +1756,7 @@ struct ComboPlayTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1650,24 +1771,25 @@ struct ComboPlayTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(2, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .darkElf_lineman,
                             state: .standing(square: sq(4, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(6, 5)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .comboPlay)
                     ],
@@ -1679,7 +1801,7 @@ struct ComboPlayTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -1705,7 +1827,7 @@ struct ComboPlayTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -1715,7 +1837,7 @@ struct ComboPlayTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -1727,10 +1849,11 @@ struct ComboPlayTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 5)
                 )
             ]
         )
@@ -1739,10 +1862,10 @@ struct ComboPlayTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(4, 5),
                             distance: .short,
                             obstructingSquares: [],
@@ -1761,17 +1884,25 @@ struct ComboPlayTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 1),
-                .playerFumbledBall(playerID: PlayerID(coachID: .away, index: 0)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .east),
-                .ballBounced(ballID: ballID, to: sq(3, 5)),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 1),
+                .playerFumbledBall(
+                    playerID: pl(.away, 0),
+                    in: sq(2, 5),
+                    ballID: 123
+                ), .ballCameLoose(ballID: 123, in: sq(2, 5)),
+                .rolledForDirection(coachID: .away, direction: .east),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(2, 5),
+                    to: sq(3, 5),
+                    direction: .east
+                ),
             ]
         )
 
@@ -1782,21 +1913,21 @@ struct ComboPlayTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []

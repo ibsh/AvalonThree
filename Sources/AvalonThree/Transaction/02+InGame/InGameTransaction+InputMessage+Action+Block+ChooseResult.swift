@@ -59,18 +59,48 @@ extension InGameTransaction {
         if !actionContext.history.contains(.blockAnimationEventsSent) {
             history.append(.blockAnimationEventsSent)
             if actionContext.history.contains(.blockIsBomb) {
-                events.append(.playerThrewBomb(playerID: player.id, square: targetSquare))
+                guard let angle = playerSquare.angle(to: targetSquare) else {
+                    throw GameError("No angle")
+                }
+                events.append(
+                    .playerThrewBomb(
+                        playerID: player.id,
+                        from: playerSquare,
+                        to: targetSquare,
+                        angle: angle
+                    )
+                )
             } else {
-                events.append(.playerBlocked(playerID: player.id, square: targetSquare))
+                guard let blockDirection = playerSquare.direction(to: targetSquare) else {
+                    throw GameError("No direction")
+                }
+                events.append(
+                    .playerBlocked(
+                        playerID: player.id,
+                        from: playerSquare,
+                        to: targetSquare,
+                        direction: blockDirection,
+                        targetPlayerID: targetPlayerID
+                    )
+                )
                 for assistingPlayerID in actionContext.history.compactMap({ entry -> PlayerID? in
                     guard case .blockAssistingPlayer(let playerID) = entry else { return nil }
                     return playerID
                 }) {
+                    guard let square = table.getPlayer(id: assistingPlayerID)?.square else {
+                        throw GameError("Assisting player is in reserves")
+                    }
+                    guard let assistDirection = square.direction(to: targetSquare) else {
+                        throw GameError("No direction")
+                    }
                     events.append(
                         .playerAssistedBlock(
                             assistingPlayerID: assistingPlayerID,
-                            blockingPlayerID: player.id,
-                            square: targetSquare
+                            from: square,
+                            to: targetSquare,
+                            direction: assistDirection,
+                            targetPlayerID: targetPlayerID,
+                            blockingPlayerID: player.id
                         )
                     )
                 }
@@ -85,7 +115,9 @@ extension InGameTransaction {
             if player.canTakeActions {
                 player.canTakeActions = false
                 table.players.update(with: player)
-                events.append(.playerCannotTakeActions(playerID: player.id))
+                events.append(
+                    .playerCannotTakeActions(playerID: player.id, in: player.square)
+                )
             }
 
         case .shove,
@@ -156,7 +188,9 @@ extension InGameTransaction {
             history.append(.blockTargetKnockedDown)
             targetPlayer.state = .prone(square: targetSquare)
             table.players.update(with: targetPlayer)
-            events.append(.playerFellDown(playerID: targetPlayerID, reason: .blocked))
+            events.append(
+                .playerFellDown(playerID: targetPlayerID, in: targetSquare, reason: .blocked)
+            )
 
             if let ball = table.playerHasABall(targetPlayer) {
 

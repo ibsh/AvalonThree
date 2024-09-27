@@ -35,6 +35,10 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
+        guard let playerSquare = player.square else {
+            throw GameError("Player is in reserves")
+        }
+
         guard var targetPlayer = table.getPlayer(id: targetPlayerID) else {
             throw GameError("No target player")
         }
@@ -52,7 +56,7 @@ extension InGameTransaction {
         if player.spec.skills.contains(.claws) {
             let result = randomizers.d6.roll()
             clawsResult = result
-            events.append(.rolledForClaws(result: result))
+            events.append(.rolledForClaws(coachID: actionContext.coachID, result: result))
             if result == TableConstants.clawsEffectiveD6Roll {
 
                 // finish the action
@@ -61,20 +65,43 @@ extension InGameTransaction {
 
                 targetPlayer.state = .prone(square: targetSquare)
                 table.players.update(with: targetPlayer)
-                events.append(.playerBlocked(playerID: player.id, square: targetSquare))
+
+                guard let direction = playerSquare.direction(to: targetSquare) else {
+                    throw GameError("No block direction")
+                }
+                events.append(
+                    .playerBlocked(
+                        playerID: player.id,
+                        from: playerSquare,
+                        to: targetSquare,
+                        direction: direction,
+                        targetPlayerID: targetPlayerID
+                    )
+                )
                 for assistingPlayerID in actionContext.history.compactMap({ entry -> PlayerID? in
                     guard case .blockAssistingPlayer(let playerID) = entry else { return nil }
                     return playerID
                 }) {
+                    guard let square = table.getPlayer(id: assistingPlayerID)?.square else {
+                        throw GameError("Assisting player is in reserves")
+                    }
+                    guard let direction = square.direction(to: targetSquare) else {
+                        throw GameError("No assist direction")
+                    }
                     events.append(
                         .playerAssistedBlock(
                             assistingPlayerID: assistingPlayerID,
-                            blockingPlayerID: player.id,
-                            square: targetSquare
+                            from: square,
+                            to: targetSquare,
+                            direction: direction,
+                            targetPlayerID: targetPlayerID,
+                            blockingPlayerID: player.id
                         )
                     )
                 }
-                events.append(.playerFellDown(playerID: targetPlayerID, reason: .blocked))
+                events.append(
+                    .playerFellDown(playerID: targetPlayerID, in: targetSquare, reason: .blocked)
+                )
 
                 try playerIsInjured(playerID: targetPlayerID, reason: .blocked)
 
@@ -87,11 +114,11 @@ extension InGameTransaction {
         }
 
         events.append(
-            .rolledForBlock(results: unmodifiedResults)
+            .rolledForBlock(coachID: actionContext.coachID, results: unmodifiedResults)
         )
 
         var results = unmodifiedResults
-        var modifications = Set<BlockRollModification>()
+        var modifications = [BlockRollModification]()
 
         results = results.map { result in
             var result = result
@@ -99,39 +126,39 @@ extension InGameTransaction {
             // blocking player effects
 
             if actionContext.history.contains(.blockIsBomb), result == .shove {
-                modifications.insert(.playerThrewBomb)
+                modifications.append(.playerThrewBomb)
                 result = .miss
             }
 
             if player.spec.skills.contains(.hulkingBrute), [.tackle, .smash].contains(result) {
-                modifications.insert(.playerIsHulkingBrute)
+                modifications.append(.playerIsHulkingBrute)
                 result = .kerrunch
             }
 
             if player.spec.skills.contains(.mightyBlow), result == .smash {
-                modifications.insert(.playerHasMightyBlow)
+                modifications.append(.playerHasMightyBlow)
                 result = .kerrunch
             }
 
             if player.spec.skills.contains(.insignificant), result == .tackle {
-                modifications.insert(.playerIsInsignificant)
+                modifications.append(.playerIsInsignificant)
                 result = .miss
             }
 
             if player.spec.skills.contains(.titchy), result == .tackle {
-                modifications.insert(.playerIsTitchy)
+                modifications.append(.playerIsTitchy)
                 result = .miss
             }
 
             // target player effects
 
             if targetPlayer.spec.skills.contains(.hulkingBrute), result == .tackle {
-                modifications.insert(.opponentIsHulkingBrute)
+                modifications.append(.opponentIsHulkingBrute)
                 result = .miss
             }
 
             if targetPlayer.spec.skills.contains(.standFirm), result == .shove {
-                modifications.insert(.opponentHasStandFirm)
+                modifications.append(.opponentHasStandFirm)
                 result = .miss
             }
 
@@ -141,7 +168,8 @@ extension InGameTransaction {
         if results != unmodifiedResults {
             events.append(
                 .changedBlockResults(
-                    results: results,
+                    from: unmodifiedResults,
+                    to: results,
                     modifications: modifications
                 )
             )

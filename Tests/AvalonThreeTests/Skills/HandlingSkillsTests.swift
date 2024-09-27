@@ -16,7 +16,7 @@ struct HandlingSkillsTests {
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -31,18 +31,19 @@ struct HandlingSkillsTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_passer,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
@@ -74,7 +75,7 @@ struct HandlingSkillsTests {
             randomizers: Randomizers(
                 blockDie: blockDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -84,7 +85,7 @@ struct HandlingSkillsTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -96,10 +97,11 @@ struct HandlingSkillsTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -108,9 +110,9 @@ struct HandlingSkillsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -123,26 +125,39 @@ struct HandlingSkillsTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(coachID: .away, result: .shove),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.shove]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(0, 6),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(1, 6),
+                    to: sq(0, 6),
+                    direction: .west,
                     reason: .shoved
                 ),
                 .playerPickedUpLooseBall(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    ballID: ballID
+                    playerID: pl(.home, 0),
+                    in: sq(0, 6),
+                    ballID: 123
                 ),
             ]
         )
@@ -151,7 +166,7 @@ struct HandlingSkillsTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     square: sq(1, 6)
                 )
             )

@@ -29,7 +29,9 @@ extension ConfigTransaction {
             throw GameError("Invalid coin flip winner team choice")
         }
 
-        events.append(.specifiedCoinFlipWinnerTeam(teamID: teamID))
+        events.append(
+            .specifiedTeam(coachID: coinFlipWinnerCoachID, teamID: teamID)
+        )
 
         config.coinFlipWinnerTeamID = teamID
 

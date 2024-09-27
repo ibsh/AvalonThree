@@ -12,16 +12,16 @@ struct SetupTransaction: Transaction {
     var table: Table
     var events: [Event]
     let randomizers: Randomizers
-    let uuidProvider: UUIDProviding
+    let ballIDProvider: BallIDProviding
 
     init(
         table: Table,
         randomizers: Randomizers,
-        uuidProvider: UUIDProviding
+        ballIDProvider: BallIDProviding
     ) {
         self.table = table
         self.randomizers = randomizers
-        self.uuidProvider = uuidProvider
+        self.ballIDProvider = ballIDProvider
         self.events = []
     }
 }

@@ -45,21 +45,15 @@ extension Square {
         return .west
     }
 
-    public func visualDirection(to targetSquare: Square) -> Direction? {
+    public func angle(to targetSquare: Square) -> Int? {
         guard targetSquare != self else { return nil }
-        if targetSquare.isAdjacent(to: self) { return direction(to: targetSquare) }
-        let angle = atan2(Double(targetSquare.y - self.y), Double(targetSquare.x - self.x)) * 180 / .pi
-        switch angle {
-        case (-180)..<(-157.5): return .west
-        case (-157.5)..<(-112.5): return .northWest
-        case (-112.5)..<(-67.5): return .north
-        case (-67.5)..<(-22.5): return .northEast
-        case (-22.5)..<22.5: return .east
-        case 22.5..<67.5: return .southEast
-        case 67.5..<112.5: return .south
-        case 112.5..<157.5: return .southWest
-        default: return .west
-        }
+        let radians = atan2(
+            Double(targetSquare.y - self.y),
+            Double(targetSquare.x - self.x)
+        )
+        let degrees = radians * 180 / .pi
+        let degreesFromNorth = (degrees + 450).truncatingRemainder(dividingBy: 360)
+        return Int(degreesFromNorth.rounded())
     }
 }
 

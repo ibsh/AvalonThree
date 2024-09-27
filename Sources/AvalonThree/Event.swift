@@ -14,100 +14,122 @@ public enum Event: Equatable, Codable, Sendable {
     )
 
     case specifiedBoardSpec(
-        boardSpecID: BoardSpecID
+        coachID: CoachID,
+        boardSpecID: BoardSpecID,
+        boardSpec: BoardSpec
     )
 
     case specifiedChallengeDeck(
+        coachID: CoachID,
         challengeDeckID: ChallengeDeckID
     )
 
     case specifiedRookieBonusRecipient(
-        rookieBonusRecipientID: RookieBonusRecipientID
+        coachID: CoachID,
+        recipientCoachID: CoachID?
     )
 
-    case specifiedCoinFlipWinnerTeam(
+    case specifiedTeam(
+        coachID: CoachID,
         teamID: TeamID
     )
 
-    case specifiedCoinFlipLoserTeam(
-        teamID: TeamID
+    case startingHandWasSetUp(
+        coachID: CoachID,
+        hand: [WrappedChallengeCard]
     )
 
-    case tableWasSetUp(
-        playerConfigs: Set<PlayerConfig>,
-        deck: [ChallengeCard],
-        coinFlipLoserHand: [ChallengeCard],
-        coinFlipWinnerHand: [ChallengeCard]
+    case playerReceivedNumber(
+        playerID: PlayerID,
+        number: Int
     )
 
-    case gameStarted
+    case startingPlayersWereSetUp(
+        coachID: CoachID,
+        playerSetups: [PlayerSetup]
+    )
 
     case rolledForDirection(
+        coachID: CoachID,
         direction: Direction
     )
 
     case changedDirection(
-        direction: Direction
+        from: Direction,
+        to: Direction
     )
 
     case rolledForTrapdoor(
+        coachID: CoachID,
         trapdoorSquare: Square
     )
 
     case declaredAction(
         declaration: ActionDeclaration,
-        isFree: Bool
+        isFree: Bool,
+        playerSquare: Square?
     )
 
     case rolledForMaxRunDistance(
+        coachID: CoachID,
         maxRunDistance: Int
     )
 
     case rolledForPass(
+        coachID: CoachID,
         die: Die,
         unmodified: Int
     )
 
     case changedPassResult(
         die: Die,
+        unmodified: Int,
         modified: Int,
-        modifications: Set<PassRollModification>
+        modifications: [PassRollModification]
     )
 
     case rolledForHurlTeammate(
+        coachID: CoachID,
         die: Die,
         unmodified: Int
     )
 
     case changedHurlTeammateResult(
         die: Die,
+        unmodified: Int,
         modified: Int,
-        modifications: Set<HurlTeammateRollModification>
+        modifications: [HurlTeammateRollModification]
     )
 
     case rolledForFoul(
+        coachID: CoachID,
         result: FoulDieResult
     )
 
     case rolledForClaws(
+        coachID: CoachID,
         result: Int
     )
 
     case rolledForBlock(
+        coachID: CoachID,
         results: [BlockDieResult]
     )
 
     case usedOffensiveSpecialistSkillReroll(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case declinedOffensiveSpecialistSkillReroll(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case changedBlockResults(
-        results: [BlockDieResult],
-        modifications: Set<BlockRollModification>
+        from: [BlockDieResult],
+        to: [BlockDieResult],
+        modifications: [BlockRollModification]
     )
 
     case selectedBlockDieResult(
@@ -116,209 +138,289 @@ public enum Event: Equatable, Codable, Sendable {
     )
 
     case declinedFollowUp(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case selectedLooseBallDirection(
-        coachID: CoachID,
+        playerID: PlayerID,
+        in: Square,
         direction: Direction
     )
 
     case rolledForArmour(
+        coachID: CoachID,
         die: Die,
         unmodified: Int
     )
 
     case changedArmourResult(
         die: Die,
+        unmodified: Int,
         modified: Int,
-        modifications: Set<ArmourRollModification>
+        modifications: [ArmourRollModification]
+    )
+
+    case playerMovedOutOfReserves(
+        playerID: PlayerID,
+        to: Square
     )
 
     case playerMoved(
         playerID: PlayerID,
-        square: Square,
+        ballID: Int?,
+        from: Square,
+        to: Square,
+        direction: Direction,
         reason: PlayerMoveReason
     )
 
     case playerCaughtBouncingBall(
         playerID: PlayerID,
-        ballID: BallID
+        in: Square,
+        ballID: Int
     )
 
     case playerPickedUpLooseBall(
         playerID: PlayerID,
-        ballID: BallID
+        in: Square,
+        ballID: Int
     )
 
     case playerPassedBall(
         playerID: PlayerID,
-        square: Square
+        from: Square,
+        to: Square,
+        angle: Int,
+        ballID: Int
     )
 
     case playerFumbledBall(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square,
+        ballID: Int
     )
 
     case playerCaughtPass(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square,
+        ballID: Int
     )
 
     case playerFailedCatch(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square,
+        ballID: Int
     )
 
     case playerHandedOffBall(
         playerID: PlayerID,
-        square: Square
+        from: Square,
+        to: Square,
+        direction: Direction,
+        ballID: Int
     )
 
     case playerCaughtHandoff(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square,
+        ballID: Int
     )
 
     case playerHurledTeammate(
         playerID: PlayerID,
         teammateID: PlayerID,
-        square: Square
+        ballID: Int?,
+        from: Square,
+        to: Square,
+        angle: Int
     )
 
     case playerFumbledTeammate(
         playerID: PlayerID,
-        teammateID: PlayerID
+        in: Square,
+        teammateID: PlayerID,
+        ballID: Int?
     )
 
     case hurledTeammateLanded(
-        playerID: PlayerID
+        playerID: PlayerID,
+        ballID: Int?,
+        in: Square
     )
 
     case hurledTeammateCrashed(
-        playerID: PlayerID
+        playerID: PlayerID,
+        ballID: Int?,
+        in: Square
     )
 
     case playerFouled(
         playerID: PlayerID,
-        square: Square
+        from: Square,
+        to: Square,
+        direction: Direction,
+        targetPlayerID: PlayerID
     )
 
     case playerBlocked(
         playerID: PlayerID,
-        square: Square
+        from: Square,
+        to: Square,
+        direction: Direction,
+        targetPlayerID: PlayerID
     )
 
     case playerThrewBomb(
         playerID: PlayerID,
-        square: Square
+        from: Square,
+        to: Square,
+        angle: Int
     )
 
     case playerAssistedBlock(
         assistingPlayerID: PlayerID,
-        blockingPlayerID: PlayerID,
-        square: Square
+        from: Square,
+        to: Square,
+        direction: Direction,
+        targetPlayerID: PlayerID,
+        blockingPlayerID: PlayerID
     )
 
     case playerScoredTouchdown(
         playerID: PlayerID,
-        ballID: BallID
+        in: Square,
+        ballID: Int
     )
 
     case newBallAppeared(
-        ballID: BallID,
-        square: Square
+        ballID: Int,
+        in: Square
     )
 
     case ballCameLoose(
-        ballID: BallID
+        ballID: Int,
+        in: Square
     )
 
     case ballDisappeared(
-        ballID: BallID
+        ballID: Int,
+        in: Square
     )
 
     case ballBounced(
-        ballID: BallID,
-        to: Square
+        ballID: Int,
+        from: Square,
+        to: Square,
+        direction: Direction
     )
 
     case playerFellDown(
         playerID: PlayerID,
+        in: Square,
         reason: PlayerFallDownReason
     )
 
     case playerStoodUp(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case playerInjured(
         playerID: PlayerID,
+        in: Square,
         reason: PlayerInjuryReason
     )
 
     case playerSentOff(
-        playerID: PlayerID
+        playerID: PlayerID,
+        from: Square
     )
 
     case playerCannotTakeActions(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square?
     )
 
     case playerCanTakeActions(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square?
     )
 
     case declinedRegenerationSkillStandUpAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case declinedFrenziedSkillBlockAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case declinedHeadbuttSkillBlockAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case claimedObjective(
         coachID: CoachID,
-        objectiveID: ObjectiveID
+        objectiveID: ObjectiveID,
+        objective: WrappedChallengeCard,
+        hand: [WrappedChallengeCard]
     )
 
     case declinedObjectives(
         coachID: CoachID,
-        objectiveIDs: [ObjectiveID]
+        objectives: [ObjectiveID: Challenge]
     )
 
     case declinedCatchersInstinctsSkillRunAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case earnedCleanSweep(
         coachID: CoachID
     )
 
+    case updatedDeck(
+        top: Challenge?,
+        count: Int
+    )
+
+    case updatedDiscards(
+        top: BonusPlay?,
+        count: Int
+    )
+
     case dealtNewObjective(
         coachID: CoachID,
-        objectiveID: ObjectiveID
+        objectiveID: ObjectiveID,
+        objective: Challenge
     )
 
     case discardedObjective(
         coachID: CoachID,
-        objectiveID: ObjectiveID
+        objectiveID: ObjectiveID,
+        objective: ChallengeCard
     )
 
-    case discardedCardsFromHand(
+    case discardedCardFromHand(
         coachID: CoachID,
-        cards: [ChallengeCard]
+        card: ChallengeCard,
+        hand: [WrappedChallengeCard]
     )
 
     case revealedInstantBonusPlay(
         coachID: CoachID,
-        card: ChallengeCard
+        card: ChallengeCard,
+        hand: [WrappedChallengeCard]
     )
 
     case revealedPersistentBonusPlay(
         coachID: CoachID,
-        card: ChallengeCard
+        card: ChallengeCard,
+        hand: [WrappedChallengeCard]
     )
 
     case discardedPersistentBonusPlay(
@@ -336,11 +438,25 @@ public enum Event: Equatable, Codable, Sendable {
         coachID: CoachID
     )
 
-    case finalTurnBegan
+    case turnBegan(
+        coachID: CoachID,
+        isFinal: Bool
+    )
 
     case gameEnded(
         endConditions: EndConditions
     )
+}
+
+public enum WrappedChallengeCard: Hashable, Codable, Sendable {
+    case open(card: ChallengeCard)
+    case closed(challenge: Challenge)
+}
+
+public struct PlayerSetup: Hashable, Codable, Sendable {
+    public let id: PlayerID
+    public let specID: PlayerSpecID
+    public let spec: PlayerSpec
 }
 
 public enum ArmourRollModification: String, Hashable, Codable, Sendable {
@@ -394,7 +510,6 @@ public enum PlayerInjuryReason: String, Equatable, Codable, Sendable {
 
 public enum PlayerMoveReason: String, Equatable, Codable, Sendable {
     case run
-    case reserves
     case sidestep
     case mark
     case shoved

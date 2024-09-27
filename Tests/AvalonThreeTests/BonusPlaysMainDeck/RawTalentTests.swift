@@ -16,17 +16,19 @@ struct RawTalentTests {
 
         let coachIDRandomizer = CoachIDRandomizerDouble()
         let deckRandomizer = DeckRandomizerDouble()
+        let playerNumberRandomizer = PlayerNumberRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
         var game = Game(
             phase: .config(Config()),
             previousPrompt: nil,
             randomizers: Randomizers(
                 coachID: coachIDRandomizer,
-                deck: deckRandomizer
+                deck: deckRandomizer,
+                playerNumber: playerNumberRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         coachIDRandomizer.nextResult = .away
@@ -74,6 +76,8 @@ struct RawTalentTests {
 
         deckRandomizer.nextResult = Array(ChallengeCard.standardShortDeck.prefix(5))
 
+        playerNumberRandomizer.nextResults = [[2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24]]
+
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
@@ -83,73 +87,285 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .specifiedCoinFlipLoserTeam(teamID: .orc),
-                .tableWasSetUp(
-                    playerConfigs: [
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 0),
-                            specID: .lizardmen_skinkRunner
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 1),
-                            specID: .lizardmen_skinkRunner
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 2),
-                            specID: .lizardmen_chameleonSkinkCatcher
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 3),
-                            specID: .lizardmen_saurusBlocker
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 4),
-                            specID: .lizardmen_saurusBlocker
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 5),
-                            specID: .lizardmen_saurusBlocker
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 0),
-                            specID: .orc_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 1),
-                            specID: .orc_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 2),
-                            specID: .orc_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 3),
-                            specID: .orc_passer
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 4),
-                            specID: .orc_blitzer
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 5),
-                            specID: .orc_bigUnBlocker
-                        ),
-                    ],
-                    deck: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay),
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .stepAside),
-                        ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .blitz),
-                        ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .intervention),
-                        ChallengeCard(challenge: .gangUp, bonusPlay: .inspiration),
-                    ],
-                    coinFlipLoserHand: [
-                        ChallengeCard(challenge: .rookieBonus, bonusPlay: .rawTalent),
-                    ],
-                    coinFlipWinnerHand: []
+                .specifiedTeam(
+                    coachID: .home,
+                    teamID: TeamID.orc
                 ),
-                .dealtNewObjective(coachID: .home, objectiveID: .first),
-                .dealtNewObjective(coachID: .home, objectiveID: .second),
-                .dealtNewObjective(coachID: .home, objectiveID: .third),
+                .startingHandWasSetUp(
+                    coachID: .away,
+                    hand: []
+                ),
+                .startingHandWasSetUp(
+                    coachID: .home,
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .rookieBonus,
+                                bonusPlay: .rawTalent
+                            )
+                        )
+                    ]
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 0),
+                    number: 2
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 1),
+                    number: 4
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 2),
+                    number: 6
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 3),
+                    number: 8
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 4),
+                    number: 10
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 5),
+                    number: 12
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 0),
+                    number: 14
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 1),
+                    number: 16
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 2),
+                    number: 18
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 3),
+                    number: 20
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 4),
+                    number: 22
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 5),
+                    number: 24
+                ),
+                .startingPlayersWereSetUp(
+                    coachID: .away,
+                    playerSetups: [
+                        PlayerSetup(
+                            id: pl(.away, 0),
+                            specID: PlayerSpecID
+                                .lizardmen_skinkRunner,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(8),
+                                block: 1,
+                                pass: 4,
+                                armour: 6,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .safeHands
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 1),
+                            specID: PlayerSpecID
+                                .lizardmen_skinkRunner,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(8),
+                                block: 1,
+                                pass: 4,
+                                armour: 6,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .safeHands
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 2),
+                            specID: PlayerSpecID
+                                .lizardmen_chameleonSkinkCatcher,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(7),
+                                block: 1,
+                                pass: 3,
+                                armour: 5,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .catchersInstincts
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 3),
+                            specID: PlayerSpecID
+                                .lizardmen_saurusBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 4),
+                            specID: PlayerSpecID
+                                .lizardmen_saurusBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 5),
+                            specID: PlayerSpecID
+                                .lizardmen_saurusBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                    ]
+                ),
+                .startingPlayersWereSetUp(
+                    coachID: .home,
+                    playerSetups: [
+                        PlayerSetup(
+                            id: pl(.home, 0),
+                            specID: PlayerSpecID
+                                .orc_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 1),
+                            specID: PlayerSpecID
+                                .orc_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 2),
+                            specID: PlayerSpecID
+                                .orc_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 3),
+                            specID: PlayerSpecID
+                                .orc_passer,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 3,
+                                armour: 3,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .handlingSkills
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 4),
+                            specID: PlayerSpecID
+                                .orc_blitzer,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .offensiveSpecialist
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 5),
+                            specID: PlayerSpecID
+                                .orc_bigUnBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                    ]
+                ),
+                .updatedDeck(
+                    top: .breakSomeBones,
+                    count: 5
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .first,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(
+                    top: .breakSomeBones,
+                    count: 4
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(
+                    top: .freeUpTheBall,
+                    count: 3
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .third,
+                    objective: .freeUpTheBall
+                ),
+                .updatedDeck(
+                    top: .freeUpTheBall,
+                    count: 2
+                ),
             ]
         )
 
@@ -165,17 +381,19 @@ struct RawTalentTests {
 
         let coachIDRandomizer = CoachIDRandomizerDouble()
         let deckRandomizer = DeckRandomizerDouble()
+        let playerNumberRandomizer = PlayerNumberRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
         var game = Game(
             phase: .config(Config()),
             previousPrompt: nil,
             randomizers: Randomizers(
                 coachID: coachIDRandomizer,
-                deck: deckRandomizer
+                deck: deckRandomizer,
+                playerNumber: playerNumberRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         coachIDRandomizer.nextResult = .away
@@ -223,6 +441,8 @@ struct RawTalentTests {
 
         deckRandomizer.nextResult = Array(ChallengeCard.standardShortDeck.prefix(5))
 
+        playerNumberRandomizer.nextResults = [[2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24]]
+
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
@@ -232,73 +452,285 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .specifiedCoinFlipLoserTeam(teamID: .orc),
-                .tableWasSetUp(
-                    playerConfigs: [
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 0),
-                            specID: .lizardmen_skinkRunner
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 1),
-                            specID: .lizardmen_skinkRunner
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 2),
-                            specID: .lizardmen_chameleonSkinkCatcher
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 3),
-                            specID: .lizardmen_saurusBlocker
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 4),
-                            specID: .lizardmen_saurusBlocker
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 5),
-                            specID: .lizardmen_saurusBlocker
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 0),
-                            specID: .orc_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 1),
-                            specID: .orc_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 2),
-                            specID: .orc_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 3),
-                            specID: .orc_passer
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 4),
-                            specID: .orc_blitzer
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 5),
-                            specID: .orc_bigUnBlocker
-                        ),
-                    ],
-                    deck: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay),
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .stepAside),
-                        ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .blitz),
-                        ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .intervention),
-                        ChallengeCard(challenge: .gangUp, bonusPlay: .inspiration),
-                    ],
-                    coinFlipLoserHand: [],
-                    coinFlipWinnerHand: [
-                        ChallengeCard(challenge: .rookieBonus, bonusPlay: .rawTalent),
+                .specifiedTeam(
+                    coachID: .home,
+                    teamID: TeamID.orc
+                ),
+                .startingHandWasSetUp(
+                    coachID: .away,
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .rookieBonus,
+                                bonusPlay: .rawTalent
+                            )
+                        )
                     ]
                 ),
-                .dealtNewObjective(coachID: .home, objectiveID: .first),
-                .dealtNewObjective(coachID: .home, objectiveID: .second),
-                .dealtNewObjective(coachID: .home, objectiveID: .third),
+                .startingHandWasSetUp(
+                    coachID: .home,
+                    hand: []
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 0),
+                    number: 2
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 1),
+                    number: 4
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 2),
+                    number: 6
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 3),
+                    number: 8
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 4),
+                    number: 10
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 5),
+                    number: 12
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 0),
+                    number: 14
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 1),
+                    number: 16
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 2),
+                    number: 18
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 3),
+                    number: 20
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 4),
+                    number: 22
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 5),
+                    number: 24
+                ),
+                .startingPlayersWereSetUp(
+                    coachID: .away,
+                    playerSetups: [
+                        PlayerSetup(
+                            id: pl(.away, 0),
+                            specID: PlayerSpecID
+                                .lizardmen_skinkRunner,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(8),
+                                block: 1,
+                                pass: 4,
+                                armour: 6,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .safeHands
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 1),
+                            specID: PlayerSpecID
+                                .lizardmen_skinkRunner,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(8),
+                                block: 1,
+                                pass: 4,
+                                armour: 6,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .safeHands
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 2),
+                            specID: PlayerSpecID
+                                .lizardmen_chameleonSkinkCatcher,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(7),
+                                block: 1,
+                                pass: 3,
+                                armour: 5,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .catchersInstincts
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 3),
+                            specID: PlayerSpecID
+                                .lizardmen_saurusBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 4),
+                            specID: PlayerSpecID
+                                .lizardmen_saurusBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 5),
+                            specID: PlayerSpecID
+                                .lizardmen_saurusBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                    ]
+                ),
+                .startingPlayersWereSetUp(
+                    coachID: .home,
+                    playerSetups: [
+                        PlayerSetup(
+                            id: pl(.home, 0),
+                            specID: PlayerSpecID
+                                .orc_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 1),
+                            specID: PlayerSpecID
+                                .orc_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 2),
+                            specID: PlayerSpecID
+                                .orc_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 3),
+                            specID: PlayerSpecID
+                                .orc_passer,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 3,
+                                armour: 3,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .handlingSkills
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 4),
+                            specID: PlayerSpecID
+                                .orc_blitzer,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .offensiveSpecialist
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 5),
+                            specID: PlayerSpecID
+                                .orc_bigUnBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                    ]
+                ),
+                .updatedDeck(
+                    top: .breakSomeBones,
+                    count: 5
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .first,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(
+                    top: .breakSomeBones,
+                    count: 4
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(
+                    top: .freeUpTheBall,
+                    count: 3
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .third,
+                    objective: .freeUpTheBall
+                ),
+                .updatedDeck(
+                    top: .freeUpTheBall,
+                    count: 2
+                ),
             ]
         )
 
@@ -314,17 +746,19 @@ struct RawTalentTests {
 
         let coachIDRandomizer = CoachIDRandomizerDouble()
         let deckRandomizer = DeckRandomizerDouble()
+        let playerNumberRandomizer = PlayerNumberRandomizerDouble()
 
-        let uuidProvider = UUIDProviderDouble()
+        let ballIDProvider = BallIDProviderDouble()
 
         var game = Game(
             phase: .config(Config()),
             previousPrompt: nil,
             randomizers: Randomizers(
                 coachID: coachIDRandomizer,
-                deck: deckRandomizer
+                deck: deckRandomizer,
+                playerNumber: playerNumberRandomizer
             ),
-            uuidProvider: uuidProvider
+            ballIDProvider: ballIDProvider
         )
 
         coachIDRandomizer.nextResult = .away
@@ -372,6 +806,8 @@ struct RawTalentTests {
 
         deckRandomizer.nextResult = Array(ChallengeCard.standardShortDeck.prefix(5))
 
+        playerNumberRandomizer.nextResults = [[2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24]]
+
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
@@ -381,71 +817,278 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .specifiedCoinFlipLoserTeam(teamID: .orc),
-                .tableWasSetUp(
-                    playerConfigs: [
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 0),
-                            specID: .lizardmen_skinkRunner
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 1),
-                            specID: .lizardmen_skinkRunner
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 2),
-                            specID: .lizardmen_chameleonSkinkCatcher
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 3),
-                            specID: .lizardmen_saurusBlocker
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 4),
-                            specID: .lizardmen_saurusBlocker
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .away, index: 5),
-                            specID: .lizardmen_saurusBlocker
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 0),
-                            specID: .orc_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 1),
-                            specID: .orc_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 2),
-                            specID: .orc_lineman
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 3),
-                            specID: .orc_passer
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 4),
-                            specID: .orc_blitzer
-                        ),
-                        PlayerConfig(
-                            id: PlayerID(coachID: .home, index: 5),
-                            specID: .orc_bigUnBlocker
-                        ),
-                    ],
-                    deck: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay),
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .stepAside),
-                        ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .blitz),
-                        ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .intervention),
-                        ChallengeCard(challenge: .gangUp, bonusPlay: .inspiration),
-                    ],
-                    coinFlipLoserHand: [],
-                    coinFlipWinnerHand: []
+                .specifiedTeam(
+                    coachID: .home,
+                    teamID: TeamID.orc
                 ),
-                .dealtNewObjective(coachID: .home, objectiveID: .first),
-                .dealtNewObjective(coachID: .home, objectiveID: .second),
-                .dealtNewObjective(coachID: .home, objectiveID: .third),
+                .startingHandWasSetUp(
+                    coachID: .away,
+                    hand: []
+                ),
+                .startingHandWasSetUp(
+                    coachID: .home,
+                    hand: []
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 0),
+                    number: 2
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 1),
+                    number: 4
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 2),
+                    number: 6
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 3),
+                    number: 8
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 4),
+                    number: 10
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.home, 5),
+                    number: 12
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 0),
+                    number: 14
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 1),
+                    number: 16
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 2),
+                    number: 18
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 3),
+                    number: 20
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 4),
+                    number: 22
+                ),
+                .playerReceivedNumber(
+                    playerID: pl(.away, 5),
+                    number: 24
+                ),
+                .startingPlayersWereSetUp(
+                    coachID: .away,
+                    playerSetups: [
+                        PlayerSetup(
+                            id: pl(.away, 0),
+                            specID: PlayerSpecID
+                                .lizardmen_skinkRunner,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(8),
+                                block: 1,
+                                pass: 4,
+                                armour: 6,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .safeHands
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 1),
+                            specID: PlayerSpecID
+                                .lizardmen_skinkRunner,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(8),
+                                block: 1,
+                                pass: 4,
+                                armour: 6,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .safeHands
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 2),
+                            specID: PlayerSpecID
+                                .lizardmen_chameleonSkinkCatcher,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(7),
+                                block: 1,
+                                pass: 3,
+                                armour: 5,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .catchersInstincts
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 3),
+                            specID: PlayerSpecID
+                                .lizardmen_saurusBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 4),
+                            specID: PlayerSpecID
+                                .lizardmen_saurusBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.away, 5),
+                            specID: PlayerSpecID
+                                .lizardmen_saurusBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                    ]
+                ),
+                .startingPlayersWereSetUp(
+                    coachID: .home,
+                    playerSetups: [
+                        PlayerSetup(
+                            id: pl(.home, 0),
+                            specID: PlayerSpecID
+                                .orc_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 1),
+                            specID: PlayerSpecID
+                                .orc_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 2),
+                            specID: PlayerSpecID
+                                .orc_lineman,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 3),
+                            specID: PlayerSpecID
+                                .orc_passer,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 1,
+                                pass: 3,
+                                armour: 3,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .handlingSkills
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 4),
+                            specID: PlayerSpecID
+                                .orc_blitzer,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(6),
+                                block: 1,
+                                pass: 4,
+                                armour: 2,
+                                skills: [
+                                    PlayerSpec.Skill
+                                        .offensiveSpecialist
+                                ]
+                            )
+                        ),
+                        PlayerSetup(
+                            id: pl(.home, 5),
+                            specID: PlayerSpecID
+                                .orc_bigUnBlocker,
+                            spec: PlayerSpec(
+                                move: PlayerSpec.Move
+                                    .fixed(5),
+                                block: 2,
+                                pass: 6,
+                                armour: 2,
+                                skills: []
+                            )
+                        ),
+                    ]
+                ),
+                .updatedDeck(
+                    top: .breakSomeBones,
+                    count: 5
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .first,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(
+                    top: .breakSomeBones,
+                    count: 4
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .second,
+                    objective: .breakSomeBones
+                ),
+                .updatedDeck(
+                    top: .freeUpTheBall,
+                    count: 3
+                ),
+                .dealtNewObjective(
+                    coachID: .home,
+                    objectiveID: .third,
+                    objective: .freeUpTheBall
+                ),
+                .updatedDeck(
+                    top: .freeUpTheBall,
+                    count: 2
+                ),
             ]
         )
 
@@ -459,7 +1102,7 @@ struct RawTalentTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -474,24 +1117,25 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_passer,
                             state: .standing(square: sq(8, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -503,7 +1147,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -528,7 +1172,7 @@ struct RawTalentTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -538,7 +1182,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -550,10 +1194,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 6)
                 )
             ]
         )
@@ -562,10 +1207,10 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(2, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -583,14 +1228,19 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 3),
-                .changedPassResult(die: .d6, modified: 2, modifications: [.longDistance, .targetPlayerMarked]),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 3),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 3,
+                    modified: 2,
+                    modifications: [.longDistance, .targetPlayerMarked]
+                ),
             ]
         )
 
@@ -598,7 +1248,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionResultEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     result: 2
                 )
             )
@@ -619,15 +1269,38 @@ struct RawTalentTests {
             latestEvents == [
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    ),
+                    hand: []
                 ),
-                .rolledForPass(die: .d6, unmodified: 4),
-                .changedPassResult(die: .d6, modified: 3, modifications: [.longDistance, .targetPlayerMarked]),
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 4
+                ),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 4,
+                    modified: 3,
+                    modifications: [
+                        .longDistance,
+                        .targetPlayerMarked,
+                    ]
+                ),
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(8, 6),
+                    to: sq(2, 6),
+                    angle: 270,
+                    ballID: 123
                 ),
-                .playerCaughtPass(playerID: PlayerID(coachID: .away, index: 1))
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    in: sq(2, 6),
+                    ballID: 123
+                ),
             ]
         )
 
@@ -638,21 +1311,21 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -671,7 +1344,7 @@ struct RawTalentTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -686,24 +1359,25 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_passer,
                             state: .standing(square: sq(8, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -715,7 +1389,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         )
                     ],
                     deck: [],
@@ -741,7 +1415,7 @@ struct RawTalentTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare pass
@@ -751,7 +1425,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
                     consumesBonusPlays: []
@@ -763,10 +1437,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .pass
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(8, 6)
                 )
             ]
         )
@@ -775,10 +1450,10 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: PlayerID(coachID: .away, index: 1),
+                            targetPlayerID: pl(.away, 1),
                             targetSquare: sq(2, 6),
                             distance: .long,
                             obstructingSquares: [],
@@ -796,14 +1471,19 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: PlayerID(coachID: .away, index: 1))
+                message: .passActionSpecifyTarget(target: pl(.away, 1))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(die: .d6, unmodified: 3),
-                .changedPassResult(die: .d6, modified: 2, modifications: [.longDistance, .targetPlayerMarked]),
+                .rolledForPass(coachID: .away, die: .d6, unmodified: 3),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 3,
+                    modified: 2,
+                    modifications: [.longDistance, .targetPlayerMarked]
+                ),
             ]
         )
 
@@ -811,7 +1491,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .passActionResultEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     result: 2
                 )
             )
@@ -831,13 +1511,28 @@ struct RawTalentTests {
         #expect(
             latestEvents == [
                 .playerPassedBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(8, 6),
+                    to: sq(2, 6),
+                    angle: 270,
+                    ballID: 123
                 ),
-                .playerFailedCatch(playerID: PlayerID(coachID: .away, index: 1)),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .north),
-                .ballBounced(ballID: ballID, to: sq(2, 5)),
+                .playerFailedCatch(
+                    playerID: pl(.away, 1),
+                    in: sq(2, 6),
+                    ballID: 123
+                ),
+                .ballCameLoose(ballID: 123, in: sq(2, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .north
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(2, 6),
+                    to: sq(2, 5),
+                    direction: .north
+                ),
             ]
         )
 
@@ -848,21 +1543,21 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -880,7 +1575,7 @@ struct RawTalentTests {
 
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -895,24 +1590,25 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .human_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -924,7 +1620,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -949,7 +1645,7 @@ struct RawTalentTests {
             randomizers: Randomizers(
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -959,7 +1655,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -971,10 +1667,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -983,9 +1680,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -997,7 +1694,7 @@ struct RawTalentTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -1010,7 +1707,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1168,7 +1865,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 1),
+                .rolledForHurlTeammate(coachID: .away, die: .d6, unmodified: 1),
             ]
         )
 
@@ -1176,7 +1873,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     result: 1
                 )
             )
@@ -1197,15 +1894,30 @@ struct RawTalentTests {
             latestEvents == [
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    ),
+                    hand: []
                 ),
-                .rolledForHurlTeammate(die: .d6, unmodified: 5),
+                .rolledForHurlTeammate(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 5
+                ),
                 .playerHurledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1),
-                    square: sq(7, 6)
+                    playerID: pl(.away, 0),
+                    teammateID: pl(.away, 1),
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(7, 6),
+                    angle: 90
                 ),
-                .hurledTeammateLanded(playerID: PlayerID(coachID: .away, index: 1)),
+                .hurledTeammateLanded(
+                    playerID: pl(.away, 1),
+                    ballID: 123,
+                    in: sq(7, 6)
+                ),
             ]
         )
 
@@ -1216,28 +1928,28 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .mark
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
@@ -1256,7 +1968,7 @@ struct RawTalentTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1271,24 +1983,25 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .halfling_treeman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .human_catcher,
                             state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 8)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -1300,7 +2013,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 1))
+                            state: .held(playerID: pl(.away, 1))
                         ),
                     ],
                     deck: [],
@@ -1326,7 +2039,7 @@ struct RawTalentTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare hurl teammate
@@ -1336,7 +2049,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
                     consumesBonusPlays: []
@@ -1348,10 +2061,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .hurlTeammate
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1360,9 +2074,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTeammates: [
-                        PlayerID(coachID: .away, index: 1),
+                        pl(.away, 1),
                     ]
                 )
             )
@@ -1374,7 +2088,7 @@ struct RawTalentTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: PlayerID(coachID: .away, index: 1)
+                    teammate: pl(.away, 1)
                 )
             )
         )
@@ -1387,7 +2101,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1545,7 +2259,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .rolledForHurlTeammate(die: .d6, unmodified: 1),
+                .rolledForHurlTeammate(coachID: .away, die: .d6, unmodified: 1),
             ]
         )
 
@@ -1553,7 +2267,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     result: 1
                 )
             )
@@ -1573,13 +2287,27 @@ struct RawTalentTests {
         #expect(
             latestEvents == [
                 .playerFumbledTeammate(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    teammateID: PlayerID(coachID: .away, index: 1)
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6),
+                    teammateID: pl(.away, 1),
+                    ballID: 123
                 ),
-                .playerInjured(playerID: PlayerID(coachID: .away, index: 1), reason: .fumbled),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .west),
-                .ballBounced(ballID: ballID, to: sq(2, 6)),
+                .playerInjured(
+                    playerID: pl(.away, 1),
+                    in: sq(3, 6),
+                    reason: .fumbled
+                ),
+                .ballCameLoose(ballID: 123, in: sq(3, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .west
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west
+                ),
             ]
         )
 
@@ -1590,14 +2318,14 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .reserves
                             ),
                             consumesBonusPlays: []
@@ -1615,7 +2343,7 @@ struct RawTalentTests {
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1630,18 +2358,19 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -1653,7 +2382,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -1678,7 +2407,7 @@ struct RawTalentTests {
             randomizers: Randomizers(
                 blockDie: blockDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -1688,7 +2417,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1700,10 +2429,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1712,9 +2442,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -1727,13 +2457,13 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash]),
             ]
         )
 
@@ -1741,7 +2471,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.smash],
                     clawsResult: nil,
                     maySelectResultToDecline: false
@@ -1764,19 +2494,35 @@ struct RawTalentTests {
             latestEvents == [
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    ),
+                    hand: []
                 ),
-                .rolledForBlock(results: [.shove]),
-                .selectedBlockDieResult(coachID: .away, result: .shove),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.shove]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
                     reason: .shoved
-                )
+                ),
             ]
         )
 
@@ -1784,7 +2530,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     square: sq(2, 6)
                 )
             )
@@ -1797,7 +2543,7 @@ struct RawTalentTests {
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1812,18 +2558,19 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -1835,7 +2582,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -1860,7 +2607,7 @@ struct RawTalentTests {
             randomizers: Randomizers(
                 blockDie: blockDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -1870,7 +2617,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -1882,10 +2629,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -1894,9 +2642,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -1909,13 +2657,13 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.miss]),
+                .rolledForBlock(coachID: .away, results: [.miss]),
             ]
         )
 
@@ -1923,7 +2671,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.miss],
                     clawsResult: nil,
                     maySelectResultToDecline: false
@@ -1944,15 +2692,27 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(coachID: .away, result: .miss),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss
                 ),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6)
+                ),
                 .turnEnded(coachID: .away),
-                .playerCanTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .finalTurnBegan
+                .playerCanTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6)
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
@@ -1963,14 +2723,14 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .home, index: 0),
+                                playerID: pl(.home, 0),
                                 actionID: .sidestep
                             ),
                             consumesBonusPlays: []
@@ -2002,24 +2762,25 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_blitzer,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -2052,7 +2813,7 @@ struct RawTalentTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -2062,7 +2823,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -2074,10 +2835,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -2086,9 +2848,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -2101,13 +2863,13 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch, .miss]),
+                .rolledForBlock(coachID: .away, results: [.kerrunch, .miss]),
             ]
         )
 
@@ -2115,7 +2877,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.kerrunch, .miss]
                 )
             )
@@ -2134,20 +2896,45 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .declinedOffensiveSpecialistSkillReroll(playerID: PlayerID(coachID: .away, index: 0)),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
+                .declinedOffensiveSpecialistSkillReroll(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6)
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerAssistedBlock(
-                    assistingPlayerID: PlayerID(coachID: .away, index: 1),
-                    blockingPlayerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    assistingPlayerID: pl(.away, 1),
+                    from: sq(3, 7),
+                    to: sq(2, 6),
+                    direction: .northWest,
+                    targetPlayerID: pl(.home, 0),
+                    blockingPlayerID: pl(.away, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 5),
-                .changedArmourResult(die: .d6, modified: 4, modifications: [.kerrunch]),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 5
+                ),
+                .changedArmourResult(
+                    die: .d6,
+                    unmodified: 5,
+                    modified: 4,
+                    modifications: [.kerrunch]
+                ),
             ]
         )
 
@@ -2158,28 +2945,28 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -2211,24 +2998,25 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_blitzer,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -2261,7 +3049,7 @@ struct RawTalentTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -2271,7 +3059,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -2283,10 +3071,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -2295,9 +3084,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -2310,13 +3099,13 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.shove, .miss]),
+                .rolledForBlock(coachID: .away, results: [.shove, .miss]),
             ]
         )
 
@@ -2324,7 +3113,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.shove, .miss]
                 )
             )
@@ -2343,8 +3132,14 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .usedOffensiveSpecialistSkillReroll(playerID: PlayerID(coachID: .away, index: 0)),
-                .rolledForBlock(results: [.smash, .miss]),
+                .usedOffensiveSpecialistSkillReroll(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6)
+                ),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash, .miss]
+                ),
             ]
         )
 
@@ -2352,7 +3147,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.smash, .miss]
                 )
             )
@@ -2371,18 +3166,35 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerAssistedBlock(
-                    assistingPlayerID: PlayerID(coachID: .away, index: 1),
-                    blockingPlayerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    assistingPlayerID: pl(.away, 1),
+                    from: sq(3, 7),
+                    to: sq(2, 6),
+                    direction: .northWest,
+                    targetPlayerID: pl(.home, 0),
+                    blockingPlayerID: pl(.away, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 3),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 3
+                ),
             ]
         )
 
@@ -2393,28 +3205,28 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -2434,7 +3246,7 @@ struct RawTalentTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2449,24 +3261,25 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .khorne_bloodseeker,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .khorne_marauder,
                             state: .standing(square: sq(2, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -2478,7 +3291,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -2505,7 +3318,7 @@ struct RawTalentTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -2515,7 +3328,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -2527,10 +3340,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -2539,9 +3353,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -2556,13 +3370,13 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.shove, .miss, .shove]),
+                .rolledForBlock(coachID: .away, results: [.shove, .miss, .shove]),
             ]
         )
 
@@ -2570,7 +3384,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.shove, .shove, .miss],
                     clawsResult: nil,
                     maySelectResultToDecline: false
@@ -2595,31 +3409,74 @@ struct RawTalentTests {
             latestEvents == [
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    ),
+                    hand: []
                 ),
-                .rolledForBlock(results: [.smash, .kerrunch, .smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash, .kerrunch, .smash]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerAssistedBlock(
-                    assistingPlayerID: PlayerID(coachID: .away, index: 1),
-                    blockingPlayerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    assistingPlayerID: pl(.away, 1),
+                    from: sq(2, 7),
+                    to: sq(1, 6),
+                    direction: .northWest,
+                    targetPlayerID: pl(.home, 0),
+                    blockingPlayerID: pl(.away, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: .east),
-                .ballBounced(ballID: ballID, to: sq(2, 6)),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: .blocked
+                ),
+                .ballCameLoose(ballID: 123, in: sq(1, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .east
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(1, 6),
+                    to: sq(2, 6),
+                    direction: .east
+                ),
                 .playerCaughtBouncingBall(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    ballID: ballID
+                    playerID: pl(.away, 0),
+                    in: sq(2, 6),
+                    ballID: 123
                 ),
-                .rolledForArmour(die: .d6, unmodified: 1),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 1
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: .blocked
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch
+                ),
             ]
         )
 
@@ -2630,21 +3487,21 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .pass
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -2664,7 +3521,7 @@ struct RawTalentTests {
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2679,24 +3536,25 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .khorne_bloodseeker,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .khorne_marauder,
                             state: .standing(square: sq(2, 7)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -2708,7 +3566,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .home, index: 0))
+                            state: .held(playerID: pl(.home, 0))
                         ),
                     ],
                     deck: [],
@@ -2735,7 +3593,7 @@ struct RawTalentTests {
                 d6: d6Randomizer,
                 direction: directionRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -2745,7 +3603,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -2757,10 +3615,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -2769,9 +3628,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -2786,13 +3645,13 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.shove, .miss, .shove]),
+                .rolledForBlock(coachID: .away, results: [.shove, .miss, .shove]),
             ]
         )
 
@@ -2800,7 +3659,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.shove, .shove, .miss],
                     clawsResult: nil,
                     maySelectResultToDecline: false
@@ -2822,34 +3681,74 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(coachID: .away, result: .shove),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerAssistedBlock(
-                    assistingPlayerID: PlayerID(coachID: .away, index: 1),
-                    blockingPlayerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    assistingPlayerID: pl(.away, 1),
+                    from: sq(2, 7),
+                    to: sq(1, 6),
+                    direction: .northWest,
+                    targetPlayerID: pl(.home, 0),
+                    blockingPlayerID: pl(.away, 0)
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(0, 6),
+                    playerID: pl(.home, 0),
+                    ballID: 123,
+                    from: sq(1, 6),
+                    to: sq(0, 6),
+                    direction: .west,
                     reason: .shoved
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.away, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
                     reason: .followUp
                 ),
-                .selectedBlockDieResult(coachID: .away, result: .shove),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .ballCameLoose(ballID: ballID),
-                .rolledForDirection(direction: Direction.south),
-                .ballBounced(ballID: ballID, to: sq(0, 7)),
-                .rolledForArmour(die: .d6, unmodified: 3),
-                .selectedBlockDieResult(coachID: .away, result: .miss),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0))
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(0, 6),
+                    reason: .blocked
+                ),
+                .ballCameLoose(ballID: 123, in: sq(0, 6)),
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .south
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(0, 6),
+                    to: sq(0, 7),
+                    direction: .south
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 3
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss
+                ),
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(1, 6)
+                ),
             ]
         )
 
@@ -2860,7 +3759,7 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -2892,18 +3791,19 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .necromantic_werewolf,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(1, 6)),
                             canTakeActions: true
                         )
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -2936,7 +3836,7 @@ struct RawTalentTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -2946,7 +3846,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -2958,10 +3858,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(2, 6)
                 )
             ]
         )
@@ -2970,9 +3871,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0)
+                        pl(.home, 0)
                     ]
                 )
             )
@@ -2986,14 +3887,14 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForClaws(result: 5),
-                .rolledForBlock(results: [.kerrunch]),
+                .rolledForClaws(coachID: .away, result: 5),
+                .rolledForBlock(coachID: .away, results: [.kerrunch]),
             ]
         )
 
@@ -3001,7 +3902,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.kerrunch],
                     clawsResult: 5,
                     maySelectResultToDecline: false
@@ -3024,15 +3925,33 @@ struct RawTalentTests {
             latestEvents == [
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    ),
+                    hand: []
                 ),
-                .rolledForClaws(result: 6),
+                .rolledForClaws(
+                    coachID: .away,
+                    result: 6
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(1, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: .blocked
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(1, 6),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -3043,7 +3962,7 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -3062,7 +3981,7 @@ struct RawTalentTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3077,24 +3996,25 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_pumpWagon,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .away, index: 1),
+                            id: pl(.away, 1),
                             spec: .snotling_snotling,
                             state: .standing(square: sq(2, 5)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -3132,7 +4052,7 @@ struct RawTalentTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -3142,7 +4062,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -3154,10 +4074,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -3166,9 +4087,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -3181,13 +4102,13 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.miss, .tackle, .shove]),
+                .rolledForBlock(coachID: .away, results: [.miss, .tackle, .shove]),
             ]
         )
 
@@ -3195,7 +4116,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.miss, .tackle, .shove],
                     clawsResult: nil,
                     maySelectResultToDecline: true
@@ -3219,9 +4140,13 @@ struct RawTalentTests {
             latestEvents == [
                 .revealedInstantBonusPlay(
                     coachID: .away,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    ),
+                    hand: []
                 ),
-                .rolledForBlock(results: [.miss, .miss, .tackle]),
+                .rolledForBlock(coachID: .away, results: [.miss, .miss, .tackle]),
             ]
         )
 
@@ -3229,7 +4154,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.miss, .miss, .tackle]
                 )
             )
@@ -3246,15 +4171,36 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(coachID: .away, result: .tackle),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .tackle
                 ),
-                .playerCannotTakeActions(playerID: PlayerID(coachID: .away, index: 0)),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 1),
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(3, 6)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 1
+                ),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
             ]
         )
 
@@ -3265,7 +4211,7 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 1),
+                                playerID: pl(.away, 1),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -3283,7 +4229,7 @@ struct RawTalentTests {
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3298,18 +4244,19 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .snotling_pumpWagon,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
                     ],
@@ -3321,7 +4268,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -3346,7 +4293,7 @@ struct RawTalentTests {
             randomizers: Randomizers(
                 blockDie: blockDieRandomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -3356,7 +4303,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -3368,10 +4315,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -3380,9 +4328,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -3395,13 +4343,13 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.miss, .tackle, .shove]),
+                .rolledForBlock(coachID: .away, results: [.miss, .tackle, .shove]),
             ]
         )
 
@@ -3409,7 +4357,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     results: [.miss, .tackle, .shove],
                     clawsResult: nil,
                     maySelectResultToDecline: true
@@ -3430,16 +4378,25 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(coachID: .away, result: .shove),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove
+                ),
                 .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
                 ),
                 .playerMoved(
-                    playerID: PlayerID(coachID: .home, index: 0),
-                    square: sq(1, 6),
+                    playerID: pl(.home, 0),
+                    ballID: nil,
+                    from: sq(2, 6),
+                    to: sq(1, 6),
+                    direction: .west,
                     reason: .shoved
-                )
+                ),
             ]
         )
 
@@ -3447,7 +4404,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     square: sq(2, 6)
                 )
             )
@@ -3461,7 +4418,7 @@ struct RawTalentTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3476,18 +4433,19 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
@@ -3499,7 +4457,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -3525,7 +4483,7 @@ struct RawTalentTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -3535,7 +4493,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -3547,10 +4505,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -3559,9 +4518,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -3575,21 +4534,43 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.kerrunch]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 2),
-                .changedArmourResult(die: .d6, modified: 1, modifications: [.kerrunch]),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 2
+                ),
+                .changedArmourResult(
+                    die: .d6,
+                    unmodified: 2,
+                    modified: 1,
+                    modifications: [.kerrunch]
+                ),
             ]
         )
 
@@ -3597,7 +4578,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .blockActionArmourResultEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     result: 1
                 )
             )
@@ -3618,10 +4599,19 @@ struct RawTalentTests {
             latestEvents == [
                 .revealedInstantBonusPlay(
                     coachID: .home,
-                    card: ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent)
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    ),
+                    hand: []
                 ),
-                .rolledForArmour(die: .d6, unmodified: 4),
-                .changedArmourResult(die: .d6, modified: 3, modifications: [.kerrunch]),
+                .rolledForArmour(coachID: .home, die: .d6, unmodified: 4),
+                .changedArmourResult(
+                    die: .d6,
+                    unmodified: 4,
+                    modified: 3,
+                    modifications: [.kerrunch]
+                ),
             ]
         )
 
@@ -3632,14 +4622,14 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []
@@ -3658,7 +4648,7 @@ struct RawTalentTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3673,18 +4663,19 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
@@ -3696,7 +4687,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -3722,7 +4713,7 @@ struct RawTalentTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -3732,7 +4723,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -3744,10 +4735,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -3756,9 +4748,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -3772,21 +4764,43 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.kerrunch]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 2),
-                .changedArmourResult(die: .d6, modified: 1, modifications: [.kerrunch]),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 2
+                ),
+                .changedArmourResult(
+                    die: .d6,
+                    unmodified: 2,
+                    modified: 1,
+                    modifications: [.kerrunch]
+                ),
             ]
         )
 
@@ -3794,7 +4808,7 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .home,
                 payload: .blockActionArmourResultEligibleForRawTalentBonusPlayReroll(
-                    playerID: PlayerID(coachID: .home, index: 0),
+                    playerID: pl(.home, 0),
                     result: 1
                 )
             )
@@ -3811,7 +4825,11 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .playerInjured(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                )
             ]
         )
 
@@ -3822,7 +4840,7 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
@@ -3841,7 +4859,7 @@ struct RawTalentTests {
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
 
-        let ballID = DefaultUUIDProvider().generate()
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3856,18 +4874,19 @@ struct RawTalentTests {
                     ),
                     players: [
                         Player(
-                            id: PlayerID(coachID: .away, index: 0),
+                            id: pl(.away, 0),
                             spec: .orc_lineman,
                             state: .standing(square: sq(3, 6)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: PlayerID(coachID: .home, index: 0),
+                            id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
+                    playerNumbers: [:],
                     coinFlipLoserHand: [],
                     coinFlipWinnerHand: [
                         ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
@@ -3879,7 +4898,7 @@ struct RawTalentTests {
                     balls: [
                         Ball(
                             id: ballID,
-                            state: .held(playerID: PlayerID(coachID: .away, index: 0))
+                            state: .held(playerID: pl(.away, 0))
                         ),
                     ],
                     deck: [],
@@ -3905,7 +4924,7 @@ struct RawTalentTests {
                 blockDie: blockDieRandomizer,
                 d6: d6Randomizer
             ),
-            uuidProvider: DefaultUUIDProvider()
+            ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
@@ -3915,7 +4934,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
                     consumesBonusPlays: []
@@ -3927,10 +4946,11 @@ struct RawTalentTests {
             latestEvents == [
                 .declaredAction(
                     declaration: ActionDeclaration(
-                        playerID: PlayerID(coachID: .away, index: 0),
+                        playerID: pl(.away, 0),
                         actionID: .block
                     ),
-                    isFree: false
+                    isFree: false,
+                    playerSquare: sq(3, 6)
                 )
             ]
         )
@@ -3939,9 +4959,9 @@ struct RawTalentTests {
             latestPayload == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
-                    playerID: PlayerID(coachID: .away, index: 0),
+                    playerID: pl(.away, 0),
                     validTargets: [
-                        PlayerID(coachID: .home, index: 0),
+                        pl(.home, 0),
                     ]
                 )
             )
@@ -3955,21 +4975,43 @@ struct RawTalentTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: PlayerID(coachID: .home, index: 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(results: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
-                .playerBlocked(
-                    playerID: PlayerID(coachID: .away, index: 0),
-                    square: sq(2, 6)
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.kerrunch]
                 ),
-                .playerFellDown(playerID: PlayerID(coachID: .home, index: 0), reason: .blocked),
-                .rolledForArmour(die: .d6, unmodified: 4),
-                .changedArmourResult(die: .d6, modified: 3, modifications: [.kerrunch]),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(3, 6),
+                    to: sq(2, 6),
+                    direction: .west,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    in: sq(2, 6),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 4
+                ),
+                .changedArmourResult(
+                    die: .d6,
+                    unmodified: 4,
+                    modified: 3,
+                    modifications: [.kerrunch]
+                ),
             ]
         )
 
@@ -3980,14 +5022,14 @@ struct RawTalentTests {
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .run
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: PlayerID(coachID: .away, index: 0),
+                                playerID: pl(.away, 0),
                                 actionID: .foul
                             ),
                             consumesBonusPlays: []

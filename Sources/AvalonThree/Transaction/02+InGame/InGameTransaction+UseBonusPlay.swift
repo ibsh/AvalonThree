@@ -20,14 +20,28 @@ extension InGameTransaction {
         }
         table.setHand(coachID: coachID, hand: hand)
 
+        let wrappedHand: [WrappedChallengeCard] = hand.map { .open(card: $0) }
+
         switch bonusPlay.persistence {
         case .instant:
-            events.append(.revealedInstantBonusPlay(coachID: coachID, card: card))
+            events.append(
+                .revealedInstantBonusPlay(
+                    coachID: coachID,
+                    card: card,
+                    hand: wrappedHand
+                )
+            )
         case .oneAction,
              .oneTurn,
              .custom,
              .game:
-            events.append(.revealedPersistentBonusPlay(coachID: coachID, card: card))
+            events.append(
+                .revealedPersistentBonusPlay(
+                    coachID: coachID,
+                    card: card,
+                    hand: wrappedHand
+                )
+            )
             let bonuses = table.getActiveBonuses(coachID: coachID)
             table.setActiveBonuses(
                 coachID: coachID,
