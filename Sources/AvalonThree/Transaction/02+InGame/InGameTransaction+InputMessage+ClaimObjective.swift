@@ -70,6 +70,16 @@ extension InGameTransaction {
         case .multiBall:
             try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
             try multiBall()
+            table.discards.append(objective)
+            events.append(
+                .discardedPersistentBonusPlay(
+                    coachID: turnContext.coachID,
+                    card: objective
+                )
+            )
+            events.append(
+                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
+            )
         case .bribedRef:
             try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
         case .nufflesBlessing:

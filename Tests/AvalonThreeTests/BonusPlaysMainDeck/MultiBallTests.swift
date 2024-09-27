@@ -225,7 +225,7 @@ struct MultiBallTests {
                     ]
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -251,6 +251,17 @@ struct MultiBallTests {
                     to: sq(6, 8),
                     direction: .northEast
                 ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    )
+                ),
+                .updatedDiscards(
+                    top: .multiBall,
+                    count: 1
+                )
             ]
         )
 
@@ -495,7 +506,7 @@ struct MultiBallTests {
                     ]
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -521,6 +532,17 @@ struct MultiBallTests {
                     to: sq(6, 4),
                     direction: .northEast
                 ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    )
+                ),
+                .updatedDiscards(
+                    top: .multiBall,
+                    count: 1
+                )
             ]
         )
 
@@ -771,7 +793,7 @@ struct MultiBallTests {
                     ]
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -802,6 +824,17 @@ struct MultiBallTests {
                     to: sq(6, 4),
                     direction: .northEast
                 ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    )
+                ),
+                .updatedDiscards(
+                    top: .multiBall,
+                    count: 1
+                )
             ]
         )
 
@@ -1057,7 +1090,7 @@ struct MultiBallTests {
                     increment: 2,
                     total: 2
                 ),
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -1105,6 +1138,17 @@ struct MultiBallTests {
                     to: sq(6, 5),
                     direction: .northEast
                 ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    )
+                ),
+                .updatedDiscards(
+                    top: .multiBall,
+                    count: 1
+                )
             ]
         )
 
@@ -1364,7 +1408,7 @@ struct MultiBallTests {
                     increment: 2,
                     total: 2
                 ),
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -1418,6 +1462,17 @@ struct MultiBallTests {
                     to: sq(6, 5),
                     direction: .northEast
                 ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    )
+                ),
+                .updatedDiscards(
+                    top: .multiBall,
+                    count: 1
+                )
             ]
         )
 
@@ -1694,7 +1749,7 @@ struct MultiBallTests {
                     increment: 2,
                     total: 2
                 ),
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -1762,6 +1817,17 @@ struct MultiBallTests {
                     to: sq(6, 6),
                     direction: .southEast
                 ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .takeThemDown,
+                        bonusPlay: .multiBall
+                    )
+                ),
+                .updatedDiscards(
+                    top: .multiBall,
+                    count: 1
+                )
             ]
         )
 
