@@ -177,8 +177,7 @@ extension BonusPlay {
 
     var persistence: Persistence {
         switch self {
-        case .shadow,
-             .legUp:
+        case .legUp:
             return .instant
         case .accuratePass,
              .blitz,
@@ -211,6 +210,7 @@ extension BonusPlay {
             return .oneTurn
         case .multiBall,
              .rawTalent,
+             .shadow,
              .readyToGo,
              .yourTimeToShine:
             return .custom

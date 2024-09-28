@@ -192,7 +192,7 @@ struct ShadowTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -207,6 +207,17 @@ struct ShadowTests {
                     to: sq(5, 5),
                     direction: .east,
                     reason: .shadow
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .shadow
+                    )
+                ),
+                .updatedDiscards(
+                    top: .shadow,
+                    count: 1
                 ),
             ]
         )
@@ -426,7 +437,7 @@ struct ShadowTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -441,6 +452,17 @@ struct ShadowTests {
                     to: sq(5, 5),
                     direction: .north,
                     reason: .shadow
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .shadow
+                    )
+                ),
+                .updatedDiscards(
+                    top: .shadow,
+                    count: 1
                 ),
             ]
         )

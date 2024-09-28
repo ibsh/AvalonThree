@@ -49,11 +49,21 @@ extension InGameTransaction {
             }
 
             try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
+
             try playerMovesIntoSquare(
                 playerID: playerID,
                 newSquare: square,
                 isFinalSquare: true,
                 reason: .shadow
+            )
+
+            let card = try table.removeActiveBonus(coachID: coachID, activeBonus: bonusPlay)
+            table.discards.append(card)
+            events.append(
+                .discardedPersistentBonusPlay(coachID: coachID, card: card)
+            )
+            events.append(
+                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
             )
         }
 
