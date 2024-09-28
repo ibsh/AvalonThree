@@ -1021,8 +1021,7 @@ struct ShowSomeGritTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .showSomeGrit,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

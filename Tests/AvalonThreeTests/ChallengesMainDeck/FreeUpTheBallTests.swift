@@ -427,8 +427,7 @@ struct FreeUpTheBallTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .freeUpTheBall,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

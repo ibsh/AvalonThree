@@ -1788,10 +1788,8 @@ struct ShowOffALittleTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .showOffALittle,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                challenge: .showOffALittle,
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

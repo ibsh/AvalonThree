@@ -183,10 +183,8 @@ struct BladedKnuckleDustersTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .breakSomeBones,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                challenge: .breakSomeBones,
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

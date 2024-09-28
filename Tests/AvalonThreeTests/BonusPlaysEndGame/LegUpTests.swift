@@ -461,16 +461,14 @@ struct LegUpTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .breakSomeBones,
+                                challenge: .breakSomeBones,
                                 bonusPlay: .legUp
                             )
                         ),
                         .open(
                             card: ChallengeCard(
                                 challenge: .getTheBall,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         ),
                     ]
@@ -490,8 +488,7 @@ struct LegUpTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .getTheBall,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

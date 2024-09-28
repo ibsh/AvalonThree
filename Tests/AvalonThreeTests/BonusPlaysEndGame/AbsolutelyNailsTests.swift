@@ -182,8 +182,7 @@ struct AbsolutelyNailsTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .breakSomeBones,
+                                challenge: .breakSomeBones,
                                 bonusPlay: .toughEnough
                             )
                         )

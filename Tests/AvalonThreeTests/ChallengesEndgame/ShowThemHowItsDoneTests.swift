@@ -928,18 +928,15 @@ struct ShowThemHowItsDoneTests {
                     objectiveID: .third,
                     objective: .open(
                         card: ChallengeCard(
-                            challenge:
-                                .showThemHowItsDone,
+                            challenge: .showThemHowItsDone,
                             bonusPlay: .absoluteCarnage
                         )
                     ),
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .showThemHowItsDone,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                challenge: .showThemHowItsDone,
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

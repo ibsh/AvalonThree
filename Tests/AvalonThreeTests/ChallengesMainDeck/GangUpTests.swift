@@ -606,8 +606,7 @@ struct GangUpTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .gangUp,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

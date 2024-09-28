@@ -1526,23 +1526,20 @@ struct GetInThereTests {
                     objectiveID: .first,
                     objective: .open(
                         card: ChallengeCard(
-                            challenge:
-                                .showThemHowItsDone,
+                            challenge: .showThemHowItsDone,
                             bonusPlay: .multiBall
                         )
                     ),
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .breakSomeBones,
+                                challenge: .breakSomeBones,
                                 bonusPlay: .getInThere
                             )
                         ),
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .showThemHowItsDone,
+                                challenge: .showThemHowItsDone,
                                 bonusPlay: .multiBall
                             )
                         ),
@@ -1553,7 +1550,7 @@ struct GetInThereTests {
                     increment: 2,
                     total: 6
                 ),
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .showThemHowItsDone,
@@ -1562,8 +1559,7 @@ struct GetInThereTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .breakSomeBones,
+                                challenge: .breakSomeBones,
                                 bonusPlay: .getInThere
                             )
                         )
@@ -1602,6 +1598,17 @@ struct GetInThereTests {
                     to: sq(6, 7),
                     direction: .east
                 ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .showThemHowItsDone,
+                        bonusPlay: .multiBall
+                    )
+                ),
+                .updatedDiscards(
+                    top: .multiBall,
+                    count: 1
+                )
             ]
         )
 
@@ -1713,7 +1720,7 @@ struct GetInThereTests {
                 ),
                 .updatedDiscards(
                     top: .getInThere,
-                    count: 1
+                    count: 2
                 ),
                 .turnEnded(coachID: .away),
             ]
@@ -1978,23 +1985,20 @@ struct GetInThereTests {
                     objectiveID: .first,
                     objective: .open(
                         card: ChallengeCard(
-                            challenge:
-                                .showThemHowItsDone,
+                            challenge: .showThemHowItsDone,
                             bonusPlay: .multiBall
                         )
                     ),
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .breakSomeBones,
+                                challenge: .breakSomeBones,
                                 bonusPlay: .getInThere
                             )
                         ),
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .showThemHowItsDone,
+                                challenge: .showThemHowItsDone,
                                 bonusPlay: .multiBall
                             )
                         ),
@@ -2005,7 +2009,7 @@ struct GetInThereTests {
                     increment: 2,
                     total: 6
                 ),
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .showThemHowItsDone,
@@ -2014,8 +2018,7 @@ struct GetInThereTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .breakSomeBones,
+                                challenge: .breakSomeBones,
                                 bonusPlay: .getInThere
                             )
                         )
@@ -2054,6 +2057,17 @@ struct GetInThereTests {
                     to: sq(6, 7),
                     direction: .east
                 ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .showThemHowItsDone,
+                        bonusPlay: .multiBall
+                    )
+                ),
+                .updatedDiscards(
+                    top: .multiBall,
+                    count: 1
+                )
             ]
         )
 
@@ -2340,16 +2354,14 @@ struct GetInThereTests {
                     objectiveID: .first,
                     objective: .open(
                         card: ChallengeCard(
-                            challenge:
-                                .showThemHowItsDone,
+                            challenge: .showThemHowItsDone,
                             bonusPlay: .multiBall
                         )
                     ),
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .showThemHowItsDone,
+                                challenge: .showThemHowItsDone,
                                 bonusPlay: .multiBall
                             )
                         )
@@ -2360,7 +2372,7 @@ struct GetInThereTests {
                     increment: 2,
                     total: 6
                 ),
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .showThemHowItsDone,
@@ -2401,6 +2413,17 @@ struct GetInThereTests {
                     to: sq(6, 7),
                     direction: .east
                 ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .showThemHowItsDone,
+                        bonusPlay: .multiBall
+                    )
+                ),
+                .updatedDiscards(
+                    top: .multiBall,
+                    count: 1
+                )
             ]
         )
 
@@ -2512,7 +2535,7 @@ struct GetInThereTests {
                 ),
                 .updatedDiscards(
                     top: .getInThere,
-                    count: 1
+                    count: 2
                 ),
                 .turnEnded(coachID: .away),
             ]
@@ -2777,16 +2800,14 @@ struct GetInThereTests {
                     objectiveID: .first,
                     objective: .open(
                         card: ChallengeCard(
-                            challenge:
-                                .showThemHowItsDone,
+                            challenge: .showThemHowItsDone,
                             bonusPlay: .multiBall
                         )
                     ),
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .showThemHowItsDone,
+                                challenge: .showThemHowItsDone,
                                 bonusPlay: .multiBall
                             )
                         )
@@ -2797,7 +2818,7 @@ struct GetInThereTests {
                     increment: 2,
                     total: 6
                 ),
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .showThemHowItsDone,
@@ -2838,6 +2859,17 @@ struct GetInThereTests {
                     to: sq(6, 7),
                     direction: .east
                 ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .showThemHowItsDone,
+                        bonusPlay: .multiBall
+                    )
+                ),
+                .updatedDiscards(
+                    top: .multiBall,
+                    count: 1
+                )
             ]
         )
 

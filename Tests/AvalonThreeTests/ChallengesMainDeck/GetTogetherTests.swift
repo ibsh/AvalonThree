@@ -656,8 +656,7 @@ struct GetTogetherTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .getTogether,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

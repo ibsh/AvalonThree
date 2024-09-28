@@ -16,9 +16,10 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
-        try useBonusPlay(bonusPlay: bonusPlay, coachID: actionContext.coachID)
-
-        return try blockActionRollDice()
+        return try useRawTalentBonusPlay(
+            coachID: actionContext.coachID,
+            action: .blockActionRollDice
+        )
     }
 
     mutating func blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(

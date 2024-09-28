@@ -583,10 +583,8 @@ struct ShowUsACompletionTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .showUsACompletion,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                challenge: .showUsACompletion,
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

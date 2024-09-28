@@ -68,18 +68,7 @@ extension InGameTransaction {
 
         switch objective.bonusPlay {
         case .multiBall:
-            try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
-            try multiBall()
-            table.discards.append(objective)
-            events.append(
-                .discardedPersistentBonusPlay(
-                    coachID: turnContext.coachID,
-                    card: objective
-                )
-            )
-            events.append(
-                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
-            )
+            try multiBall(objective: objective, coachID: turnContext.coachID)
         case .bribedRef:
             try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
         case .nufflesBlessing:
@@ -162,8 +151,19 @@ extension InGameTransaction {
         }
     }
 
-    private mutating func multiBall() throws {
+    private mutating func multiBall(objective: ChallengeCard, coachID: CoachID) throws {
+        try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: coachID)
         try addNewBall()
         try addNewBall()
+        table.discards.append(objective)
+        events.append(
+            .discardedPersistentBonusPlay(
+                coachID: coachID,
+                card: objective
+            )
+        )
+        events.append(
+            .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
+        )
     }
 }

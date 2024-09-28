@@ -55,6 +55,21 @@ extension Table {
         }
     }
 
+    mutating func removeActiveBonus(
+        coachID: CoachID,
+        activeBonus: BonusPlay
+    ) throws -> ChallengeCard {
+        var bonuses = getActiveBonuses(coachID: coachID)
+        guard let card = bonuses.removeFirst(where: { $0.bonusPlay == activeBonus }) else {
+            throw GameError("No active bonus")
+        }
+        setActiveBonuses(
+            coachID: coachID,
+            activeBonuses: bonuses
+        )
+        return card
+    }
+
     func getScore(
         coachID: CoachID
     ) -> Int {

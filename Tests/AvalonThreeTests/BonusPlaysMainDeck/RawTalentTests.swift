@@ -1267,7 +1267,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1300,6 +1300,17 @@ struct RawTalentTests {
                     playerID: pl(.away, 1),
                     in: sq(2, 6),
                     ballID: 123
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    )
+                ),
+                .updatedDiscards(
+                    top: .rawTalent,
+                    count: 1
                 ),
             ]
         )
@@ -1892,7 +1903,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1917,6 +1928,17 @@ struct RawTalentTests {
                     playerID: pl(.away, 1),
                     ballID: 123,
                     in: sq(7, 6)
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    )
+                ),
+                .updatedDiscards(
+                    top: .rawTalent,
+                    count: 1
                 ),
             ]
         )
@@ -2492,7 +2514,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -2522,6 +2544,17 @@ struct RawTalentTests {
                     to: sq(1, 6),
                     direction: .west,
                     reason: .shoved
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    )
+                ),
+                .updatedDiscards(
+                    top: .rawTalent,
+                    count: 1
                 ),
             ]
         )
@@ -3407,7 +3440,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -3476,6 +3509,17 @@ struct RawTalentTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .kerrunch
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    )
+                ),
+                .updatedDiscards(
+                    top: .rawTalent,
+                    count: 1
                 ),
             ]
         )
@@ -3923,7 +3967,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -3951,6 +3995,17 @@ struct RawTalentTests {
                     playerID: pl(.home, 0),
                     in: sq(1, 6),
                     reason: .blocked
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    )
+                ),
+                .updatedDiscards(
+                    top: .rawTalent,
+                    count: 1
                 ),
             ]
         )
@@ -4138,7 +4193,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -4147,6 +4202,17 @@ struct RawTalentTests {
                     hand: []
                 ),
                 .rolledForBlock(coachID: .away, results: [.miss, .miss, .tackle]),
+                .discardedPersistentBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    )
+                ),
+                .updatedDiscards(
+                    top: .rawTalent,
+                    count: 1
+                ),
             ]
         )
 
@@ -4597,7 +4663,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedInstantBonusPlay(
+                .revealedPersistentBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -4605,12 +4671,27 @@ struct RawTalentTests {
                     ),
                     hand: []
                 ),
-                .rolledForArmour(coachID: .home, die: .d6, unmodified: 4),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 4
+                ),
                 .changedArmourResult(
                     die: .d6,
                     unmodified: 4,
                     modified: 3,
                     modifications: [.kerrunch]
+                ),
+                .discardedPersistentBonusPlay(
+                    coachID: .home,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    )
+                ),
+                .updatedDiscards(
+                    top: .rawTalent,
+                    count: 1
                 ),
             ]
         )

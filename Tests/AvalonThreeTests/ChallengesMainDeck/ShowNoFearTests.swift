@@ -619,8 +619,7 @@ struct ShowNoFearTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .showNoFear,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

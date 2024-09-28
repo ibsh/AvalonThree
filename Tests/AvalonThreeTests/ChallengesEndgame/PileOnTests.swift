@@ -612,8 +612,7 @@ struct PileOnTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .pileOn,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

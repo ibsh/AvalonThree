@@ -9,6 +9,8 @@ import Foundation
 
 extension InGameTransaction {
 
+    private var bonusPlay: BonusPlay { .rawTalent }
+
     mutating func hurlTeammateActionUseRawTalentBonusPlayReroll() throws -> Prompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
@@ -17,8 +19,10 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
-        try useBonusPlay(bonusPlay: .rawTalent, coachID: actionContext.coachID)
-        return try hurlTeammateActionRollDie()
+        return try useRawTalentBonusPlay(
+            coachID: actionContext.coachID,
+            action: .hurlTeammateActionRollDie
+        )
     }
 
     mutating func hurlTeammateActionDeclineRawTalentBonusPlayReroll() throws -> Prompt? {

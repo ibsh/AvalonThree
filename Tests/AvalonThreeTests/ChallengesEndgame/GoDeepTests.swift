@@ -589,8 +589,7 @@ struct GoDeepTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .goDeep,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]
@@ -852,8 +851,7 @@ struct GoDeepTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .goDeep,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

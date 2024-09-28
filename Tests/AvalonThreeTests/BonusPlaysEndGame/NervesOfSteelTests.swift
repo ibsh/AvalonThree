@@ -480,8 +480,7 @@ struct NervesOfSteelTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .breakSomeBones,
+                                challenge: .breakSomeBones,
                                 bonusPlay: .hailMaryPass
                             )
                         )

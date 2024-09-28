@@ -479,18 +479,15 @@ struct ShowboatForTheCrowdTests {
                     objectiveID: .first,
                     objective: .open(
                         card: ChallengeCard(
-                            challenge:
-                                .showboatForTheCrowd,
+                            challenge: .showboatForTheCrowd,
                             bonusPlay: .absoluteCarnage
                         )
                     ),
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .showboatForTheCrowd,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                challenge: .showboatForTheCrowd,
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

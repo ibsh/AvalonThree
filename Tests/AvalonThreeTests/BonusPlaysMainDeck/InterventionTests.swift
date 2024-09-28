@@ -1268,8 +1268,7 @@ struct InterventionTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .breakSomeBones,
+                                challenge: .breakSomeBones,
                                 bonusPlay: .interference
                             )
                         )
@@ -2189,8 +2188,7 @@ struct InterventionTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .breakSomeBones,
+                                challenge: .breakSomeBones,
                                 bonusPlay: .divingTackle
                             )
                         )

@@ -436,8 +436,7 @@ struct GetTheBallTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .getTheBall,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

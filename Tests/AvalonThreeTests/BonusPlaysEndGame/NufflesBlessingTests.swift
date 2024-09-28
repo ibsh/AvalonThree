@@ -242,8 +242,7 @@ struct NufflesBlessingTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .getTheBall,
-                                bonusPlay:
-                                    .nufflesBlessing
+                                bonusPlay: .nufflesBlessing
                             )
                         )
                     ]

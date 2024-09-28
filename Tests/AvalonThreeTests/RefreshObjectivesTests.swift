@@ -353,8 +353,7 @@ struct RefreshObjectivesTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .takeThemDown,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

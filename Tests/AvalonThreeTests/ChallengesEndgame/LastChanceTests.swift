@@ -551,8 +551,7 @@ struct LastChanceTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .lastChance,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

@@ -713,8 +713,7 @@ struct SpreadOutTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .spreadOut,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]
@@ -940,8 +939,7 @@ struct SpreadOutTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .spreadOut,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

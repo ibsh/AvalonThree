@@ -654,10 +654,8 @@ struct MakeARiskyPassTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .makeARiskyPass,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                challenge: .makeARiskyPass,
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]
@@ -1811,10 +1809,8 @@ struct MakeARiskyPassTests {
                     hand: [
                         .open(
                             card: ChallengeCard(
-                                challenge:
-                                    .makeARiskyPass,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                challenge: .makeARiskyPass,
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

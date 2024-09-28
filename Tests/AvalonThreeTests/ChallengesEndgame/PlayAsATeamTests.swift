@@ -1481,8 +1481,7 @@ struct PlayAsATeamTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .playAsATeam,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

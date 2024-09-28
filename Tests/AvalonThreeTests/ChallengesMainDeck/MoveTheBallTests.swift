@@ -442,8 +442,7 @@ struct MoveTheBallTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .moveTheBall,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]
@@ -707,8 +706,7 @@ struct MoveTheBallTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .moveTheBall,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

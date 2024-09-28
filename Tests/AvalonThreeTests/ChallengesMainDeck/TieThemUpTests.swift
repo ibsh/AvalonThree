@@ -632,8 +632,7 @@ struct TieThemUpTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .tieThemUp,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]

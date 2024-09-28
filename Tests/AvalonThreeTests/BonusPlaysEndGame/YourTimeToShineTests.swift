@@ -386,8 +386,7 @@ struct YourTimeToShineTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .getTheBall,
-                                bonusPlay:
-                                    .yourTimeToShine
+                                bonusPlay: .yourTimeToShine
                             )
                         )
                     ]
@@ -1058,8 +1057,7 @@ struct YourTimeToShineTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .getTheBall,
-                                bonusPlay:
-                                    .yourTimeToShine
+                                bonusPlay: .yourTimeToShine
                             )
                         )
                     ]

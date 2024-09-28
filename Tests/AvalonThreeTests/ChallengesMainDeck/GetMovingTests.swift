@@ -502,8 +502,7 @@ struct GetMovingTests {
                         .open(
                             card: ChallengeCard(
                                 challenge: .getMoving,
-                                bonusPlay:
-                                    .absoluteCarnage
+                                bonusPlay: .absoluteCarnage
                             )
                         )
                     ]
