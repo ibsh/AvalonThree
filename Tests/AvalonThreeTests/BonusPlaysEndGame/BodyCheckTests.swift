@@ -78,7 +78,7 @@ struct BodyCheckTests {
 
         // MARK: - Declare block
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -105,7 +105,7 @@ struct BodyCheckTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForBodyCheckBonusPlay(
                     playerID: pl(.away, 0)
@@ -117,7 +117,7 @@ struct BodyCheckTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseBodyCheckBonusPlay
@@ -181,7 +181,7 @@ struct BodyCheckTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -276,7 +276,7 @@ struct BodyCheckTests {
 
         // MARK: - Declare block
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -303,7 +303,7 @@ struct BodyCheckTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForBodyCheckBonusPlay(
                     playerID: pl(.away, 0)
@@ -316,7 +316,7 @@ struct BodyCheckTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineBodyCheckBonusPlay
@@ -348,7 +348,7 @@ struct BodyCheckTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

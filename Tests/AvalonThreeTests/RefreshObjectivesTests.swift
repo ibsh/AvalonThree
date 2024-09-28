@@ -118,7 +118,7 @@ struct RefreshObjectivesTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -145,7 +145,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -191,7 +191,7 @@ struct RefreshObjectivesTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -214,7 +214,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -243,7 +243,7 @@ struct RefreshObjectivesTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -296,7 +296,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
                     objectiveIDs: [.first]
@@ -306,7 +306,7 @@ struct RefreshObjectivesTests {
 
         // MARK: - Claim objective
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
@@ -342,7 +342,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -370,7 +370,7 @@ struct RefreshObjectivesTests {
 
         foulDieRandomizer.nextResults = [.spotted]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -423,7 +423,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -589,7 +589,7 @@ struct RefreshObjectivesTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -616,7 +616,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -662,7 +662,7 @@ struct RefreshObjectivesTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -685,7 +685,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -714,7 +714,7 @@ struct RefreshObjectivesTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -767,7 +767,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -795,7 +795,7 @@ struct RefreshObjectivesTests {
 
         foulDieRandomizer.nextResults = [.spotted]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -838,7 +838,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .selectObjectiveToDiscard(objectiveIDs: [.second, .third])
             )
@@ -847,7 +847,7 @@ struct RefreshObjectivesTests {
         // MARK: - Try to preempt the prompt by declaring an action instead
 
         #expect(throws: GameError("Invalid message")) {
-            (latestEvents, latestPayload) = try game.process(
+            (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .home,
                     message: .declarePlayerAction(
@@ -864,7 +864,7 @@ struct RefreshObjectivesTests {
         // MARK: - Try to discard an invalid action
 
         #expect(throws: GameError("Invalid objective ID")) {
-            (latestEvents, latestPayload) = try game.process(
+            (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .home,
                     message: .selectObjectiveToDiscard(objectiveID: .first)
@@ -874,7 +874,7 @@ struct RefreshObjectivesTests {
 
         // MARK: - Choose objective to discard
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .selectObjectiveToDiscard(objectiveID: .second)
@@ -915,7 +915,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1080,7 +1080,7 @@ struct RefreshObjectivesTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1107,7 +1107,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -1153,7 +1153,7 @@ struct RefreshObjectivesTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -1176,7 +1176,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1205,7 +1205,7 @@ struct RefreshObjectivesTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1258,7 +1258,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1286,7 +1286,7 @@ struct RefreshObjectivesTests {
 
         foulDieRandomizer.nextResults = [.spotted]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1329,7 +1329,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .selectObjectiveToDiscard(objectiveIDs: [.first, .second, .third])
             )
@@ -1338,7 +1338,7 @@ struct RefreshObjectivesTests {
         // MARK: - Try to preempt the prompt by declaring an action instead
 
         #expect(throws: GameError("Invalid message")) {
-            (latestEvents, latestPayload) = try game.process(
+            (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .home,
                     message: .declarePlayerAction(
@@ -1354,7 +1354,7 @@ struct RefreshObjectivesTests {
 
         // MARK: - Choose objective to discard
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .selectObjectiveToDiscard(objectiveID: .second)
@@ -1389,7 +1389,7 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [

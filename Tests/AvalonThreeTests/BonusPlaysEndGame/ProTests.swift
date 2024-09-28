@@ -85,7 +85,7 @@ struct ProTests {
 
         // MARK: - Declare pass
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -112,7 +112,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -131,7 +131,7 @@ struct ProTests {
 
         // MARK: - Specify pass
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
@@ -143,7 +143,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionEligibleForProBonusPlay(
                     playerID: pl(.away, 0)
@@ -155,7 +155,7 @@ struct ProTests {
 
         d8Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionUseProBonusPlay
@@ -209,7 +209,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -316,7 +316,7 @@ struct ProTests {
 
         // MARK: - Declare pass
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -343,7 +343,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -362,7 +362,7 @@ struct ProTests {
 
         // MARK: - Specify pass
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
@@ -374,7 +374,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionEligibleForProBonusPlay(
                     playerID: pl(.away, 0)
@@ -386,7 +386,7 @@ struct ProTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionDeclineProBonusPlay
@@ -424,7 +424,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -531,7 +531,7 @@ struct ProTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -558,7 +558,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -703,7 +703,7 @@ struct ProTests {
 
         // MARK: - Specify target square
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(1, 6))
@@ -715,7 +715,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionEligibleForProBonusPlay(
                     playerID: pl(.away, 0)
@@ -727,7 +727,7 @@ struct ProTests {
 
         d8Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionUseProBonusPlay
@@ -774,7 +774,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -881,7 +881,7 @@ struct ProTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -908,7 +908,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1053,7 +1053,7 @@ struct ProTests {
 
         // MARK: - Specify target square
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(1, 6))
@@ -1065,7 +1065,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionEligibleForProBonusPlay(
                     playerID: pl(.away, 0)
@@ -1077,7 +1077,7 @@ struct ProTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionDeclineProBonusPlay
@@ -1108,7 +1108,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1212,7 +1212,7 @@ struct ProTests {
 
         blockDieRandomizer.nextResults = [.smash]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1260,7 +1260,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForProBonusPlay(
                     playerID: pl(.home, 0)
@@ -1272,7 +1272,7 @@ struct ProTests {
 
         d8Randomizer.nextResults = [4]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionUseProBonusPlay
@@ -1306,7 +1306,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1403,7 +1403,7 @@ struct ProTests {
 
         blockDieRandomizer.nextResults = [.smash]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1451,7 +1451,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForProBonusPlay(
                     playerID: pl(.home, 0)
@@ -1463,7 +1463,7 @@ struct ProTests {
 
         d6Randomizer.nextResults = [4]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionDeclineProBonusPlay
@@ -1477,7 +1477,7 @@ struct ProTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

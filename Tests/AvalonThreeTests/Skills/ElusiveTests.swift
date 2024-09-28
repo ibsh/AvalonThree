@@ -79,7 +79,7 @@ struct ElusiveTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -106,7 +106,7 @@ struct ElusiveTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -153,7 +153,7 @@ struct ElusiveTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -217,7 +217,7 @@ struct ElusiveTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -304,7 +304,7 @@ struct ElusiveTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -331,7 +331,7 @@ struct ElusiveTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -379,7 +379,7 @@ struct ElusiveTests {
         // MARK: - Specify run
 
         #expect(throws: GameError("Invalid final square")) {
-            (latestEvents, latestPayload) = try game.process(
+            (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
                     message: .runActionSpecifySquares(squares: [
@@ -462,7 +462,7 @@ struct ElusiveTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -489,7 +489,7 @@ struct ElusiveTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -537,7 +537,7 @@ struct ElusiveTests {
         // MARK: - Specify run
 
         #expect(throws: GameError("Invalid intermediate square")) {
-            (latestEvents, latestPayload) = try game.process(
+            (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
                     message: .runActionSpecifySquares(squares: [
@@ -638,7 +638,7 @@ struct ElusiveTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -665,7 +665,7 @@ struct ElusiveTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -712,7 +712,7 @@ struct ElusiveTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -780,7 +780,7 @@ struct ElusiveTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

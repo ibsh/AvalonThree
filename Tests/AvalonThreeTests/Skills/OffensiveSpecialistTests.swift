@@ -86,7 +86,7 @@ struct OffensiveSpecialistTests {
 
         blockDieRandomizer.nextResults = [.kerrunch, .miss]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -114,7 +114,7 @@ struct OffensiveSpecialistTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
@@ -127,7 +127,7 @@ struct OffensiveSpecialistTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineOffensiveSpecialistSkillReroll(result: .kerrunch)
@@ -180,7 +180,7 @@ struct OffensiveSpecialistTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -295,7 +295,7 @@ struct OffensiveSpecialistTests {
 
         blockDieRandomizer.nextResults = [.shove, .miss]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -323,7 +323,7 @@ struct OffensiveSpecialistTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
@@ -336,7 +336,7 @@ struct OffensiveSpecialistTests {
 
         blockDieRandomizer.nextResults = [.smash, .miss]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
@@ -357,7 +357,7 @@ struct OffensiveSpecialistTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
@@ -370,7 +370,7 @@ struct OffensiveSpecialistTests {
 
         d6Randomizer.nextResults = [3]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .smash)
@@ -413,7 +413,7 @@ struct OffensiveSpecialistTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

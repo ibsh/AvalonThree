@@ -80,7 +80,7 @@ struct TheKidsGotMoxyTests {
 
         // MARK: - Declare block
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -107,7 +107,7 @@ struct TheKidsGotMoxyTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForTheKidsGotMoxyBonusPlay(
                     playerID: pl(.away, 0)
@@ -120,7 +120,7 @@ struct TheKidsGotMoxyTests {
         blockDieRandomizer.nextResults = [.miss, .kerrunch, .shove]
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseTheKidsGotMoxyBonusPlay
@@ -142,7 +142,7 @@ struct TheKidsGotMoxyTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
@@ -153,7 +153,7 @@ struct TheKidsGotMoxyTests {
 
         // MARK: - Choose block result
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .kerrunch)
@@ -205,7 +205,7 @@ struct TheKidsGotMoxyTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -300,7 +300,7 @@ struct TheKidsGotMoxyTests {
 
         // MARK: - Declare block
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -327,7 +327,7 @@ struct TheKidsGotMoxyTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForTheKidsGotMoxyBonusPlay(
                     playerID: pl(.away, 0)
@@ -340,7 +340,7 @@ struct TheKidsGotMoxyTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineTheKidsGotMoxyBonusPlay
@@ -379,7 +379,7 @@ struct TheKidsGotMoxyTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

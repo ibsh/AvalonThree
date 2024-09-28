@@ -85,7 +85,7 @@ struct FoulTests {
 
         foulDieRandomizer.nextResults = [.gotThem]
 
-        let (latestEvents, latestPayload) = try game.process(
+        let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -125,7 +125,7 @@ struct FoulTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -222,7 +222,7 @@ struct FoulTests {
 
         // MARK: - Declare foul
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -249,7 +249,7 @@ struct FoulTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .foulActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -265,7 +265,7 @@ struct FoulTests {
 
         foulDieRandomizer.nextResults = [.gotThem]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .foulActionSpecifyTarget(target: pl(.home, 0))
@@ -291,7 +291,7 @@ struct FoulTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

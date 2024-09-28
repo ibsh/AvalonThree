@@ -82,7 +82,7 @@ struct AbsoluteCarnageTests {
 
         blockDieRandomizer.nextResults = [.smash]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -125,7 +125,7 @@ struct AbsoluteCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForAbsoluteCarnageBonusPlay(
                     playerID: pl(.away, 0)
@@ -137,7 +137,7 @@ struct AbsoluteCarnageTests {
 
         d6Randomizer.nextResults = [6]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseAbsoluteCarnageBonusPlay
@@ -174,7 +174,7 @@ struct AbsoluteCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -271,7 +271,7 @@ struct AbsoluteCarnageTests {
 
         blockDieRandomizer.nextResults = [.smash]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -316,7 +316,7 @@ struct AbsoluteCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForAbsoluteCarnageBonusPlay(
                     playerID: pl(.away, 0)
@@ -328,7 +328,7 @@ struct AbsoluteCarnageTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseAbsoluteCarnageBonusPlay
@@ -373,7 +373,7 @@ struct AbsoluteCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -470,7 +470,7 @@ struct AbsoluteCarnageTests {
 
         blockDieRandomizer.nextResults = [.smash]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -515,7 +515,7 @@ struct AbsoluteCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForAbsoluteCarnageBonusPlay(
                     playerID: pl(.away, 0)
@@ -527,7 +527,7 @@ struct AbsoluteCarnageTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineAbsoluteCarnageBonusPlay
@@ -541,7 +541,7 @@ struct AbsoluteCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

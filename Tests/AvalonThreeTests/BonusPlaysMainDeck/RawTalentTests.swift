@@ -1177,7 +1177,7 @@ struct RawTalentTests {
 
         // MARK: - Declare pass
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1204,7 +1204,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1225,7 +1225,7 @@ struct RawTalentTests {
 
         d6Randomizer.nextResults = [3]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
@@ -1245,7 +1245,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionResultEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -1258,7 +1258,7 @@ struct RawTalentTests {
 
         d6Randomizer.nextResults = [4]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionUseRawTalentBonusPlayReroll
@@ -1316,7 +1316,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1431,7 +1431,7 @@ struct RawTalentTests {
 
         // MARK: - Declare pass
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1458,7 +1458,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1479,7 +1479,7 @@ struct RawTalentTests {
 
         d6Randomizer.nextResults = [3]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
@@ -1499,7 +1499,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionResultEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -1512,7 +1512,7 @@ struct RawTalentTests {
 
         directionRandomizer.nextResults = [.north]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionDeclineRawTalentBonusPlayReroll
@@ -1548,7 +1548,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1661,7 +1661,7 @@ struct RawTalentTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1688,7 +1688,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1840,7 +1840,7 @@ struct RawTalentTests {
 
         d6Randomizer.nextResults = [1]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
@@ -1854,7 +1854,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -1867,7 +1867,7 @@ struct RawTalentTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionUseRawTalentBonusPlayReroll
@@ -1917,7 +1917,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2039,7 +2039,7 @@ struct RawTalentTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2066,7 +2066,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -2218,7 +2218,7 @@ struct RawTalentTests {
 
         d6Randomizer.nextResults = [1]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
@@ -2232,7 +2232,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -2245,7 +2245,7 @@ struct RawTalentTests {
 
         directionRandomizer.nextResults = [.west]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionDeclineRawTalentBonusPlayReroll
@@ -2280,7 +2280,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2382,7 +2382,7 @@ struct RawTalentTests {
 
         blockDieRandomizer.nextResults = [.smash]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2410,7 +2410,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -2425,7 +2425,7 @@ struct RawTalentTests {
 
         blockDieRandomizer.nextResults = [.shove]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseRawTalentBonusPlayRerollForBlockDieResults
@@ -2481,7 +2481,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
                     playerID: pl(.away, 0),
@@ -2568,7 +2568,7 @@ struct RawTalentTests {
 
         blockDieRandomizer.nextResults = [.miss]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2596,7 +2596,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -2609,7 +2609,7 @@ struct RawTalentTests {
 
         // MARK: - Decline reroll
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
@@ -2646,7 +2646,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2749,7 +2749,7 @@ struct RawTalentTests {
 
         blockDieRandomizer.nextResults = [.kerrunch, .miss]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2777,7 +2777,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
@@ -2790,7 +2790,7 @@ struct RawTalentTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineOffensiveSpecialistSkillReroll(result: .kerrunch)
@@ -2843,7 +2843,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2960,7 +2960,7 @@ struct RawTalentTests {
 
         blockDieRandomizer.nextResults = [.shove, .miss]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2988,7 +2988,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
@@ -3001,7 +3001,7 @@ struct RawTalentTests {
 
         blockDieRandomizer.nextResults = [.smash, .miss]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
@@ -3022,7 +3022,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
@@ -3035,7 +3035,7 @@ struct RawTalentTests {
 
         d6Randomizer.nextResults = [3]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .smash)
@@ -3078,7 +3078,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3206,7 +3206,7 @@ struct RawTalentTests {
         d6Randomizer.nextResults = [3, 3]
         directionRandomizer.nextResults = [.east]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3237,7 +3237,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -3254,7 +3254,7 @@ struct RawTalentTests {
         d6Randomizer.nextResults = [1]
         directionRandomizer.nextResults = [.east]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseRawTalentBonusPlayRerollForBlockDieResults
@@ -3350,7 +3350,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3471,7 +3471,7 @@ struct RawTalentTests {
         d6Randomizer.nextResults = [3, 3]
         directionRandomizer.nextResults = [.east]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3502,7 +3502,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -3518,7 +3518,7 @@ struct RawTalentTests {
         d6Randomizer.nextResults = [3]
         directionRandomizer.nextResults = [.south]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(result: nil)
@@ -3602,7 +3602,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3693,7 +3693,7 @@ struct RawTalentTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [5]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3722,7 +3722,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -3737,7 +3737,7 @@ struct RawTalentTests {
 
         d6Randomizer.nextResults = [6]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseRawTalentBonusPlayRerollForBlockDieResults
@@ -3790,7 +3790,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3893,7 +3893,7 @@ struct RawTalentTests {
 
         blockDieRandomizer.nextResults = [.miss, .tackle, .shove]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3921,7 +3921,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -3937,7 +3937,7 @@ struct RawTalentTests {
         blockDieRandomizer.nextResults = [.miss, .miss, .tackle]
         d6Randomizer.nextResults = [1]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseRawTalentBonusPlayRerollForBlockDieResults
@@ -3970,7 +3970,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
@@ -3981,7 +3981,7 @@ struct RawTalentTests {
 
         // MARK: - Select die
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .tackle)
@@ -4025,7 +4025,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -4120,7 +4120,7 @@ struct RawTalentTests {
 
         blockDieRandomizer.nextResults = [.miss, .tackle, .shove]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -4148,7 +4148,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.away, 0),
@@ -4161,7 +4161,7 @@ struct RawTalentTests {
 
         // MARK: - Decline reroll
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
@@ -4196,7 +4196,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
                     playerID: pl(.away, 0),
@@ -4286,7 +4286,7 @@ struct RawTalentTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [2]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -4345,7 +4345,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionArmourResultEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.home, 0),
@@ -4358,7 +4358,7 @@ struct RawTalentTests {
 
         d6Randomizer.nextResults = [4]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionUseRawTalentBonusPlayRerollForArmourResult
@@ -4401,7 +4401,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -4506,7 +4506,7 @@ struct RawTalentTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [2]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -4565,7 +4565,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionArmourResultEligibleForRawTalentBonusPlayReroll(
                     playerID: pl(.home, 0),
@@ -4576,7 +4576,7 @@ struct RawTalentTests {
 
         // MARK: - Decline reroll
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionDeclineRawTalentBonusPlayRerollForArmourResult
@@ -4594,7 +4594,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -4692,7 +4692,7 @@ struct RawTalentTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [4]
 
-        let (latestEvents, latestPayload) = try game.process(
+        let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -4751,7 +4751,7 @@ struct RawTalentTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

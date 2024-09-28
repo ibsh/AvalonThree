@@ -91,7 +91,7 @@ struct DistractionTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -118,7 +118,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -164,7 +164,7 @@ struct DistractionTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -196,7 +196,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForDistractionBonusPlaySidestepAction(
                     validPlayers: [
@@ -208,7 +208,7 @@ struct DistractionTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .useDistractionBonusPlaySidestepAction(
@@ -239,7 +239,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.home, 0),
@@ -253,7 +253,7 @@ struct DistractionTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSpecifySquare(square: sq(8, 7))
@@ -285,7 +285,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -318,7 +318,7 @@ struct DistractionTests {
 
         // MARK: - Declare run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -345,7 +345,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -392,7 +392,7 @@ struct DistractionTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -424,7 +424,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -443,7 +443,7 @@ struct DistractionTests {
 
         // MARK: - Declare run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -470,7 +470,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 1),
@@ -517,7 +517,7 @@ struct DistractionTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -578,7 +578,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -684,7 +684,7 @@ struct DistractionTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -711,7 +711,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 1),
@@ -758,7 +758,7 @@ struct DistractionTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -790,7 +790,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -823,7 +823,7 @@ struct DistractionTests {
 
         // MARK: - Declare run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -850,7 +850,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -897,7 +897,7 @@ struct DistractionTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -965,7 +965,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -991,7 +991,7 @@ struct DistractionTests {
 
         // MARK: - Declare mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1018,7 +1018,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -1064,7 +1064,7 @@ struct DistractionTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -1096,7 +1096,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForDistractionBonusPlaySidestepAction(validPlayers: [
                     pl(.home, 0),
@@ -1106,7 +1106,7 @@ struct DistractionTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .useDistractionBonusPlaySidestepAction(
@@ -1137,7 +1137,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.home, 0),
@@ -1151,7 +1151,7 @@ struct DistractionTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSpecifySquare(square: sq(8, 7))
@@ -1212,7 +1212,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1318,7 +1318,7 @@ struct DistractionTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1345,7 +1345,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -1391,7 +1391,7 @@ struct DistractionTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -1423,7 +1423,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForDistractionBonusPlaySidestepAction(validPlayers: [
                     pl(.home, 0),
@@ -1433,7 +1433,7 @@ struct DistractionTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declineDistractionBonusPlaySidestepAction
@@ -1445,7 +1445,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1558,7 +1558,7 @@ struct DistractionTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1585,7 +1585,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 1),
@@ -1632,7 +1632,7 @@ struct DistractionTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -1664,7 +1664,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1697,7 +1697,7 @@ struct DistractionTests {
 
         // MARK: - Declare run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1724,7 +1724,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -1771,7 +1771,7 @@ struct DistractionTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -1839,7 +1839,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1865,7 +1865,7 @@ struct DistractionTests {
 
         // MARK: - Declare mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1892,7 +1892,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -1938,7 +1938,7 @@ struct DistractionTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -1970,7 +1970,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForDistractionBonusPlaySidestepAction(validPlayers: [
                     pl(.home, 0),
@@ -1980,7 +1980,7 @@ struct DistractionTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declineDistractionBonusPlaySidestepAction
@@ -2022,7 +2022,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2124,7 +2124,7 @@ struct DistractionTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2151,7 +2151,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -2197,7 +2197,7 @@ struct DistractionTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -2229,7 +2229,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForFrenziedSkillBlockAction(
                     playerID: pl(.away, 0)
@@ -2243,7 +2243,7 @@ struct DistractionTests {
 
         blockDieRandomizer.nextResults = [.shove]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useFrenziedSkillBlockAction
@@ -2285,7 +2285,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
                     playerID: pl(.away, 0),
@@ -2296,7 +2296,7 @@ struct DistractionTests {
 
         // MARK: - Follow up
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseFollowUp
@@ -2317,7 +2317,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2336,7 +2336,7 @@ struct DistractionTests {
 
         // MARK: - In another timeline, decline free action
 
-        (latestEvents, latestPayload) = try otherGame.process(
+        (latestEvents, latestPrompt) = try otherGame.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineFrenziedSkillBlockAction
@@ -2353,7 +2353,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForDistractionBonusPlaySidestepAction(
                     validPlayers: [
@@ -2441,7 +2441,7 @@ struct DistractionTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2468,7 +2468,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -2515,7 +2515,7 @@ struct DistractionTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -2583,7 +2583,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2602,7 +2602,7 @@ struct DistractionTests {
 
         // MARK: - Declare mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2629,7 +2629,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -2675,7 +2675,7 @@ struct DistractionTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -2707,7 +2707,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForHeadbuttSkillBlockAction(
                     playerID: pl(.away, 0)
@@ -2721,7 +2721,7 @@ struct DistractionTests {
 
         blockDieRandomizer.nextResults = [.shove]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useHeadbuttSkillBlockAction
@@ -2763,7 +2763,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
                     playerID: pl(.away, 0),
@@ -2774,7 +2774,7 @@ struct DistractionTests {
 
         // MARK: - Follow up
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseFollowUp
@@ -2795,7 +2795,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2814,7 +2814,7 @@ struct DistractionTests {
 
         // MARK: - In another timeline, decline free action
 
-        (latestEvents, latestPayload) = try otherGame.process(
+        (latestEvents, latestPrompt) = try otherGame.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineHeadbuttSkillBlockAction
@@ -2831,7 +2831,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForDistractionBonusPlaySidestepAction(
                     validPlayers: [
@@ -2921,7 +2921,7 @@ struct DistractionTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2948,7 +2948,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -2995,7 +2995,7 @@ struct DistractionTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -3063,7 +3063,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3082,7 +3082,7 @@ struct DistractionTests {
 
         // MARK: - Declare mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3109,7 +3109,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -3155,7 +3155,7 @@ struct DistractionTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -3187,7 +3187,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForBlitzBonusPlayBlockAction(
                     playerID: pl(.away, 0)
@@ -3201,7 +3201,7 @@ struct DistractionTests {
 
         blockDieRandomizer.nextResults = [.miss]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useBlitzBonusPlayBlockAction
@@ -3273,7 +3273,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3299,7 +3299,7 @@ struct DistractionTests {
 
         // MARK: - In another timeline, decline bonus play
 
-        (latestEvents, latestPayload) = try otherGame.process(
+        (latestEvents, latestPrompt) = try otherGame.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineBlitzBonusPlayBlockAction
@@ -3311,7 +3311,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForDistractionBonusPlaySidestepAction(
                     validPlayers: [
@@ -3401,7 +3401,7 @@ struct DistractionTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3428,7 +3428,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -3474,7 +3474,7 @@ struct DistractionTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -3506,7 +3506,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForDivingTackleBonusPlayBlockAction(
                     playerID: pl(.away, 0)
@@ -3520,7 +3520,7 @@ struct DistractionTests {
 
         blockDieRandomizer.nextResults = [.miss]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useDivingTackleBonusPlayBlockAction
@@ -3601,7 +3601,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3627,7 +3627,7 @@ struct DistractionTests {
 
         // MARK: - In another timeline, decline bonus play
 
-        (latestEvents, latestPayload) = try otherGame.process(
+        (latestEvents, latestPrompt) = try otherGame.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineDivingTackleBonusPlayBlockAction
@@ -3639,7 +3639,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForDistractionBonusPlaySidestepAction(
                     validPlayers: [
@@ -3729,7 +3729,7 @@ struct DistractionTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3756,7 +3756,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -3802,7 +3802,7 @@ struct DistractionTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(squares: [
@@ -3834,7 +3834,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForShoulderChargeBonusPlayBlockAction(
                     playerID: pl(.away, 0)
@@ -3848,7 +3848,7 @@ struct DistractionTests {
 
         blockDieRandomizer.nextResults = [.miss]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useShoulderChargeBonusPlayBlockAction
@@ -3923,7 +3923,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3949,7 +3949,7 @@ struct DistractionTests {
 
         // MARK: - In another timeline, decline bonus play
 
-        (latestEvents, latestPayload) = try otherGame.process(
+        (latestEvents, latestPrompt) = try otherGame.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineShoulderChargeBonusPlayBlockAction
@@ -3961,7 +3961,7 @@ struct DistractionTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForDistractionBonusPlaySidestepAction(
                     validPlayers: [

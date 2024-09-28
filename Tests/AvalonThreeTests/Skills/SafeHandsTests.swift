@@ -88,7 +88,7 @@ struct SafeHandsTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [6]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -134,7 +134,7 @@ struct SafeHandsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionSelectSafeHandsLooseBallDirection(
                     playerID: pl(.home, 0),
@@ -152,7 +152,7 @@ struct SafeHandsTests {
 
         // MARK: - Choose loose ball direction
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionSelectSafeHandsLooseBallDirection(direction: .east)
@@ -181,7 +181,7 @@ struct SafeHandsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

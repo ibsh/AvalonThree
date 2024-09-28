@@ -79,7 +79,7 @@ struct FrenziedTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -106,7 +106,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -152,7 +152,7 @@ struct FrenziedTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(
@@ -177,7 +177,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForFrenziedSkillBlockAction(
                     playerID: pl(.away, 0)
@@ -187,7 +187,7 @@ struct FrenziedTests {
 
         // MARK: - Decline block
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineFrenziedSkillBlockAction
@@ -204,7 +204,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -302,7 +302,7 @@ struct FrenziedTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -329,7 +329,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -375,7 +375,7 @@ struct FrenziedTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(
@@ -400,7 +400,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForFrenziedSkillBlockAction(
                     playerID: pl(.away, 0)
@@ -412,7 +412,7 @@ struct FrenziedTests {
 
         blockDieRandomizer.nextResults = [.shove]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useFrenziedSkillBlockAction
@@ -457,7 +457,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
                     playerID: pl(.away, 0),
@@ -468,7 +468,7 @@ struct FrenziedTests {
 
         // MARK: - Follow up
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseFollowUp
@@ -489,7 +489,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -510,7 +510,7 @@ struct FrenziedTests {
 
         // MARK: - Declare sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -537,7 +537,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.away, 0),
@@ -567,7 +567,7 @@ struct FrenziedTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .sidestepActionSpecifySquare(square: sq(2, 6))
@@ -588,7 +588,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -607,7 +607,7 @@ struct FrenziedTests {
 
         // MARK: - Declare run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -634,7 +634,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -681,7 +681,7 @@ struct FrenziedTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -717,7 +717,7 @@ struct FrenziedTests {
         // For future reference, yes he has a ball, but no he can't pass because he has no
         // receivers. Or teammates of any kind.
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -831,7 +831,7 @@ struct FrenziedTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -858,7 +858,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -904,7 +904,7 @@ struct FrenziedTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(
@@ -929,7 +929,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForFrenziedSkillBlockAction(
                     playerID: pl(.away, 0)
@@ -941,7 +941,7 @@ struct FrenziedTests {
 
         // MARK: - Take free block and lose "tie them up"
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useFrenziedSkillBlockAction
@@ -962,7 +962,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -979,7 +979,7 @@ struct FrenziedTests {
 
         blockDieRandomizer.nextResults = [.miss]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSpecifyTarget(target: pl(.home, 0))
@@ -1012,7 +1012,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1038,7 +1038,7 @@ struct FrenziedTests {
 
         // MARK: - Decline free block and earn "tie them up"
 
-        (latestEvents, latestPayload) = try otherGame.process(
+        (latestEvents, latestPrompt) = try otherGame.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineFrenziedSkillBlockAction
@@ -1055,7 +1055,7 @@ struct FrenziedTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(objectiveIDs: [.second])
             )

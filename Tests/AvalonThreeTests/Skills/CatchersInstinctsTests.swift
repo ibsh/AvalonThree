@@ -85,7 +85,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Declare sidestep
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -112,7 +112,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.away, 1),
@@ -126,7 +126,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .sidestepActionSpecifySquare(square: sq(3, 7))
@@ -147,7 +147,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -187,7 +187,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Declare run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -214,7 +214,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 1),
@@ -261,7 +261,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -302,7 +302,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -328,7 +328,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Declare handoff
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -355,7 +355,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 1),
@@ -374,7 +374,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Specify handoff
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 0))
@@ -401,7 +401,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -498,7 +498,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Declare sidestep
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -525,7 +525,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.away, 1),
@@ -539,7 +539,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .sidestepActionSpecifySquare(square: sq(3, 7))
@@ -560,7 +560,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -600,7 +600,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Declare run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -627,7 +627,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 1),
@@ -674,7 +674,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -715,7 +715,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -741,7 +741,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Declare pass
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -768,7 +768,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 1),
@@ -789,7 +789,7 @@ struct CatchersInstinctsTests {
 
         d6Randomizer.nextResults = [2]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 0))
@@ -815,7 +815,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForCatchersInstinctsSkillRunAction(
                     playerID: pl(.away, 0)
@@ -825,7 +825,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Decline free run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineCatchersInstinctsSkillRunAction
@@ -844,7 +844,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -943,7 +943,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Declare sidestep
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -970,7 +970,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.away, 1),
@@ -984,7 +984,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .sidestepActionSpecifySquare(square: sq(3, 7))
@@ -1005,7 +1005,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1045,7 +1045,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Declare run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1072,7 +1072,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 1),
@@ -1119,7 +1119,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -1160,7 +1160,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1186,7 +1186,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Declare pass
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1213,7 +1213,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 1),
@@ -1234,7 +1234,7 @@ struct CatchersInstinctsTests {
 
         d6Randomizer.nextResults = [2]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 0))
@@ -1260,7 +1260,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForCatchersInstinctsSkillRunAction(
                     playerID: pl(.away, 0)
@@ -1270,7 +1270,7 @@ struct CatchersInstinctsTests {
 
         // MARK: - Take free run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useCatchersInstinctsSkillRunAction
@@ -1291,7 +1291,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -1340,7 +1340,7 @@ struct CatchersInstinctsTests {
 
         blockDieRandomizer.nextResults = [.shove]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -1374,7 +1374,7 @@ struct CatchersInstinctsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [

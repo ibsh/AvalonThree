@@ -847,7 +847,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -874,7 +874,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1026,7 +1026,7 @@ struct HurlTeammateTests {
         // MARK: - Specify target square
 
         #expect(throws: GameError("Invalid target")) {
-            (latestEvents, latestPayload) = try game.process(
+            (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
                     message: .hurlTeammateActionSpecifyTarget(
@@ -1112,7 +1112,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1139,7 +1139,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1290,7 +1290,7 @@ struct HurlTeammateTests {
         // MARK: - Specify target square
 
         #expect(throws: GameError("Invalid target")) {
-            (latestEvents, latestPayload) = try game.process(
+            (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
                     message: .hurlTeammateActionSpecifyTarget(
@@ -1376,7 +1376,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1403,7 +1403,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1554,7 +1554,7 @@ struct HurlTeammateTests {
         // MARK: - Specify target square
 
         #expect(throws: GameError("Invalid target")) {
-            (latestEvents, latestPayload) = try game.process(
+            (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
                     message: .hurlTeammateActionSpecifyTarget(
@@ -1644,7 +1644,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1671,7 +1671,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1823,7 +1823,7 @@ struct HurlTeammateTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
@@ -1856,7 +1856,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1967,7 +1967,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1994,7 +1994,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -2146,7 +2146,7 @@ struct HurlTeammateTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
@@ -2177,7 +2177,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2309,7 +2309,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2336,7 +2336,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -2488,7 +2488,7 @@ struct HurlTeammateTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
@@ -2527,7 +2527,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2646,7 +2646,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2673,7 +2673,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -2825,7 +2825,7 @@ struct HurlTeammateTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(0, 4))
@@ -2862,7 +2862,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2981,7 +2981,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3008,7 +3008,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -3160,7 +3160,7 @@ struct HurlTeammateTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
@@ -3199,7 +3199,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3324,7 +3324,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3351,7 +3351,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -3503,7 +3503,7 @@ struct HurlTeammateTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
@@ -3536,7 +3536,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3656,7 +3656,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3683,7 +3683,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -3758,7 +3758,7 @@ struct HurlTeammateTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
@@ -3799,7 +3799,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3912,7 +3912,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3939,7 +3939,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -4092,7 +4092,7 @@ struct HurlTeammateTests {
         d6Randomizer.nextResults = [1]
         directionRandomizer.nextResults = [.west]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
@@ -4132,7 +4132,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -4238,7 +4238,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -4265,7 +4265,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -4418,7 +4418,7 @@ struct HurlTeammateTests {
         d6Randomizer.nextResults = [3]
         directionRandomizer.nextResults = [.west]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
@@ -4460,7 +4460,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -4571,7 +4571,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -4598,7 +4598,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -4751,7 +4751,7 @@ struct HurlTeammateTests {
         d6Randomizer.nextResults = [3]
         directionRandomizer.nextResults = [.east, .east, .south]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
@@ -4813,7 +4813,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -4923,7 +4923,7 @@ struct HurlTeammateTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -4950,7 +4950,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
                     playerID: pl(.away, 0),
@@ -4964,7 +4964,7 @@ struct HurlTeammateTests {
 
         // MARK: - Specify teammate
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTeammate(
@@ -4978,7 +4978,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -5129,7 +5129,7 @@ struct HurlTeammateTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
@@ -5162,7 +5162,7 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

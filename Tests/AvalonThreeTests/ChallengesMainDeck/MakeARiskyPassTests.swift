@@ -96,7 +96,7 @@ struct MakeARiskyPassTests {
 
         // MARK: - Declare pass
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -123,7 +123,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -145,7 +145,7 @@ struct MakeARiskyPassTests {
         d6Randomizer.nextResults = [3]
         directionRandomizer.nextResults = [.west]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
@@ -200,7 +200,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -324,7 +324,7 @@ struct MakeARiskyPassTests {
 
         // MARK: - Declare pass
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -351,7 +351,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -372,7 +372,7 @@ struct MakeARiskyPassTests {
 
         d6Randomizer.nextResults = [3]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
@@ -402,7 +402,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -535,7 +535,7 @@ struct MakeARiskyPassTests {
 
         // MARK: - Declare pass
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -562,7 +562,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -584,7 +584,7 @@ struct MakeARiskyPassTests {
         d6Randomizer.nextResults = [4]
         directionRandomizer.nextResults = [.west]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
@@ -623,7 +623,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
                     objectiveIDs: [.second]
@@ -633,7 +633,7 @@ struct MakeARiskyPassTests {
 
         // MARK: - Claim objective
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
@@ -669,7 +669,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -795,7 +795,7 @@ struct MakeARiskyPassTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -822,7 +822,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -975,7 +975,7 @@ struct MakeARiskyPassTests {
         d6Randomizer.nextResults = [1]
         directionRandomizer.nextResults = [.west]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
@@ -1015,7 +1015,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1132,7 +1132,7 @@ struct MakeARiskyPassTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1159,7 +1159,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1311,7 +1311,7 @@ struct MakeARiskyPassTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
@@ -1342,7 +1342,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1481,7 +1481,7 @@ struct MakeARiskyPassTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1508,7 +1508,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1660,7 +1660,7 @@ struct MakeARiskyPassTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(0, 4))
@@ -1697,7 +1697,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
                     objectiveIDs: [.second]
@@ -1707,7 +1707,7 @@ struct MakeARiskyPassTests {
 
         // MARK: - Claim objective
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
@@ -1743,7 +1743,7 @@ struct MakeARiskyPassTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

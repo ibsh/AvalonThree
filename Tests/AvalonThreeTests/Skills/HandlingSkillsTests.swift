@@ -82,7 +82,7 @@ struct HandlingSkillsTests {
 
         blockDieRandomizer.nextResults = [.shove]
 
-        let (latestEvents, latestPayload) = try game.process(
+        let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -138,7 +138,7 @@ struct HandlingSkillsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
                     playerID: pl(.away, 0),

@@ -87,7 +87,7 @@ struct ShoulderChargeTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -114,7 +114,7 @@ struct ShoulderChargeTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -160,7 +160,7 @@ struct ShoulderChargeTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(
@@ -185,7 +185,7 @@ struct ShoulderChargeTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForShoulderChargeBonusPlayBlockAction(
                     playerID: pl(.away, 0)
@@ -198,7 +198,7 @@ struct ShoulderChargeTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [3]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useShoulderChargeBonusPlayBlockAction
@@ -275,7 +275,7 @@ struct ShoulderChargeTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -364,7 +364,7 @@ struct ShoulderChargeTests {
 
         // MARK: - Declare mark
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -391,7 +391,7 @@ struct ShoulderChargeTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -437,7 +437,7 @@ struct ShoulderChargeTests {
 
         // MARK: - Specify mark
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSpecifySquares(
@@ -462,7 +462,7 @@ struct ShoulderChargeTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForShoulderChargeBonusPlayBlockAction(
                     playerID: pl(.away, 0)
@@ -472,7 +472,7 @@ struct ShoulderChargeTests {
 
         // MARK: - Decline block
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineShoulderChargeBonusPlayBlockAction
@@ -484,7 +484,7 @@ struct ShoulderChargeTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

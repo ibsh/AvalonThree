@@ -85,7 +85,7 @@ struct AbsolutelyNailsTests {
 
         blockDieRandomizer.nextResults = [.smash]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -130,7 +130,7 @@ struct AbsolutelyNailsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForAbsolutelyNailsBonusPlay(
                     playerID: pl(.home, 0)
@@ -142,7 +142,7 @@ struct AbsolutelyNailsTests {
 
         d6Randomizer.nextResults = [2]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionUseAbsolutelyNailsBonusPlay
@@ -186,7 +186,7 @@ struct AbsolutelyNailsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -286,7 +286,7 @@ struct AbsolutelyNailsTests {
 
         blockDieRandomizer.nextResults = [.smash]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -329,7 +329,7 @@ struct AbsolutelyNailsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForAbsolutelyNailsBonusPlay(
                     playerID: pl(.home, 0)
@@ -339,7 +339,7 @@ struct AbsolutelyNailsTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionDeclineAbsolutelyNailsBonusPlay
@@ -351,7 +351,7 @@ struct AbsolutelyNailsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForToughEnoughBonusPlay(
                     playerID: pl(.home, 0)
@@ -361,7 +361,7 @@ struct AbsolutelyNailsTests {
 
         // MARK: - Decline another bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionDeclineToughEnoughBonusPlay
@@ -373,7 +373,7 @@ struct AbsolutelyNailsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForAbsoluteCarnageBonusPlay(
                     playerID: pl(.away, 0)
@@ -385,7 +385,7 @@ struct AbsolutelyNailsTests {
 
         d6Randomizer.nextResults = [4]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineAbsoluteCarnageBonusPlay
@@ -399,7 +399,7 @@ struct AbsolutelyNailsTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

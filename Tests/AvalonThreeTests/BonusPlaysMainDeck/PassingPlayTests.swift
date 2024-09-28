@@ -132,7 +132,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare sidestep
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -159,7 +159,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.home, 0),
@@ -205,7 +205,7 @@ struct PassingPlayTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSpecifySquare(square: sq(8, 9))
@@ -226,7 +226,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -280,7 +280,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -307,7 +307,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.home, 1),
@@ -353,7 +353,7 @@ struct PassingPlayTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSpecifySquare(square: sq(9, 9))
@@ -374,7 +374,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -428,7 +428,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -455,7 +455,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.home, 2),
@@ -501,7 +501,7 @@ struct PassingPlayTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSpecifySquare(square: sq(10, 9))
@@ -522,7 +522,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForPassingPlayBonusPlay
             )
@@ -530,7 +530,7 @@ struct PassingPlayTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .usePassingPlayBonusPlay
@@ -570,7 +570,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -624,7 +624,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare hurl teammate
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -651,7 +651,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -794,7 +794,7 @@ struct PassingPlayTests {
 
         d8Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(9, 12))
@@ -833,7 +833,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -887,7 +887,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare pass
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -914,7 +914,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 1),
@@ -942,7 +942,7 @@ struct PassingPlayTests {
 
         d8Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 2))
@@ -980,7 +980,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1034,7 +1034,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1061,7 +1061,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 2),
@@ -1108,7 +1108,7 @@ struct PassingPlayTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(squares: [
@@ -1161,7 +1161,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .selectObjectiveToDiscard(objectiveIDs: [.first, .second])
             )
@@ -1290,7 +1290,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare sidestep
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -1317,7 +1317,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.home, 0),
@@ -1363,7 +1363,7 @@ struct PassingPlayTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSpecifySquare(square: sq(8, 9))
@@ -1384,7 +1384,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1438,7 +1438,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -1465,7 +1465,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.home, 1),
@@ -1511,7 +1511,7 @@ struct PassingPlayTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSpecifySquare(square: sq(9, 9))
@@ -1532,7 +1532,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1586,7 +1586,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -1613,7 +1613,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.home, 2),
@@ -1659,7 +1659,7 @@ struct PassingPlayTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSpecifySquare(square: sq(10, 9))
@@ -1681,7 +1681,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForPassingPlayBonusPlay
             )
@@ -1689,7 +1689,7 @@ struct PassingPlayTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declinePassingPlayBonusPlay
@@ -1721,7 +1721,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1775,7 +1775,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare hurl teammate
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1802,7 +1802,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -1945,7 +1945,7 @@ struct PassingPlayTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(9, 12))
@@ -1984,7 +1984,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -2038,7 +2038,7 @@ struct PassingPlayTests {
 
         // MARK: - Declare pass
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2065,7 +2065,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 1),
@@ -2093,7 +2093,7 @@ struct PassingPlayTests {
 
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 2))
@@ -2131,7 +2131,7 @@ struct PassingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

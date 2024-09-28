@@ -98,7 +98,7 @@ struct ReservesTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -125,7 +125,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -172,7 +172,7 @@ struct ReservesTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -207,7 +207,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForReservesBonusPlayReservesAction(validPlayers: [
                     pl(.home, 0),
@@ -219,7 +219,7 @@ struct ReservesTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .useReservesBonusPlayReservesAction(
@@ -250,7 +250,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.home, 1),
@@ -296,7 +296,7 @@ struct ReservesTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .reservesActionSpecifySquare(square: sq(7, 14))
@@ -325,7 +325,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -445,7 +445,7 @@ struct ReservesTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -472,7 +472,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -519,7 +519,7 @@ struct ReservesTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -554,7 +554,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForReservesBonusPlayReservesAction(validPlayers: [
                     pl(.home, 0),
@@ -566,7 +566,7 @@ struct ReservesTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declineReservesBonusPlayReservesAction
@@ -580,7 +580,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -706,7 +706,7 @@ struct ReservesTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -733,7 +733,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -780,7 +780,7 @@ struct ReservesTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -815,7 +815,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declareEmergencyReservesAction(validPlayers: [
                     pl(.home, 0),
@@ -828,7 +828,7 @@ struct ReservesTests {
 
         // MARK: - Declare emergency reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declareEmergencyReservesAction(
@@ -851,7 +851,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.home, 3),
@@ -897,7 +897,7 @@ struct ReservesTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .reservesActionSpecifySquare(square: sq(7, 14))
@@ -914,7 +914,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForReservesBonusPlayReservesAction(validPlayers: [
                     pl(.home, 0),
@@ -926,7 +926,7 @@ struct ReservesTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .useReservesBonusPlayReservesAction(
@@ -957,7 +957,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.home, 1),
@@ -1003,7 +1003,7 @@ struct ReservesTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .reservesActionSpecifySquare(square: sq(1, 14))
@@ -1032,7 +1032,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1165,7 +1165,7 @@ struct ReservesTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1192,7 +1192,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -1239,7 +1239,7 @@ struct ReservesTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -1274,7 +1274,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declareEmergencyReservesAction(validPlayers: [
                     pl(.home, 0),
@@ -1287,7 +1287,7 @@ struct ReservesTests {
 
         // MARK: - Declare emergency reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declareEmergencyReservesAction(
@@ -1310,7 +1310,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.home, 3),
@@ -1356,7 +1356,7 @@ struct ReservesTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .reservesActionSpecifySquare(square: sq(7, 14))
@@ -1373,7 +1373,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForReservesBonusPlayReservesAction(validPlayers: [
                     pl(.home, 0),
@@ -1385,7 +1385,7 @@ struct ReservesTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declineReservesBonusPlayReservesAction
@@ -1399,7 +1399,7 @@ struct ReservesTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [

@@ -82,7 +82,7 @@ struct HulkingBruteTests {
 
         // MARK: - Declare block
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -109,7 +109,7 @@ struct HulkingBruteTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -125,7 +125,7 @@ struct HulkingBruteTests {
 
         blockDieRandomizer.nextResults = [.tackle, .miss]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSpecifyTarget(target: pl(.home, 0))
@@ -144,7 +144,7 @@ struct HulkingBruteTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
@@ -222,7 +222,7 @@ struct HulkingBruteTests {
 
         blockDieRandomizer.nextResults = [.shove, .smash]
 
-        let (latestEvents, latestPayload) = try game.process(
+        let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -255,7 +255,7 @@ struct HulkingBruteTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
@@ -340,7 +340,7 @@ struct HulkingBruteTests {
         ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.west]
 
-        let (latestEvents, latestPayload) = try game.process(
+        let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -413,7 +413,7 @@ struct HulkingBruteTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [

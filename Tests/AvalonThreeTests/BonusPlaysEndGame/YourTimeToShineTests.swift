@@ -108,7 +108,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Declare reserves
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -135,7 +135,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.away, 2),
@@ -181,7 +181,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .reservesActionSpecifySquare(square: sq(6, 0))
@@ -198,7 +198,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -252,7 +252,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Declare run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -279,7 +279,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -326,7 +326,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -356,7 +356,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(objectiveIDs: [.first])
             )
@@ -364,7 +364,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Claim objective
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
@@ -408,7 +408,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForYourTimeToShineBonusPlayReservesAction(
                     validPlayers: [
@@ -422,7 +422,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Use reserves action
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useYourTimeToShineBonusPlayReservesAction(
@@ -445,7 +445,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.away, 3),
@@ -491,7 +491,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .reservesActionSpecifySquare(square: sq(2, 0))
@@ -508,7 +508,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForYourTimeToShineBonusPlayReservesAction(
                     validPlayers: [
@@ -521,7 +521,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Use reserves action
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useYourTimeToShineBonusPlayReservesAction(
@@ -544,7 +544,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.away, 4),
@@ -590,7 +590,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .reservesActionSpecifySquare(square: sq(8, 0))
@@ -607,7 +607,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForYourTimeToShineBonusPlayRunAction(
                     validPlayers: [
@@ -621,7 +621,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Use run action
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useYourTimeToShineBonusPlayRunAction(
@@ -644,7 +644,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 3),
@@ -691,7 +691,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -772,7 +772,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -923,7 +923,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -950,7 +950,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -997,7 +997,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -1027,7 +1027,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(objectiveIDs: [.first])
             )
@@ -1035,7 +1035,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Claim objective
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
@@ -1079,7 +1079,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForYourTimeToShineBonusPlayReservesAction(
                     validPlayers: [
@@ -1094,7 +1094,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Decline reserves action
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineYourTimeToShineBonusPlayReservesAction
@@ -1106,7 +1106,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForYourTimeToShineBonusPlayReservesAction(
                     validPlayers: [
@@ -1121,7 +1121,7 @@ struct YourTimeToShineTests {
 
         // MARK: - Decline reserves action
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineYourTimeToShineBonusPlayReservesAction
@@ -1145,7 +1145,7 @@ struct YourTimeToShineTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

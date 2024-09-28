@@ -93,7 +93,7 @@ struct BlockingPlayTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -120,7 +120,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForBlockingPlayBonusPlay(
                     playerID: pl(.away, 0)
@@ -130,7 +130,7 @@ struct BlockingPlayTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionUseBlockingPlayBonusPlay
@@ -151,7 +151,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -198,7 +198,7 @@ struct BlockingPlayTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -241,7 +241,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -363,7 +363,7 @@ struct BlockingPlayTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -390,7 +390,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForBlockingPlayBonusPlay(
                     playerID: pl(.away, 0)
@@ -400,7 +400,7 @@ struct BlockingPlayTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionDeclineBlockingPlayBonusPlay
@@ -412,7 +412,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -569,7 +569,7 @@ struct BlockingPlayTests {
 
         // MARK: - Declare first run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -596,7 +596,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionEligibleForBlockingPlayBonusPlay(
                     playerID: pl(.away, 0)
@@ -606,7 +606,7 @@ struct BlockingPlayTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionUseBlockingPlayBonusPlay
@@ -627,7 +627,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -674,7 +674,7 @@ struct BlockingPlayTests {
 
         // MARK: - Specify first run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -717,7 +717,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -757,7 +757,7 @@ struct BlockingPlayTests {
 
         // MARK: - Declare second run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -784,7 +784,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 1),
@@ -831,7 +831,7 @@ struct BlockingPlayTests {
 
         // MARK: - Specify second run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -865,7 +865,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -908,7 +908,7 @@ struct BlockingPlayTests {
         blockDieRandomizer.nextResults = [.smash, .smash]
         d6Randomizer.nextResults = [6]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -981,7 +981,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .selectObjectiveToDiscard(objectiveIDs: [.first, .third])
             )
@@ -989,7 +989,7 @@ struct BlockingPlayTests {
 
         // MARK: - Discard objective
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .selectObjectiveToDiscard(objectiveID: .first)
@@ -1024,7 +1024,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1043,7 +1043,7 @@ struct BlockingPlayTests {
 
         // Declare stand up
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -1071,7 +1071,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1097,7 +1097,7 @@ struct BlockingPlayTests {
 
         // MARK: - Declare second block
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -1124,7 +1124,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionSpecifyTarget(
                     playerID: pl(.home, 0),
@@ -1141,7 +1141,7 @@ struct BlockingPlayTests {
         blockDieRandomizer.nextResults = [.shove]
         d6Randomizer.nextResults = [6]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionSpecifyTarget(target: pl(.away, 1))
@@ -1175,7 +1175,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForFollowUp(
                     playerID: pl(.home, 0),
@@ -1186,7 +1186,7 @@ struct BlockingPlayTests {
 
         // MARK: - Follow up
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionUseFollowUp
@@ -1207,7 +1207,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1226,7 +1226,7 @@ struct BlockingPlayTests {
 
         // MARK: - Declare sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -1253,7 +1253,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.home, 0),
@@ -1267,7 +1267,7 @@ struct BlockingPlayTests {
 
         // MARK: - Specify sidestep
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSpecifySquare(square: sq(7, 7))
@@ -1289,7 +1289,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .selectObjectiveToDiscard(objectiveIDs: [.first, .third])
             )
@@ -1297,7 +1297,7 @@ struct BlockingPlayTests {
 
         // MARK: - Discard objective
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .selectObjectiveToDiscard(objectiveID: .third)
@@ -1323,7 +1323,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1370,7 +1370,7 @@ struct BlockingPlayTests {
 
         // MARK: - Declare final run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1397,7 +1397,7 @@ struct BlockingPlayTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),

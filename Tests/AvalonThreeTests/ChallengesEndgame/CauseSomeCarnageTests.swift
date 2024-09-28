@@ -98,7 +98,7 @@ struct CauseSomeCarnageTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [1]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -149,7 +149,7 @@ struct CauseSomeCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -185,7 +185,7 @@ struct CauseSomeCarnageTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -237,7 +237,7 @@ struct CauseSomeCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -356,7 +356,7 @@ struct CauseSomeCarnageTests {
 
         blockDieRandomizer.nextResults = [.miss]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -400,7 +400,7 @@ struct CauseSomeCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -429,7 +429,7 @@ struct CauseSomeCarnageTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [5]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -481,7 +481,7 @@ struct CauseSomeCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -594,7 +594,7 @@ struct CauseSomeCarnageTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [5]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -646,7 +646,7 @@ struct CauseSomeCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -689,7 +689,7 @@ struct CauseSomeCarnageTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [1]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -740,7 +740,7 @@ struct CauseSomeCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
                     objectiveIDs: [.second]
@@ -750,7 +750,7 @@ struct CauseSomeCarnageTests {
 
         // MARK: - Claim objective
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
@@ -782,7 +782,7 @@ struct CauseSomeCarnageTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

@@ -86,7 +86,7 @@ struct BladedKnuckleDustersTests {
 
         blockDieRandomizer.nextResults = [.smash]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -131,7 +131,7 @@ struct BladedKnuckleDustersTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForBladedKnuckleDustersBonusPlay(
                     playerID: pl(.away, 0)
@@ -143,7 +143,7 @@ struct BladedKnuckleDustersTests {
 
         d6Randomizer.nextResults = [2]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseBladedKnuckleDustersBonusPlay
@@ -187,7 +187,7 @@ struct BladedKnuckleDustersTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -281,7 +281,7 @@ struct BladedKnuckleDustersTests {
 
         blockDieRandomizer.nextResults = [.smash]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -326,7 +326,7 @@ struct BladedKnuckleDustersTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .blockActionEligibleForBladedKnuckleDustersBonusPlay(
                     playerID: pl(.away, 0)
@@ -336,7 +336,7 @@ struct BladedKnuckleDustersTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineBladedKnuckleDustersBonusPlay
@@ -348,7 +348,7 @@ struct BladedKnuckleDustersTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForAbsolutelyNailsBonusPlay(
                     playerID: pl(.home, 0)

@@ -98,7 +98,7 @@ struct MultiBallTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -151,7 +151,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
                     objectiveIDs: [.second]
@@ -172,7 +172,7 @@ struct MultiBallTests {
         let secondNewBallID = 789
         ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
@@ -241,7 +241,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -354,7 +354,7 @@ struct MultiBallTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -407,7 +407,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
                     objectiveIDs: [.second]
@@ -428,7 +428,7 @@ struct MultiBallTests {
         let secondNewBallID = 789
         ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
@@ -497,7 +497,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -616,7 +616,7 @@ struct MultiBallTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -669,7 +669,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
                     objectiveIDs: [.second]
@@ -690,7 +690,7 @@ struct MultiBallTests {
         let secondNewBallID = 789
         ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
@@ -764,7 +764,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -884,7 +884,7 @@ struct MultiBallTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -937,7 +937,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
                     objectiveIDs: [.second]
@@ -958,7 +958,7 @@ struct MultiBallTests {
         let secondNewBallID = 123
         ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
@@ -1053,7 +1053,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1177,7 +1177,7 @@ struct MultiBallTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1230,7 +1230,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
                     objectiveIDs: [.second]
@@ -1251,7 +1251,7 @@ struct MultiBallTests {
         let secondNewBallID = 123
         ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
@@ -1352,7 +1352,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -1489,7 +1489,7 @@ struct MultiBallTests {
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1542,7 +1542,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
                     objectiveIDs: [.second]
@@ -1567,7 +1567,7 @@ struct MultiBallTests {
         let secondNewBallID = 123
         ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
@@ -1682,7 +1682,7 @@ struct MultiBallTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [

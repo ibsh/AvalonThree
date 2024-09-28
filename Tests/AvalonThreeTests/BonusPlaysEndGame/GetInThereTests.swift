@@ -109,7 +109,7 @@ struct GetInThereTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -136,7 +136,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -187,7 +187,7 @@ struct GetInThereTests {
         ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.northWest]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -250,7 +250,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.home, 0)
@@ -260,7 +260,7 @@ struct GetInThereTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .useGetInThereBonusPlayReservesAction
@@ -289,7 +289,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.home, 0),
@@ -335,7 +335,7 @@ struct GetInThereTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .reservesActionSpecifySquare(square: sq(3, 14))
@@ -363,7 +363,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
                     playerID: pl(.home, 1)
@@ -471,7 +471,7 @@ struct GetInThereTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -498,7 +498,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -549,7 +549,7 @@ struct GetInThereTests {
         ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.northWest]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -612,7 +612,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.home, 0)
@@ -622,7 +622,7 @@ struct GetInThereTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declineGetInThereBonusPlayReservesAction
@@ -634,7 +634,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
                     playerID: pl(.home, 1)
@@ -742,7 +742,7 @@ struct GetInThereTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -769,7 +769,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -820,7 +820,7 @@ struct GetInThereTests {
         ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.northWest]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -883,7 +883,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.away, 1)
@@ -893,7 +893,7 @@ struct GetInThereTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useGetInThereBonusPlayReservesAction
@@ -922,7 +922,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.away, 1),
@@ -968,7 +968,7 @@ struct GetInThereTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .reservesActionSpecifySquare(square: sq(3, 0))
@@ -996,7 +996,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
                     playerID: pl(.home, 1)
@@ -1104,7 +1104,7 @@ struct GetInThereTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1131,7 +1131,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -1182,7 +1182,7 @@ struct GetInThereTests {
         ballIDProvider.nextResults = [newBallID]
         directionRandomizer.nextResults = [.northWest]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -1246,7 +1246,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.away, 1)
@@ -1256,7 +1256,7 @@ struct GetInThereTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineGetInThereBonusPlayReservesAction
@@ -1268,7 +1268,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
                     playerID: pl(.home, 1)
@@ -1381,7 +1381,7 @@ struct GetInThereTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1408,7 +1408,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -1455,7 +1455,7 @@ struct GetInThereTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -1499,7 +1499,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(objectiveIDs: [.first])
             )
@@ -1512,7 +1512,7 @@ struct GetInThereTests {
         ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
         directionRandomizer.nextResults = [.northWest, .east]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
@@ -1613,7 +1613,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.away, 1)
@@ -1623,7 +1623,7 @@ struct GetInThereTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useGetInThereBonusPlayReservesAction
@@ -1652,7 +1652,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.away, 1),
@@ -1698,7 +1698,7 @@ struct GetInThereTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .reservesActionSpecifySquare(square: sq(3, 0))
@@ -1727,7 +1727,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
                     playerID: pl(.home, 1)
@@ -1840,7 +1840,7 @@ struct GetInThereTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1867,7 +1867,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -1914,7 +1914,7 @@ struct GetInThereTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -1958,7 +1958,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(objectiveIDs: [.first])
             )
@@ -1971,7 +1971,7 @@ struct GetInThereTests {
         ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
         directionRandomizer.nextResults = [.northWest, .east]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
@@ -2072,7 +2072,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.away, 1)
@@ -2082,7 +2082,7 @@ struct GetInThereTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineGetInThereBonusPlayReservesAction
@@ -2096,7 +2096,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
                     playerID: pl(.home, 1)
@@ -2209,7 +2209,7 @@ struct GetInThereTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2236,7 +2236,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -2283,7 +2283,7 @@ struct GetInThereTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -2327,7 +2327,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(objectiveIDs: [.first])
             )
@@ -2340,7 +2340,7 @@ struct GetInThereTests {
         ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
         directionRandomizer.nextResults = [.northWest, .east]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
@@ -2428,7 +2428,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.home, 0)
@@ -2438,7 +2438,7 @@ struct GetInThereTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .useGetInThereBonusPlayReservesAction
@@ -2467,7 +2467,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.home, 0),
@@ -2513,7 +2513,7 @@ struct GetInThereTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .reservesActionSpecifySquare(square: sq(3, 14))
@@ -2542,7 +2542,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
                     playerID: pl(.home, 1)
@@ -2655,7 +2655,7 @@ struct GetInThereTests {
 
         // MARK: - Declare run
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2682,7 +2682,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
@@ -2729,7 +2729,7 @@ struct GetInThereTests {
 
         // MARK: - Specify run
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSpecifySquares(
@@ -2773,7 +2773,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(objectiveIDs: [.first])
             )
@@ -2786,7 +2786,7 @@ struct GetInThereTests {
         ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
         directionRandomizer.nextResults = [.northWest, .east]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
@@ -2874,7 +2874,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.home, 0)
@@ -2884,7 +2884,7 @@ struct GetInThereTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declineGetInThereBonusPlayReservesAction
@@ -2898,7 +2898,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForRegenerationSkillStandUpAction(
                     playerID: pl(.home, 1)
@@ -2987,7 +2987,7 @@ struct GetInThereTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [4]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3044,7 +3044,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.home, 0)
@@ -3054,7 +3054,7 @@ struct GetInThereTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .useGetInThereBonusPlayReservesAction
@@ -3083,7 +3083,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.home, 0),
@@ -3129,7 +3129,7 @@ struct GetInThereTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .reservesActionSpecifySquare(square: sq(3, 14))
@@ -3157,7 +3157,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3262,7 +3262,7 @@ struct GetInThereTests {
         blockDieRandomizer.nextResults = [.kerrunch]
         d6Randomizer.nextResults = [4]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3319,7 +3319,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.home, 0)
@@ -3329,7 +3329,7 @@ struct GetInThereTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declineGetInThereBonusPlayReservesAction
@@ -3341,7 +3341,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3436,7 +3436,7 @@ struct GetInThereTests {
 
         foulDieRandomizer.nextResults = [.gotThem]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3476,7 +3476,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.home, 0)
@@ -3486,7 +3486,7 @@ struct GetInThereTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .useGetInThereBonusPlayReservesAction
@@ -3515,7 +3515,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.home, 0),
@@ -3561,7 +3561,7 @@ struct GetInThereTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .reservesActionSpecifySquare(square: sq(3, 14))
@@ -3589,7 +3589,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3691,7 +3691,7 @@ struct GetInThereTests {
 
         foulDieRandomizer.nextResults = [.gotThem]
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3731,7 +3731,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .home,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.home, 0)
@@ -3741,7 +3741,7 @@ struct GetInThereTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declineGetInThereBonusPlayReservesAction
@@ -3753,7 +3753,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -3854,7 +3854,7 @@ struct GetInThereTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3881,7 +3881,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -4034,7 +4034,7 @@ struct GetInThereTests {
         d6Randomizer.nextResults = [1]
         directionRandomizer.nextResults = [.west]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
@@ -4074,7 +4074,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.away, 1)
@@ -4084,7 +4084,7 @@ struct GetInThereTests {
 
         // MARK: - Use bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useGetInThereBonusPlayReservesAction
@@ -4113,7 +4113,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .reservesActionSpecifySquare(
                     playerID: pl(.away, 1),
@@ -4159,7 +4159,7 @@ struct GetInThereTests {
 
         // MARK: - Specify reserves
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .reservesActionSpecifySquare(square: sq(3, 0))
@@ -4187,7 +4187,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
@@ -4295,7 +4295,7 @@ struct GetInThereTests {
 
         // MARK: - Declare hurl teammate
 
-        var (latestEvents, latestPayload) = try game.process(
+        var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -4322,7 +4322,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
@@ -4475,7 +4475,7 @@ struct GetInThereTests {
         d6Randomizer.nextResults = [1]
         directionRandomizer.nextResults = [.west]
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
@@ -4515,7 +4515,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .eligibleForGetInThereBonusPlayReservesAction(
                     playerID: pl(.away, 1)
@@ -4525,7 +4525,7 @@ struct GetInThereTests {
 
         // MARK: - Decline bonus play
 
-        (latestEvents, latestPayload) = try game.process(
+        (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineGetInThereBonusPlayReservesAction
@@ -4537,7 +4537,7 @@ struct GetInThereTests {
         )
 
         #expect(
-            latestPayload == Prompt(
+            latestPrompt == Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
