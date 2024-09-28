@@ -411,19 +411,13 @@ public enum Event: Equatable, Codable, Sendable {
         hand: [WrappedChallengeCard]
     )
 
-    case revealedInstantBonusPlay(
+    case activatedBonusPlay(
         coachID: CoachID,
         card: ChallengeCard,
         hand: [WrappedChallengeCard]
     )
 
-    case revealedPersistentBonusPlay(
-        coachID: CoachID,
-        card: ChallengeCard,
-        hand: [WrappedChallengeCard]
-    )
-
-    case discardedPersistentBonusPlay(
+    case discardedActiveBonusPlay(
         coachID: CoachID,
         card: ChallengeCard
     )

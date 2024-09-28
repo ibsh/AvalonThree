@@ -539,7 +539,7 @@ struct PassingPlayTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1173,7 +1173,7 @@ struct PassingPlayTests {
                     reason: .run
                 ),
                 .turnEnded(coachID: .away),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,

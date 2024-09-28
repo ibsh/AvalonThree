@@ -418,7 +418,7 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -517,7 +517,7 @@ struct DivingTackleTests {
                     reason: PlayerFallDownReason
                         .divingTackle
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -744,7 +744,7 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -831,7 +831,7 @@ struct DivingTackleTests {
                     reason: PlayerFallDownReason
                         .divingTackle
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1056,7 +1056,7 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1125,7 +1125,7 @@ struct DivingTackleTests {
                     reason: PlayerFallDownReason
                         .divingTackle
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1367,7 +1367,7 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1466,7 +1466,7 @@ struct DivingTackleTests {
                     to: sq(2, 7),
                     direction: .south
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1695,7 +1695,7 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1794,7 +1794,7 @@ struct DivingTackleTests {
                     to: sq(2, 7),
                     direction: .south
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -2029,7 +2029,7 @@ struct DivingTackleTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -2147,7 +2147,7 @@ struct DivingTackleTests {
                     in: sq(2, 7),
                     ballID: 123
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,

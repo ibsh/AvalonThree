@@ -230,7 +230,7 @@ struct ReservesTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -309,7 +309,7 @@ struct ReservesTests {
                     playerID: pl(.home, 1),
                     to: sq(7, 14)
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -937,7 +937,7 @@ struct ReservesTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1016,7 +1016,7 @@ struct ReservesTests {
                     playerID: pl(.home, 1),
                     to: sq(1, 14)
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,

@@ -86,8 +86,7 @@ extension InGameTransaction {
         var discardCards = [ChallengeCard]()
         for activeBonusCard in activeBonusCards {
             switch activeBonusCard.bonusPlay.persistence {
-            case .instant,
-                 .oneAction,
+            case .oneAction,
                  .oneTurn:
                 discardCards.append(activeBonusCard)
             case .custom,
@@ -99,7 +98,7 @@ extension InGameTransaction {
         for discardCard in discardCards {
             table.discards.append(discardCard)
             events.append(
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: oldTurnCoachID,
                     card: discardCard
                 )

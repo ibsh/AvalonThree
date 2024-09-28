@@ -1267,7 +1267,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1301,7 +1301,7 @@ struct RawTalentTests {
                     in: sq(2, 6),
                     ballID: 123
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1903,7 +1903,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1929,7 +1929,7 @@ struct RawTalentTests {
                     ballID: 123,
                     in: sq(7, 6)
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -2514,7 +2514,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -2545,7 +2545,7 @@ struct RawTalentTests {
                     direction: .west,
                     reason: .shoved
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -3440,7 +3440,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -3510,7 +3510,7 @@ struct RawTalentTests {
                     coachID: .away,
                     result: .kerrunch
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -3967,7 +3967,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -3996,7 +3996,7 @@ struct RawTalentTests {
                     in: sq(1, 6),
                     reason: .blocked
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -4193,7 +4193,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -4202,7 +4202,7 @@ struct RawTalentTests {
                     hand: []
                 ),
                 .rolledForBlock(coachID: .away, results: [.miss, .miss, .tackle]),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -4663,7 +4663,7 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -4682,7 +4682,7 @@ struct RawTalentTests {
                     modified: 3,
                     modifications: [.kerrunch]
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,

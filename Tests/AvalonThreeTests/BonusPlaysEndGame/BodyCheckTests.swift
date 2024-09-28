@@ -151,7 +151,7 @@ struct BodyCheckTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -190,7 +190,7 @@ struct BodyCheckTests {
                     modified: 4,
                     modifications: [.kerrunch]
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,

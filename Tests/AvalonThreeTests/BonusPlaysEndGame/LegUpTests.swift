@@ -478,7 +478,7 @@ struct LegUpTests {
                     increment: 1,
                     total: 1
                 ),
-                .revealedInstantBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -497,6 +497,17 @@ struct LegUpTests {
                     coachID: .away,
                     increment: 1,
                     total: 2
+                ),
+                .discardedActiveBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .legUp
+                    )
+                ),
+                .updatedDiscards(
+                    top: .legUp,
+                    count: 1
                 ),
                 .turnEnded(coachID: .away),
                 .turnBegan(coachID: .home, isFinal: true),
@@ -725,7 +736,7 @@ struct LegUpTests {
                     increment: 4,
                     total: 4
                 ),
-                .revealedInstantBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -737,6 +748,17 @@ struct LegUpTests {
                     coachID: .away,
                     increment: 1,
                     total: 5
+                ),
+                .discardedActiveBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .legUp
+                    )
+                ),
+                .updatedDiscards(
+                    top: .legUp,
+                    count: 1
                 ),
             ]
         )

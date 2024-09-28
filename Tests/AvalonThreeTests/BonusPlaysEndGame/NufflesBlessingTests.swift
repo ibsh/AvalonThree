@@ -252,7 +252,7 @@ struct NufflesBlessingTests {
                     increment: 1,
                     total: 1
                 ),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .getTheBall,

@@ -475,7 +475,7 @@ struct InterventionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -585,7 +585,7 @@ struct InterventionTests {
                     direction: .southEast,
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -878,7 +878,7 @@ struct InterventionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -972,7 +972,7 @@ struct InterventionTests {
                     direction: .southWest,
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1259,7 +1259,7 @@ struct InterventionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1274,7 +1274,7 @@ struct InterventionTests {
                         )
                     ]
                 ),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1386,7 +1386,7 @@ struct InterventionTests {
                     direction: .west,
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1397,7 +1397,7 @@ struct InterventionTests {
                     top: .intervention,
                     count: 1
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1680,7 +1680,7 @@ struct InterventionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1774,7 +1774,7 @@ struct InterventionTests {
                     direction: .southEast,
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -2179,7 +2179,7 @@ struct InterventionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -2280,7 +2280,7 @@ struct InterventionTests {
                     direction: .southEast,
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -2314,7 +2314,7 @@ struct InterventionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -2419,7 +2419,7 @@ struct InterventionTests {
                     reason: PlayerFallDownReason
                         .divingTackle
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -2982,7 +2982,7 @@ struct InterventionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -3076,7 +3076,7 @@ struct InterventionTests {
                     direction: .southEast,
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -3608,7 +3608,7 @@ struct InterventionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -3702,7 +3702,7 @@ struct InterventionTests {
                     direction: .southEast,
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -4002,7 +4002,7 @@ struct InterventionTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -4112,7 +4112,7 @@ struct InterventionTests {
                     direction: .southEast,
                     reason: .mark
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .home,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,

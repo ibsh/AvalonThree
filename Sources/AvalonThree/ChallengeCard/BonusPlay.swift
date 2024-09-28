@@ -168,7 +168,6 @@ public enum BonusPlay: String, Codable, Sendable {
 extension BonusPlay {
 
     enum Persistence: Equatable {
-        case instant
         case oneAction
         case oneTurn
         case custom
@@ -177,8 +176,6 @@ extension BonusPlay {
 
     var persistence: Persistence {
         switch self {
-        case .legUp:
-            return .instant
         case .accuratePass,
              .blitz,
              .distraction,
@@ -211,6 +208,7 @@ extension BonusPlay {
         case .multiBall,
              .rawTalent,
              .shadow,
+             .legUp,
              .readyToGo,
              .yourTimeToShine:
             return .custom

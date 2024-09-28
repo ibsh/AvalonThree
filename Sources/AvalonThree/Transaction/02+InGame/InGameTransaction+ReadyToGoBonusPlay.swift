@@ -90,7 +90,7 @@ extension InGameTransaction {
         for discardCard in discardCards {
             table.discards.append(discardCard)
             events.append(
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: coachID,
                     card: discardCard
                 )

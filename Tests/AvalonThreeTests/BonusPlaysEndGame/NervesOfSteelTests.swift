@@ -197,7 +197,7 @@ struct NervesOfSteelTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -266,7 +266,7 @@ struct NervesOfSteelTests {
                     in: sq(3, 6),
                     ballID: 123
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -471,7 +471,7 @@ struct NervesOfSteelTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -486,7 +486,7 @@ struct NervesOfSteelTests {
                         )
                     ]
                 ),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -561,7 +561,7 @@ struct NervesOfSteelTests {
                     in: sq(9, 6),
                     ballID: 123
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -572,7 +572,7 @@ struct NervesOfSteelTests {
                     top: .nervesOfSteel,
                     count: 1
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -823,7 +823,7 @@ struct NervesOfSteelTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -1028,7 +1028,7 @@ struct NervesOfSteelTests {
                     ballID: 123,
                     in: sq(2, 8)
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,

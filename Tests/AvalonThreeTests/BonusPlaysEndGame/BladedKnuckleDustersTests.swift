@@ -174,7 +174,7 @@ struct BladedKnuckleDustersTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -194,7 +194,7 @@ struct BladedKnuckleDustersTests {
                     in: sq(2, 6),
                     reason: .blocked
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,

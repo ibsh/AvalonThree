@@ -60,7 +60,7 @@ extension InGameTransaction {
             let card = try table.removeActiveBonus(coachID: coachID, activeBonus: bonusPlay)
             table.discards.append(card)
             events.append(
-                .discardedPersistentBonusPlay(coachID: coachID, card: card)
+                .discardedActiveBonusPlay(coachID: coachID, card: card)
             )
             events.append(
                 .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)

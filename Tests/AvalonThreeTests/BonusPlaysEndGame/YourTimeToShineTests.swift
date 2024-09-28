@@ -396,7 +396,7 @@ struct YourTimeToShineTests {
                     increment: 1,
                     total: 1
                 ),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .getTheBall,
@@ -757,7 +757,7 @@ struct YourTimeToShineTests {
                     direction: .southEast,
                     reason: .run
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .getTheBall,
@@ -1067,7 +1067,7 @@ struct YourTimeToShineTests {
                     increment: 1,
                     total: 1
                 ),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .getTheBall,
@@ -1130,7 +1130,7 @@ struct YourTimeToShineTests {
 
         #expect(
             latestEvents == [
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .getTheBall,

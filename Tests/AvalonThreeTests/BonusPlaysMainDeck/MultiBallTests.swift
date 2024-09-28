@@ -225,7 +225,7 @@ struct MultiBallTests {
                     ]
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -251,7 +251,7 @@ struct MultiBallTests {
                     to: sq(6, 8),
                     direction: .northEast
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -506,7 +506,7 @@ struct MultiBallTests {
                     ]
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -532,7 +532,7 @@ struct MultiBallTests {
                     to: sq(6, 4),
                     direction: .northEast
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -793,7 +793,7 @@ struct MultiBallTests {
                     ]
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -824,7 +824,7 @@ struct MultiBallTests {
                     to: sq(6, 4),
                     direction: .northEast
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -1090,7 +1090,7 @@ struct MultiBallTests {
                     increment: 2,
                     total: 2
                 ),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -1138,7 +1138,7 @@ struct MultiBallTests {
                     to: sq(6, 5),
                     direction: .northEast
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -1408,7 +1408,7 @@ struct MultiBallTests {
                     increment: 2,
                     total: 2
                 ),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -1462,7 +1462,7 @@ struct MultiBallTests {
                     to: sq(6, 5),
                     direction: .northEast
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -1749,7 +1749,7 @@ struct MultiBallTests {
                     increment: 2,
                     total: 2
                 ),
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,
@@ -1817,7 +1817,7 @@ struct MultiBallTests {
                     to: sq(6, 6),
                     direction: .southEast
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .takeThemDown,

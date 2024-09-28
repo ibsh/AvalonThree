@@ -157,7 +157,7 @@ extension InGameTransaction {
         try addNewBall()
         table.discards.append(objective)
         events.append(
-            .discardedPersistentBonusPlay(
+            .discardedActiveBonusPlay(
                 coachID: coachID,
                 card: objective
             )

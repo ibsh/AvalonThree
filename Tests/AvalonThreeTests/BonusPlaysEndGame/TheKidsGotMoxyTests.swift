@@ -154,7 +154,7 @@ struct TheKidsGotMoxyTests {
 
         #expect(
             latestEvents == [
-                .revealedPersistentBonusPlay(
+                .activatedBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
@@ -214,7 +214,7 @@ struct TheKidsGotMoxyTests {
                     modified: 4,
                     modifications: [.kerrunch]
                 ),
-                .discardedPersistentBonusPlay(
+                .discardedActiveBonusPlay(
                     coachID: .away,
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
