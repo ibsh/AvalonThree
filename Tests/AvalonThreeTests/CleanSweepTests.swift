@@ -102,6 +102,8 @@ struct CleanSweepTests {
 
         // MARK: - Declare block
 
+        blockDieRandomizer.nextResults = [.smash]
+
         var (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -124,35 +126,7 @@ struct CleanSweepTests {
                     ),
                     isFree: false,
                     playerSquare: sq(6, 6)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.smash]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(coachID: .away, results: [.smash]),
             ]
         )
@@ -690,6 +664,8 @@ struct CleanSweepTests {
 
         // MARK: - Declare block
 
+        blockDieRandomizer.nextResults = [.smash]
+
         var (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -712,35 +688,7 @@ struct CleanSweepTests {
                     ),
                     isFree: false,
                     playerSquare: sq(6, 6)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.smash]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(coachID: .away, results: [.smash]),
             ]
         )
@@ -1308,6 +1256,8 @@ struct CleanSweepTests {
 
         // MARK: - Declare block
 
+        blockDieRandomizer.nextResults = [.smash]
+
         var (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -1330,35 +1280,7 @@ struct CleanSweepTests {
                     ),
                     isFree: false,
                     playerSquare: sq(6, 6)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.smash]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(coachID: .away, results: [.smash]),
             ]
         )

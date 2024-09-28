@@ -1,20 +1,22 @@
 //
-//  BodyCheckTests.swift
-//  AvalonThreeTests
+//  FoulTests.swift
+//  AvalonThree
 //
-//  Created by Ibrahim Sha'ath on 7/3/24.
+//  Created by Ibrahim Sha'ath on 9/27/24.
 //
 
 import Testing
 @testable import AvalonThree
 
-struct BodyCheckTests {
+struct FoulTests {
 
-    @Test func used() async throws {
+    @Test func notPromptedIfOnlyOneEligibleTarget() async throws {
 
         // MARK: - Init
 
-        let d6Randomizer = D6RandomizerDouble()
+        let foulDieRandomizer = FoulDieRandomizerDouble()
+
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -24,33 +26,36 @@ struct BodyCheckTests {
                         boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
-                        coinFlipWinnerTeamID: .human,
-                        coinFlipLoserTeamID: .orc
+                        coinFlipWinnerTeamID: .undead,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
                             id: pl(.away, 0),
-                            spec: .orc_lineman,
-                            state: .standing(square: sq(3, 6)),
+                            spec: .human_lineman,
+                            state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
                             id: pl(.home, 0),
-                            spec: .human_lineman,
-                            state: .standing(square: sq(2, 6)),
+                            spec: .undead_skeleton,
+                            state: .prone(square: sq(5, 11)),
                             canTakeActions: true
-                        )
+                        ),
                     ],
                     playerNumbers: [:],
-                    coinFlipLoserHand: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .bodyCheck),
-                    ],
+                    coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
                     coinFlipWinnerActiveBonuses: [],
                     coinFlipLoserScore: 0,
                     coinFlipWinnerScore: 0,
-                    balls: [],
+                    balls: [
+                        Ball(
+                            id: ballID,
+                            state: .held(playerID: pl(.away, 0))
+                        )
+                    ],
                     deck: [],
                     objectives: Objectives(),
                     discards: []
@@ -67,24 +72,26 @@ struct BodyCheckTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [],
-                    playerActionsLeft: 3
+                    playerActionsLeft: 1
                 )
             ),
             randomizers: Randomizers(
-                d6: d6Randomizer
+                foulDie: foulDieRandomizer
             ),
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare block
+        // MARK: - Declare foul
 
-        var (latestEvents, latestPayload) = try game.process(
+        foulDieRandomizer.nextResults = [.gotThem]
+
+        let (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .block
+                        actionID: .foul
                     ),
                     consumesBonusPlays: []
                 )
@@ -96,86 +103,23 @@ struct BodyCheckTests {
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .block
+                        actionID: .foul
                     ),
                     isFree: false,
-                    playerSquare: sq(3, 6)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionEligibleForBodyCheckBonusPlay(
-                    playerID: pl(.away, 0)
-                )
-            )
-        )
-
-        // MARK: - Use bonus play
-
-        d6Randomizer.nextResults = [5]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionUseBodyCheckBonusPlay
-            )
-        )
-
-        #expect(
-            latestEvents == [
-                .activatedBonusPlay(
-                    coachID: .away,
-                    card: ChallengeCard(
-                        challenge: .breakSomeBones,
-                        bonusPlay: .bodyCheck
-                    ),
-                    hand: []
+                    playerSquare: sq(5, 12)
                 ),
-                .rolledForBlock(
-                    coachID: .away,
-                    results: [.kerrunch]
-                ),
-                .selectedBlockDieResult(
-                    coachID: .away,
-                    result: .kerrunch,
-                    from: [.kerrunch]
-                ),
-                .playerBlocked(
+                .rolledForFoul(coachID: .away, result: .gotThem),
+                .playerFouled(
                     playerID: pl(.away, 0),
-                    from: sq(3, 6),
-                    to: sq(2, 6),
-                    direction: .west,
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
                     targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(
+                .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
-                    reason: .blocked
-                ),
-                .rolledForArmour(
-                    coachID: .home,
-                    die: .d6,
-                    unmodified: 5
-                ),
-                .changedArmourResult(
-                    die: .d6,
-                    unmodified: 5,
-                    modified: 4,
-                    modifications: [.kerrunch]
-                ),
-                .discardedActiveBonusPlay(
-                    coachID: .away,
-                    card: ChallengeCard(
-                        challenge: .breakSomeBones,
-                        bonusPlay: .bodyCheck
-                    )
-                ),
-                .updatedDiscards(
-                    top: .bodyCheck,
-                    count: 1
+                    in: sq(5, 11),
+                    reason: .fouled
                 ),
             ]
         )
@@ -189,13 +133,6 @@ struct BodyCheckTests {
                             declaration: ActionDeclaration(
                                 playerID: pl(.away, 0),
                                 actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
                             ),
                             consumesBonusPlays: []
                         ),
@@ -206,12 +143,13 @@ struct BodyCheckTests {
         )
     }
 
-    @Test func declined() async throws {
+    @Test func promptedIfMoreThanOneEligibleTarget() async throws {
 
         // MARK: - Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
+        let foulDieRandomizer = FoulDieRandomizerDouble()
+
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -221,33 +159,42 @@ struct BodyCheckTests {
                         boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
-                        coinFlipWinnerTeamID: .human,
-                        coinFlipLoserTeamID: .orc
+                        coinFlipWinnerTeamID: .undead,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
                             id: pl(.away, 0),
-                            spec: .orc_lineman,
-                            state: .standing(square: sq(3, 6)),
+                            spec: .human_lineman,
+                            state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
                             id: pl(.home, 0),
-                            spec: .human_lineman,
-                            state: .standing(square: sq(2, 6)),
+                            spec: .undead_skeleton,
+                            state: .prone(square: sq(5, 11)),
                             canTakeActions: true
-                        )
+                        ),
+                        Player(
+                            id: pl(.home, 1),
+                            spec: .undead_skeleton,
+                            state: .prone(square: sq(4, 13)),
+                            canTakeActions: true
+                        ),
                     ],
                     playerNumbers: [:],
-                    coinFlipLoserHand: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .bodyCheck),
-                    ],
+                    coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
                     coinFlipWinnerActiveBonuses: [],
                     coinFlipLoserScore: 0,
                     coinFlipWinnerScore: 0,
-                    balls: [],
+                    balls: [
+                        Ball(
+                            id: ballID,
+                            state: .held(playerID: pl(.away, 0))
+                        )
+                    ],
                     deck: [],
                     objectives: Objectives(),
                     discards: []
@@ -264,17 +211,16 @@ struct BodyCheckTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [],
-                    playerActionsLeft: 3
+                    playerActionsLeft: 1
                 )
             ),
             randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
+                foulDie: foulDieRandomizer
             ),
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare block
+        // MARK: - Declare foul
 
         var (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
@@ -282,7 +228,7 @@ struct BodyCheckTests {
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .block
+                        actionID: .foul
                     ),
                     consumesBonusPlays: []
                 )
@@ -294,10 +240,10 @@ struct BodyCheckTests {
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .block
+                        actionID: .foul
                     ),
                     isFree: false,
-                    playerSquare: sq(3, 6)
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -305,45 +251,42 @@ struct BodyCheckTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .blockActionEligibleForBodyCheckBonusPlay(
-                    playerID: pl(.away, 0)
+                payload: .foulActionSpecifyTarget(
+                    playerID: pl(.away, 0),
+                    validTargets: [
+                        pl(.home, 0),
+                        pl(.home, 1),
+                    ]
                 )
             )
         )
 
-        // MARK: - Decline bonus play
+        // MARK: - Specify foul
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [5]
+        foulDieRandomizer.nextResults = [.gotThem]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionDeclineBodyCheckBonusPlay
+                message: .foulActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(
-                    coachID: .away,
-                    result: .smash,
-                    from: [.smash]
-                ),
-                .playerBlocked(
+                .rolledForFoul(coachID: .away, result: .gotThem),
+                .playerFouled(
                     playerID: pl(.away, 0),
-                    from: sq(3, 6),
-                    to: sq(2, 6),
-                    direction: .west,
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
                     targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(
+                .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
-                    reason: .blocked
+                    in: sq(5, 11),
+                    reason: .fouled
                 ),
-                .rolledForArmour(coachID: .home, die: .d6, unmodified: 5),
             ]
         )
 
@@ -356,13 +299,6 @@ struct BodyCheckTests {
                             declaration: ActionDeclaration(
                                 playerID: pl(.away, 0),
                                 actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
                             ),
                             consumesBonusPlays: []
                         ),

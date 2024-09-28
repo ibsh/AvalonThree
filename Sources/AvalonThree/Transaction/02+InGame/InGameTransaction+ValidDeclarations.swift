@@ -257,8 +257,8 @@ extension InGameTransaction {
                 .playersInSquares(square.adjacentSquares)
                 .contains(where: { adjacentPlayer in
                     adjacentPlayer.coachID == player.coachID
-                    &&
-                    adjacentPlayer.spec != player.spec
+                    && adjacentPlayer.spec != player.spec
+                    && adjacentPlayer.isStanding != nil
                 })
         else {
             return .cannotDeclare

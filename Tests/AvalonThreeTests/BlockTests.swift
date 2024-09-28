@@ -1,21 +1,22 @@
 //
-//  TheKidsGotMoxyTests.swift
-//  AvalonThreeTests
+//  BlockTests.swift
+//  AvalonThree
 //
-//  Created by Ibrahim Sha'ath on 7/3/24.
+//  Created by Ibrahim Sha'ath on 9/27/24.
 //
 
 import Testing
 @testable import AvalonThree
 
-struct TheKidsGotMoxyTests {
+struct BlockTests {
 
-    @Test func used() async throws {
+    @Test func notPromptedIfOnlyOneEligibleTarget() async throws {
 
         // MARK: - Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
+
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -25,33 +26,36 @@ struct TheKidsGotMoxyTests {
                         boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
-                        coinFlipWinnerTeamID: .human,
-                        coinFlipLoserTeamID: .orc
+                        coinFlipWinnerTeamID: .undead,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
                             id: pl(.away, 0),
-                            spec: .orc_lineman,
-                            state: .standing(square: sq(3, 6)),
+                            spec: .human_lineman,
+                            state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
                             id: pl(.home, 0),
-                            spec: .human_lineman,
-                            state: .standing(square: sq(2, 6)),
+                            spec: .undead_skeleton,
+                            state: .standing(square: sq(5, 11)),
                             canTakeActions: true
-                        )
+                        ),
                     ],
                     playerNumbers: [:],
-                    coinFlipLoserHand: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .theKidsGotMoxy),
-                    ],
+                    coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
                     coinFlipWinnerActiveBonuses: [],
                     coinFlipLoserScore: 0,
                     coinFlipWinnerScore: 0,
-                    balls: [],
+                    balls: [
+                        Ball(
+                            id: ballID,
+                            state: .held(playerID: pl(.away, 0))
+                        )
+                    ],
                     deck: [],
                     objectives: Objectives(),
                     discards: []
@@ -68,19 +72,20 @@ struct TheKidsGotMoxyTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [],
-                    playerActionsLeft: 3
+                    playerActionsLeft: 1
                 )
             ),
             randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
+                blockDie: blockDieRandomizer
             ),
             ballIDProvider: DefaultBallIDProvider()
         )
 
         // MARK: - Declare block
 
-        var (latestEvents, latestPayload) = try game.process(
+        blockDieRandomizer.nextResults = [.miss]
+
+        let (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -101,141 +106,70 @@ struct TheKidsGotMoxyTests {
                         actionID: .block
                     ),
                     isFree: false,
-                    playerSquare: sq(3, 6)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionEligibleForTheKidsGotMoxyBonusPlay(
-                    playerID: pl(.away, 0)
-                )
-            )
-        )
-
-        // MARK: - Use bonus play
-
-        blockDieRandomizer.nextResults = [.miss, .kerrunch, .shove]
-        d6Randomizer.nextResults = [5]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionUseTheKidsGotMoxyBonusPlay
-            )
-        )
-
-        #expect(
-            latestEvents == [
-                .activatedBonusPlay(
-                    coachID: .away,
-                    card: ChallengeCard(
-                        challenge: .breakSomeBones,
-                        bonusPlay: .theKidsGotMoxy
-                    ),
-                    hand: []
+                    playerSquare: sq(5, 12)
                 ),
-                .rolledForBlock(coachID: .away, results: [.miss, .kerrunch, .shove]),
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSelectResult(
-                    playerID: pl(.away, 0),
-                    results: [.miss, .kerrunch, .shove]
-                )
-            )
-        )
-
-        // MARK: - Choose block result
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSelectResult(result: .kerrunch)
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.miss]
+                ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch,
-                    from: [.miss, .kerrunch, .shove]
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
-                    from: sq(3, 6),
-                    to: sq(2, 6),
-                    direction: .west,
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
                     targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(
-                    playerID: pl(.home, 0),
-                    in: sq(2, 6),
-                    reason: PlayerFallDownReason.blocked
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(5, 12)
                 ),
-                .rolledForArmour(
-                    coachID: .home,
-                    die: .d6,
-                    unmodified: 5
+                .turnEnded(coachID: .away),
+                .playerCanTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(5, 12)
                 ),
-                .changedArmourResult(
-                    die: .d6,
-                    unmodified: 5,
-                    modified: 4,
-                    modifications: [.kerrunch]
-                ),
-                .discardedActiveBonusPlay(
-                    coachID: .away,
-                    card: ChallengeCard(
-                        challenge: .breakSomeBones,
-                        bonusPlay: .theKidsGotMoxy
-                    )
-                ),
-                .updatedDiscards(
-                    top: .theKidsGotMoxy,
-                    count: 1
-                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
         #expect(
             latestPayload == Prompt(
-                coachID: .away,
+                coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
+                                playerID: pl(.home, 0),
+                                actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
+                                playerID: pl(.home, 0),
+                                actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                     ],
-                    playerActionsLeft: 2
+                    playerActionsLeft: 3
                 )
             )
         )
     }
 
-    @Test func declined() async throws {
+    @Test func promptedIfMoreThanOneEligibleTarget() async throws {
 
         // MARK: - Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
+
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -245,33 +179,42 @@ struct TheKidsGotMoxyTests {
                         boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
-                        coinFlipWinnerTeamID: .human,
-                        coinFlipLoserTeamID: .orc
+                        coinFlipWinnerTeamID: .undead,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
                             id: pl(.away, 0),
-                            spec: .orc_lineman,
-                            state: .standing(square: sq(3, 6)),
+                            spec: .human_lineman,
+                            state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
                             id: pl(.home, 0),
-                            spec: .human_lineman,
-                            state: .standing(square: sq(2, 6)),
+                            spec: .undead_skeleton,
+                            state: .standing(square: sq(5, 11)),
                             canTakeActions: true
-                        )
+                        ),
+                        Player(
+                            id: pl(.home, 1),
+                            spec: .undead_skeleton,
+                            state: .standing(square: sq(4, 13)),
+                            canTakeActions: true
+                        ),
                     ],
                     playerNumbers: [:],
-                    coinFlipLoserHand: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .theKidsGotMoxy),
-                    ],
+                    coinFlipLoserHand: [],
                     coinFlipWinnerHand: [],
                     coinFlipLoserActiveBonuses: [],
                     coinFlipWinnerActiveBonuses: [],
                     coinFlipLoserScore: 0,
                     coinFlipWinnerScore: 0,
-                    balls: [],
+                    balls: [
+                        Ball(
+                            id: ballID,
+                            state: .held(playerID: pl(.away, 0))
+                        )
+                    ],
                     deck: [],
                     objectives: Objectives(),
                     discards: []
@@ -288,12 +231,11 @@ struct TheKidsGotMoxyTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [],
-                    playerActionsLeft: 3
+                    playerActionsLeft: 1
                 )
             ),
             randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
+                blockDie: blockDieRandomizer
             ),
             ballIDProvider: DefaultBallIDProvider()
         )
@@ -321,7 +263,7 @@ struct TheKidsGotMoxyTests {
                         actionID: .block
                     ),
                     isFree: false,
-                    playerSquare: sq(3, 6)
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -329,21 +271,24 @@ struct TheKidsGotMoxyTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .blockActionEligibleForTheKidsGotMoxyBonusPlay(
-                    playerID: pl(.away, 0)
+                payload: .blockActionSpecifyTarget(
+                    playerID: pl(.away, 0),
+                    validTargets: [
+                        pl(.home, 0),
+                        pl(.home, 1),
+                    ]
                 )
             )
         )
 
-        // MARK: - Decline bonus play
+        // MARK: - Specify block
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [5]
+        blockDieRandomizer.nextResults = [.miss]
 
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionDeclineTheKidsGotMoxyBonusPlay
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
@@ -351,54 +296,68 @@ struct TheKidsGotMoxyTests {
             latestEvents == [
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.smash]
+                    results: [.miss]
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
-                    from: [.smash]
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
-                    from: sq(3, 6),
-                    to: sq(2, 6),
-                    direction: .west,
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
                     targetPlayerID: pl(.home, 0)
                 ),
-                .playerFellDown(
-                    playerID: pl(.home, 0),
-                    in: sq(2, 6),
-                    reason: PlayerFallDownReason.blocked
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(5, 12)
                 ),
-                .rolledForArmour(
-                    coachID: .home,
-                    die: .d6,
-                    unmodified: 5
+                .turnEnded(coachID: .away),
+                .playerCanTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(5, 12)
                 ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
         #expect(
             latestPayload == Prompt(
-                coachID: .away,
+                coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
+                                playerID: pl(.home, 0),
+                                actionID: .block
                             ),
                             consumesBonusPlays: []
                         ),
                         ValidDeclaration(
                             declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
+                                playerID: pl(.home, 0),
+                                actionID: .sidestep
+                            ),
+                            consumesBonusPlays: []
+                        ),
+                        ValidDeclaration(
+                            declaration: ActionDeclaration(
+                                playerID: pl(.home, 1),
+                                actionID: .block
+                            ),
+                            consumesBonusPlays: []
+                        ),
+                        ValidDeclaration(
+                            declaration: ActionDeclaration(
+                                playerID: pl(.home, 1),
+                                actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
                     ],
-                    playerActionsLeft: 2
+                    playerActionsLeft: 3
                 )
             )
         )

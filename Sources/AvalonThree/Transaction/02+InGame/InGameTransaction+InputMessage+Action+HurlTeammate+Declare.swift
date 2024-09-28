@@ -22,11 +22,12 @@ extension InGameTransaction {
             throw GameError("Player is in reserves")
         }
 
-        let validTeammates = table
+        let validTeammateIDs = table
             .playersInSquares(playerSquare.adjacentSquares)
             .filter { possibleTeammate in
                 possibleTeammate.coachID == player.coachID
                 && possibleTeammate.index != player.index
+                && possibleTeammate.isStanding != nil
             }
             .map { $0.id }
             .toSet()
@@ -46,17 +47,26 @@ extension InGameTransaction {
         if isFree {
             history.append(.actionIsFree)
         }
-        history.append(.hurlTeammateValidTeammates(validTeammates))
+        history.append(.hurlTeammateValidTeammates(validTeammateIDs))
         events.append(
             .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
         )
 
-        return Prompt(
-            coachID: playerID.coachID,
-            payload: .hurlTeammateActionSpecifyTeammate(
-                playerID: playerID,
-                validTeammates: validTeammates
+        if validTeammateIDs.count == 1 {
+
+            return try hurlTeammateActionSpecifyTeammate(
+                teammate: validTeammateIDs.first!
             )
-        )
+
+        } else {
+
+            return Prompt(
+                coachID: playerID.coachID,
+                payload: .hurlTeammateActionSpecifyTeammate(
+                    playerID: playerID,
+                    validTeammates: validTeammateIDs
+                )
+            )
+        }
     }
 }

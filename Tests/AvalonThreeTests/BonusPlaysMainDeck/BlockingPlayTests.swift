@@ -905,6 +905,9 @@ struct BlockingPlayTests {
 
         // MARK: - Declare first block
 
+        blockDieRandomizer.nextResults = [.smash, .smash]
+        d6Randomizer.nextResults = [6]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -927,36 +930,7 @@ struct BlockingPlayTests {
                     ),
                     isFree: false,
                     playerSquare: sq(5, 7)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify first block
-
-        blockDieRandomizer.nextResults = [.smash, .smash]
-        d6Randomizer.nextResults = [6]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(
                     coachID: .away,
                     results: [.smash, .smash]

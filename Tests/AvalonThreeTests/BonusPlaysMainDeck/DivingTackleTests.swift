@@ -409,6 +409,8 @@ struct DivingTackleTests {
 
         // MARK: - Take free block
 
+        blockDieRandomizer.nextResults = [.shove]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -434,34 +436,6 @@ struct DivingTackleTests {
                     isFree: true,
                     playerSquare: sq(2, 6)
                 ),
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.shove]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.shove]),
                 .selectedBlockDieResult(
                     coachID: .away,
@@ -739,6 +713,9 @@ struct DivingTackleTests {
 
         // MARK: - Take free block
 
+        blockDieRandomizer.nextResults = [.kerrunch]
+        d6Randomizer.nextResults = [3]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -764,35 +741,6 @@ struct DivingTackleTests {
                     isFree: true,
                     playerSquare: sq(2, 6)
                 ),
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [3]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
                 .rolledForBlock(
                     coachID: .away,
                     results: [.kerrunch]
@@ -1052,6 +1000,8 @@ struct DivingTackleTests {
 
         // MARK: - Take free block
 
+        blockDieRandomizer.nextResults = [.miss]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -1077,34 +1027,6 @@ struct DivingTackleTests {
                     isFree: true,
                     playerSquare: sq(2, 6)
                 ),
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.miss]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
                 .rolledForBlock(
                     coachID: .away,
                     results: [.miss]
@@ -1364,6 +1286,10 @@ struct DivingTackleTests {
 
         // MARK: - Take free block
 
+        blockDieRandomizer.nextResults = [.kerrunch]
+        d6Randomizer.nextResults = [3]
+        directionRandomizer.nextResults = [.south]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -1389,36 +1315,6 @@ struct DivingTackleTests {
                     isFree: true,
                     playerSquare: sq(2, 6)
                 ),
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [3]
-        directionRandomizer.nextResults = [.south]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
                 .rolledForBlock(
                     coachID: .away,
                     results: [.kerrunch]
@@ -1693,6 +1589,10 @@ struct DivingTackleTests {
 
         // MARK: - Take free block
 
+        blockDieRandomizer.nextResults = [.kerrunch]
+        d6Randomizer.nextResults = [3]
+        directionRandomizer.nextResults = [.south]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -1718,36 +1618,6 @@ struct DivingTackleTests {
                     isFree: true,
                     playerSquare: sq(2, 6)
                 ),
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [3]
-        directionRandomizer.nextResults = [.south]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
                 .rolledForBlock(
                     coachID: .away,
                     results: [.kerrunch]
@@ -2028,6 +1898,10 @@ struct DivingTackleTests {
 
         // MARK: - Take free block
 
+        blockDieRandomizer.nextResults = [.miss, .smash, .smash]
+        d6Randomizer.nextResults = [2]
+        directionRandomizer.nextResults = [.south]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -2053,36 +1927,6 @@ struct DivingTackleTests {
                     isFree: true,
                     playerSquare: sq(2, 6)
                 ),
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.miss, .smash, .smash]
-        d6Randomizer.nextResults = [2]
-        directionRandomizer.nextResults = [.south]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
                 .rolledForBlock(
                     coachID: .away,
                     results: [.smash, .smash, .miss]

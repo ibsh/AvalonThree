@@ -347,6 +347,12 @@ struct JumpUpTests {
 
         // MARK: - Declare block
 
+        blockDieRandomizer.nextResults = [.smash]
+        d6Randomizer.nextResults = [4]
+        let newBallID = 123
+        ballIDProvider.nextResults = [newBallID]
+        directionRandomizer.nextResults = [.northWest]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -369,39 +375,7 @@ struct JumpUpTests {
                     ),
                     isFree: false,
                     playerSquare: sq(8, 7)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 2)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [4]
-        let newBallID = 123
-        ballIDProvider.nextResults = [newBallID]
-        directionRandomizer.nextResults = [.northWest]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 2))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(
                     coachID: .away,
                     results: [.smash]
@@ -890,6 +864,12 @@ struct JumpUpTests {
 
         // MARK: - Declare block
 
+        blockDieRandomizer.nextResults = [.smash]
+        d6Randomizer.nextResults = [4]
+        let newBallID = 123
+        ballIDProvider.nextResults = [newBallID]
+        directionRandomizer.nextResults = [.northWest]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -912,39 +892,7 @@ struct JumpUpTests {
                     ),
                     isFree: false,
                     playerSquare: sq(8, 7)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 2)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [4]
-        let newBallID = 123
-        ballIDProvider.nextResults = [newBallID]
-        directionRandomizer.nextResults = [.northWest]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 2))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(
                     coachID: .away,
                     results: [.smash]

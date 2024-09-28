@@ -2984,6 +2984,9 @@ struct GetInThereTests {
 
         // MARK: - Declare block
 
+        blockDieRandomizer.nextResults = [.kerrunch]
+        d6Randomizer.nextResults = [4]
+
         var (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -3006,36 +3009,7 @@ struct GetInThereTests {
                     ),
                     isFree: false,
                     playerSquare: sq(5, 12)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [4]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
                 .selectedBlockDieResult(
                     coachID: .away,
@@ -3285,6 +3259,9 @@ struct GetInThereTests {
 
         // MARK: - Declare block
 
+        blockDieRandomizer.nextResults = [.kerrunch]
+        d6Randomizer.nextResults = [4]
+
         var (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -3307,36 +3284,7 @@ struct GetInThereTests {
                     ),
                     isFree: false,
                     playerSquare: sq(5, 12)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [4]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
                 .selectedBlockDieResult(
                     coachID: .away,
@@ -3486,6 +3434,8 @@ struct GetInThereTests {
 
         // MARK: - Declare foul
 
+        foulDieRandomizer.nextResults = [.gotThem]
+
         var (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -3508,35 +3458,7 @@ struct GetInThereTests {
                     ),
                     isFree: false,
                     playerSquare: sq(5, 12)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .foulActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify foul
-
-        foulDieRandomizer.nextResults = [.gotThem]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .foulActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForFoul(coachID: .away, result: .gotThem),
                 .playerFouled(
                     playerID: pl(.away, 0),
@@ -3767,6 +3689,8 @@ struct GetInThereTests {
 
         // MARK: - Declare foul
 
+        foulDieRandomizer.nextResults = [.gotThem]
+
         var (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -3789,35 +3713,7 @@ struct GetInThereTests {
                     ),
                     isFree: false,
                     playerSquare: sq(5, 12)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .foulActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify foul
-
-        foulDieRandomizer.nextResults = [.gotThem]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .foulActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForFoul(coachID: .away, result: .gotThem),
                 .playerFouled(
                     playerID: pl(.away, 0),
@@ -3982,33 +3878,6 @@ struct GetInThereTests {
                     playerSquare: sq(3, 6)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(
@@ -4450,33 +4319,6 @@ struct GetInThereTests {
                     playerSquare: sq(3, 6)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(

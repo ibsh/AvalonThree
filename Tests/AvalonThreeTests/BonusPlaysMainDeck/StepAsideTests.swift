@@ -87,7 +87,10 @@ struct StepAsideTests {
 
         // MARK: - Declare block
 
-        var (latestEvents, latestPayload) = try game.process(
+        blockDieRandomizer.nextResults = [.kerrunch]
+        d6Randomizer.nextResults = [4]
+
+        let (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -109,36 +112,7 @@ struct StepAsideTests {
                     ),
                     isFree: false,
                     playerSquare: sq(1, 7)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [4]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(
                     coachID: .away,
                     results: [.kerrunch]
@@ -303,31 +277,6 @@ struct StepAsideTests {
                     playerSquare: sq(1, 7)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(
@@ -539,31 +488,6 @@ struct StepAsideTests {
                     playerSquare: sq(1, 7)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(
@@ -1045,33 +969,6 @@ struct StepAsideTests {
 
         #expect(
             latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(
-                    target: pl(.home, 0)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
-        )
-
-        #expect(
-            latestPayload == Prompt(
                 coachID: .home,
                 payload: .blockActionEligibleForStepAsideBonusPlaySidestepAction(
                     playerID: pl(.home, 0)
@@ -1445,33 +1342,6 @@ struct StepAsideTests {
                     playerSquare: sq(6, 6)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(
-                    target: pl(.home, 0)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(

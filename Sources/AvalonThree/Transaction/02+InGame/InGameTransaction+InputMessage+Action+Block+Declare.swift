@@ -22,7 +22,7 @@ extension InGameTransaction {
             throw GameError("Player is in reserves")
         }
 
-        let validTargets = {
+        let validTargetPlayerIDs = {
             if player.spec.skills.contains(.bomber),
                table.playerIsMarked(player) == nil
             {
@@ -70,15 +70,27 @@ extension InGameTransaction {
         }
 
         history.append(
-            .blockValidTargets(validTargets)
+            .blockValidTargets(validTargetPlayerIDs)
         )
         events.append(
             .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
         )
 
-        return Prompt(
-            coachID: playerID.coachID,
-            payload: .blockActionSpecifyTarget(playerID: playerID, validTargets: validTargets)
-        )
+        if validTargetPlayerIDs.count == 1 {
+
+            return try blockActionSpecifyTarget(
+                target: validTargetPlayerIDs.first!
+            )
+
+        } else {
+
+            return Prompt(
+                coachID: playerID.coachID,
+                payload: .blockActionSpecifyTarget(
+                    playerID: playerID,
+                    validTargets: validTargetPlayerIDs
+                )
+            )
+        }
     }
 }

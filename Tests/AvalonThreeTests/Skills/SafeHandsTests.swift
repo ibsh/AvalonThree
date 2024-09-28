@@ -85,6 +85,9 @@ struct SafeHandsTests {
 
         // MARK: - Declare block
 
+        blockDieRandomizer.nextResults = [.kerrunch]
+        d6Randomizer.nextResults = [6]
+
         var (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -107,36 +110,7 @@ struct SafeHandsTests {
                     ),
                     isFree: false,
                     playerSquare: sq(3, 5)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0)
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [6]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
                 .selectedBlockDieResult(
                     coachID: .away,

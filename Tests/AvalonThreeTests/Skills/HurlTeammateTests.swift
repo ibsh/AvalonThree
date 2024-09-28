@@ -557,10 +557,89 @@ struct HurlTeammateTests {
                             state: .inReserves,
                             canTakeActions: true
                         ),
+                    ],
+                    playerNumbers: [:],
+                    coinFlipLoserHand: [],
+                    coinFlipWinnerHand: [],
+                    coinFlipLoserActiveBonuses: [],
+                    coinFlipWinnerActiveBonuses: [],
+                    coinFlipLoserScore: 0,
+                    coinFlipWinnerScore: 0,
+                    balls: [
+                        Ball(
+                            id: ballID,
+                            state: .held(playerID: pl(.away, 2))
+                        ),
+                    ],
+                    deck: [],
+                    objectives: Objectives(),
+                    discards: []
+                ),
+                [
+                    .prepareForTurn(
+                        coachID: .away,
+                        isSpecial: nil,
+                        mustDiscardObjective: false
+                    ),
+                ]
+            ),
+            previousPrompt: Prompt(
+                coachID: .away,
+                payload: .declarePlayerAction(
+                    validDeclarations: [],
+                    playerActionsLeft: 3
+                )
+            ),
+            randomizers: Randomizers(),
+            ballIDProvider: DefaultBallIDProvider()
+        )
+
+        // MARK: - Declare hurl teammate
+
+        #expect(throws: GameError("No matching declaration")) {
+            try game.process(
+                InputMessageWrapper(
+                    coachID: .away,
+                    message: .declarePlayerAction(
+                        declaration: ActionDeclaration(
+                            playerID: pl(.away, 0),
+                            actionID: .hurlTeammate
+                        ),
+                        consumesBonusPlays: []
+                    )
+                )
+            )
+        }
+    }
+
+    @Test func cantSpecifyAProneTeammate() async throws {
+
+        // MARK: - Init
+
+        let ballID = 123
+
+        var game = Game(
+            phase: .active(
+                Table(
+                    config: FinalizedConfig(
+                        coinFlipWinnerCoachID: .home,
+                        boardSpecID: .season1Board1,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .halfling
+                    ),
+                    players: [
                         Player(
-                            id: pl(.away, 2),
+                            id: pl(.away, 0),
+                            spec: .halfling_treeman,
+                            state: .standing(square: sq(3, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.away, 1),
                             spec: .halfling_hopeful,
-                            state: .standing(square: sq(4, 6)),
+                            state: .prone(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                     ],
@@ -601,53 +680,16 @@ struct HurlTeammateTests {
         )
 
         // MARK: - Declare hurl teammate
-
-        var (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .declarePlayerAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .hurlTeammate
-                    ),
-                    consumesBonusPlays: []
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .hurlTeammate
-                    ),
-                    isFree: false,
-                    playerSquare: sq(3, 6)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 2),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        #expect(throws: GameError("Invalid teammate")) {
-            (latestEvents, latestPayload) = try game.process(
+        #expect(throws: GameError("No matching declaration")) {
+            try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .hurlTeammateActionSpecifyTeammate(
-                        teammate: pl(.away, 1)
+                    message: .declarePlayerAction(
+                        declaration: ActionDeclaration(
+                            playerID: pl(.away, 0),
+                            actionID: .hurlTeammate
+                        ),
+                        consumesBonusPlays: []
                     )
                 )
             )
@@ -682,12 +724,6 @@ struct HurlTeammateTests {
                             id: pl(.away, 1),
                             spec: .halfling_hopeful,
                             state: .standing(square: sq(5, 6)),
-                            canTakeActions: true
-                        ),
-                        Player(
-                            id: pl(.away, 2),
-                            spec: .halfling_hopeful,
-                            state: .standing(square: sq(4, 6)),
                             canTakeActions: true
                         ),
                     ],
@@ -726,55 +762,16 @@ struct HurlTeammateTests {
             randomizers: Randomizers(),
             ballIDProvider: DefaultBallIDProvider()
         )
-
-        // MARK: - Declare hurl teammate
-
-        var (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .declarePlayerAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .hurlTeammate
-                    ),
-                    consumesBonusPlays: []
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .hurlTeammate
-                    ),
-                    isFree: false,
-                    playerSquare: sq(3, 6)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 2),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        #expect(throws: GameError("Invalid teammate")) {
-            (latestEvents, latestPayload) = try game.process(
+        #expect(throws: GameError("No matching declaration")) {
+            try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .hurlTeammateActionSpecifyTeammate(
-                        teammate: pl(.away, 1)
+                    message: .declarePlayerAction(
+                        declaration: ActionDeclaration(
+                            playerID: pl(.away, 0),
+                            actionID: .hurlTeammate
+                        ),
+                        consumesBonusPlays: []
                     )
                 )
             )
@@ -874,33 +871,6 @@ struct HurlTeammateTests {
                     playerSquare: sq(3, 6)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(
@@ -1171,33 +1141,6 @@ struct HurlTeammateTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
                     validTargets: [
@@ -1457,33 +1400,6 @@ struct HurlTeammateTests {
                     playerSquare: sq(3, 6)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(
@@ -1752,33 +1668,6 @@ struct HurlTeammateTests {
                     playerSquare: sq(3, 6)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(
@@ -2102,33 +1991,6 @@ struct HurlTeammateTests {
                     playerSquare: sq(3, 6)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(
@@ -2476,33 +2338,6 @@ struct HurlTeammateTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
                     validTargets: [
@@ -2840,33 +2675,6 @@ struct HurlTeammateTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
                     validTargets: [
@@ -3197,33 +3005,6 @@ struct HurlTeammateTests {
                     playerSquare: sq(3, 6)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(
@@ -3572,33 +3353,6 @@ struct HurlTeammateTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
                     validTargets: [
@@ -3931,33 +3685,6 @@ struct HurlTeammateTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
                     validTargets: [
@@ -4209,33 +3936,6 @@ struct HurlTeammateTests {
                     playerSquare: sq(3, 6)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(
@@ -4562,33 +4262,6 @@ struct HurlTeammateTests {
                     playerSquare: sq(3, 6)
                 )
             ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
         )
 
         #expect(
@@ -4927,33 +4600,6 @@ struct HurlTeammateTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
                     validTargets: [
@@ -5192,11 +4838,13 @@ struct HurlTeammateTests {
         )
     }
 
-    @Test func hurledProneTeammateStaysProneEvenIfSuccessful() async throws {
+    @Test func promptedForTeammateIfMoreThanOneIsEligible() async throws {
 
         // MARK: - Init
 
         let d6Randomizer = D6RandomizerDouble()
+
+        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -5218,16 +4866,20 @@ struct HurlTeammateTests {
                         ),
                         Player(
                             id: pl(.away, 1),
+                            spec: .halfling_catcher,
+                            state: .standing(square: sq(4, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.away, 2),
                             spec: .halfling_hopeful,
-                            state: .prone(
-                                square: sq(4, 6)
-                            ),
+                            state: .standing(square: sq(2, 6)),
                             canTakeActions: true
                         ),
                         Player(
                             id: pl(.home, 0),
                             spec: .human_lineman,
-                            state: .standing(square: sq(7, 8)),
+                            state: .standing(square: sq(5, 11)),
                             canTakeActions: true
                         ),
                     ],
@@ -5238,7 +4890,12 @@ struct HurlTeammateTests {
                     coinFlipWinnerActiveBonuses: [],
                     coinFlipLoserScore: 0,
                     coinFlipWinnerScore: 0,
-                    balls: [],
+                    balls: [
+                        Ball(
+                            id: ballID,
+                            state: .held(playerID: pl(.away, 1))
+                        ),
+                    ],
                     deck: [],
                     objectives: Objectives(),
                     discards: []
@@ -5299,6 +4956,7 @@ struct HurlTeammateTests {
                     playerID: pl(.away, 0),
                     validTeammates: [
                         pl(.away, 1),
+                        pl(.away, 2),
                     ]
                 )
             )
@@ -5325,11 +4983,11 @@ struct HurlTeammateTests {
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
                     validTargets: [
-                        HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
-                        HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
-                        HurlTeammateTarget(targetSquare: sq(0, 2), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
+                        HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(2, 4), sq(1, 3), sq(1, 4)]),
+                        HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 4), sq(1, 3), sq(2, 4), sq(2, 3)]),
+                        HurlTeammateTarget(targetSquare: sq(0, 2), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(2, 4), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 3), distance: .short, obstructingSquares: [sq(1, 3), sq(2, 4), sq(1, 4)]),
-                        HurlTeammateTarget(targetSquare: sq(0, 4), distance: .short, obstructingSquares: [sq(2, 4), sq(1, 4)]),
+                        HurlTeammateTarget(targetSquare: sq(0, 4), distance: .short, obstructingSquares: [sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 5), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(0, 6), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(0, 7), distance: .short, obstructingSquares: []),
@@ -5338,30 +4996,29 @@ struct HurlTeammateTests {
                         HurlTeammateTarget(targetSquare: sq(0, 10), distance: .long, obstructingSquares: [sq(1, 10)]),
                         HurlTeammateTarget(targetSquare: sq(0, 11), distance: .long, obstructingSquares: [sq(1, 10), sq(1, 11)]),
                         HurlTeammateTarget(targetSquare: sq(0, 12), distance: .long, obstructingSquares: [sq(2, 10), sq(1, 10), sq(1, 11)]),
-                        HurlTeammateTarget(targetSquare: sq(0, 13), distance: .long, obstructingSquares: [sq(1, 11), sq(2, 10), sq(2, 11), sq(1, 10)]),
-                        HurlTeammateTarget(targetSquare: sq(0, 14), distance: .long, obstructingSquares: [sq(2, 10), sq(2, 11), sq(1, 10), sq(1, 11)]),
-                        HurlTeammateTarget(targetSquare: sq(1, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 4), sq(2, 3)]),
-                        HurlTeammateTarget(targetSquare: sq(1, 1), distance: .long, obstructingSquares: [sq(1, 3), sq(1, 4), sq(2, 4), sq(2, 3)]),
-                        HurlTeammateTarget(targetSquare: sq(1, 2), distance: .short, obstructingSquares: [sq(2, 3), sq(1, 3), sq(1, 4), sq(2, 4)]),
+                        HurlTeammateTarget(targetSquare: sq(0, 13), distance: .long, obstructingSquares: [sq(2, 10), sq(1, 10), sq(1, 11), sq(2, 11)]),
+                        HurlTeammateTarget(targetSquare: sq(0, 14), distance: .long, obstructingSquares: [sq(1, 11), sq(2, 11), sq(1, 10), sq(2, 10)]),
+                        HurlTeammateTarget(targetSquare: sq(1, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(1, 3), sq(2, 4)]),
+                        HurlTeammateTarget(targetSquare: sq(1, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(2, 3), sq(1, 4), sq(1, 3)]),
+                        HurlTeammateTarget(targetSquare: sq(1, 2), distance: .short, obstructingSquares: [sq(1, 4), sq(2, 3), sq(2, 4), sq(1, 3)]),
                         HurlTeammateTarget(targetSquare: sq(1, 5), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(1, 6), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(1, 7), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(1, 8), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(1, 9), distance: .short, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(1, 12), distance: .long, obstructingSquares: [sq(2, 10), sq(2, 11), sq(1, 11), sq(1, 10)]),
-                        HurlTeammateTarget(targetSquare: sq(1, 13), distance: .long, obstructingSquares: [sq(2, 11), sq(1, 11), sq(2, 10), sq(1, 10)]),
-                        HurlTeammateTarget(targetSquare: sq(1, 14), distance: .long, obstructingSquares: [sq(2, 10), sq(1, 11), sq(1, 10), sq(2, 11)]),
+                        HurlTeammateTarget(targetSquare: sq(1, 12), distance: .long, obstructingSquares: [sq(1, 11), sq(2, 10), sq(2, 11), sq(1, 10)]),
+                        HurlTeammateTarget(targetSquare: sq(1, 13), distance: .long, obstructingSquares: [sq(1, 11), sq(2, 11), sq(1, 10), sq(2, 10)]),
+                        HurlTeammateTarget(targetSquare: sq(1, 14), distance: .long, obstructingSquares: [sq(1, 11), sq(2, 11), sq(2, 10), sq(1, 10)]),
                         HurlTeammateTarget(targetSquare: sq(2, 0), distance: .long, obstructingSquares: [sq(2, 4), sq(2, 3)]),
-                        HurlTeammateTarget(targetSquare: sq(2, 1), distance: .long, obstructingSquares: [sq(2, 3), sq(2, 4)]),
-                        HurlTeammateTarget(targetSquare: sq(2, 2), distance: .short, obstructingSquares: [sq(2, 3), sq(2, 4)]),
+                        HurlTeammateTarget(targetSquare: sq(2, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(2, 3)]),
+                        HurlTeammateTarget(targetSquare: sq(2, 2), distance: .short, obstructingSquares: [sq(2, 4), sq(2, 3)]),
                         HurlTeammateTarget(targetSquare: sq(2, 5), distance: .short, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(2, 6), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(2, 7), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(2, 8), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(2, 9), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(2, 12), distance: .long, obstructingSquares: [sq(2, 10), sq(2, 11)]),
-                        HurlTeammateTarget(targetSquare: sq(2, 13), distance: .long, obstructingSquares: [sq(2, 10), sq(2, 11)]),
-                        HurlTeammateTarget(targetSquare: sq(2, 14), distance: .long, obstructingSquares: [sq(2, 11), sq(2, 10)]),
+                        HurlTeammateTarget(targetSquare: sq(2, 13), distance: .long, obstructingSquares: [sq(2, 11), sq(2, 10)]),
+                        HurlTeammateTarget(targetSquare: sq(2, 14), distance: .long, obstructingSquares: [sq(2, 10), sq(2, 11)]),
                         HurlTeammateTarget(targetSquare: sq(3, 0), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(3, 1), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(3, 2), distance: .short, obstructingSquares: []),
@@ -5401,10 +5058,9 @@ struct HurlTeammateTests {
                         HurlTeammateTarget(targetSquare: sq(5, 8), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(5, 9), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(5, 10), distance: .short, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(5, 11), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(5, 12), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(5, 13), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(5, 14), distance: .long, obstructingSquares: []),
+                        HurlTeammateTarget(targetSquare: sq(5, 12), distance: .long, obstructingSquares: [sq(5, 11)]),
+                        HurlTeammateTarget(targetSquare: sq(5, 13), distance: .long, obstructingSquares: [sq(5, 11)]),
+                        HurlTeammateTarget(targetSquare: sq(5, 14), distance: .long, obstructingSquares: [sq(5, 11)]),
                         HurlTeammateTarget(targetSquare: sq(6, 0), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(6, 1), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(6, 2), distance: .long, obstructingSquares: []),
@@ -5416,10 +5072,10 @@ struct HurlTeammateTests {
                         HurlTeammateTarget(targetSquare: sq(6, 8), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(6, 9), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(6, 10), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(6, 11), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(6, 12), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(6, 13), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(6, 14), distance: .long, obstructingSquares: []),
+                        HurlTeammateTarget(targetSquare: sq(6, 11), distance: .long, obstructingSquares: [sq(5, 11)]),
+                        HurlTeammateTarget(targetSquare: sq(6, 12), distance: .long, obstructingSquares: [sq(5, 11)]),
+                        HurlTeammateTarget(targetSquare: sq(6, 13), distance: .long, obstructingSquares: [sq(5, 11)]),
+                        HurlTeammateTarget(targetSquare: sq(6, 14), distance: .long, obstructingSquares: [sq(5, 11)]),
                         HurlTeammateTarget(targetSquare: sq(7, 0), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(7, 1), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(7, 2), distance: .long, obstructingSquares: []),
@@ -5428,19 +5084,20 @@ struct HurlTeammateTests {
                         HurlTeammateTarget(targetSquare: sq(7, 5), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(7, 6), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(7, 7), distance: .short, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(7, 9), distance: .long, obstructingSquares: [sq(7, 8)]),
+                        HurlTeammateTarget(targetSquare: sq(7, 8), distance: .short, obstructingSquares: []),
+                        HurlTeammateTarget(targetSquare: sq(7, 9), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(7, 10), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(7, 11), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(7, 12), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(7, 13), distance: .long, obstructingSquares: []),
+                        HurlTeammateTarget(targetSquare: sq(7, 12), distance: .long, obstructingSquares: [sq(5, 11)]),
+                        HurlTeammateTarget(targetSquare: sq(7, 13), distance: .long, obstructingSquares: [sq(5, 11)]),
                         HurlTeammateTarget(targetSquare: sq(8, 0), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(8, 1), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(8, 2), distance: .long, obstructingSquares: [sq(8, 3)]),
                         HurlTeammateTarget(targetSquare: sq(8, 5), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(8, 6), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(8, 7), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(8, 8), distance: .long, obstructingSquares: [sq(7, 8)]),
-                        HurlTeammateTarget(targetSquare: sq(8, 9), distance: .long, obstructingSquares: [sq(7, 8)]),
+                        HurlTeammateTarget(targetSquare: sq(8, 8), distance: .long, obstructingSquares: []),
+                        HurlTeammateTarget(targetSquare: sq(8, 9), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(8, 12), distance: .long, obstructingSquares: [sq(8, 11)]),
                         HurlTeammateTarget(targetSquare: sq(8, 13), distance: .long, obstructingSquares: [sq(8, 11)]),
                         HurlTeammateTarget(targetSquare: sq(9, 0), distance: .long, obstructingSquares: []),
@@ -5449,20 +5106,20 @@ struct HurlTeammateTests {
                         HurlTeammateTarget(targetSquare: sq(9, 5), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(9, 6), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(9, 7), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(9, 8), distance: .long, obstructingSquares: [sq(7, 8)]),
-                        HurlTeammateTarget(targetSquare: sq(9, 9), distance: .long, obstructingSquares: [sq(7, 8)]),
-                        HurlTeammateTarget(targetSquare: sq(9, 12), distance: .long, obstructingSquares: [sq(8, 10), sq(9, 11), sq(8, 11)]),
+                        HurlTeammateTarget(targetSquare: sq(9, 8), distance: .long, obstructingSquares: []),
+                        HurlTeammateTarget(targetSquare: sq(9, 9), distance: .long, obstructingSquares: []),
+                        HurlTeammateTarget(targetSquare: sq(9, 12), distance: .long, obstructingSquares: [sq(8, 11), sq(8, 10), sq(9, 11)]),
                         HurlTeammateTarget(targetSquare: sq(10, 1), distance: .long, obstructingSquares: [sq(9, 3), sq(8, 3)]),
-                        HurlTeammateTarget(targetSquare: sq(10, 2), distance: .long, obstructingSquares: [sq(8, 3), sq(8, 4), sq(9, 3)]),
-                        HurlTeammateTarget(targetSquare: sq(10, 3), distance: .long, obstructingSquares: [sq(9, 3), sq(8, 4), sq(8, 3), sq(9, 4)]),
-                        HurlTeammateTarget(targetSquare: sq(10, 4), distance: .long, obstructingSquares: [sq(8, 4), sq(9, 4)]),
+                        HurlTeammateTarget(targetSquare: sq(10, 2), distance: .long, obstructingSquares: [sq(8, 3), sq(9, 3), sq(8, 4)]),
+                        HurlTeammateTarget(targetSquare: sq(10, 3), distance: .long, obstructingSquares: [sq(8, 3), sq(9, 3), sq(9, 4), sq(8, 4)]),
+                        HurlTeammateTarget(targetSquare: sq(10, 4), distance: .long, obstructingSquares: [sq(9, 4), sq(8, 4)]),
                         HurlTeammateTarget(targetSquare: sq(10, 5), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(10, 6), distance: .long, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(10, 7), distance: .long, obstructingSquares: []),
-                        HurlTeammateTarget(targetSquare: sq(10, 8), distance: .long, obstructingSquares: [sq(7, 8)]),
-                        HurlTeammateTarget(targetSquare: sq(10, 9), distance: .long, obstructingSquares: [sq(7, 8)]),
-                        HurlTeammateTarget(targetSquare: sq(10, 10), distance: .long, obstructingSquares: [sq(8, 10), sq(7, 8), sq(9, 10)]),
-                        HurlTeammateTarget(targetSquare: sq(10, 11), distance: .long, obstructingSquares: [sq(9, 11), sq(7, 8), sq(8, 10), sq(9, 10), sq(8, 11)]),
+                        HurlTeammateTarget(targetSquare: sq(10, 8), distance: .long, obstructingSquares: []),
+                        HurlTeammateTarget(targetSquare: sq(10, 9), distance: .long, obstructingSquares: []),
+                        HurlTeammateTarget(targetSquare: sq(10, 10), distance: .long, obstructingSquares: [sq(9, 10), sq(8, 10)]),
+                        HurlTeammateTarget(targetSquare: sq(10, 11), distance: .long, obstructingSquares: [sq(9, 11), sq(8, 11), sq(8, 10), sq(9, 10)]),
                     ]
                 )
             )
@@ -5475,7 +5132,9 @@ struct HurlTeammateTests {
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
+                message: .hurlTeammateActionSpecifyTarget(
+                    targetSquare: sq(4, 10)
+                )
             )
         )
 
@@ -5489,15 +5148,15 @@ struct HurlTeammateTests {
                 .playerHurledTeammate(
                     playerID: pl(.away, 0),
                     teammateID: pl(.away, 1),
-                    ballID: nil,
+                    ballID: 123,
                     from: sq(3, 6),
-                    to: sq(7, 6),
-                    angle: 90
+                    to: sq(4, 10),
+                    angle: 166
                 ),
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
-                    ballID: nil,
-                    in: sq(7, 6)
+                    ballID: 123,
+                    in: sq(4, 10)
                 ),
             ]
         )
@@ -5517,7 +5176,21 @@ struct HurlTeammateTests {
                         ValidDeclaration(
                             declaration: ActionDeclaration(
                                 playerID: pl(.away, 1),
-                                actionID: .standUp
+                                actionID: .block
+                            ),
+                            consumesBonusPlays: []
+                        ),
+                        ValidDeclaration(
+                            declaration: ActionDeclaration(
+                                playerID: pl(.away, 2),
+                                actionID: .run
+                            ),
+                            consumesBonusPlays: []
+                        ),
+                        ValidDeclaration(
+                            declaration: ActionDeclaration(
+                                playerID: pl(.away, 1),
+                                actionID: .sidestep
                             ),
                             consumesBonusPlays: []
                         ),
@@ -5526,15 +5199,5 @@ struct HurlTeammateTests {
                 )
             )
         )
-
-        guard
-            let player = game.table.players.first(where: { player in
-                player.id == pl(.away, 1)
-            }),
-            case .prone(square: sq(7, 6)) = player.state
-        else {
-            #expect(2 + 2 == 5)
-            return
-        }
     }
 }

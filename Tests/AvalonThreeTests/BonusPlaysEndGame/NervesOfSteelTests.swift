@@ -845,33 +845,6 @@ struct NervesOfSteelTests {
         #expect(
             latestPayload == Prompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSpecifyTeammate(
-                    playerID: pl(.away, 0),
-                    validTeammates: [
-                        pl(.away, 1),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify teammate
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .hurlTeammateActionSpecifyTeammate(
-                    teammate: pl(.away, 1)
-                )
-            )
-        )
-
-        #expect(
-            latestEvents == []
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
                     validTargets: [

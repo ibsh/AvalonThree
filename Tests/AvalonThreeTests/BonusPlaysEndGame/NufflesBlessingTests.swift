@@ -405,6 +405,9 @@ struct NufflesBlessingTests {
 
         // MARK: - Use bonus play
 
+        blockDieRandomizer.nextResults = [.kerrunch, .kerrunch]
+        d6Randomizer.nextResults = [5]
+
         (latestEvents, latestPayload) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -427,36 +430,7 @@ struct NufflesBlessingTests {
                     ),
                     isFree: false,
                     playerSquare: sq(5, 11)
-                )
-            ]
-        )
-
-        #expect(
-            latestPayload == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0),
-                    ]
-                )
-            )
-        )
-
-        // MARK: - Specify block
-
-        blockDieRandomizer.nextResults = [.kerrunch, .kerrunch]
-        d6Randomizer.nextResults = [5]
-
-        (latestEvents, latestPayload) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
-        )
-
-        #expect(
-            latestEvents == [
+                ),
                 .rolledForBlock(
                     coachID: .away,
                     results: [.kerrunch, .kerrunch]

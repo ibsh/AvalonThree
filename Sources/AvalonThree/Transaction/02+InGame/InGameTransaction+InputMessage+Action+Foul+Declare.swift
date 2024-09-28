@@ -22,7 +22,7 @@ extension InGameTransaction {
             throw GameError("Player is not open")
         }
 
-        let validTargets = table
+        let validTargetPlayerIDs = table
             .playersInSquares(playerSquare.adjacentSquares)
             .filter { possibleTarget in
                 possibleTarget.coachID != player.coachID
@@ -46,14 +46,26 @@ extension InGameTransaction {
         if isFree {
             history.append(.actionIsFree)
         }
-        history.append(.foulValidTargets(validTargets))
+        history.append(.foulValidTargets(validTargetPlayerIDs))
         events.append(
             .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
         )
 
-        return Prompt(
-            coachID: playerID.coachID,
-            payload: .foulActionSpecifyTarget(playerID: playerID, validTargets: validTargets)
-        )
+        if validTargetPlayerIDs.count == 1 {
+
+            return try foulActionSpecifyTarget(
+                target: validTargetPlayerIDs.first!
+            )
+
+        } else {
+
+            return Prompt(
+                coachID: playerID.coachID,
+                payload: .foulActionSpecifyTarget(
+                    playerID: playerID,
+                    validTargets: validTargetPlayerIDs
+                )
+            )
+        }
     }
 }
