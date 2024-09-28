@@ -162,12 +162,6 @@ struct CauseSomeCarnageTests {
                     reason: .blocked
                 ),
                 .rolledForArmour(coachID: .home, die: .d6, unmodified: 1),
-                .changedArmourResult(
-                    die: .d6,
-                    unmodified: 1,
-                    modified: 1,
-                    modifications: [.kerrunch]
-                ),
                 .playerInjured(
                     playerID: pl(.home, 0),
                     in: sq(1, 7),
@@ -878,12 +872,6 @@ struct CauseSomeCarnageTests {
                     reason: .blocked
                 ),
                 .rolledForArmour(coachID: .home, die: .d6, unmodified: 1),
-                .changedArmourResult(
-                    die: .d6,
-                    unmodified: 1,
-                    modified: 1,
-                    modifications: [.kerrunch]
-                ),
                 .playerInjured(
                     playerID: pl(.home, 1),
                     in: sq(5, 7),

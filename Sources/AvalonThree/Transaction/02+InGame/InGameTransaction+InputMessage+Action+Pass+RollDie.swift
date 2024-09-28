@@ -179,14 +179,16 @@ extension InGameTransaction {
             modifiedRoll = unmodifiedRoll
         } else {
             modifiedRoll = (unmodifiedRoll + modifier).clamp(randomizer.range)
-            events.append(
-                .changedPassResult(
-                    die: randomizer.die,
-                    unmodified: unmodifiedRoll,
-                    modified: modifiedRoll,
-                    modifications: modifications
+            if modifiedRoll != unmodifiedRoll {
+                events.append(
+                    .changedPassResult(
+                        die: randomizer.die,
+                        unmodified: unmodifiedRoll,
+                        modified: modifiedRoll,
+                        modifications: modifications
+                    )
                 )
-            )
+            }
         }
 
         if modifier < 0 {

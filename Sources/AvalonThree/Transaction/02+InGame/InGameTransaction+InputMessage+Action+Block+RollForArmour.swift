@@ -193,7 +193,7 @@ extension InGameTransaction {
 
             let modifiedRoll = (unmodifiedRoll + modifier).clamp(randomizer.range)
 
-            if modifier < 0 {
+            if modifiedRoll != unmodifiedRoll {
                 events.append(
                     .changedArmourResult(
                         die: randomizer.die,
