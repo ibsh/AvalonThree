@@ -4586,7 +4586,8 @@ struct InspirationTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove
+                    result: .shove,
+                    from: [.shove]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 5),

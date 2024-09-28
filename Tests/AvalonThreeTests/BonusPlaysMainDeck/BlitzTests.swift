@@ -329,7 +329,11 @@ struct BlitzTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.shove]),
-                .selectedBlockDieResult(coachID: .away, result: .shove),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove,
+                    from: [.shove]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(5, 6),
@@ -1038,7 +1042,8 @@ struct BlitzTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

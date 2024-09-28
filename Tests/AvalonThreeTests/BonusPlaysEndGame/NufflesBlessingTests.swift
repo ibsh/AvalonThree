@@ -463,7 +463,8 @@ struct NufflesBlessingTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch, .kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

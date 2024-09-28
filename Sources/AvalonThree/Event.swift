@@ -134,7 +134,8 @@ public enum Event: Equatable, Codable, Sendable {
 
     case selectedBlockDieResult(
         coachID: CoachID,
-        result: BlockDieResult
+        result: BlockDieResult,
+        from: [BlockDieResult]
     )
 
     case declinedFollowUp(

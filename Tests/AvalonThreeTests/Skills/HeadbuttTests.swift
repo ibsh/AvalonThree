@@ -1113,7 +1113,8 @@ struct HeadbuttTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove
+                    result: .shove,
+                    from: [.shove]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -1593,7 +1594,8 @@ struct HeadbuttTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

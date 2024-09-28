@@ -138,7 +138,11 @@ struct SafeHandsTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch,
+                    from: [.kerrunch]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(3, 5),

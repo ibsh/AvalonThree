@@ -168,7 +168,8 @@ struct OffensiveSpecialistTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch, .miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -432,7 +433,8 @@ struct OffensiveSpecialistTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash
+                    result: .smash,
+                    from: [.smash, .miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

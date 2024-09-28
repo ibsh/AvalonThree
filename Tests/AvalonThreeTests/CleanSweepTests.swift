@@ -187,7 +187,11 @@ struct CleanSweepTests {
                     in: sq(6, 6)
                 ),
                 .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash,
+                    from: [.smash]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(6, 6),
@@ -771,7 +775,11 @@ struct CleanSweepTests {
                     in: sq(6, 6)
                 ),
                 .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash,
+                    from: [.smash]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(6, 6),
@@ -1385,7 +1393,11 @@ struct CleanSweepTests {
                     in: sq(6, 6)
                 ),
                 .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash,
+                    from: [.smash]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(6, 6),

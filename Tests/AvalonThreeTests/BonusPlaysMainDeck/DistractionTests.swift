@@ -2289,7 +2289,11 @@ struct DistractionTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.shove]),
-                .selectedBlockDieResult(coachID: .away, result: .shove),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove,
+                    from: [.shove]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(6, 6),
@@ -2791,7 +2795,11 @@ struct DistractionTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.shove]),
-                .selectedBlockDieResult(coachID: .away, result: .shove),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .shove,
+                    from: [.shove]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(6, 6),
@@ -3308,7 +3316,8 @@ struct DistractionTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -3654,7 +3663,8 @@ struct DistractionTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -4009,7 +4019,8 @@ struct DistractionTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

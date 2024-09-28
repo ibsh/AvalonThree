@@ -53,7 +53,7 @@ extension InGameTransaction {
         }
 
         events.append(
-            .selectedBlockDieResult(coachID: player.coachID, result: result)
+            .selectedBlockDieResult(coachID: player.coachID, result: result, from: results)
         )
 
         if !actionContext.history.contains(.blockAnimationEventsSent) {

@@ -151,11 +151,12 @@ struct EnforcerTests {
             latestEvents == [
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.kerrunch, .tackle, .shove]
+                    results: [.shove, .kerrunch, .tackle]
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove
+                    result: .shove,
+                    from: [.shove, .kerrunch, .tackle]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -190,7 +191,8 @@ struct EnforcerTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch, .tackle]
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
@@ -226,7 +228,8 @@ struct EnforcerTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .tackle
+                    result: .tackle,
+                    from: [.tackle]
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
@@ -444,11 +447,12 @@ struct EnforcerTests {
             latestEvents == [
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.miss, .smash, .smash]
+                    results: [.smash, .smash, .miss]
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash
+                    result: .smash,
+                    from: [.smash, .smash, .miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -493,11 +497,13 @@ struct EnforcerTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash
+                    result: .smash,
+                    from: [.smash, .miss]
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),

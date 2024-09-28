@@ -145,7 +145,8 @@ struct StepAsideTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -380,7 +381,8 @@ struct StepAsideTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

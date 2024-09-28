@@ -145,7 +145,8 @@ struct StandFirmTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

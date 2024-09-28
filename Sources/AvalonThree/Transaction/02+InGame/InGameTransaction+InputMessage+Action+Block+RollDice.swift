@@ -109,8 +109,14 @@ extension InGameTransaction {
             }
         }
 
-        let unmodifiedResults = blockDiceCount.reduce([BlockDieResult]()) { partialResult in
+        var unmodifiedResults = blockDiceCount.reduce([BlockDieResult]()) { partialResult in
             partialResult + [randomizers.blockDie.rollBlockDie()]
+        }
+
+        if player.spec.skills.contains(.enforcer) {
+            unmodifiedResults = unmodifiedResults.sorted { lhs, rhs in
+                lhs.enforcerSortValue < rhs.enforcerSortValue
+            }
         }
 
         events.append(
@@ -165,6 +171,12 @@ extension InGameTransaction {
             return result
         }
 
+        if player.spec.skills.contains(.enforcer) {
+            results = results.sorted { lhs, rhs in
+                lhs.enforcerSortValue < rhs.enforcerSortValue
+            }
+        }
+
         if results != unmodifiedResults {
             events.append(
                 .changedBlockResults(
@@ -173,12 +185,6 @@ extension InGameTransaction {
                     modifications: modifications
                 )
             )
-        }
-
-        if player.spec.skills.contains(.enforcer) {
-            results = results.sorted { lhs, rhs in
-                lhs.enforcerSortValue < rhs.enforcerSortValue
-            }
         }
 
         history.append(.blockResults(results))

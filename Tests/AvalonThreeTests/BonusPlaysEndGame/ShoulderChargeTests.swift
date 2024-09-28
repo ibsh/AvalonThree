@@ -255,7 +255,8 @@ struct ShoulderChargeTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

@@ -1850,7 +1850,8 @@ struct InterventionTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .home,
-                    result: .shove
+                    result: .shove,
+                    from: [.shove]
                 ),
                 .playerBlocked(
                     playerID: pl(.home, 0),
@@ -2364,7 +2365,8 @@ struct InterventionTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .home,
-                    result: .shove
+                    result: .shove,
+                    from: [.shove]
                 ),
                 .playerBlocked(
                     playerID: pl(.home, 0),

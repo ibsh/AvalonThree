@@ -3037,7 +3037,11 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch,
+                    from: [.kerrunch]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(5, 12),
@@ -3334,7 +3338,11 @@ struct GetInThereTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch,
+                    from: [.kerrunch]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(5, 12),

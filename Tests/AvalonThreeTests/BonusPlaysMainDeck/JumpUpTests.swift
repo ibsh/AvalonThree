@@ -408,7 +408,8 @@ struct JumpUpTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash
+                    result: .smash,
+                    from: [.smash]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -950,7 +951,8 @@ struct JumpUpTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash
+                    result: .smash,
+                    from: [.smash]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

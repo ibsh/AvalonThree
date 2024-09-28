@@ -145,7 +145,8 @@ struct BreakTheirLinesTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -330,7 +331,11 @@ struct BreakTheirLinesTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash,
+                    from: [.smash]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(3, 6),
@@ -506,7 +511,11 @@ struct BreakTheirLinesTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash,
+                    from: [.smash]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(3, 6),
@@ -724,7 +733,11 @@ struct BreakTheirLinesTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash,
+                    from: [.smash]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(6, 14),

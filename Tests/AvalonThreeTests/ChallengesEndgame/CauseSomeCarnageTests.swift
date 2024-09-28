@@ -148,7 +148,11 @@ struct CauseSomeCarnageTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch,
+                    from: [.kerrunch]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(1, 6),
@@ -257,7 +261,11 @@ struct CauseSomeCarnageTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch,
+                    from: [.kerrunch]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 1),
                     from: sq(5, 6),
@@ -450,7 +458,11 @@ struct CauseSomeCarnageTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.miss]),
-                .selectedBlockDieResult(coachID: .away, result: .miss),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss,
+                    from: [.miss]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(1, 6),
@@ -547,7 +559,8 @@ struct CauseSomeCarnageTests {
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 1),
@@ -737,7 +750,8 @@ struct CauseSomeCarnageTests {
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -857,7 +871,8 @@ struct CauseSomeCarnageTests {
                 .rolledForBlock(coachID: .away, results: [.kerrunch]),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 1),

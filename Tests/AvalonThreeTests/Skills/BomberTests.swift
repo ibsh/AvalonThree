@@ -178,7 +178,11 @@ struct BomberTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch,
+                    from: [.miss, .kerrunch]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(4, 5),
@@ -526,7 +530,11 @@ struct BomberTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash,
+                    from: [.smash]
+                ),
                 .playerThrewBomb(
                     playerID: pl(.away, 0),
                     from: sq(4, 5),
@@ -757,7 +765,11 @@ struct BomberTests {
                     to: [.miss],
                     modifications: [.playerThrewBomb]
                 ),
-                .selectedBlockDieResult(coachID: .away, result: .miss),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss,
+                    from: [.miss]
+                ),
                 .playerThrewBomb(
                     playerID: pl(.away, 0),
                     from: sq(4, 5),

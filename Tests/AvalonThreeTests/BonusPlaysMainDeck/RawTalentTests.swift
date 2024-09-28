@@ -2528,7 +2528,8 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove
+                    result: .shove,
+                    from: [.shove]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -2727,7 +2728,8 @@ struct RawTalentTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -2935,7 +2937,8 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch, .miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -3201,7 +3204,8 @@ struct RawTalentTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash
+                    result: .smash,
+                    from: [.smash, .miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -3409,7 +3413,10 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .rolledForBlock(coachID: .away, results: [.shove, .miss, .shove]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.shove, .shove, .miss]
+                ),
             ]
         )
 
@@ -3450,11 +3457,12 @@ struct RawTalentTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.smash, .kerrunch, .smash]
+                    results: [.smash, .smash, .kerrunch]
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash
+                    result: .smash,
+                    from: [.smash, .smash, .kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -3504,11 +3512,13 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash
+                    result: .smash,
+                    from: [.smash, .kerrunch]
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .discardedActiveBonusPlay(
                     coachID: .away,
@@ -3518,8 +3528,7 @@ struct RawTalentTests {
                     )
                 ),
                 .updatedDiscards(
-                    top: .rawTalent,
-                    count: 1
+                    top: .rawTalent, count: 1
                 ),
             ]
         )
@@ -3695,7 +3704,10 @@ struct RawTalentTests {
 
         #expect(
             latestEvents == [
-                .rolledForBlock(coachID: .away, results: [.shove, .miss, .shove]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.shove, .shove, .miss]
+                ),
             ]
         )
 
@@ -3727,7 +3739,8 @@ struct RawTalentTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove
+                    result: .shove,
+                    from: [.shove, .shove, .miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -3762,7 +3775,8 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove
+                    result: .shove,
+                    from: [.shove, .miss]
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
@@ -3787,7 +3801,8 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
@@ -4239,7 +4254,8 @@ struct RawTalentTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .tackle
+                    result: .tackle,
+                    from: [.miss, .miss, .tackle]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -4446,7 +4462,8 @@ struct RawTalentTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove
+                    result: .shove,
+                    from: [.miss, .tackle, .shove]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -4612,7 +4629,8 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -4857,7 +4875,8 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -5068,7 +5087,8 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch
+                    result: .kerrunch,
+                    from: [.kerrunch]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

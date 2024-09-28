@@ -142,7 +142,8 @@ struct TakeThemDownTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss
+                    result: .miss,
+                    from: [.miss]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -333,7 +334,8 @@ struct TakeThemDownTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash
+                    result: .smash,
+                    from: [.smash]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

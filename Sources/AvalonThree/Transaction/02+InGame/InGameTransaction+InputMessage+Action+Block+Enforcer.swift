@@ -46,10 +46,15 @@ extension InGameTransaction {
 
         if targetPlayer.isInReserves {
             // We've already injured the target; all that's left is to disable the player.
-            while let result = results.popFirst() {
+            while let result = results.first {
                 events.append(
-                    .selectedBlockDieResult(coachID: actionContext.coachID, result: result)
+                    .selectedBlockDieResult(
+                        coachID: actionContext.coachID,
+                        result: result,
+                        from: results
+                    )
                 )
+                _ = results.popFirst()
                 if [.miss, .tackle].contains(result) {
                     if player.canTakeActions {
                         player.canTakeActions = false

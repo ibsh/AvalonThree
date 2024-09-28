@@ -1238,7 +1238,11 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.miss]),
-                .selectedBlockDieResult(coachID: .away, result: .miss),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss,
+                    from: [.miss]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(2, 7),
@@ -1898,7 +1902,11 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.miss, .miss]),
-                .selectedBlockDieResult(coachID: .away, result: .miss),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss,
+                    from: [.miss, .miss]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(2, 7),
@@ -2658,7 +2666,11 @@ struct DefensivePlayTests {
         #expect(
             latestEvents == [
                 .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(coachID: .away, result: .smash),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .smash,
+                    from: [.smash]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 1),
                     from: sq(9, 7),
@@ -2930,7 +2942,11 @@ struct DefensivePlayTests {
 
         #expect(
             latestEvents == [
-                .selectedBlockDieResult(coachID: .away, result: .kerrunch),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .kerrunch,
+                    from: [.kerrunch, .smash]
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(3, 7),
