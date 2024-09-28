@@ -25,9 +25,14 @@ extension InGameTransaction {
         let coachScore = table.getScore(coachID: oldTurnCoachID)
         let opponentScore = table.getScore(coachID: newTurnCoachID)
 
-        if coachScore + TableConstants.suddenDeathDelta <= opponentScore {
-            events.append(.gameEnded(endConditions: .suddenDeath(newTurnCoachID)))
-            return nil
+        if
+            !table.objectives.notEmpty.map({ $0.1 }).contains(where: { $0.challenge.isEndgame }),
+            !table.discards.contains(where: { $0.challenge.isEndgame })
+        {
+            if coachScore + TableConstants.suddenDeathDelta <= opponentScore {
+                events.append(.gameEnded(endConditions: .suddenDeath(newTurnCoachID)))
+                return nil
+            }
         }
 
         // check for clock end

@@ -144,6 +144,40 @@ extension Challenge {
 }
 
 extension Challenge {
+    var isEndgame: Bool {
+        switch self {
+        case .breakSomeBones,
+             .freeUpTheBall,
+             .gangUp,
+             .getMoving,
+             .getTheBall,
+             .getTogether,
+             .makeARiskyPass,
+             .moveTheBall,
+             .showboatForTheCrowd,
+             .showNoFear,
+             .showUsACompletion,
+             .spreadOut,
+             .takeThemDown,
+             .tieThemUp:
+            false
+        case .breakTheirLines,
+             .causeSomeCarnage,
+             .goDeep,
+             .lastChance,
+             .pileOn,
+             .playAsATeam,
+             .showOffALittle,
+             .showSomeGrit,
+             .showThemHowItsDone:
+            true
+        case .rookieBonus:
+            false
+        }
+    }
+}
+
+extension Challenge {
     var checkedPostTouchdown: Bool {
         switch self {
         case .breakSomeBones,
