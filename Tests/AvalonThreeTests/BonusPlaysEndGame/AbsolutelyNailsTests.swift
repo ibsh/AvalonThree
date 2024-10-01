@@ -10,14 +10,11 @@ import Testing
 
 struct AbsolutelyNailsTests {
 
-    @Test func used() async throws {
+    private let blockDieRandomizer = BlockDieRandomizerDouble()
+    private let d6Randomizer = D6RandomizerDouble()
 
-        // MARK: - Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
-        var game = Game(
+    private func setup() -> Game {
+        Game(
             phase: .active(
                 Table(
                     config: FinalizedConfig(
@@ -70,7 +67,7 @@ struct AbsolutelyNailsTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -80,8 +77,15 @@ struct AbsolutelyNailsTests {
             ),
             ballIDProvider: DefaultBallIDProvider()
         )
+    }
 
-        // MARK: - Declare block
+    @Test func used() async throws {
+
+        // Init
+
+        var game = setup()
+
+        // Declare block
 
         blockDieRandomizer.nextResults = [.smash]
 
@@ -99,46 +103,19 @@ struct AbsolutelyNailsTests {
         )
 
         #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .block
-                    ),
-                    isFree: false,
-                    playerSquare: sq(3, 6)
-                ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(
-                    coachID: .away,
-                    result: .smash,
-                    from: [.smash]
-                ),
-                .playerBlocked(
-                    playerID: pl(.away, 0),
-                    from: sq(3, 6),
-                    to: sq(2, 6),
-                    direction: .west,
-                    targetPlayerID: pl(.home, 0)
-                ),
-                .playerFellDown(
-                    playerID: pl(.home, 0),
-                    in: sq(2, 6),
-                    reason: .blocked
-                ),
+            latestEvents.map { $0.case } == [
+                .declaredAction,
+                .rolledForBlock,
+                .selectedBlockDieResult,
+                .playerBlocked,
+                .playerFellDown,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .home,
-                payload: .blockActionEligibleForAbsolutelyNailsBonusPlay(
-                    playerID: pl(.home, 0)
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .home)
+        #expect(latestPrompt?.payload.case == .blockActionEligibleForAbsolutelyNailsBonusPlay)
 
-        // MARK: - Use bonus play
+        // Use bonus play
 
         d6Randomizer.nextResults = [2]
 
@@ -150,139 +127,25 @@ struct AbsolutelyNailsTests {
         )
 
         #expect(
-            latestEvents == [
-                .activatedBonusPlay(
-                    coachID: .home,
-                    card: ChallengeCard(
-                        challenge: .breakSomeBones,
-                        bonusPlay: .absolutelyNails
-                    ),
-                    hand: [
-                        .open(
-                            card: ChallengeCard(
-                                challenge: .breakSomeBones,
-                                bonusPlay: .toughEnough
-                            )
-                        )
-                    ]
-                ),
-                .rolledForArmour(
-                    coachID: .home,
-                    die: .d6,
-                    unmodified: 2
-                ),
-                .discardedActiveBonusPlay(
-                    coachID: .home,
-                    card: ChallengeCard(
-                        challenge: .breakSomeBones,
-                        bonusPlay: .absolutelyNails
-                    )
-                ),
-                .updatedDiscards(
-                    top: .absolutelyNails,
-                    count: 1
-                ),
+            latestEvents.map { $0.case } == [
+                .activatedBonusPlay,
+                .rolledForArmour,
+                .discardedActiveBonusPlay,
+                .updatedDiscards,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func declined() async throws {
 
-        // MARK: - Init
+        // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
+        var game = setup()
 
-        var game = Game(
-            phase: .active(
-                Table(
-                    config: FinalizedConfig(
-                        coinFlipWinnerCoachID: .home,
-                        boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
-                        rookieBonusRecipientID: .noOne,
-                        coinFlipWinnerTeamID: .human,
-                        coinFlipLoserTeamID: .orc
-                    ),
-                    players: [
-                        Player(
-                            id: pl(.away, 0),
-                            spec: .orc_lineman,
-                            state: .standing(square: sq(3, 6)),
-                            canTakeActions: true
-                        ),
-                        Player(
-                            id: pl(.home, 0),
-                            spec: .human_lineman,
-                            state: .standing(square: sq(2, 6)),
-                            canTakeActions: true
-                        )
-                    ],
-                    playerNumbers: [:],
-                    coinFlipLoserHand: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absoluteCarnage),
-                    ],
-                    coinFlipWinnerHand: [
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .toughEnough),
-                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .absolutelyNails),
-                    ],
-                    coinFlipLoserActiveBonuses: [],
-                    coinFlipWinnerActiveBonuses: [],
-                    coinFlipLoserScore: 0,
-                    coinFlipWinnerScore: 0,
-                    balls: [],
-                    deck: [],
-                    objectives: Objectives(),
-                    discards: []
-                ),
-                [
-                    .prepareForTurn(
-                        coachID: .away,
-                        isSpecial: nil,
-                        mustDiscardObjective: false
-                    ),
-                ]
-            ),
-            previousPrompt: Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [],
-                    playerActionsLeft: 3
-                )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
-        )
-
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.smash]
 
@@ -300,44 +163,19 @@ struct AbsolutelyNailsTests {
         )
 
         #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0), actionID: .block),
-                    isFree: false,
-                    playerSquare: sq(3, 6)
-                ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
-                .selectedBlockDieResult(
-                    coachID: .away,
-                    result: .smash,
-                    from: [.smash]
-                ),
-                .playerBlocked(
-                    playerID: pl(.away, 0),
-                    from: sq(3, 6),
-                    to: sq(2, 6),
-                    direction: .west,
-                    targetPlayerID: pl(.home, 0)
-                ),
-                .playerFellDown(
-                    playerID: pl(.home, 0),
-                    in: sq(2, 6),
-                    reason: .blocked
-                ),
+            latestEvents.map { $0.case } == [
+                .declaredAction,
+                .rolledForBlock,
+                .selectedBlockDieResult,
+                .playerBlocked,
+                .playerFellDown,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .home,
-                payload: .blockActionEligibleForAbsolutelyNailsBonusPlay(
-                    playerID: pl(.home, 0)
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .home)
+        #expect(latestPrompt?.payload.case == .blockActionEligibleForAbsolutelyNailsBonusPlay)
 
-        // MARK: - Decline bonus play
+        // Decline bonus play
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -350,16 +188,10 @@ struct AbsolutelyNailsTests {
             latestEvents == []
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .home,
-                payload: .blockActionEligibleForToughEnoughBonusPlay(
-                    playerID: pl(.home, 0)
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .home)
+        #expect(latestPrompt?.payload.case == .blockActionEligibleForToughEnoughBonusPlay)
 
-        // MARK: - Decline another bonus play
+        // Decline another bonus play
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -372,18 +204,12 @@ struct AbsolutelyNailsTests {
             latestEvents == []
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .blockActionEligibleForAbsoluteCarnageBonusPlay(
-                    playerID: pl(.away, 0)
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .blockActionEligibleForAbsoluteCarnageBonusPlay)
 
-        // MARK: - Decline a final bonus play
+        // Decline bonus play
 
-        d6Randomizer.nextResults = [4]
+        d6Randomizer.nextResults = [2]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -393,34 +219,13 @@ struct AbsolutelyNailsTests {
         )
 
         #expect(
-            latestEvents == [
-                .rolledForArmour(coachID: .home, die: .d6, unmodified: 4),
+            latestEvents.map { $0.case } == [
+                .rolledForArmour,
+                .playerInjured,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 }

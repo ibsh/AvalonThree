@@ -60,10 +60,12 @@ extension InGameTransaction {
             .turnBegan(coachID: turnContext.coachID, isFinal: turnContext.isFinal)
         )
 
+        let validDeclarations = try validDeclarations()
+
         return try Prompt(
             coachID: turnContext.coachID,
             payload: .declarePlayerAction(
-                validDeclarations: validDeclarations(),
+                validDeclarations: validDeclarations.toPromptDeclarations(table: table),
                 playerActionsLeft: playerActionsLeft()
             )
         )
@@ -132,34 +134,31 @@ extension InGameTransaction {
             return nil
         }
 
-        let objectiveIDs = table.objectives.notEmpty.map { $0.0 }
+        let objectives = table.objectives.notEmpty
 
         guard
             turnContext.mustDiscardObjective,
-            !objectiveIDs.isEmpty
+            !objectives.isEmpty
         else {
             return nil
         }
 
         history.append(
-            .choosingObjectiveToDiscard(objectiveIDs: objectiveIDs)
+            .choosingObjectiveToDiscard(objectiveIDs: objectives.map { $0.0 })
         )
 
-        if objectiveIDs.count == 1 {
-            let objectiveID = objectiveIDs.first!
+        if objectives.count == 1 {
+            let objective = objectives.first!
             history.append(
-                .discardedObjective(objectiveID: objectiveID)
+                .discardedObjective(objectiveID: objective.0)
             )
-            guard let objective = table.objectives.getObjective(id: objectiveID) else {
-                throw GameError("No objective")
-            }
-            table.objectives.remove(objectiveID)
-            table.discards.append(objective)
+            table.objectives.remove(objective.0)
+            table.discards.append(objective.1)
             events.append(
                 .discardedObjective(
                     coachID: turnContext.coachID,
-                    objectiveID: objectiveID,
-                    objective: objective
+                    objectiveID: objective.0,
+                    objective: objective.1
                 )
             )
             events.append(
@@ -170,7 +169,9 @@ extension InGameTransaction {
 
         return Prompt(
             coachID: turnContext.coachID,
-            payload: .selectObjectiveToDiscard(objectiveIDs: objectiveIDs)
+            payload: .selectObjectiveToDiscard(
+                objectives: objectives.mapValues { $0.challenge }
+            )
         )
     }
 
@@ -366,10 +367,15 @@ extension InGameTransaction {
                 .eligibleForRegenerationSkillStandUpAction(playerID: proneRegeneratingPlayer.id)
             )
 
+            guard let playerSquare = proneRegeneratingPlayer.square else {
+                throw GameError("Player is in reserves")
+            }
+
             return Prompt(
                 coachID: proneRegeneratingPlayer.coachID,
                 payload: .eligibleForRegenerationSkillStandUpAction(
-                    playerID: proneRegeneratingPlayer.id
+                    playerID: proneRegeneratingPlayer.id,
+                    in: playerSquare
                 )
             )
         }
@@ -385,7 +391,7 @@ extension InGameTransaction {
             return nil
         }
 
-        let playerIDs = try table
+        let players = try table
             .players(coachID: turnContext.coachID)
             .filter {
                 try playerCanDeclareAction(
@@ -395,14 +401,13 @@ extension InGameTransaction {
                     consumesBonusPlays: []
                 )
             }
-            .map { $0.id }
             .toSet()
 
         guard
             table.getHand(coachID: turnContext.coachID).contains(
                 where: { $0.bonusPlay == .jumpUp }
             ),
-            !playerIDs.isEmpty
+            !players.isEmpty
         else {
             return nil
         }
@@ -411,7 +416,17 @@ extension InGameTransaction {
 
         return Prompt(
             coachID: turnContext.coachID,
-            payload: .eligibleForJumpUpBonusPlayStandUpAction(validPlayers: playerIDs)
+            payload: .eligibleForJumpUpBonusPlayStandUpAction(
+                validPlayers: try players.reduce([:]) { partialResult, player in
+                    guard let playerSquare = player.square else {
+                        throw GameError("Player is in reserves")
+                    }
+                    return partialResult.adding(
+                        key: player.id,
+                        value: playerSquare
+                    )
+                }
+            )
         )
     }
 

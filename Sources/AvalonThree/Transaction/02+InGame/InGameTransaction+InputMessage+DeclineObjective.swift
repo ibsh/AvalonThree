@@ -25,9 +25,10 @@ extension InGameTransaction {
                 guard let objective = table.objectives.getObjective(id: objectiveID) else {
                     throw GameError("No objective")
                 }
-                var partialResult = partialResult
-                partialResult[objectiveID] = objective.challenge
-                return partialResult
+                return partialResult.adding(
+                    key: objectiveID,
+                    value: objective.challenge
+                )
             }
 
         history.append(

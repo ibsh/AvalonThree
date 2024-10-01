@@ -26,6 +26,10 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
+        guard let playerSquare = table.getPlayer(id: actionContext.playerID)?.square else {
+            throw GameError("Player is in reserves")
+        }
+
         guard
             let validTarget = validTargets
                 .first(where: { $0.targetPlayerID == targetPlayerID })
@@ -44,7 +48,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: actionContext.coachID,
                 payload: .passActionEligibleForAccuratePassBonusPlay(
-                    playerID: actionContext.playerID
+                    playerID: actionContext.playerID,
+                    in: playerSquare
                 )
             )
         }

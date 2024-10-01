@@ -41,10 +41,15 @@ extension InGameTransaction {
             return prompt
         }
 
+        guard let playerSquare = table.getPlayer(id: actionContext.playerID)?.square else {
+            throw GameError("Player is in reserves")
+        }
+
         return Prompt(
             coachID: actionContext.coachID,
             payload: .runActionSpecifySquares(
                 playerID: actionContext.playerID,
+                in: playerSquare,
                 maxRunDistance: maxRunDistance,
                 validSquares: validSquares
             )
@@ -68,11 +73,17 @@ extension InGameTransaction {
             return nil
         }
 
+        guard let playerSquare = table.getPlayer(id: actionContext.playerID)?.square else {
+            throw GameError("Player is in reserves")
+        }
+
         history.append(.runEligibleForBlockingPlayBonusPlay)
+
         return Prompt(
             coachID: actionContext.coachID,
             payload: .runActionEligibleForBlockingPlayBonusPlay(
-                playerID: actionContext.playerID
+                playerID: actionContext.playerID,
+                in: playerSquare
             )
         )
     }
@@ -92,12 +103,17 @@ extension InGameTransaction {
             return nil
         }
 
+        guard let playerSquare = table.getPlayer(id: actionContext.playerID)?.square else {
+            throw GameError("Player is in reserves")
+        }
+
         history.append(.runEligibleForDodgeBonusPlay)
 
         return Prompt(
             coachID: actionContext.coachID,
             payload: .runActionEligibleForDodgeBonusPlay(
-                playerID: actionContext.playerID
+                playerID: actionContext.playerID,
+                in: playerSquare
             )
         )
     }
@@ -117,12 +133,17 @@ extension InGameTransaction {
             return nil
         }
 
+        guard let playerSquare = table.getPlayer(id: actionContext.playerID)?.square else {
+            throw GameError("Player is in reserves")
+        }
+
         history.append(.runEligibleForSprintBonusPlay)
 
         return Prompt(
             coachID: actionContext.coachID,
             payload: .runActionEligibleForSprintBonusPlay(
-                playerID: actionContext.playerID
+                playerID: actionContext.playerID,
+                in: playerSquare
             )
         )
     }

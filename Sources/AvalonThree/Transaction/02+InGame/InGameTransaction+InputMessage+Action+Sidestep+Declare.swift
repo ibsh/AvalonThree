@@ -51,7 +51,11 @@ extension InGameTransaction {
 
         return Prompt(
             coachID: playerID.coachID,
-            payload: .sidestepActionSpecifySquare(playerID: playerID, validSquares: validSquares)
+            payload: .sidestepActionSpecifySquare(
+                playerID: playerID,
+                in: playerSquare,
+                validSquares: validSquares
+            )
         )
     }
 }

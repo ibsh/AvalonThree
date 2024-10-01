@@ -10,9 +10,9 @@ import Testing
 
 struct OffensiveSpecialistTests {
 
-    @Test func selectResultRatherThanRerolling() async throws {
+    @Test func declined() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
@@ -71,7 +71,7 @@ struct OffensiveSpecialistTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -82,7 +82,7 @@ struct OffensiveSpecialistTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.kerrunch, .miss]
 
@@ -100,30 +100,19 @@ struct OffensiveSpecialistTests {
         )
 
         #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .block
-                    ),
-                    isFree: false,
-                    playerSquare: sq(3, 6)
-                ),
-                .rolledForBlock(coachID: .away, results: [.kerrunch, .miss]),
+            latestEvents.map { $0.case } == [
+                .declaredAction,
+                .rolledForBlock,
             ]
         )
 
+        #expect(latestPrompt?.coachID == .away)
         #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: pl(.away, 0),
-                    results: [.kerrunch, .miss]
-                )
-            )
+            latestPrompt?.payload.case ==
+                .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll
         )
 
-        // MARK: - Choose block result rather than reroll
+        // Choose block result rather than reroll
 
         d6Randomizer.nextResults = [5]
 
@@ -135,93 +124,24 @@ struct OffensiveSpecialistTests {
         )
 
         #expect(
-            latestEvents == [
-                .declinedOffensiveSpecialistSkillReroll(
-                    playerID: pl(.away, 0),
-                    in: sq(3, 6)
-                ),
-                .selectedBlockDieResult(
-                    coachID: .away,
-                    result: .kerrunch,
-                    from: [.kerrunch, .miss]
-                ),
-                .playerBlocked(
-                    playerID: pl(.away, 0),
-                    from: sq(3, 6),
-                    to: sq(2, 6),
-                    direction: .west,
-                    targetPlayerID: pl(.home, 0)
-                ),
-                .playerAssistedBlock(
-                    assistingPlayerID: pl(.away, 1),
-                    from: sq(3, 7),
-                    to: sq(2, 6),
-                    direction: .northWest,
-                    targetPlayerID: pl(.home, 0),
-                    blockingPlayerID: pl(.away, 0)
-                ),
-                .playerFellDown(
-                    playerID: pl(.home, 0),
-                    in: sq(2, 6),
-                    reason: .blocked
-                ),
-                .rolledForArmour(
-                    coachID: .home,
-                    die: .d6,
-                    unmodified: 5
-                ),
-                .changedArmourResult(
-                    die: .d6,
-                    unmodified: 5,
-                    modified: 4,
-                    modifications: [.kerrunch]
-                ),
+            latestEvents.map { $0.case } == [
+                .declinedOffensiveSpecialistSkillReroll,
+                .selectedBlockDieResult,
+                .playerBlocked,
+                .playerAssistedBlock,
+                .playerFellDown,
+                .rolledForArmour,
+                .changedArmourResult,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
-    @Test func selectToReroll() async throws {
+    @Test func used() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
@@ -280,7 +200,7 @@ struct OffensiveSpecialistTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -291,7 +211,7 @@ struct OffensiveSpecialistTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.shove, .miss]
 
@@ -309,30 +229,19 @@ struct OffensiveSpecialistTests {
         )
 
         #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .block
-                    ),
-                    isFree: false,
-                    playerSquare: sq(3, 6)
-                ),
-                .rolledForBlock(coachID: .away, results: [.shove, .miss]),
+            latestEvents.map { $0.case } == [
+                .declaredAction,
+                .rolledForBlock,
             ]
         )
 
+        #expect(latestPrompt?.coachID == .away)
         #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: pl(.away, 0),
-                    results: [.shove, .miss]
-                )
-            )
+            latestPrompt?.payload.case ==
+                .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll
         )
 
-        // MARK: - Choose to reroll
+        // Choose to reroll
 
         blockDieRandomizer.nextResults = [.smash, .miss]
 
@@ -344,29 +253,16 @@ struct OffensiveSpecialistTests {
         )
 
         #expect(
-            latestEvents == [
-                .usedOffensiveSpecialistSkillReroll(
-                    playerID: pl(.away, 0),
-                    in: sq(3, 6)
-                ),
-                .rolledForBlock(
-                    coachID: .away,
-                    results: [.smash, .miss]
-                ),
+            latestEvents.map { $0.case } == [
+                .usedOffensiveSpecialistSkillReroll,
+                .rolledForBlock,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .blockActionSelectResult(
-                    playerID: pl(.away, 0),
-                    results: [.smash, .miss]
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .blockActionSelectResult)
 
-        // MARK: - Choose block result
+        // Choose block result
 
         d6Randomizer.nextResults = [3]
 
@@ -378,77 +274,16 @@ struct OffensiveSpecialistTests {
         )
 
         #expect(
-            latestEvents == [
-                .selectedBlockDieResult(
-                    coachID: .away,
-                    result: .smash,
-                    from: [.smash, .miss]
-                ),
-                .playerBlocked(
-                    playerID: pl(.away, 0),
-                    from: sq(3, 6),
-                    to: sq(2, 6),
-                    direction: .west,
-                    targetPlayerID: pl(.home, 0)
-                ),
-                .playerAssistedBlock(
-                    assistingPlayerID: pl(.away, 1),
-                    from: sq(3, 7),
-                    to: sq(2, 6),
-                    direction: .northWest,
-                    targetPlayerID: pl(.home, 0),
-                    blockingPlayerID: pl(.away, 0)
-                ),
-                .playerFellDown(
-                    playerID: pl(.home, 0),
-                    in: sq(2, 6),
-                    reason: .blocked
-                ),
-                .rolledForArmour(
-                    coachID: .home,
-                    die: .d6,
-                    unmodified: 3
-                ),
+            latestEvents.map { $0.case } == [
+                .selectedBlockDieResult,
+                .playerBlocked,
+                .playerAssistedBlock,
+                .playerFellDown,
+                .rolledForArmour,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 }

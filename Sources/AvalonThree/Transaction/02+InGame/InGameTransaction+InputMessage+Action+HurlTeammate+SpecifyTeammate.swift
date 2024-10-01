@@ -89,6 +89,7 @@ extension InGameTransaction {
             coachID: actionContext.coachID,
             payload: .hurlTeammateActionSpecifyTarget(
                 playerID: actionContext.playerID,
+                in: playerSquare,
                 validTargets: validTargets
             )
         )

@@ -64,6 +64,11 @@ public enum BonusPlay: String, Codable, Sendable {
     /// following the rules for "New Ball" and "Multiple Balls In Play".
     case multiBall
 
+    /// Play this card at the start of your turn, before the Pre-Turn Sequence. Pass checks during
+    /// this turn are made with a D8, and a result of 6+ before or after modification always
+    /// succeeds.
+    case passingPlay
+
     /// Play this card after you make an Armour Check, a Pass Check or roll the dice for a Block
     /// action. Re-roll the dice.
     case rawTalent
@@ -83,11 +88,6 @@ public enum BonusPlay: String, Codable, Sendable {
     /// are rolled. Your player immediately makes a free Sidestep action (after which they must be
     /// Open). The opponent's Block action is cancelled and does not count as having been made.
     case stepAside
-
-    /// Play this card at the start of your turn, before the Pre-Turn Sequence. Pass checks during
-    /// this turn are made with a D8, and a result of 6+ before or after modification always
-    /// succeeds.
-    case passingPlay
 
     /// Play this card before you make an Armour check for your player. The check is made with a D8,
     /// and an unmodified result of 6+ always succeeds.

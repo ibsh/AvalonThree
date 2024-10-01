@@ -46,7 +46,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     // MARK: - Turn
 
     case declarePlayerAction(
-        validDeclarations: Set<ValidDeclaration>,
+        validDeclarations: [PlayerID: PromptValidDeclaringPlayer],
         playerActionsLeft: Int
     )
 
@@ -55,11 +55,12 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     )
 
     case eligibleForRegenerationSkillStandUpAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case eligibleForJumpUpBonusPlayStandUpAction(
-        validPlayers: Set<PlayerID>
+        validPlayers: [PlayerID: Square]
     )
 
     case eligibleForReservesBonusPlayReservesAction(
@@ -69,19 +70,23 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     // MARK: - Run action
 
     case runActionEligibleForBlockingPlayBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case runActionEligibleForDodgeBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case runActionEligibleForSprintBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case runActionSpecifySquares(
         playerID: PlayerID,
+        in: Square,
         maxRunDistance: Int,
         validSquares: ValidMoveSquares
     )
@@ -89,35 +94,42 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     // MARK: - Mark action
 
     case markActionEligibleForInterferenceBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case markActionSpecifySquares(
         playerID: PlayerID,
+        in: Square,
         validSquares: ValidMoveSquares
     )
 
     // MARK: - Pass action
 
     case passActionEligibleForHailMaryPassBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case passActionSpecifyTarget(
         playerID: PlayerID,
+        in: Square,
         validTargets: Set<PassTarget>
     )
 
     case passActionEligibleForAccuratePassBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case passActionEligibleForProBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case passActionResultEligibleForRawTalentBonusPlayReroll(
         playerID: PlayerID,
+        in: Square,
         result: Int
     )
 
@@ -125,24 +137,29 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     case hurlTeammateActionSpecifyTeammate(
         playerID: PlayerID,
-        validTeammates: Set<PlayerID>
+        in: Square,
+        validTeammates: [PlayerID: Square]
     )
 
     case hurlTeammateActionSpecifyTarget(
         playerID: PlayerID,
+        in: Square,
         validTargets: Set<HurlTeammateTarget>
     )
 
     case hurlTeammateActionEligibleForAccuratePassBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case hurlTeammateActionEligibleForProBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll(
         playerID: PlayerID,
+        in: Square,
         result: Int
     )
 
@@ -150,6 +167,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     case foulActionSpecifyTarget(
         playerID: PlayerID,
+        in: Square,
         validTargets: Set<PlayerID>
     )
 
@@ -157,28 +175,34 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     case blockActionSpecifyTarget(
         playerID: PlayerID,
+        in: Square,
         validTargets: Set<PlayerID>
     )
 
     case blockActionEligibleForStepAsideBonusPlaySidestepAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case blockActionEligibleForBodyCheckBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case blockActionEligibleForTheKidsGotMoxyBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
         playerID: PlayerID,
+        in: Square,
         results: [BlockDieResult]
     )
 
     case blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
         playerID: PlayerID,
+        in: Square,
         results: [BlockDieResult],
         clawsResult: Int?,
         maySelectResultToDecline: Bool
@@ -186,41 +210,50 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     case blockActionSelectResult(
         playerID: PlayerID,
+        in: Square,
         results: [BlockDieResult]
     )
 
     case blockActionSelectSafeHandsLooseBallDirection(
         playerID: PlayerID,
+        in: Square,
         directions: Set<Direction>
     )
 
     case blockActionEligibleForFollowUp(
         playerID: PlayerID,
+        in: Square,
         square: Square
     )
 
     case blockActionEligibleForBladedKnuckleDustersBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case blockActionEligibleForAbsolutelyNailsBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case blockActionEligibleForToughEnoughBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case blockActionEligibleForProBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case blockActionEligibleForAbsoluteCarnageBonusPlay(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case blockActionArmourResultEligibleForRawTalentBonusPlayReroll(
         playerID: PlayerID,
+        in: Square,
         result: Int
     )
 
@@ -228,6 +261,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     case sidestepActionSpecifySquare(
         playerID: PlayerID,
+        in: Square,
         validSquares: ValidMoveSquares
     )
 
@@ -249,53 +283,62 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     // MARK: - After action
 
     case eligibleForFrenziedSkillBlockAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case eligibleForShoulderChargeBonusPlayBlockAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case eligibleForDivingTackleBonusPlayBlockAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case eligibleForHeadbuttSkillBlockAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case eligibleForBlitzBonusPlayBlockAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case eligibleForComboPlayBonusPlayFreeAction(
-        validDeclaration: ValidDeclaration
+        validDeclaration: PromptValidDeclaration,
+        in: Square
     )
 
     case eligibleForDistractionBonusPlaySidestepAction(
-        validPlayers: Set<PlayerID>
+        validPlayers: [PlayerID: Square]
     )
 
     case eligibleForInterventionBonusPlayMarkAction(
         /// Note that this is a set of declarations rather than player IDs because you might need to
         /// spend an Interference bonus play to make some of these declarations valid.
-        validDeclarations: Set<ValidDeclaration>
+        validDeclarations: [PlayerID: PromptValidDeclaringPlayer]
     )
 
     case earnedObjective(
-        objectiveIDs: [ObjectiveID]
+        objectives: [ObjectiveID: Challenge]
     )
 
     case eligibleForReadyToGoBonusPlayRunAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case eligibleForReadyToGoBonusPlaySidestepAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case eligibleForReadyToGoBonusPlayStandUpAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case eligibleForYourTimeToShineBonusPlayReservesAction(
@@ -303,19 +346,20 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     )
 
     case eligibleForYourTimeToShineBonusPlayRunAction(
-        validPlayers: Set<PlayerID>
+        validPlayers: [PlayerID: Square]
     )
 
     case eligibleForCatchersInstinctsSkillRunAction(
-        playerID: PlayerID
+        playerID: PlayerID,
+        in: Square
     )
 
     case eligibleForInspirationBonusPlayFreeAction(
-        validDeclarations: Set<ValidDeclaration>
+        validDeclarations: [PlayerID: PromptValidDeclaringPlayer]
     )
 
     case eligibleForShadowBonusPlayExtraMove(
-        validPlayers: Set<PlayerID>,
+        validPlayers: [PlayerID: Square],
         square: Square
     )
 
@@ -331,8 +375,18 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     case eligibleForPassingPlayBonusPlay
 
     case selectObjectiveToDiscard(
-        objectiveIDs: [ObjectiveID]
+        objectives: [ObjectiveID: Challenge]
     )
+}
+
+public struct PromptValidDeclaringPlayer: Hashable, Codable, Sendable {
+    let declarations: [PromptValidDeclaration]
+    let square: Square?
+}
+
+public struct PromptValidDeclaration: Hashable, Codable, Sendable {
+    public let actionID: ActionID
+    public let consumesBonusPlays: [BonusPlay]
 }
 
 public struct ValidMoveSquares: Hashable, Codable, Sendable {

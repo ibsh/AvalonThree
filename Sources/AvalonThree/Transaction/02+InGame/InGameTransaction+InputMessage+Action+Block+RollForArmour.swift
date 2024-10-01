@@ -40,8 +40,16 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
+        guard let playerSquare = player.square else {
+            throw GameError("Player is in reserves")
+        }
+
         guard let targetPlayer = table.getPlayer(id: targetPlayerID) else {
             throw GameError("No target player")
+        }
+
+        guard let targetPlayerSquare = targetPlayer.square else {
+            throw GameError("Target player is in reserves")
         }
 
         guard let armourStat = targetPlayer.spec.armour else {
@@ -58,7 +66,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: actionContext.coachID,
                 payload: .blockActionEligibleForBladedKnuckleDustersBonusPlay(
-                    playerID: actionContext.playerID
+                    playerID: actionContext.playerID,
+                    in: playerSquare
                 )
             )
         }
@@ -73,7 +82,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: targetPlayerID.coachID,
                 payload: .blockActionEligibleForAbsolutelyNailsBonusPlay(
-                    playerID: targetPlayerID
+                    playerID: targetPlayerID,
+                    in: targetPlayerSquare
                 )
             )
         }
@@ -91,7 +101,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: targetPlayerID.coachID,
                 payload: .blockActionEligibleForToughEnoughBonusPlay(
-                    playerID: targetPlayerID
+                    playerID: targetPlayerID,
+                    in: targetPlayerSquare
                 )
             )
         }
@@ -110,7 +121,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: targetPlayerID.coachID,
                 payload: .blockActionEligibleForProBonusPlay(
-                    playerID: targetPlayerID
+                    playerID: targetPlayerID,
+                    in: targetPlayerSquare
                 )
             )
         }
@@ -128,7 +140,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: actionContext.coachID,
                 payload: .blockActionEligibleForAbsoluteCarnageBonusPlay(
-                    playerID: actionContext.playerID
+                    playerID: actionContext.playerID,
+                    in: playerSquare
                 )
             )
         }
@@ -220,6 +233,7 @@ extension InGameTransaction {
                     coachID: targetPlayerID.coachID,
                     payload: .blockActionArmourResultEligibleForRawTalentBonusPlayReroll(
                         playerID: targetPlayerID,
+                        in: playerSquare,
                         result: modifiedRoll
                     )
                 )

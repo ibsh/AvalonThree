@@ -63,6 +63,7 @@ extension InGameTransaction {
                 coachID: playerID.coachID,
                 payload: .foulActionSpecifyTarget(
                     playerID: playerID,
+                    in: playerSquare,
                     validTargets: validTargetPlayerIDs
                 )
             )

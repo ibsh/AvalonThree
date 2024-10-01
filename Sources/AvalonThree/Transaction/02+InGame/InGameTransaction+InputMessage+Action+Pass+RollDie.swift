@@ -51,7 +51,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: actionContext.coachID,
                 payload: .passActionEligibleForProBonusPlay(
-                    playerID: actionContext.playerID
+                    playerID: player.id,
+                    in: playerSquare
                 )
             )
         }
@@ -213,6 +214,7 @@ extension InGameTransaction {
                 coachID: player.coachID,
                 payload: .passActionResultEligibleForRawTalentBonusPlayReroll(
                     playerID: player.id,
+                    in: playerSquare,
                     result: modifiedRoll
                 )
             )

@@ -1,5 +1,5 @@
 //
-//  PassingTests.swift
+//  PassTests.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 7/25/24.
@@ -8,15 +8,13 @@
 import Testing
 @testable import AvalonThree
 
-struct PassingTests {
+struct PassTests {
 
     @Test func handingOffToAPlayerWithoutPassStat() async throws {
 
-        // MARK: - Init
+        // Init
 
         let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -52,7 +50,7 @@ struct PassingTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 0))
                         )
                     ],
@@ -71,7 +69,7 @@ struct PassingTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -81,7 +79,7 @@ struct PassingTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare handoff
+        // Declare handoff
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -114,6 +112,7 @@ struct PassingTests {
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 5),
                     validTargets: [
                         PassTarget(
                             targetPlayerID: pl(.away, 1),
@@ -127,7 +126,7 @@ struct PassingTests {
             )
         )
 
-        // MARK: - Specify handoff
+        // Specify handoff
 
         directionRandomizer.nextResults = [.south]
 
@@ -171,19 +170,23 @@ struct PassingTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(3, 5)
                         ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 1): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(4, 5)
                         ),
                     ],
                     playerActionsLeft: 2
@@ -194,12 +197,10 @@ struct PassingTests {
 
     @Test func passingToAPlayerWithoutPassStat() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -235,7 +236,7 @@ struct PassingTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 0))
                         )
                     ],
@@ -254,7 +255,7 @@ struct PassingTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -265,7 +266,7 @@ struct PassingTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare pass
+        // Declare pass
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -298,6 +299,7 @@ struct PassingTests {
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(2, 5),
                     validTargets: [
                         PassTarget(
                             targetPlayerID: pl(.away, 1),
@@ -311,7 +313,7 @@ struct PassingTests {
             )
         )
 
-        // MARK: - Specify pass
+        // Specify pass
 
         d6Randomizer.nextResults = [6]
         directionRandomizer.nextResults = [.south]
@@ -361,19 +363,23 @@ struct PassingTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(2, 5)
                         ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 1): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(4, 5)
                         ),
                     ],
                     playerActionsLeft: 2

@@ -12,7 +12,7 @@ struct MightyBlowTests {
 
     @Test func whenBlockingSmashBecomesKerrunch() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
@@ -64,7 +64,7 @@ struct MightyBlowTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -74,7 +74,7 @@ struct MightyBlowTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.shove, .smash]
 
@@ -115,6 +115,7 @@ struct MightyBlowTests {
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     results: [.shove, .kerrunch]
                 )
             )

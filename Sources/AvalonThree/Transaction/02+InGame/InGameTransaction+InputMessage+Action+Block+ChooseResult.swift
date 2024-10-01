@@ -48,7 +48,7 @@ extension InGameTransaction {
             throw GameError("No target player")
         }
 
-        guard let targetSquare = targetPlayer.square else {
+        guard let targetPlayerSquare = targetPlayer.square else {
             throw GameError("Target player is in reserves")
         }
 
@@ -59,26 +59,26 @@ extension InGameTransaction {
         if !actionContext.history.contains(.blockAnimationEventsSent) {
             history.append(.blockAnimationEventsSent)
             if actionContext.history.contains(.blockIsBomb) {
-                guard let angle = playerSquare.angle(to: targetSquare) else {
+                guard let angle = playerSquare.angle(to: targetPlayerSquare) else {
                     throw GameError("No angle")
                 }
                 events.append(
                     .playerThrewBomb(
                         playerID: player.id,
                         from: playerSquare,
-                        to: targetSquare,
+                        to: targetPlayerSquare,
                         angle: angle
                     )
                 )
             } else {
-                guard let blockDirection = playerSquare.direction(to: targetSquare) else {
+                guard let blockDirection = playerSquare.direction(to: targetPlayerSquare) else {
                     throw GameError("No direction")
                 }
                 events.append(
                     .playerBlocked(
                         playerID: player.id,
                         from: playerSquare,
-                        to: targetSquare,
+                        to: targetPlayerSquare,
                         direction: blockDirection,
                         targetPlayerID: targetPlayerID
                     )
@@ -90,14 +90,14 @@ extension InGameTransaction {
                     guard let square = table.getPlayer(id: assistingPlayerID)?.square else {
                         throw GameError("Assisting player is in reserves")
                     }
-                    guard let assistDirection = square.direction(to: targetSquare) else {
+                    guard let assistDirection = square.direction(to: targetPlayerSquare) else {
                         throw GameError("No direction")
                     }
                     events.append(
                         .playerAssistedBlock(
                             assistingPlayerID: assistingPlayerID,
                             from: square,
-                            to: targetSquare,
+                            to: targetPlayerSquare,
                             direction: assistDirection,
                             targetPlayerID: targetPlayerID,
                             blockingPlayerID: player.id
@@ -141,11 +141,11 @@ extension InGameTransaction {
         // shove?
 
         if result == .shove {
-            guard let direction = playerSquare.direction(to: targetSquare) else {
+            guard let direction = playerSquare.direction(to: targetPlayerSquare) else {
                 throw GameError("Couldn't derive shove direction")
             }
 
-            if let shovedToSquare = targetSquare.inDirection(direction),
+            if let shovedToSquare = targetPlayerSquare.inDirection(direction),
                 table.squareIsUnobstructed(shovedToSquare),
                 table.squareIsEmptyOfPlayers(shovedToSquare)
             {
@@ -160,7 +160,7 @@ extension InGameTransaction {
                 if player.spec.skills.contains(.enforcer), results.count > 1 {
                     try playerMovesIntoSquare(
                         playerID: player.id,
-                        newSquare: targetSquare,
+                        newSquare: targetPlayerSquare,
                         isFinalSquare: true,
                         reason: .followUp
                     )
@@ -169,13 +169,14 @@ extension InGameTransaction {
 
                 // update the action
                 history.append(.blockResult(result))
-                history.append(.blockFollowUpSquare(targetSquare))
+                history.append(.blockFollowUpSquare(targetPlayerSquare))
 
                 return Prompt(
                     coachID: actionContext.coachID,
                     payload: .blockActionEligibleForFollowUp(
                         playerID: actionContext.playerID,
-                        square: targetSquare
+                        in: playerSquare,
+                        square: targetPlayerSquare
                     )
                 )
             }
@@ -186,25 +187,25 @@ extension InGameTransaction {
         if targetPlayer.isProne == nil {
 
             history.append(.blockTargetKnockedDown)
-            targetPlayer.state = .prone(square: targetSquare)
+            targetPlayer.state = .prone(square: targetPlayerSquare)
             table.players.update(with: targetPlayer)
             events.append(
-                .playerFellDown(playerID: targetPlayerID, in: targetSquare, reason: .blocked)
+                .playerFellDown(playerID: targetPlayerID, in: targetPlayerSquare, reason: .blocked)
             )
 
             if let ball = table.playerHasABall(targetPlayer) {
 
-                try ballComesLoose(id: ball.id, square: targetSquare)
+                try ballComesLoose(id: ball.id, square: targetPlayerSquare)
 
                 if targetPlayer.spec.skills.contains(.safeHands) {
 
-                    let directions = targetSquare
+                    let directions = targetPlayerSquare
                         .adjacentSquares
                         .filter { adjacentSquare in
                             table.squareIsUnobstructed(adjacentSquare)
                         }
                         .compactMap { adjacentSquare in
-                            targetSquare.direction(to: adjacentSquare)
+                            targetPlayerSquare.direction(to: adjacentSquare)
                         }
                         .toSet()
 
@@ -216,6 +217,7 @@ extension InGameTransaction {
                         coachID: targetPlayerID.coachID,
                         payload: .blockActionSelectSafeHandsLooseBallDirection(
                             playerID: targetPlayerID,
+                            in: targetPlayerSquare,
                             directions: directions
                         )
                     )

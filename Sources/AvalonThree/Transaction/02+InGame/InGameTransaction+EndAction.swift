@@ -133,7 +133,7 @@ extension InGameTransaction {
             return try Prompt(
                 coachID: turnContext.coachID,
                 payload: .declarePlayerAction(
-                    validDeclarations: validDeclarations,
+                    validDeclarations: validDeclarations.toPromptDeclarations(table: table),
                     playerActionsLeft: playerActionsLeft()
                 )
             )

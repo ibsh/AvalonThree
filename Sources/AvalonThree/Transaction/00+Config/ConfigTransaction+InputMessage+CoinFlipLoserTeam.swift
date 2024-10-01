@@ -97,13 +97,14 @@ extension ConfigTransaction {
         var playerNumberData = randomizers.playerNumber.getPlayerNumbers(count: players.count)
 
         let playerNumbers: [PlayerID: Int] = players.reduce([:]) { partialResult, player in
-            var partialResult = partialResult
             let number = playerNumberData.removeFirst()
-            partialResult[player.id] = number
             events.append(
                 .playerReceivedNumber(playerID: player.id, number: number)
             )
-            return partialResult
+            return partialResult.adding(
+                key: player.id,
+                value: number
+            )
         }
 
         events.append(

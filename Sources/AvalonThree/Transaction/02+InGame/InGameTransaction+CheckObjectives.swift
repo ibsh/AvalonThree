@@ -46,9 +46,9 @@ extension InGameTransaction {
         }
 
         var canClaim = try objectives.filter {
-            guard $0.1.challenge.checkedPostTouchdown == postTouchdown else { return false }
+            guard $0.value.challenge.checkedPostTouchdown == postTouchdown else { return false }
             return try canClaimChallenge(
-                challenge: $0.1.challenge,
+                challenge: $0.value.challenge,
                 turnContext: turnContext,
                 lastActionContext: lastActionContext
             )
@@ -60,13 +60,17 @@ extension InGameTransaction {
 
         // Note that this logic relies on there being only one "Last chance" challenge in the deck.
         if canClaim.count > 1 {
-            canClaim.removeAll(where: { $0.1.challenge == .lastChance })
+            canClaim = canClaim.filter {
+                $0.value.challenge != .lastChance
+            }
         }
 
         history.append(.choosingObjectiveToClaim(objectiveIDs: canClaim.map { $0.0 }))
         return Prompt(
             coachID: turnContext.coachID,
-            payload: .earnedObjective(objectiveIDs: canClaim.map { $0.0 })
+            payload: .earnedObjective(
+                objectives: canClaim.mapValues { $0.challenge }
+            )
         )
     }
 }
@@ -246,7 +250,6 @@ extension InGameTransaction {
 
         let oldBallYLocations = try lastActionContext.snapshot.balls
             .reduce([Int: Int]()) { partialResult, ball in
-                var partialResult = partialResult
                 switch ball.state {
                 case .held(let playerID):
                     guard
@@ -259,16 +262,20 @@ extension InGameTransaction {
                     guard let playerSquare = player.square else {
                         throw GameError("No square")
                     }
-                    partialResult[ball.id] = playerSquare.y
+                    return partialResult.adding(
+                        key: ball.id,
+                        value: playerSquare.y
+                    )
                 case .loose(let square):
-                    partialResult[ball.id] = square.y
+                    return partialResult.adding(
+                        key: ball.id,
+                        value: square.y
+                    )
                 }
-                return partialResult
             }
 
         let newBallYLocations = try table.balls
             .reduce([Int: Int]()) { partialResult, ball in
-                var partialResult = partialResult
                 switch ball.state {
                 case .held(let playerID):
                     guard let player = table.getPlayer(id: playerID) else {
@@ -277,11 +284,16 @@ extension InGameTransaction {
                     guard let playerSquare = player.square else {
                         throw GameError("No square")
                     }
-                    partialResult[ball.id] = playerSquare.y
+                    return partialResult.adding(
+                        key: ball.id,
+                        value: playerSquare.y
+                    )
                 case .loose(let square):
-                    partialResult[ball.id] = square.y
+                    return partialResult.adding(
+                        key: ball.id,
+                        value: square.y
+                    )
                 }
-                return partialResult
             }
 
         var newBallYDeltas = [Int: Int]()

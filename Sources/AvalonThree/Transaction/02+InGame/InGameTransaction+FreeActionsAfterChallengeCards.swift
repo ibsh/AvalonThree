@@ -92,6 +92,10 @@ extension InGameTransaction {
             throw GameError("No target player")
         }
 
+        guard let targetPlayerSquare = targetPlayer.square else {
+            throw GameError("Target player is in reserves")
+        }
+
         guard
             targetPlayer.spec.skills.contains(.catchersInstincts),
             distance != .handoff,
@@ -122,7 +126,10 @@ extension InGameTransaction {
 
         return Prompt(
             coachID: targetPlayer.coachID,
-            payload: .eligibleForCatchersInstinctsSkillRunAction(playerID: targetPlayerID)
+            payload: .eligibleForCatchersInstinctsSkillRunAction(
+                playerID: targetPlayerID,
+                in: targetPlayerSquare
+            )
         )
     }
 
@@ -158,7 +165,7 @@ extension InGameTransaction {
         return Prompt(
             coachID: lastActionContext.coachID,
             payload: .eligibleForInspirationBonusPlayFreeAction(
-                validDeclarations: validDeclarations
+                validDeclarations: validDeclarations.toPromptDeclarations(table: table)
             )
         )
     }
@@ -204,7 +211,6 @@ extension InGameTransaction {
             .filter { player in
                 player.square?.isAdjacent(to: square) == true
             }
-            .map { $0.id }
             .toSet()
 
         if validPlayers.isEmpty {
@@ -213,7 +219,7 @@ extension InGameTransaction {
 
         history.append(
             .eligibleForShadowBonusPlayExtraMove(
-                validPlayers: validPlayers,
+                validPlayers: validPlayers.map { $0.id }.toSet(),
                 square: square
             )
         )
@@ -221,7 +227,15 @@ extension InGameTransaction {
         return Prompt(
             coachID: coachID,
             payload: .eligibleForShadowBonusPlayExtraMove(
-                validPlayers: validPlayers,
+                validPlayers: try validPlayers.reduce([:]) { partialResult, player in
+                    guard let playerSquare = player.square else {
+                        throw GameError("Player is in reserves")
+                    }
+                    return partialResult.adding(
+                        key: player.id,
+                        value: playerSquare
+                    )
+                },
                 square: square
             )
         )

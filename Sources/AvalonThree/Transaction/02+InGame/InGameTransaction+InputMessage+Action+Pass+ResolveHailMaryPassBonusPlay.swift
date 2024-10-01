@@ -38,6 +38,10 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
+        guard let playerSquare = table.getPlayer(id: actionContext.playerID)?.square else {
+            throw GameError("Player is in reserves")
+        }
+
         let bonusPlay = BonusPlay.hailMaryPass
 
         if use {
@@ -57,6 +61,7 @@ extension InGameTransaction {
             coachID: actionContext.coachID,
             payload: .passActionSpecifyTarget(
                 playerID: actionContext.playerID,
+                in: playerSquare,
                 validTargets: validTargets
             )
         )

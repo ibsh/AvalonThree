@@ -12,13 +12,11 @@ struct RefreshObjectivesTests {
 
     @Test func notPromptedWhenEmptyObjectivesBecauseOneClaimed() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
         let foulDieRandomizer = FoulDieRandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -54,7 +52,7 @@ struct RefreshObjectivesTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .loose(square: sq(2, 2))
                         ),
                     ],
@@ -104,7 +102,7 @@ struct RefreshObjectivesTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -116,7 +114,7 @@ struct RefreshObjectivesTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare mark
+        // Declare mark
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -149,6 +147,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(5, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -189,7 +188,7 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // MARK: - Specify mark
+        // Specify mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -218,19 +217,18 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .block
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .sidestep
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .block,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .sidestep,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 6)
                         ),
                     ],
                     playerActionsLeft: 2
@@ -238,7 +236,7 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
@@ -299,12 +297,14 @@ struct RefreshObjectivesTests {
             latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
-                    objectiveIDs: [.first]
+                    objectives: [
+                        .first: .takeThemDown,
+                    ]
                 )
             )
         )
 
-        // MARK: - Claim objective
+        // Claim objective
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -346,19 +346,18 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .foul,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 6)
                         ),
                     ],
                     playerActionsLeft: 1
@@ -366,7 +365,7 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // MARK: - Declare foul
+        // Declare foul
 
         foulDieRandomizer.nextResults = [.spotted]
 
@@ -427,12 +426,14 @@ struct RefreshObjectivesTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.home, 0),
-                                actionID: .standUp
-                            ),
-                            consumesBonusPlays: []
+                        pl(.home, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .standUp,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 7)
                         ),
                     ],
                     playerActionsLeft: 3
@@ -487,13 +488,11 @@ struct RefreshObjectivesTests {
 
     @Test func promptedWhenEmptyObjectivesBecauseSomeMissing() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
         let foulDieRandomizer = FoulDieRandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -529,7 +528,7 @@ struct RefreshObjectivesTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .loose(square: sq(2, 2))
                         ),
                     ],
@@ -575,7 +574,7 @@ struct RefreshObjectivesTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -587,7 +586,7 @@ struct RefreshObjectivesTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare mark
+        // Declare mark
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -620,6 +619,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(5, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -660,7 +660,7 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // MARK: - Specify mark
+        // Specify mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -689,19 +689,18 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .block
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .sidestep
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .block,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .sidestep,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 6)
                         ),
                     ],
                     playerActionsLeft: 2
@@ -709,7 +708,7 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
@@ -771,19 +770,18 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .foul,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 6)
                         ),
                     ],
                     playerActionsLeft: 1
@@ -791,7 +789,7 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // MARK: - Declare foul
+        // Declare foul
 
         foulDieRandomizer.nextResults = [.spotted]
 
@@ -840,11 +838,16 @@ struct RefreshObjectivesTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .selectObjectiveToDiscard(objectiveIDs: [.second, .third])
+                payload: .selectObjectiveToDiscard(
+                    objectives: [
+                        .second: .spreadOut,
+                        .third: .showNoFear,
+                    ]
+                )
             )
         )
 
-        // MARK: - Try to preempt the prompt by declaring an action instead
+        // Try to preempt the prompt by declaring an action instead
 
         #expect(throws: GameError("Invalid message")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -861,7 +864,7 @@ struct RefreshObjectivesTests {
             )
         }
 
-        // MARK: - Try to discard an invalid action
+        // Try to discard an invalid action
 
         #expect(throws: GameError("Invalid objective ID")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -872,7 +875,7 @@ struct RefreshObjectivesTests {
             )
         }
 
-        // MARK: - Choose objective to discard
+        // Choose objective to discard
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -919,12 +922,14 @@ struct RefreshObjectivesTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.home, 0),
-                                actionID: .standUp
-                            ),
-                            consumesBonusPlays: []
+                        pl(.home, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .standUp,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 7)
                         ),
                     ],
                     playerActionsLeft: 3
@@ -974,13 +979,11 @@ struct RefreshObjectivesTests {
 
     @Test func promptedWhenNoEmptyObjectives() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
         let foulDieRandomizer = FoulDieRandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1016,7 +1019,7 @@ struct RefreshObjectivesTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .loose(square: sq(2, 2))
                         ),
                     ],
@@ -1066,7 +1069,7 @@ struct RefreshObjectivesTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -1078,7 +1081,7 @@ struct RefreshObjectivesTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare mark
+        // Declare mark
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1111,6 +1114,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(5, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1151,7 +1155,7 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // MARK: - Specify mark
+        // Specify mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1180,19 +1184,18 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .block
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .sidestep
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .block,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .sidestep,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 6)
                         ),
                     ],
                     playerActionsLeft: 2
@@ -1200,7 +1203,7 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
@@ -1262,19 +1265,18 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .foul,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 6)
                         ),
                     ],
                     playerActionsLeft: 1
@@ -1282,7 +1284,7 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // MARK: - Declare foul
+        // Declare foul
 
         foulDieRandomizer.nextResults = [.spotted]
 
@@ -1331,11 +1333,17 @@ struct RefreshObjectivesTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .selectObjectiveToDiscard(objectiveIDs: [.first, .second, .third])
+                payload: .selectObjectiveToDiscard(
+                    objectives: [
+                        .first: .showboatForTheCrowd,
+                        .second: .spreadOut,
+                        .third: .showNoFear,
+                    ]
+                )
             )
         )
 
-        // MARK: - Try to preempt the prompt by declaring an action instead
+        // Try to preempt the prompt by declaring an action instead
 
         #expect(throws: GameError("Invalid message")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -1352,7 +1360,7 @@ struct RefreshObjectivesTests {
             )
         }
 
-        // MARK: - Choose objective to discard
+        // Choose objective to discard
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1393,12 +1401,14 @@ struct RefreshObjectivesTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.home, 0),
-                                actionID: .standUp
-                            ),
-                            consumesBonusPlays: []
+                        pl(.home, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .standUp,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 7)
                         ),
                     ],
                     playerActionsLeft: 3

@@ -28,6 +28,10 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
+        guard let playerSquare = player.square else {
+            throw GameError("Player is in reserves")
+        }
+
         guard var effectivePassStat = player.spec.pass else {
             throw GameError("Player has no pass stat")
         }
@@ -43,7 +47,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: actionContext.coachID,
                 payload: .hurlTeammateActionEligibleForProBonusPlay(
-                    playerID: actionContext.playerID
+                    playerID: actionContext.playerID,
+                    in: playerSquare
                 )
             )
         }
@@ -135,6 +140,7 @@ extension InGameTransaction {
                 coachID: player.coachID,
                 payload: .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll(
                     playerID: player.id,
+                    in: playerSquare,
                     result: modifiedRoll
                 )
             )

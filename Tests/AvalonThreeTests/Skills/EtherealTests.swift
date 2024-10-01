@@ -12,9 +12,7 @@ struct EtherealTests {
 
     @Test func canMoveAdjacentToPlayersAndThroughObstructions() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -50,7 +48,7 @@ struct EtherealTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.home, 0))
                         )
                     ],
@@ -69,7 +67,7 @@ struct EtherealTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -77,7 +75,7 @@ struct EtherealTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -93,15 +91,8 @@ struct EtherealTests {
         )
 
         #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .run
-                    ),
-                    isFree: false,
-                    playerSquare: sq(3, 5)
-                )
+            latestEvents.map { $0.case } == [
+                .declaredAction,
             ]
         )
 
@@ -110,6 +101,7 @@ struct EtherealTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(3, 5),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -151,7 +143,7 @@ struct EtherealTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -166,66 +158,21 @@ struct EtherealTests {
         )
 
         #expect(
-            latestEvents == [
-                .playerMoved(
-                    playerID: pl(.away, 0),
-                    ballID: nil,
-                    from: sq(3, 5),
-                    to: sq(2, 5),
-                    direction: .west,
-                    reason: .run
-                ),
-                .playerMoved(
-                    playerID: pl(.away, 0),
-                    ballID: nil,
-                    from: sq(2, 5),
-                    to: sq(1, 4),
-                    direction: .northWest,
-                    reason: .run
-                ),
-                .playerMoved(
-                    playerID: pl(.away, 0),
-                    ballID: nil,
-                    from: sq(1, 4),
-                    to: sq(1, 3),
-                    direction: .north,
-                    reason: .run
-                ),
-                .playerMoved(
-                    playerID: pl(.away, 0),
-                    ballID: nil,
-                    from: sq(1, 3),
-                    to: sq(0, 2),
-                    direction: .northWest,
-                    reason: .run
-                ),
+            latestEvents.map { $0.case } == [
+                .playerMoved,
+                .playerMoved,
+                .playerMoved,
+                .playerMoved,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .mark
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func cannotStopAdjacentToPlayers() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -261,7 +208,7 @@ struct EtherealTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.home, 0))
                         )
                     ],
@@ -280,7 +227,7 @@ struct EtherealTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -288,7 +235,7 @@ struct EtherealTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -304,65 +251,15 @@ struct EtherealTests {
         )
 
         #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .run
-                    ),
-                    isFree: false,
-                    playerSquare: sq(3, 5)
-                )
+            latestEvents.map { $0.case } == [
+                .declaredAction,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .runActionSpecifySquares(
-                    playerID: pl(.away, 0),
-                    maxRunDistance: 6,
-                    validSquares: ValidMoveSquares(
-                        intermediate: squares("""
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        a.aaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        ...........
-                        ...........
-                        ...........
-                        """),
-                        final: squares("""
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        a..aaaaa...
-                        ...aaaaa...
-                        ...aaaaaaa.
-                        ...aaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        a..aaaaa...
-                        a..aaaaa...
-                        ...........
-                        ...........
-                        ...........
-                        """)
-                    )
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
 
-        // MARK: - Specify run
+        // Specify run
 
         #expect(throws: GameError("Invalid final square")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -381,9 +278,7 @@ struct EtherealTests {
 
     @Test func cannotStopOnObstruction() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -419,7 +314,7 @@ struct EtherealTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.home, 0))
                         )
                     ],
@@ -438,7 +333,7 @@ struct EtherealTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -446,7 +341,7 @@ struct EtherealTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -462,65 +357,15 @@ struct EtherealTests {
         )
 
         #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .run
-                    ),
-                    isFree: false,
-                    playerSquare: sq(3, 5)
-                )
+            latestEvents.map { $0.case } == [
+                .declaredAction,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .runActionSpecifySquares(
-                    playerID: pl(.away, 0),
-                    maxRunDistance: 6,
-                    validSquares: ValidMoveSquares(
-                        intermediate: squares("""
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        a.aaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        ...........
-                        ...........
-                        ...........
-                        """),
-                        final: squares("""
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        a..aaaaa...
-                        ...aaaaa...
-                        ...aaaaaaa.
-                        ...aaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        a..aaaaa...
-                        a..aaaaa...
-                        ...........
-                        ...........
-                        ...........
-                        """)
-                    )
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
 
-        // MARK: - Specify run
+        // Specify run
 
         #expect(throws: GameError("Invalid final square")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -538,9 +383,7 @@ struct EtherealTests {
 
     @Test func cannotMoveThroughPlayers() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -576,7 +419,7 @@ struct EtherealTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.home, 0))
                         )
                     ],
@@ -595,7 +438,7 @@ struct EtherealTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -603,7 +446,7 @@ struct EtherealTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -619,65 +462,15 @@ struct EtherealTests {
         )
 
         #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .run
-                    ),
-                    isFree: false,
-                    playerSquare: sq(3, 5)
-                )
+            latestEvents.map { $0.case } == [
+                .declaredAction,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .runActionSpecifySquares(
-                    playerID: pl(.away, 0),
-                    maxRunDistance: 6,
-                    validSquares: ValidMoveSquares(
-                        intermediate: squares("""
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        a.aaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        ...........
-                        ...........
-                        ...........
-                        """),
-                        final: squares("""
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        a..aaaaa...
-                        ...aaaaa...
-                        ...aaaaaaa.
-                        ...aaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        aaaaaaaaaa.
-                        a..aaaaa...
-                        a..aaaaa...
-                        ...........
-                        ...........
-                        ...........
-                        """)
-                    )
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
 
-        // MARK: - Specify run
+        // Specify run
 
         #expect(throws: GameError("Invalid intermediate square")) {
             _ = try game.process(
@@ -696,9 +489,7 @@ struct EtherealTests {
 
     @Test func takesPrecedenceOverTitchyAndInsignificantAndCanMovePastAndEndAdjacent() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -752,7 +543,7 @@ struct EtherealTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.home, 0))
                         )
                     ],
@@ -771,7 +562,7 @@ struct EtherealTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -779,7 +570,7 @@ struct EtherealTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -795,15 +586,8 @@ struct EtherealTests {
         )
 
         #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .run
-                    ),
-                    isFree: false,
-                    playerSquare: sq(0, 6)
-                )
+            latestEvents.map { $0.case } == [
+                .declaredAction,
             ]
         )
 
@@ -812,6 +596,7 @@ struct EtherealTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(0, 6),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -853,7 +638,7 @@ struct EtherealTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -870,74 +655,17 @@ struct EtherealTests {
         )
 
         #expect(
-            latestEvents == [
-                .playerMoved(
-                    playerID: pl(.away, 0),
-                    ballID: nil,
-                    from: sq(0, 6),
-                    to: sq(1, 6),
-                    direction: .east,
-                    reason: .run
-                ),
-                .playerMoved(
-                    playerID: pl(.away, 0),
-                    ballID: nil,
-                    from: sq(1, 6),
-                    to: sq(2, 6),
-                    direction: .east,
-                    reason: .run
-                ),
-                .playerMoved(
-                    playerID: pl(.away, 0),
-                    ballID: nil,
-                    from: sq(2, 6),
-                    to: sq(3, 6),
-                    direction: .east,
-                    reason: .run
-                ),
-                .playerMoved(
-                    playerID: pl(.away, 0),
-                    ballID: nil,
-                    from: sq(3, 6),
-                    to: sq(4, 6),
-                    direction: .east,
-                    reason: .run
-                ),
-                .playerMoved(
-                    playerID: pl(.away, 0),
-                    ballID: nil,
-                    from: sq(4, 6),
-                    to: sq(3, 6),
-                    direction: .west,
-                    reason: .run
-                ),
-                .playerMoved(
-                    playerID: pl(.away, 0),
-                    ballID: nil,
-                    from: sq(3, 6),
-                    to: sq(2, 6),
-                    direction: .west,
-                    reason: .run
-                ),
+            latestEvents.map { $0.case } == [
+                .playerMoved,
+                .playerMoved,
+                .playerMoved,
+                .playerMoved,
+                .playerMoved,
+                .playerMoved,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .block
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 }

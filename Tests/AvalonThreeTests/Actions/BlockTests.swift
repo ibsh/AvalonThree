@@ -1,5 +1,5 @@
 //
-//  FoulTests.swift
+//  BlockTests.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 9/27/24.
@@ -8,15 +8,13 @@
 import Testing
 @testable import AvalonThree
 
-struct FoulTests {
+struct BlockTests {
 
     @Test func notPromptedIfOnlyOneEligibleTarget() async throws {
 
-        // MARK: - Init
+        // Init
 
-        let foulDieRandomizer = FoulDieRandomizerDouble()
-
-        let ballID = 123
+        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -39,7 +37,7 @@ struct FoulTests {
                         Player(
                             id: pl(.home, 0),
                             spec: .undead_skeleton,
-                            state: .prone(square: sq(5, 11)),
+                            state: .standing(square: sq(5, 11)),
                             canTakeActions: true
                         ),
                     ],
@@ -52,7 +50,7 @@ struct FoulTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 0))
                         )
                     ],
@@ -71,19 +69,19 @@ struct FoulTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 1
                 )
             ),
             randomizers: Randomizers(
-                foulDie: foulDieRandomizer
+                blockDie: blockDieRandomizer
             ),
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare foul
+        // Declare block
 
-        foulDieRandomizer.nextResults = [.gotThem]
+        blockDieRandomizer.nextResults = [.miss]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -91,7 +89,7 @@ struct FoulTests {
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .foul
+                        actionID: .block
                     ),
                     consumesBonusPlays: []
                 )
@@ -103,41 +101,60 @@ struct FoulTests {
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .foul
+                        actionID: .block
                     ),
                     isFree: false,
                     playerSquare: sq(5, 12)
                 ),
-                .rolledForFoul(coachID: .away, result: .gotThem),
-                .playerFouled(
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.miss]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss,
+                    from: [.miss]
+                ),
+                .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(5, 12),
                     to: sq(5, 11),
                     direction: .north,
                     targetPlayerID: pl(.home, 0)
                 ),
-                .playerInjured(
-                    playerID: pl(.home, 0),
-                    in: sq(5, 11),
-                    reason: .fouled
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(5, 12)
                 ),
+                .turnEnded(coachID: .away),
+                .playerCanTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(5, 12)
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
         #expect(
             latestPrompt == Prompt(
-                coachID: .away,
+                coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.home, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .block,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .sidestep,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 11)
                         ),
                     ],
-                    playerActionsLeft: 2
+                    playerActionsLeft: 3
                 )
             )
         )
@@ -145,11 +162,9 @@ struct FoulTests {
 
     @Test func promptedIfMoreThanOneEligibleTarget() async throws {
 
-        // MARK: - Init
+        // Init
 
-        let foulDieRandomizer = FoulDieRandomizerDouble()
-
-        let ballID = 123
+        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -172,13 +187,13 @@ struct FoulTests {
                         Player(
                             id: pl(.home, 0),
                             spec: .undead_skeleton,
-                            state: .prone(square: sq(5, 11)),
+                            state: .standing(square: sq(5, 11)),
                             canTakeActions: true
                         ),
                         Player(
                             id: pl(.home, 1),
                             spec: .undead_skeleton,
-                            state: .prone(square: sq(4, 13)),
+                            state: .standing(square: sq(4, 13)),
                             canTakeActions: true
                         ),
                     ],
@@ -191,7 +206,7 @@ struct FoulTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 0))
                         )
                     ],
@@ -210,17 +225,17 @@ struct FoulTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 1
                 )
             ),
             randomizers: Randomizers(
-                foulDie: foulDieRandomizer
+                blockDie: blockDieRandomizer
             ),
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare foul
+        // Declare block
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -228,7 +243,7 @@ struct FoulTests {
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .foul
+                        actionID: .block
                     ),
                     consumesBonusPlays: []
                 )
@@ -240,7 +255,7 @@ struct FoulTests {
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .foul
+                        actionID: .block
                     ),
                     isFree: false,
                     playerSquare: sq(5, 12)
@@ -251,8 +266,9 @@ struct FoulTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .foulActionSpecifyTarget(
+                payload: .blockActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(5, 12),
                     validTargets: [
                         pl(.home, 0),
                         pl(.home, 1),
@@ -261,49 +277,81 @@ struct FoulTests {
             )
         )
 
-        // MARK: - Specify foul
+        // Specify block
 
-        foulDieRandomizer.nextResults = [.gotThem]
+        blockDieRandomizer.nextResults = [.miss]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .foulActionSpecifyTarget(target: pl(.home, 0))
+                message: .blockActionSpecifyTarget(target: pl(.home, 0))
             )
         )
 
         #expect(
             latestEvents == [
-                .rolledForFoul(coachID: .away, result: .gotThem),
-                .playerFouled(
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.miss]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    result: .miss,
+                    from: [.miss]
+                ),
+                .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(5, 12),
                     to: sq(5, 11),
                     direction: .north,
                     targetPlayerID: pl(.home, 0)
                 ),
-                .playerInjured(
-                    playerID: pl(.home, 0),
-                    in: sq(5, 11),
-                    reason: .fouled
+                .playerCannotTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(5, 12)
                 ),
+                .turnEnded(coachID: .away),
+                .playerCanTakeActions(
+                    playerID: pl(.away, 0),
+                    in: sq(5, 12)
+                ),
+                .turnBegan(coachID: .home, isFinal: true),
             ]
         )
 
         #expect(
             latestPrompt == Prompt(
-                coachID: .away,
+                coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.home, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .block,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .sidestep,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(5, 11)
+                        ),
+                        pl(.home, 1): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .block,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .sidestep,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(4, 13)
                         ),
                     ],
-                    playerActionsLeft: 2
+                    playerActionsLeft: 3
                 )
             )
         )

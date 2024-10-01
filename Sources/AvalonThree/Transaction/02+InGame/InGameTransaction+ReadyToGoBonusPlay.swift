@@ -41,9 +41,15 @@ extension InGameTransaction {
                     validDeclaration.playerID == player.id && validDeclaration.actionID == .run
                 }
             ) {
+                guard let playerSquare = player.square else {
+                    throw GameError("Player is in reserves")
+                }
                 return Prompt(
                     coachID: coachID,
-                    payload: .eligibleForReadyToGoBonusPlayRunAction(playerID: player.id)
+                    payload: .eligibleForReadyToGoBonusPlayRunAction(
+                        playerID: player.id,
+                        in: playerSquare
+                    )
                 )
             }
         }
@@ -55,9 +61,15 @@ extension InGameTransaction {
                     validDeclaration.playerID == player.id && validDeclaration.actionID == .sidestep
                 }
             ) {
+                guard let playerSquare = player.square else {
+                    throw GameError("Player is in reserves")
+                }
                 return Prompt(
                     coachID: coachID,
-                    payload: .eligibleForReadyToGoBonusPlaySidestepAction(playerID: player.id)
+                    payload: .eligibleForReadyToGoBonusPlaySidestepAction(
+                        playerID: player.id,
+                        in: playerSquare
+                    )
                 )
             }
         }
@@ -69,9 +81,15 @@ extension InGameTransaction {
                     validDeclaration.playerID == player.id && validDeclaration.actionID == .standUp
                 }
             ) {
+                guard let playerSquare = player.square else {
+                    throw GameError("Player is in reserves")
+                }
                 return Prompt(
                     coachID: coachID,
-                    payload: .eligibleForReadyToGoBonusPlayStandUpAction(playerID: player.id)
+                    payload: .eligibleForReadyToGoBonusPlayStandUpAction(
+                        playerID: player.id,
+                        in: playerSquare
+                    )
                 )
             }
         }

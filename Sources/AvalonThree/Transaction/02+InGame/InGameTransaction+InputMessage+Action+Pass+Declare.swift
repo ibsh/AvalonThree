@@ -60,6 +60,7 @@ extension InGameTransaction {
                 coachID: playerID.coachID,
                 payload: .passActionSpecifyTarget(
                     playerID: playerID,
+                    in: playerSquare,
                     validTargets: hailMaryPassValidTargets
                 )
             )
@@ -74,7 +75,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: playerID.coachID,
                 payload: .passActionEligibleForHailMaryPassBonusPlay(
-                    playerID: playerID
+                    playerID: playerID,
+                    in: playerSquare
                 )
             )
         }
@@ -83,6 +85,7 @@ extension InGameTransaction {
             coachID: playerID.coachID,
             payload: .passActionSpecifyTarget(
                 playerID: playerID,
+                in: playerSquare,
                 validTargets: basicValidTargets
             )
         )

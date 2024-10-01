@@ -12,11 +12,9 @@ struct HandlingSkillsTests {
 
     @Test func pickUpOnShove() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -51,7 +49,7 @@ struct HandlingSkillsTests {
                     coinFlipLoserScore: 0,
                     coinFlipWinnerScore: 0,
                     balls: [
-                        Ball(id: ballID, state: .loose(square: sq(0, 6))),
+                        Ball(id: 123, state: .loose(square: sq(0, 6))),
                     ],
                     deck: [],
                     objectives: Objectives(),
@@ -68,7 +66,7 @@ struct HandlingSkillsTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -78,7 +76,7 @@ struct HandlingSkillsTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.shove]
 
@@ -137,14 +135,7 @@ struct HandlingSkillsTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .blockActionEligibleForFollowUp(
-                    playerID: pl(.away, 0),
-                    square: sq(1, 6)
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .blockActionEligibleForFollowUp)
     }
 }

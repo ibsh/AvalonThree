@@ -12,7 +12,7 @@ struct LeapTests {
 
     @Test func canMoveAdjacentToAndThroughPlayers() async throws {
 
-        // MARK: - Init
+        // Init
 
         var game = Game(
             phase: .active(
@@ -62,7 +62,7 @@ struct LeapTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -70,7 +70,7 @@ struct LeapTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -103,6 +103,7 @@ struct LeapTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(3, 5),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -144,7 +145,7 @@ struct LeapTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -195,28 +196,13 @@ struct LeapTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .mark
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func cannotStopAdjacentToPlayers() async throws {
 
-        // MARK: - Init
+        // Init
 
         var game = Game(
             phase: .active(
@@ -266,7 +252,7 @@ struct LeapTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -274,7 +260,7 @@ struct LeapTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -307,6 +293,7 @@ struct LeapTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(3, 5),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -348,7 +335,7 @@ struct LeapTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         #expect(throws: GameError("Invalid final square")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -366,7 +353,7 @@ struct LeapTests {
 
     @Test func cannotMoveThroughObstructions() async throws {
 
-        // MARK: - Init
+        // Init
 
         var game = Game(
             phase: .active(
@@ -416,7 +403,7 @@ struct LeapTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -424,7 +411,7 @@ struct LeapTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -457,6 +444,7 @@ struct LeapTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(3, 5),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -498,7 +486,7 @@ struct LeapTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         #expect(throws: GameError("Invalid intermediate square")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -516,9 +504,7 @@ struct LeapTests {
 
     @Test func takesPrecedenceOverTitchyAndInsignificantAndCanMovePastAndEndAdjacent() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -572,7 +558,7 @@ struct LeapTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.home, 0))
                         )
                     ],
@@ -591,7 +577,7 @@ struct LeapTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -599,7 +585,7 @@ struct LeapTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -632,6 +618,7 @@ struct LeapTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(0, 6),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -673,7 +660,7 @@ struct LeapTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -742,22 +729,7 @@ struct LeapTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .block
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 }

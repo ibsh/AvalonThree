@@ -117,9 +117,16 @@ extension InGameTransaction {
             .eligibleForFrenziedSkillBlockAction(playerID: lastActionContext.playerID)
         )
 
+        guard let playerSquare = player.square else {
+            throw GameError("Player is in reserves")
+        }
+
         return Prompt(
             coachID: player.coachID,
-            payload: .eligibleForFrenziedSkillBlockAction(playerID: lastActionContext.playerID)
+            payload: .eligibleForFrenziedSkillBlockAction(
+                playerID: player.id,
+                in: playerSquare
+            )
         )
     }
 
@@ -165,10 +172,15 @@ extension InGameTransaction {
             .eligibleForShoulderChargeBonusPlayBlockAction(playerID: lastActionContext.playerID)
         )
 
+        guard let playerSquare = player.square else {
+            throw GameError("Player is in reserves")
+        }
+
         return Prompt(
             coachID: lastActionContext.coachID,
             payload: .eligibleForShoulderChargeBonusPlayBlockAction(
-                playerID: lastActionContext.playerID
+                playerID: player.id,
+                in: playerSquare
             )
         )
     }
@@ -215,10 +227,15 @@ extension InGameTransaction {
             .eligibleForDivingTackleBonusPlayBlockAction(playerID: lastActionContext.playerID)
         )
 
+        guard let playerSquare = player.square else {
+            throw GameError("Player is in reserves")
+        }
+
         return Prompt(
             coachID: lastActionContext.coachID,
             payload: .eligibleForDivingTackleBonusPlayBlockAction(
-                playerID: lastActionContext.playerID
+                playerID: player.id,
+                in: playerSquare
             )
         )
     }
@@ -268,9 +285,16 @@ extension InGameTransaction {
             .eligibleForHeadbuttSkillBlockAction(playerID: lastActionContext.playerID)
         )
 
+        guard let playerSquare = player.square else {
+            throw GameError("Player is in reserves")
+        }
+
         return Prompt(
             coachID: player.coachID,
-            payload: .eligibleForHeadbuttSkillBlockAction(playerID: lastActionContext.playerID)
+            payload: .eligibleForHeadbuttSkillBlockAction(
+                playerID: lastActionContext.playerID,
+                in: playerSquare
+            )
         )
     }
 
@@ -319,10 +343,15 @@ extension InGameTransaction {
             .eligibleForBlitzBonusPlayBlockAction(playerID: lastActionContext.playerID)
         )
 
+        guard let playerSquare = player.square else {
+            throw GameError("Player is in reserves")
+        }
+
         return Prompt(
             coachID: lastActionContext.coachID,
             payload: .eligibleForBlitzBonusPlayBlockAction(
-                playerID: player.id
+                playerID: player.id,
+                in: playerSquare
             )
         )
     }
@@ -376,7 +405,13 @@ extension InGameTransaction {
         return Prompt(
             coachID: lastActionContext.coachID,
             payload: .eligibleForComboPlayBonusPlayFreeAction(
-                validDeclaration: validDeclaration
+                validDeclaration: validDeclaration.toPromptDeclaration(),
+                in: try {
+                    guard let playerSquare = table.getPlayer(id: validDeclaration.playerID)?.square else {
+                        throw GameError("Player is in reserves")
+                    }
+                    return playerSquare
+                }()
             )
         )
     }
@@ -459,7 +494,7 @@ extension InGameTransaction {
         }
 
         let validDeclarations = try validDeclarations(coachID: coachID)
-        let validPlayers = validDeclarations.compactMap { validDeclaration -> PlayerID? in
+        let validPlayerIDs = validDeclarations.compactMap { validDeclaration -> PlayerID? in
             guard
                 validDeclaration.actionID == .sidestep,
                 let myPlayer = table.getPlayer(id: validDeclaration.playerID),
@@ -470,15 +505,25 @@ extension InGameTransaction {
         }
             .toSet()
 
-        if validPlayers.isEmpty {
+        if validPlayerIDs.isEmpty {
             return nil
         }
 
-        history.append(.eligibleForDistractionBonusPlaySidestepAction(validPlayers))
+        history.append(.eligibleForDistractionBonusPlaySidestepAction(validPlayerIDs))
 
         return Prompt(
             coachID: coachID,
-            payload: .eligibleForDistractionBonusPlaySidestepAction(validPlayers: validPlayers)
+            payload: .eligibleForDistractionBonusPlaySidestepAction(
+                validPlayers: try validPlayerIDs.reduce([:]) { partialResult, playerID in
+                    guard let playerSquare = table.getPlayer(id: playerID)?.square else {
+                        throw GameError("Player is in reserves")
+                    }
+                    return partialResult.adding(
+                        key: player.id,
+                        value: playerSquare
+                    )
+                }
+            )
         )
     }
 
@@ -541,7 +586,7 @@ extension InGameTransaction {
         return Prompt(
             coachID: coachID,
             payload: .eligibleForInterventionBonusPlayMarkAction(
-                validDeclarations: validDeclarations
+                validDeclarations: validDeclarations.toPromptDeclarations(table: table)
             )
         )
     }

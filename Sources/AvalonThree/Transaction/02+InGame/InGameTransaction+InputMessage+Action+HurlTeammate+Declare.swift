@@ -22,14 +22,13 @@ extension InGameTransaction {
             throw GameError("Player is in reserves")
         }
 
-        let validTeammateIDs = table
+        let validTeammates = table
             .playersInSquares(playerSquare.adjacentSquares)
             .filter { possibleTeammate in
                 possibleTeammate.coachID == player.coachID
                 && possibleTeammate.index != player.index
                 && possibleTeammate.isStanding != nil
             }
-            .map { $0.id }
             .toSet()
 
         let declaration = ActionDeclaration(
@@ -47,15 +46,15 @@ extension InGameTransaction {
         if isFree {
             history.append(.actionIsFree)
         }
-        history.append(.hurlTeammateValidTeammates(validTeammateIDs))
+        history.append(.hurlTeammateValidTeammates(validTeammates.map { $0.id }.toSet()))
         events.append(
             .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
         )
 
-        if validTeammateIDs.count == 1 {
+        if validTeammates.count == 1 {
 
             return try hurlTeammateActionSpecifyTeammate(
-                teammate: validTeammateIDs.first!
+                teammate: validTeammates.first!.id
             )
 
         } else {
@@ -64,7 +63,16 @@ extension InGameTransaction {
                 coachID: playerID.coachID,
                 payload: .hurlTeammateActionSpecifyTeammate(
                     playerID: playerID,
-                    validTeammates: validTeammateIDs
+                    in: playerSquare,
+                    validTeammates: try validTeammates.reduce([:]) { partialResult, teammate in
+                        guard let teammateSquare = teammate.square else {
+                            throw GameError("Player is in reserves")
+                        }
+                        return partialResult.adding(
+                            key: teammate.id,
+                            value: teammateSquare
+                        )
+                    }
                 )
             )
         }

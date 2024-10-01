@@ -12,13 +12,11 @@ struct DiscardFromHandTests {
 
     @Test func notPromptedWhenOnlyHoldingThreeCards() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -60,7 +58,7 @@ struct DiscardFromHandTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.home, 0))
                         )
                     ],
@@ -92,7 +90,7 @@ struct DiscardFromHandTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -104,7 +102,7 @@ struct DiscardFromHandTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.smash]
 
@@ -140,12 +138,13 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
+                    in: sq(6, 6),
                     results: [.smash]
                 )
             )
         )
 
-        // MARK: - Choose to reroll
+        // Choose to reroll
 
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
@@ -198,12 +197,14 @@ struct DiscardFromHandTests {
             latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
-                    objectiveIDs: [.second]
+                    objectives: [
+                        .second: .takeThemDown,
+                    ]
                 )
             )
         )
 
-        // MARK: - Claim objective
+        // Claim objective
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -241,26 +242,27 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .foul,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(6, 6)
                         ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 1): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(6, 12)
                         ),
                     ],
                     playerActionsLeft: 2
@@ -268,7 +270,7 @@ struct DiscardFromHandTests {
             )
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -301,6 +303,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(6, 6),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -342,7 +345,7 @@ struct DiscardFromHandTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -402,12 +405,14 @@ struct DiscardFromHandTests {
             latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
-                    objectiveIDs: [.first]
+                    objectives: [
+                        .first: .getTheBall,
+                    ]
                 )
             )
         )
 
-        // MARK: - Claim objective
+        // Claim objective
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -451,19 +456,23 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .pass
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .pass,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(6, 8)
                         ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 1): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(6, 12)
                         ),
                     ],
                     playerActionsLeft: 1
@@ -471,7 +480,7 @@ struct DiscardFromHandTests {
             )
         )
 
-        // MARK: - Declare pass
+        // Declare pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -504,6 +513,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(6, 8),
                     validTargets: [
                         PassTarget(
                             targetPlayerID: pl(.away, 1),
@@ -517,7 +527,7 @@ struct DiscardFromHandTests {
             )
         )
 
-        // MARK: - Specify pass
+        // Specify pass
 
         d6Randomizer.nextResults = [5]
 
@@ -550,12 +560,14 @@ struct DiscardFromHandTests {
             latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
-                    objectiveIDs: [.third]
+                    objectives: [
+                        .third: .moveTheBall,
+                    ]
                 )
             )
         )
 
-        // MARK: - Claim objective
+        // Claim objective
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -609,12 +621,14 @@ struct DiscardFromHandTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.home, 0),
-                                actionID: .standUp
-                            ),
-                            consumesBonusPlays: []
+                        pl(.home, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .standUp,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(7, 6)
                         ),
                     ],
                     playerActionsLeft: 3
@@ -660,13 +674,11 @@ struct DiscardFromHandTests {
 
     @Test func mustDiscardCardsYouAreHoldingAndDownToExactlyThreeCards() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -717,7 +729,7 @@ struct DiscardFromHandTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.home, 0))
                         )
                     ],
@@ -749,7 +761,7 @@ struct DiscardFromHandTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -761,7 +773,7 @@ struct DiscardFromHandTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.smash]
 
@@ -797,12 +809,13 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
+                    in: sq(6, 6),
                     results: [.smash]
                 )
             )
         )
 
-        // MARK: - Choose to reroll
+        // Choose to reroll
 
         blockDieRandomizer.nextResults = [.smash]
         d6Randomizer.nextResults = [6]
@@ -858,12 +871,14 @@ struct DiscardFromHandTests {
             latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
-                    objectiveIDs: [.second]
+                    objectives: [
+                        .second: .takeThemDown,
+                    ]
                 )
             )
         )
 
-        // MARK: - Claim objective
+        // Claim objective
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -913,26 +928,27 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .foul,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(6, 6)
                         ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .foul
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 1): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(6, 12)
                         ),
                     ],
                     playerActionsLeft: 2
@@ -940,7 +956,7 @@ struct DiscardFromHandTests {
             )
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -973,6 +989,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(6, 6),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1014,7 +1031,7 @@ struct DiscardFromHandTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1074,12 +1091,14 @@ struct DiscardFromHandTests {
             latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
-                    objectiveIDs: [.first]
+                    objectives: [
+                        .first: .getTheBall,
+                    ]
                 )
             )
         )
 
-        // MARK: - Claim objective
+        // Claim objective
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1135,19 +1154,23 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .pass
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .pass,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(6, 8)
                         ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
+                        pl(.away, 1): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(6, 12)
                         ),
                     ],
                     playerActionsLeft: 1
@@ -1155,7 +1178,7 @@ struct DiscardFromHandTests {
             )
         )
 
-        // MARK: - Declare pass
+        // Declare pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1188,6 +1211,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(6, 8),
                     validTargets: [
                         PassTarget(
                             targetPlayerID: pl(.away, 1),
@@ -1201,7 +1225,7 @@ struct DiscardFromHandTests {
             )
         )
 
-        // MARK: - Specify pass
+        // Specify pass
 
         d6Randomizer.nextResults = [5]
 
@@ -1234,12 +1258,14 @@ struct DiscardFromHandTests {
             latestPrompt == Prompt(
                 coachID: .away,
                 payload: .earnedObjective(
-                    objectiveIDs: [.third]
+                    objectives: [
+                        .third: .moveTheBall,
+                    ]
                 )
             )
         )
 
-        // MARK: - Claim objective
+        // Claim objective
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1326,7 +1352,7 @@ struct DiscardFromHandTests {
             )
         )
 
-        // MARK: - Specify cards that aren't in hand
+        // Specify cards that aren't in hand
 
         #expect(throws: GameError("Invalid cards")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -1348,7 +1374,7 @@ struct DiscardFromHandTests {
             )
         }
 
-        // MARK: - Specify too few cards
+        // Specify too few cards
 
         #expect(throws: GameError("Invalid card count")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -1366,7 +1392,7 @@ struct DiscardFromHandTests {
             )
         }
 
-        // MARK: - Specify too many cards
+        // Specify too many cards
 
         #expect(throws: GameError("Invalid card count")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -1392,7 +1418,7 @@ struct DiscardFromHandTests {
             )
         }
 
-        // MARK: - Specify valid cards
+        // Specify valid cards
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1486,12 +1512,14 @@ struct DiscardFromHandTests {
                 coachID: .home,
                 payload: .declarePlayerAction(
                     validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.home, 0),
-                                actionID: .standUp
-                            ),
-                            consumesBonusPlays: []
+                        pl(.home, 0): PromptValidDeclaringPlayer(
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .standUp,
+                                    consumesBonusPlays: []
+                                ),
+                            ],
+                            square: sq(7, 6)
                         ),
                     ],
                     playerActionsLeft: 3

@@ -39,6 +39,14 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
+        guard let player = table.getPlayer(id: actionContext.playerID) else {
+            throw GameError("No player")
+        }
+
+        guard let playerSquare = player.square else {
+            throw GameError("No player square")
+        }
+
         let bonusPlay = BonusPlay.interference
 
         if use {
@@ -47,14 +55,6 @@ extension InGameTransaction {
             // refresh valid squares now that the player has the bonus active
 
             maxMarkDistance = TableConstants.interferenceBonusPlayMaxMarkDistance
-
-            guard let player = table.getPlayer(id: actionContext.playerID) else {
-                throw GameError("No player")
-            }
-
-            guard let playerSquare = player.square else {
-                throw GameError("No player square")
-            }
 
             let targetSquares: Set<Square>? = try {
                 guard let targetPlayerID = actionContext.history.lastResult(
@@ -95,6 +95,7 @@ extension InGameTransaction {
             coachID: actionContext.coachID,
             payload: .markActionSpecifySquares(
                 playerID: actionContext.playerID,
+                in: playerSquare,
                 validSquares: validSquares
             )
         )

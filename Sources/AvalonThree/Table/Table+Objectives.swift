@@ -37,22 +37,21 @@ extension Objectives {
         }
     }
 
-    private var identified: [(ObjectiveID, ChallengeCard?)] {
-        [
-            (.first, first),
-            (.second, second),
-            (.third, third),
-        ]
-    }
-
-    var notEmpty: [(ObjectiveID, ChallengeCard)] {
-        identified.compactMap {
-            guard let card = $0.1 else { return nil }
-            return ($0.0, card)
+    var notEmpty: [ObjectiveID: ChallengeCard] {
+        var result = [ObjectiveID: ChallengeCard]()
+        if let first {
+            result[.first] = first
         }
+        if let second {
+            result[.second] = second
+        }
+        if let third {
+            result[.third] = third
+        }
+        return result
     }
 
     var emptyCount: Int {
-        identified.count - notEmpty.count
+        3 - notEmpty.count
     }
 }

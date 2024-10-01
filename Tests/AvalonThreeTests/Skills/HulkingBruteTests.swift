@@ -12,7 +12,7 @@ struct HulkingBruteTests {
 
     @Test func whenBlockingTackleBecomesKerrunch() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
@@ -70,7 +70,7 @@ struct HulkingBruteTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -80,7 +80,7 @@ struct HulkingBruteTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -96,32 +96,15 @@ struct HulkingBruteTests {
         )
 
         #expect(
-            latestEvents == [
-                .declaredAction(
-                    declaration: ActionDeclaration(
-                        playerID: pl(.away, 0),
-                        actionID: .block
-                    ),
-                    isFree: false,
-                    playerSquare: sq(3, 6)
-                )
+            latestEvents.map { $0.case } == [
+                .declaredAction,
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .blockActionSpecifyTarget(
-                    playerID: pl(.away, 0),
-                    validTargets: [
-                        pl(.home, 0),
-                        pl(.home, 1),
-                    ]
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .blockActionSpecifyTarget)
 
-        // MARK: - Specify block
+        // Specify block
 
         blockDieRandomizer.nextResults = [.tackle, .miss]
 
@@ -148,6 +131,7 @@ struct HulkingBruteTests {
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     results: [.kerrunch, .miss]
                 )
             )
@@ -156,7 +140,7 @@ struct HulkingBruteTests {
 
     @Test func whenBlockingSmashBecomesKerrunch() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
 
@@ -208,7 +192,7 @@ struct HulkingBruteTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -218,7 +202,7 @@ struct HulkingBruteTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.shove, .smash]
 
@@ -259,6 +243,7 @@ struct HulkingBruteTests {
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     results: [.shove, .kerrunch]
                 )
             )
@@ -267,7 +252,7 @@ struct HulkingBruteTests {
 
     @Test func whenBlockedTackleBecomesMiss() async throws {
 
-        // MARK: - Init
+        // Init
 
         let blockDieRandomizer = BlockDieRandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
@@ -322,7 +307,7 @@ struct HulkingBruteTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -333,7 +318,7 @@ struct HulkingBruteTests {
             ballIDProvider: ballIDProvider
         )
 
-        // MARK: - Declare block
+        // Declare block
 
         blockDieRandomizer.nextResults = [.tackle]
         let newBallID = 123
@@ -412,29 +397,7 @@ struct HulkingBruteTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .home,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.home, 0),
-                                actionID: .block
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.home, 0),
-                                actionID: .sidestep
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 3
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .home)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 }

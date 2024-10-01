@@ -12,8 +12,6 @@ struct SuddenDeathTests {
 
     @Test func possibleBeforeEndgame() async throws {
 
-        let ballID = 123
-
         var game = Game(
             phase: .active(
                 Table(
@@ -48,7 +46,7 @@ struct SuddenDeathTests {
                     coinFlipWinnerScore: 21,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 0))
                         ),
                     ],
@@ -114,7 +112,7 @@ struct SuddenDeathTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 1
                 )
             ),
@@ -122,7 +120,7 @@ struct SuddenDeathTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -155,6 +153,7 @@ struct SuddenDeathTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(6, 10),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -196,7 +195,7 @@ struct SuddenDeathTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -269,8 +268,6 @@ struct SuddenDeathTests {
 
     @Test func impossibleAfterAnEndgameCardIsDealt() async throws {
 
-        let ballID = 123
-
         var game = Game(
             phase: .active(
                 Table(
@@ -305,7 +302,7 @@ struct SuddenDeathTests {
                     coinFlipWinnerScore: 21,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 0))
                         ),
                     ],
@@ -371,7 +368,7 @@ struct SuddenDeathTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 1
                 )
             ),
@@ -379,7 +376,7 @@ struct SuddenDeathTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -412,6 +409,7 @@ struct SuddenDeathTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(6, 10),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -453,7 +451,7 @@ struct SuddenDeathTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -521,7 +519,11 @@ struct SuddenDeathTests {
             latestPrompt == Prompt(
                 coachID: .home,
                 payload: .selectObjectiveToDiscard(
-                    objectiveIDs: [.first, .second, .third]
+                    objectives: [
+                        .first: .breakSomeBones,
+                        .second: .breakSomeBones,
+                        .third: .breakTheirLines
+                    ]
                 )
             )
         )
@@ -529,8 +531,6 @@ struct SuddenDeathTests {
 
     @Test func impossibleAfterAnEndgameCardIsDiscarded() async throws {
 
-        let ballID = 123
-
         var game = Game(
             phase: .active(
                 Table(
@@ -565,7 +565,7 @@ struct SuddenDeathTests {
                     coinFlipWinnerScore: 21,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 0))
                         ),
                     ],
@@ -631,7 +631,7 @@ struct SuddenDeathTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 1
                 )
             ),
@@ -639,7 +639,7 @@ struct SuddenDeathTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare run
+        // Declare run
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -672,6 +672,7 @@ struct SuddenDeathTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
+                    in: sq(6, 10),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -713,7 +714,7 @@ struct SuddenDeathTests {
             )
         )
 
-        // MARK: - Specify run
+        // Specify run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -781,7 +782,11 @@ struct SuddenDeathTests {
             latestPrompt == Prompt(
                 coachID: .home,
                 payload: .selectObjectiveToDiscard(
-                    objectiveIDs: [.first, .second, .third]
+                    objectives: [
+                        .first: .breakSomeBones,
+                        .second: .breakSomeBones,
+                        .third: .breakSomeBones,
+                    ]
                 )
             )
         )

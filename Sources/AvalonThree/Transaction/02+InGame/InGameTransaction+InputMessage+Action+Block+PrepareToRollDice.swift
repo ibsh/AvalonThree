@@ -24,8 +24,16 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
+        guard let playerSquare = table.getPlayer(id: actionContext.playerID)?.square else {
+            throw GameError("Player is in reserves")
+        }
+
         guard let targetPlayer = table.getPlayer(id: targetPlayerID) else {
             throw GameError("No target player")
+        }
+
+        guard let targetPlayerSquare = targetPlayer.square else {
+            throw GameError("Target player is in reserves")
         }
 
         if
@@ -44,7 +52,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: targetPlayerID.coachID,
                 payload: .blockActionEligibleForStepAsideBonusPlaySidestepAction(
-                    playerID: targetPlayerID
+                    playerID: targetPlayerID,
+                    in: targetPlayerSquare
                 )
             )
         }
@@ -61,7 +70,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: actionContext.coachID,
                 payload: .blockActionEligibleForBodyCheckBonusPlay(
-                    playerID: actionContext.playerID
+                    playerID: actionContext.playerID,
+                    in: playerSquare
                 )
             )
         }
@@ -81,7 +91,8 @@ extension InGameTransaction {
             return Prompt(
                 coachID: actionContext.coachID,
                 payload: .blockActionEligibleForTheKidsGotMoxyBonusPlay(
-                    playerID: actionContext.playerID
+                    playerID: actionContext.playerID,
+                    in: playerSquare
                 )
             )
         }

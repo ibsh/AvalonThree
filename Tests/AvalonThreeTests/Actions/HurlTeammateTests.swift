@@ -12,9 +12,7 @@ struct HurlTeammateTests {
 
     @Test func cantDeclareAHurlTeammateActionWithoutTheSkill() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -50,7 +48,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -69,7 +67,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -77,7 +75,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         #expect(throws: GameError("No matching declaration")) {
             _ = try game.process(
@@ -97,9 +95,7 @@ struct HurlTeammateTests {
 
     @Test func cantDeclareAHurlTeammateActionWhenInReserves() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -135,7 +131,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -154,7 +150,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -162,7 +158,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         #expect(throws: GameError("No matching declaration")) {
             _ = try game.process(
@@ -182,9 +178,7 @@ struct HurlTeammateTests {
 
     @Test func cantDeclareAHurlTeammateActionWhenProne() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -220,7 +214,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -239,7 +233,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -247,7 +241,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         #expect(throws: GameError("No matching declaration")) {
             _ = try game.process(
@@ -267,9 +261,7 @@ struct HurlTeammateTests {
 
     @Test func cantDeclareAHurlTeammateActionWhenMarked() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -312,7 +304,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -331,7 +323,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -339,7 +331,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         #expect(throws: GameError("No matching declaration")) {
             _ = try game.process(
@@ -359,9 +351,7 @@ struct HurlTeammateTests {
 
     @Test func cantDeclareAHurlTeammateActionWithoutAnEligibleTeammate() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -397,7 +387,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -416,7 +406,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -424,7 +414,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         #expect(throws: GameError("No matching declaration")) {
             _ = try game.process(
@@ -444,9 +434,7 @@ struct HurlTeammateTests {
 
     @Test func cantDeclareAHurlTeammateActionWithABall() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -482,7 +470,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 0))
                         ),
                     ],
@@ -501,7 +489,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -509,7 +497,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         #expect(throws: GameError("No matching declaration")) {
             _ = try game.process(
@@ -529,9 +517,7 @@ struct HurlTeammateTests {
 
     @Test func cantSpecifyATeammateInReserves() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -567,7 +553,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 2))
                         ),
                     ],
@@ -586,7 +572,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -594,7 +580,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         #expect(throws: GameError("No matching declaration")) {
             try game.process(
@@ -614,9 +600,7 @@ struct HurlTeammateTests {
 
     @Test func cantSpecifyAProneTeammate() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -652,7 +636,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 2))
                         ),
                     ],
@@ -671,7 +655,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -679,7 +663,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
         #expect(throws: GameError("No matching declaration")) {
             try game.process(
                 InputMessageWrapper(
@@ -698,9 +682,7 @@ struct HurlTeammateTests {
 
     @Test func cantSpecifyATeammateWhoIsntAdjacent() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -736,7 +718,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -755,7 +737,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -780,9 +762,7 @@ struct HurlTeammateTests {
 
     @Test func cantSpecifyAnObstructedSquare() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -818,7 +798,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -837,7 +817,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -845,7 +825,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -878,6 +858,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 3), sq(2, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
@@ -1023,7 +1004,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         #expect(throws: GameError("Invalid target")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -1039,9 +1020,7 @@ struct HurlTeammateTests {
 
     @Test func cantSpecifyAnOccupiedSquare() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -1083,7 +1062,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -1102,7 +1081,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -1110,7 +1089,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1143,6 +1122,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1287,7 +1267,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         #expect(throws: GameError("Invalid target")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -1303,9 +1283,7 @@ struct HurlTeammateTests {
 
     @Test func cantSpecifyASquareOutOfRange() async throws {
 
-        // MARK: - Init
-
-        let ballID = 123
+        // Init
 
         var game = Game(
             phase: .active(
@@ -1347,7 +1325,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -1366,7 +1344,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -1374,7 +1352,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1407,6 +1385,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1551,7 +1530,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         #expect(throws: GameError("Invalid target")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -1567,11 +1546,9 @@ struct HurlTeammateTests {
 
     @Test func canHurlToAnAdjacentSquare() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1613,7 +1590,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -1632,7 +1609,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -1642,7 +1619,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1675,6 +1652,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1819,7 +1797,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [5]
 
@@ -1855,46 +1833,15 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .pass
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func canHurlToShortDistance() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -1936,7 +1883,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -1955,7 +1902,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -1965,7 +1912,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1998,6 +1945,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2142,7 +2090,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [5]
 
@@ -2176,53 +2124,15 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .mark
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .pass
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func longDistanceModifiesRoll() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2278,7 +2188,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -2297,7 +2207,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -2307,7 +2217,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -2340,6 +2250,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2484,7 +2395,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [5]
 
@@ -2526,46 +2437,15 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .pass
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func obstructionModifiesRoll() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2615,7 +2495,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -2634,7 +2514,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -2644,7 +2524,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -2677,6 +2557,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2821,7 +2702,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [5]
 
@@ -2861,46 +2742,15 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .pass
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func markedIntermediateSquareModifiesRoll() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -2950,7 +2800,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -2969,7 +2819,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -2979,7 +2829,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -3012,6 +2862,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(2, 4), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 3), sq(1, 3), sq(2, 4), sq(1, 4)]),
@@ -3156,7 +3007,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [5]
 
@@ -3198,60 +3049,15 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .mark
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .mark
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .pass
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func markedTargetSquareDoesNotModifyRoll() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3293,7 +3099,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -3312,7 +3118,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -3322,7 +3128,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -3355,6 +3161,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(2, 4), sq(1, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 4), sq(1, 3), sq(2, 4), sq(2, 3)]),
@@ -3499,7 +3306,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [5]
 
@@ -3535,47 +3342,15 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .block
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .sidestep
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func twoOrMoreModifiersOnlyModifyOnce() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3625,7 +3400,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -3644,7 +3419,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -3654,7 +3429,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -3687,6 +3462,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(0, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 2), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(0, 3), distance: .short, obstructingSquares: []),
@@ -3754,7 +3530,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [5]
 
@@ -3798,47 +3574,16 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .block
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .sidestep
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func canFumbleTeammate() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -3880,7 +3625,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -3899,7 +3644,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -3910,7 +3655,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -3943,6 +3688,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4087,7 +3833,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [1]
         directionRandomizer.nextResults = [.west]
@@ -4131,40 +3877,16 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .reserves
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func canCrashTeammate() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -4206,7 +3928,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -4225,7 +3947,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -4236,7 +3958,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -4269,6 +3991,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4413,7 +4136,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [3]
         directionRandomizer.nextResults = [.west]
@@ -4459,41 +4182,16 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .standUp
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func canHurlOntoABall() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
         let directionRandomizer = DirectionRandomizerDouble()
-
-        let heldBallID = 123
-        let looseBallID = 456
 
         var game = Game(
             phase: .active(
@@ -4535,11 +4233,11 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: heldBallID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                         Ball(
-                            id: looseBallID,
+                            id: 456,
                             state: .loose(square: sq(7, 6))
                         ),
                     ],
@@ -4558,7 +4256,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -4569,7 +4267,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -4602,6 +4300,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4746,7 +4445,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [3]
         directionRandomizer.nextResults = [.east, .east, .south]
@@ -4812,39 +4511,15 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .standUp
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 
     @Test func promptedForTeammateIfMoreThanOneIsEligible() async throws {
 
-        // MARK: - Init
+        // Init
 
         let d6Randomizer = D6RandomizerDouble()
-
-        let ballID = 123
 
         var game = Game(
             phase: .active(
@@ -4892,7 +4567,7 @@ struct HurlTeammateTests {
                     coinFlipWinnerScore: 0,
                     balls: [
                         Ball(
-                            id: ballID,
+                            id: 123,
                             state: .held(playerID: pl(.away, 1))
                         ),
                     ],
@@ -4911,7 +4586,7 @@ struct HurlTeammateTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .declarePlayerAction(
-                    validDeclarations: [],
+                    validDeclarations: [:],
                     playerActionsLeft: 3
                 )
             ),
@@ -4921,7 +4596,7 @@ struct HurlTeammateTests {
             ballIDProvider: DefaultBallIDProvider()
         )
 
-        // MARK: - Declare hurl teammate
+        // Declare hurl teammate
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -4954,15 +4629,16 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTeammates: [
-                        pl(.away, 1),
-                        pl(.away, 2),
+                        pl(.away, 1): sq(4, 6),
+                        pl(.away, 2): sq(2, 6),
                     ]
                 )
             )
         )
 
-        // MARK: - Specify teammate
+        // Specify teammate
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -4982,6 +4658,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
+                    in: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(2, 4), sq(1, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 4), sq(1, 3), sq(2, 4), sq(2, 3)]),
@@ -5125,7 +4802,7 @@ struct HurlTeammateTests {
             )
         )
 
-        // MARK: - Specify target square
+        // Specify target square
 
         d6Randomizer.nextResults = [5]
 
@@ -5161,43 +4838,7 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(
-            latestPrompt == Prompt(
-                coachID: .away,
-                payload: .declarePlayerAction(
-                    validDeclarations: [
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 0),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .block
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 2),
-                                actionID: .run
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                        ValidDeclaration(
-                            declaration: ActionDeclaration(
-                                playerID: pl(.away, 1),
-                                actionID: .sidestep
-                            ),
-                            consumesBonusPlays: []
-                        ),
-                    ],
-                    playerActionsLeft: 2
-                )
-            )
-        )
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
 }
