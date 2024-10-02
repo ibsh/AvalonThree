@@ -75,9 +75,7 @@ struct LegUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -216,9 +214,7 @@ struct LegUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -356,9 +352,7 @@ struct LegUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run

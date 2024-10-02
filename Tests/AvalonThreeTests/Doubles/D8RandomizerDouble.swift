@@ -8,9 +8,17 @@
 import Foundation
 @testable import AvalonThree
 
-final class D8RandomizerDouble: D8Randomizing {
+func d8(_ nextResults: Int...) -> D8Randomizing {
+    D8RandomizerDouble(nextResults)
+}
 
-    var nextResults: [Int] = []
+private final class D8RandomizerDouble: D8Randomizing {
+
+    private var nextResults: [Int] = []
+
+    init(_ nextResults: [Int]) {
+        self.nextResults = nextResults
+    }
 
     func roll() -> Int {
         nextResults.popFirst() ?? DefaultD8Randomizer().roll()

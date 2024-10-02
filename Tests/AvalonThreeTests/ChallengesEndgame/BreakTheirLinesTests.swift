@@ -14,8 +14,6 @@ struct BreakTheirLinesTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -77,16 +75,10 @@ struct BreakTheirLinesTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.miss]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -98,7 +90,8 @@ struct BreakTheirLinesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(
@@ -123,9 +116,6 @@ struct BreakTheirLinesTests {
     @Test func notAvailableWhenNotHoldingABall() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -183,18 +173,10 @@ struct BreakTheirLinesTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -206,7 +188,8 @@ struct BreakTheirLinesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -227,9 +210,6 @@ struct BreakTheirLinesTests {
     @Test func availableWhenHoldingABallAndTargetKnockedDown() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -292,18 +272,10 @@ struct BreakTheirLinesTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -315,7 +287,8 @@ struct BreakTheirLinesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -372,9 +345,6 @@ struct BreakTheirLinesTests {
     @Test func availableAlongsideScoringTouchdown() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -437,18 +407,10 @@ struct BreakTheirLinesTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -460,7 +422,8 @@ struct BreakTheirLinesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(

@@ -70,9 +70,7 @@ struct HeadbuttTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -182,9 +180,7 @@ struct HeadbuttTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare sidestep
@@ -348,8 +344,6 @@ struct HeadbuttTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -406,11 +400,7 @@ struct HeadbuttTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare sidestep
@@ -551,13 +541,12 @@ struct HeadbuttTests {
 
         // Take free block
 
-        blockDieRandomizer.nextResults = [.shove]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useHeadbuttSkillBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove))
         )
 
         #expect(
@@ -597,8 +586,6 @@ struct HeadbuttTests {
     @Test func canPreventEarningTieThemUp() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -679,11 +666,7 @@ struct HeadbuttTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -802,13 +785,12 @@ struct HeadbuttTests {
 
         // Specify block
 
-        blockDieRandomizer.nextResults = [.miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(

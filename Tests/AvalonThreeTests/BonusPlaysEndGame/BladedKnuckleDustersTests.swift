@@ -10,9 +10,6 @@ import Testing
 
 struct BladedKnuckleDustersTests {
 
-    private let blockDieRandomizer = BlockDieRandomizerDouble()
-    private let d6Randomizer = D6RandomizerDouble()
-
     private func setup() -> Game {
         Game(
             phase: .active(
@@ -71,12 +68,7 @@ struct BladedKnuckleDustersTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
     }
 
@@ -88,8 +80,6 @@ struct BladedKnuckleDustersTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -100,7 +90,8 @@ struct BladedKnuckleDustersTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -118,13 +109,12 @@ struct BladedKnuckleDustersTests {
 
         // Use bonus play
 
-        d6Randomizer.nextResults = [2]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseBladedKnuckleDustersBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2))
         )
         #expect(
             latestEvents.map { $0.case } == [
@@ -147,8 +137,6 @@ struct BladedKnuckleDustersTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -159,7 +147,8 @@ struct BladedKnuckleDustersTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -225,13 +214,12 @@ struct BladedKnuckleDustersTests {
 
         // Decline bonus play
 
-        d6Randomizer.nextResults = [2]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineAbsoluteCarnageBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2))
         )
 
         #expect(

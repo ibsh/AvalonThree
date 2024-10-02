@@ -82,9 +82,7 @@ struct DistractionTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -247,9 +245,7 @@ struct DistractionTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -520,9 +516,7 @@ struct DistractionTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -660,9 +654,7 @@ struct DistractionTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -841,8 +833,6 @@ struct DistractionTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -903,11 +893,7 @@ struct DistractionTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -960,13 +946,12 @@ struct DistractionTests {
 
         // Use free action
 
-        blockDieRandomizer.nextResults = [.shove]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useFrenziedSkillBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove))
         )
 
         #expect(
@@ -1022,8 +1007,6 @@ struct DistractionTests {
     @Test func ineligibleAfterUsedHeadbutt() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1085,11 +1068,7 @@ struct DistractionTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -1196,13 +1175,12 @@ struct DistractionTests {
 
         // Use free action
 
-        blockDieRandomizer.nextResults = [.shove]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useHeadbuttSkillBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove))
         )
 
         #expect(
@@ -1258,8 +1236,6 @@ struct DistractionTests {
     @Test func ineligibleAfterUsedBlitz() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1323,11 +1299,7 @@ struct DistractionTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -1434,13 +1406,12 @@ struct DistractionTests {
 
         // Use bonus play
 
-        blockDieRandomizer.nextResults = [.miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useBlitzBonusPlayBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(
@@ -1484,8 +1455,6 @@ struct DistractionTests {
     @Test func ineligibleAfterUsedDivingTackle() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1549,11 +1518,7 @@ struct DistractionTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -1606,13 +1571,12 @@ struct DistractionTests {
 
         // Use bonus play
 
-        blockDieRandomizer.nextResults = [.miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useDivingTackleBonusPlayBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(
@@ -1657,8 +1621,6 @@ struct DistractionTests {
     @Test func ineligibleAfterUsedShoulderCharge() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1722,11 +1684,7 @@ struct DistractionTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -1779,13 +1737,12 @@ struct DistractionTests {
 
         // Use bonus play
 
-        blockDieRandomizer.nextResults = [.miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useShoulderChargeBonusPlayBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(

@@ -14,9 +14,6 @@ struct BreakSomeBonesTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -73,18 +70,10 @@ struct BreakSomeBonesTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -96,7 +85,8 @@ struct BreakSomeBonesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -126,9 +116,6 @@ struct BreakSomeBonesTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -185,18 +172,10 @@ struct BreakSomeBonesTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [1]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -208,7 +187,8 @@ struct BreakSomeBonesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(1))
         )
 
         #expect(

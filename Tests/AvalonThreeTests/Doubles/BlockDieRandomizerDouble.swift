@@ -8,9 +8,17 @@
 import Foundation
 @testable import AvalonThree
 
-final class BlockDieRandomizerDouble: BlockDieRandomizing {
+func block(_ nextResults: BlockDieResult...) -> BlockDieRandomizing {
+    BlockDieRandomizerDouble(nextResults)
+}
 
-    var nextResults: [BlockDieResult] = []
+private final class BlockDieRandomizerDouble: BlockDieRandomizing {
+
+    private var nextResults: [BlockDieResult]
+
+    init(_ nextResults: [BlockDieResult]) {
+        self.nextResults = nextResults
+    }
 
     func rollBlockDie() -> BlockDieResult {
         nextResults.popFirst() ?? DefaultBlockDieRandomizer().rollBlockDie()

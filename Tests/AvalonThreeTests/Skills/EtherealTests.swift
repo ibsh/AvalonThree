@@ -70,9 +70,7 @@ struct EtherealTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -230,9 +228,7 @@ struct EtherealTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -336,9 +332,7 @@ struct EtherealTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -441,9 +435,7 @@ struct EtherealTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -565,9 +557,7 @@ struct EtherealTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run

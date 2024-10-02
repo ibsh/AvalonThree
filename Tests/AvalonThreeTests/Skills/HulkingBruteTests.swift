@@ -14,8 +14,6 @@ struct HulkingBruteTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -73,11 +71,7 @@ struct HulkingBruteTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
@@ -106,13 +100,12 @@ struct HulkingBruteTests {
 
         // Specify block
 
-        blockDieRandomizer.nextResults = [.tackle, .miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.tackle, .miss))
         )
 
         #expect(
@@ -141,8 +134,6 @@ struct HulkingBruteTests {
     @Test func whenBlockingSmashBecomesKerrunch() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -195,16 +186,10 @@ struct HulkingBruteTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.shove, .smash]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -216,7 +201,8 @@ struct HulkingBruteTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove, .smash))
         )
 
         #expect(
@@ -253,11 +239,6 @@ struct HulkingBruteTests {
     @Test func whenBlockedTackleBecomesMiss() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
 
         var game = Game(
             phase: .active(
@@ -310,20 +291,10 @@ struct HulkingBruteTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.tackle]
-        let newBallID = 123
-        ballIDProvider.nextResults = [newBallID]
-        directionRandomizer.nextResults = [.west]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -335,7 +306,9 @@ struct HulkingBruteTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.tackle), direction: direction(.west)),
+            ballIDProvider: ballID(123)
         )
 
         #expect(

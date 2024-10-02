@@ -14,12 +14,6 @@ struct JumpUpTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -87,13 +81,7 @@ struct JumpUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare run
@@ -190,12 +178,6 @@ struct JumpUpTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [4]
-        let newBallID = 123
-        ballIDProvider.nextResults = [newBallID]
-        directionRandomizer.nextResults = [.northWest]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -206,7 +188,9 @@ struct JumpUpTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(4), direction: direction(.northWest)),
+            ballIDProvider: ballID(123)
         )
 
         #expect(
@@ -258,12 +242,6 @@ struct JumpUpTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -331,13 +309,7 @@ struct JumpUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare run
@@ -434,12 +406,6 @@ struct JumpUpTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [4]
-        let newBallID = 123
-        ballIDProvider.nextResults = [newBallID]
-        directionRandomizer.nextResults = [.northWest]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -450,7 +416,9 @@ struct JumpUpTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(4), direction: direction(.northWest)),
+            ballIDProvider: ballID(123)
         )
 
         #expect(

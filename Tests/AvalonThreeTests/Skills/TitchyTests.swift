@@ -65,9 +65,7 @@ struct TitchyTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -255,9 +253,7 @@ struct TitchyTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -357,8 +353,6 @@ struct TitchyTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -415,16 +409,10 @@ struct TitchyTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.tackle]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -436,7 +424,8 @@ struct TitchyTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.tackle))
         )
 
         #expect(

@@ -8,9 +8,17 @@
 import Foundation
 @testable import AvalonThree
 
-final class TrapdoorRandomizerDouble: TrapdoorRandomizing {
+func trapdoor(_ nextResults: Square...) -> TrapdoorRandomizing {
+    TrapdoorRandomizerDouble(nextResults)
+}
 
-    var nextResults: [Square] = []
+private final class TrapdoorRandomizerDouble: TrapdoorRandomizing {
+
+    private var nextResults: [Square] = []
+
+    init(_ nextResults: [Square]) {
+        self.nextResults = nextResults
+    }
 
     func selectRandomTrapdoor(from squares: Set<Square>) -> Square {
         nextResults.popFirst() ?? DefaultTrapdoorRandomizer().selectRandomTrapdoor(from: squares)

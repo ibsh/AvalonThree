@@ -14,8 +14,6 @@ struct BlockTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -72,16 +70,10 @@ struct BlockTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.miss]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -93,7 +85,8 @@ struct BlockTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(
@@ -164,8 +157,6 @@ struct BlockTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -228,11 +219,7 @@ struct BlockTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
@@ -279,13 +266,12 @@ struct BlockTests {
 
         // Specify block
 
-        blockDieRandomizer.nextResults = [.miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(

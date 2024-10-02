@@ -7,20 +7,20 @@
 
 import Foundation
 
-protocol PlayerNumberRandomizing: Sendable {
-    func getPlayerNumbers(count: Int) -> [Int]
+public protocol PlayerNumberRandomizing {
+    func generate() -> Int
 }
 
-struct DefaultPlayerNumberRandomizer: PlayerNumberRandomizing {
+public final class DefaultPlayerNumberRandomizer {
+    public init() { }
+}
 
-    func getPlayerNumbers(count: Int) -> [Int] {
-        var set = Set<Int>()
-        while set.count < count {
-            guard let result = (0...99).randomElement() else {
-                fatalError("No player numbers in my range")
-            }
-            set.insert(result)
+extension DefaultPlayerNumberRandomizer: PlayerNumberRandomizing {
+
+    public func generate() -> Int {
+        guard let result = (0...99).randomElement() else {
+            fatalError("No player numbers in my range")
         }
-        return set.shuffled()
+        return result
     }
 }

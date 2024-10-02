@@ -175,7 +175,7 @@ extension InGameTransaction {
             if looseBalls.isEmpty {
                 break
             }
-            
+
             // This should only ever be one, but still
             for ball in looseBalls {
                 guard let newPlayer = table.getPlayer(id: playerID) else {

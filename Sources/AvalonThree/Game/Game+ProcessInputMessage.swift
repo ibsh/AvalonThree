@@ -9,17 +9,25 @@ import Foundation
 
 extension Game {
 
-    public mutating func process(_ messageWrapper: InputMessageWrapper) throws -> ([Event], Prompt?) {
+    public mutating func process(
+        _ messageWrapper: InputMessageWrapper,
+        randomizers: Randomizers = Randomizers(),
+        ballIDProvider: BallIDProviding = DefaultBallIDProvider()
+    ) throws -> ([Event], Prompt?) {
         try validate(messageWrapper)
         return try process(
             messageWrapper: messageWrapper,
-            priorEvents: []
+            priorEvents: [],
+            randomizers: randomizers,
+            ballIDProvider: ballIDProvider
         )
     }
 
     private mutating func process(
         messageWrapper: InputMessageWrapper,
-        priorEvents: [Event]
+        priorEvents: [Event],
+        randomizers: Randomizers,
+        ballIDProvider: BallIDProviding
     ) throws -> ([Event], Prompt?) {
         switch phase {
         case .config(let config):
@@ -35,7 +43,9 @@ extension Game {
                 phase = .setup(table)
                 return try process(
                     messageWrapper: messageWrapper,
-                    priorEvents: priorEvents + transaction.events
+                    priorEvents: priorEvents + transaction.events,
+                    randomizers: randomizers,
+                    ballIDProvider: ballIDProvider
                 )
             } else {
                 throw GameError("No prompt or table")
@@ -55,7 +65,9 @@ extension Game {
                 phase = .active(transaction.table, [])
                 return try process(
                     messageWrapper: messageWrapper,
-                    priorEvents: priorEvents + transaction.events
+                    priorEvents: priorEvents + transaction.events,
+                    randomizers: randomizers,
+                    ballIDProvider: ballIDProvider
                 )
             }
 
@@ -91,7 +103,9 @@ extension Game {
                 phase = .finished(transaction.table)
                 return try process(
                     messageWrapper: messageWrapper,
-                    priorEvents: priorEvents + transaction.events
+                    priorEvents: priorEvents + transaction.events,
+                    randomizers: randomizers,
+                    ballIDProvider: ballIDProvider
                 )
             }
 

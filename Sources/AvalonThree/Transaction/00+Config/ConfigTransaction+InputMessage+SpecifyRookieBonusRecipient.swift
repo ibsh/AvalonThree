@@ -33,7 +33,7 @@ extension ConfigTransaction {
             .specifiedRookieBonusRecipient(
                 coachID: coinFlipWinnerCoachID,
                 recipientCoachID: {
-                    switch (rookieBonusRecipientID) {
+                    switch rookieBonusRecipientID {
                     case (.noOne): nil
                     case (.coinFlipWinner): coinFlipWinnerCoachID
                     case (.coinFlipLoser): coinFlipWinnerCoachID.inverse

@@ -14,10 +14,6 @@ struct CleanSweepTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -89,18 +85,10 @@ struct CleanSweepTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -112,7 +100,8 @@ struct CleanSweepTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -142,15 +131,12 @@ struct CleanSweepTests {
 
         // Choose to reroll
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
-        directionRandomizer.nextResults = [.northWest]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6), direction: direction(.northWest))
         )
 
         #expect(
@@ -477,13 +463,12 @@ struct CleanSweepTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -584,10 +569,6 @@ struct CleanSweepTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -663,18 +644,10 @@ struct CleanSweepTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -686,7 +659,8 @@ struct CleanSweepTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -716,15 +690,12 @@ struct CleanSweepTests {
 
         // Choose to reroll
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
-        directionRandomizer.nextResults = [.northWest]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6), direction: direction(.northWest))
         )
 
         #expect(
@@ -1083,13 +1054,12 @@ struct CleanSweepTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -1190,10 +1160,6 @@ struct CleanSweepTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1269,18 +1235,10 @@ struct CleanSweepTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1292,7 +1250,8 @@ struct CleanSweepTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -1322,15 +1281,12 @@ struct CleanSweepTests {
 
         // Choose to reroll
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
-        directionRandomizer.nextResults = [.northWest]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6), direction: direction(.northWest))
         )
 
         #expect(
@@ -1675,13 +1631,12 @@ struct CleanSweepTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(

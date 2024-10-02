@@ -14,8 +14,6 @@ struct ProTests {
 
         // Init
 
-        let d8Randomizer = D8RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -74,11 +72,7 @@ struct ProTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d8: d8Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -123,13 +117,12 @@ struct ProTests {
 
         // MARK: - Use bonus play
 
-        d8Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionUseProBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d8: d8(5))
         )
 
         #expect(
@@ -186,8 +179,6 @@ struct ProTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -246,11 +237,7 @@ struct ProTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -295,13 +282,12 @@ struct ProTests {
 
         // MARK: - Decline bonus play
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionDeclineProBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -341,8 +327,6 @@ struct ProTests {
     @Test func usedForHurlTeammate() async throws {
 
         // Init
-
-        let d8Randomizer = D8RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -402,11 +386,7 @@ struct ProTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d8: d8Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -451,13 +431,12 @@ struct ProTests {
 
         // Use bonus play
 
-        d8Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionUseProBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d8: d8(5))
         )
 
         #expect(
@@ -507,8 +486,6 @@ struct ProTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -567,11 +544,7 @@ struct ProTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -616,13 +589,12 @@ struct ProTests {
 
         // MARK: - Use bonus play
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionDeclineProBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -655,9 +627,6 @@ struct ProTests {
     @Test func usedForArmour() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d8Randomizer = D8RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -712,17 +681,10 @@ struct ProTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d8: d8Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -734,7 +696,8 @@ struct ProTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -752,13 +715,12 @@ struct ProTests {
 
         // Use bonus play
 
-        d8Randomizer.nextResults = [4]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionUseProBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d8: d8(4))
         )
 
         #expect(
@@ -795,9 +757,6 @@ struct ProTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -851,17 +810,10 @@ struct ProTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -873,7 +825,8 @@ struct ProTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -891,13 +844,12 @@ struct ProTests {
 
         // Decline bonus play
 
-        d6Randomizer.nextResults = [4]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionDeclineProBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(

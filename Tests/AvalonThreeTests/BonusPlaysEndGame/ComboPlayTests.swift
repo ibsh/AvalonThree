@@ -78,9 +78,7 @@ struct ComboPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare handoff
@@ -176,8 +174,6 @@ struct ComboPlayTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -242,11 +238,7 @@ struct ComboPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -275,13 +267,12 @@ struct ComboPlayTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [4]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -409,9 +400,7 @@ struct ComboPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare handoff
@@ -501,8 +490,6 @@ struct ComboPlayTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -567,11 +554,7 @@ struct ComboPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -600,13 +583,12 @@ struct ComboPlayTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -729,9 +711,7 @@ struct ComboPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare handoff
@@ -798,8 +778,6 @@ struct ComboPlayTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -864,11 +842,7 @@ struct ComboPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -897,13 +871,12 @@ struct ComboPlayTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [4]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -938,9 +911,6 @@ struct ComboPlayTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1005,12 +975,7 @@ struct ComboPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -1039,14 +1004,12 @@ struct ComboPlayTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [1]
-        directionRandomizer.nextResults = [.east]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(1), direction: direction(.east))
         )
 
         #expect(

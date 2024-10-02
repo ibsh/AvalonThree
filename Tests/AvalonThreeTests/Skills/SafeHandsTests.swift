@@ -14,9 +14,6 @@ struct SafeHandsTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -73,18 +70,10 @@ struct SafeHandsTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [6]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -96,7 +85,8 @@ struct SafeHandsTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch))
         )
 
         #expect(
@@ -134,7 +124,8 @@ struct SafeHandsTests {
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionSelectSafeHandsLooseBallDirection(direction: .east)
-            )
+            ),
+            randomizers: Randomizers(d6: d6(6))
         )
 
         #expect(

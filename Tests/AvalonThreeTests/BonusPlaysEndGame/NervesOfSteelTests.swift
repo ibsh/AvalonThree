@@ -76,9 +76,7 @@ struct NervesOfSteelTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Try to declare pass
@@ -102,8 +100,6 @@ struct NervesOfSteelTests {
     @Test func usedForPassWithoutHailMary() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -169,11 +165,7 @@ struct NervesOfSteelTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -203,15 +195,14 @@ struct NervesOfSteelTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [4]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
                     target: pl(.away, 1)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -231,8 +222,6 @@ struct NervesOfSteelTests {
     @Test func usedForPassWithHailMary() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -299,11 +288,7 @@ struct NervesOfSteelTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Try to declare pass without bonus plays
@@ -381,15 +366,14 @@ struct NervesOfSteelTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [4]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
                     target: pl(.away, 1)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -475,9 +459,7 @@ struct NervesOfSteelTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Try to declare pass
@@ -501,8 +483,6 @@ struct NervesOfSteelTests {
     @Test func usedForHurlTeammate() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -568,11 +548,7 @@ struct NervesOfSteelTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -602,13 +578,12 @@ struct NervesOfSteelTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(2, 8))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(

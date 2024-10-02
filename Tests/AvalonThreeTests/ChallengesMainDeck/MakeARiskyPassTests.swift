@@ -14,9 +14,6 @@ struct MakeARiskyPassTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -84,12 +81,7 @@ struct MakeARiskyPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -118,14 +110,12 @@ struct MakeARiskyPassTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [3]
-        directionRandomizer.nextResults = [.west]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3), direction: direction(.west))
         )
 
         #expect(
@@ -190,8 +180,6 @@ struct MakeARiskyPassTests {
     @Test func notAvailableWhenPassHasNoNegativeModifier() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -260,11 +248,7 @@ struct MakeARiskyPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -293,13 +277,12 @@ struct MakeARiskyPassTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [3]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3))
         )
 
         #expect(
@@ -339,9 +322,6 @@ struct MakeARiskyPassTests {
     @Test func availableWhenModifiedPassSuccessful() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -410,12 +390,7 @@ struct MakeARiskyPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -444,14 +419,12 @@ struct MakeARiskyPassTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [4]
-        directionRandomizer.nextResults = [.west]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4), direction: direction(.west))
         )
 
         #expect(
@@ -520,9 +493,6 @@ struct MakeARiskyPassTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -590,12 +560,7 @@ struct MakeARiskyPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -624,14 +589,12 @@ struct MakeARiskyPassTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [1]
-        directionRandomizer.nextResults = [.west]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(1), direction: direction(.west))
         )
 
         #expect(
@@ -682,8 +645,6 @@ struct MakeARiskyPassTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -751,11 +712,7 @@ struct MakeARiskyPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -784,13 +741,12 @@ struct MakeARiskyPassTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -831,8 +787,6 @@ struct MakeARiskyPassTests {
     @Test func availableWhenModifiedHurlTeammateSuccessful() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -909,11 +863,7 @@ struct MakeARiskyPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -942,13 +892,12 @@ struct MakeARiskyPassTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(0, 4))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(

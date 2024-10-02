@@ -14,8 +14,6 @@ struct PassingPlayTests {
 
         // Init
 
-        let d8Randomizer = D8RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -121,11 +119,7 @@ struct PassingPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d8: d8Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare sidestep
@@ -304,13 +298,12 @@ struct PassingPlayTests {
 
         // Specify target square
 
-        d8Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(9, 12))
-            )
+            ),
+            randomizers: Randomizers(d8: d8(5))
         )
 
         #expect(
@@ -373,13 +366,12 @@ struct PassingPlayTests {
 
         // Specify pass
 
-        d8Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 2))
-            )
+            ),
+            randomizers: Randomizers(d8: d8(5))
         )
 
         #expect(
@@ -470,8 +462,6 @@ struct PassingPlayTests {
     @Test func notAppliedIfDeclined() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -578,11 +568,7 @@ struct PassingPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare sidestep
@@ -760,13 +746,12 @@ struct PassingPlayTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(9, 12))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -829,13 +814,12 @@ struct PassingPlayTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 2))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(

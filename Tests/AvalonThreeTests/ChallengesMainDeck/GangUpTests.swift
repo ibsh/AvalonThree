@@ -14,9 +14,6 @@ struct GangUpTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -91,12 +88,7 @@ struct GangUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
@@ -125,14 +117,12 @@ struct GangUpTests {
 
         // Specify block
 
-        blockDieRandomizer.nextResults = [.miss, .miss]
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss, .miss), d6: d6(6))
         )
 
         #expect(
@@ -160,9 +150,6 @@ struct GangUpTests {
     @Test func notAvailableWhenNotAssisted() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -220,18 +207,10 @@ struct GangUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -243,7 +222,8 @@ struct GangUpTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -272,9 +252,6 @@ struct GangUpTests {
     @Test func availableWhenAssistedAndTargetKnockedDown() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -338,18 +315,10 @@ struct GangUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash, .smash]
-        d6Randomizer.nextResults = [6]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -361,7 +330,8 @@ struct GangUpTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash, .smash), d6: d6(6))
         )
 
         #expect(

@@ -14,10 +14,6 @@ struct EnforcerTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -83,20 +79,10 @@ struct EnforcerTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch, .tackle, .shove]
-        d6Randomizer.nextResults = [4, 2]
-        directionRandomizer.nextResults = [.east]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -108,7 +94,8 @@ struct EnforcerTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch, .tackle, .shove), d6: d6(4, 2), direction: direction(.east))
         )
 
         #expect(
@@ -266,10 +253,6 @@ struct EnforcerTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -332,20 +315,10 @@ struct EnforcerTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.miss, .smash, .smash]
-        d6Randomizer.nextResults = [2]
-        directionRandomizer.nextResults = [.south]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -357,7 +330,8 @@ struct EnforcerTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss, .smash, .smash), d6: d6(2), direction: direction(.south))
         )
 
         #expect(

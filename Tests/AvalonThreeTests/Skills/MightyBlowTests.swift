@@ -14,8 +14,6 @@ struct MightyBlowTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -67,16 +65,10 @@ struct MightyBlowTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.shove, .smash]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -88,7 +80,8 @@ struct MightyBlowTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove, .smash))
         )
 
         #expect(

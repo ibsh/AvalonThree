@@ -15,36 +15,10 @@ struct MyFirstGameTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let coachIDRandomizer = CoachIDRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let d8Randomizer = D8RandomizerDouble()
-        let deckRandomizer = DeckRandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-        let foulDieRandomizer = FoulDieRandomizerDouble()
-        let playerNumberRandomizer = PlayerNumberRandomizerDouble()
-        let trapdoorRandomizer = TrapdoorRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .config(Config()),
-            previousPrompt: nil,
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                coachID: coachIDRandomizer,
-                d6: d6Randomizer,
-                d8: d8Randomizer,
-                deck: deckRandomizer,
-                direction: directionRandomizer,
-                foulDie: foulDieRandomizer,
-                playerNumber: playerNumberRandomizer,
-                trapdoor: trapdoorRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            previousPrompt: nil
         )
-
-        coachIDRandomizer.nextResult = .home
 
         // Begin
 
@@ -52,7 +26,8 @@ struct MyFirstGameTests {
             InputMessageWrapper(
                 coachID: .home,
                 message: .begin
-            )
+            ),
+            randomizers: Randomizers(coachID: coachID(.home))
         )
 
         #expect(
@@ -228,14 +203,39 @@ struct MyFirstGameTests {
 
         // First coach config
 
-        deckRandomizer.nextResult = Array(ChallengeCard.standardShortDeck.prefix(5))
-
-        playerNumberRandomizer.nextResults = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .specifyCoinFlipLoserTeam(teamID: .human)
+            ),
+            randomizers: Randomizers(
+                deck: deck([
+                    ChallengeCard(challenge: .gangUp, bonusPlay: .toughEnough),
+                    ChallengeCard(challenge: .showNoFear, bonusPlay: .jumpUp),
+                    ChallengeCard(challenge: .moveTheBall, bonusPlay: .dodge),
+                    ChallengeCard(challenge: .takeThemDown, bonusPlay: .inspiration),
+                    ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay),
+                    ChallengeCard(challenge: .getTogether, bonusPlay: .reserves),
+                    ChallengeCard(challenge: .getMoving, bonusPlay: .interference),
+                    ChallengeCard(challenge: .tieThemUp, bonusPlay: .defensivePlay),
+                    ChallengeCard(challenge: .gangUp, bonusPlay: .inspiration),
+                    ChallengeCard(challenge: .tieThemUp, bonusPlay: .rawTalent),
+                    ChallengeCard(challenge: .moveTheBall, bonusPlay: .rawTalent),
+                    ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .intervention),
+                    ChallengeCard(challenge: .takeThemDown, bonusPlay: .divingTackle),
+                    ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .blitz),
+                    ChallengeCard(challenge: .breakSomeBones, bonusPlay: .stepAside),
+                    ChallengeCard(challenge: .spreadOut, bonusPlay: .reserves),
+                    ChallengeCard(challenge: .getTheBall, bonusPlay: .distraction),
+                    ChallengeCard(challenge: .showboatForTheCrowd, bonusPlay: .multiBall),
+                    ChallengeCard(challenge: .showUsACompletion, bonusPlay: .inspiration),
+                    ChallengeCard(challenge: .getMoving, bonusPlay: .sprint),
+                    ChallengeCard(challenge: .showUsACompletion, bonusPlay: .passingPlay),
+                    ChallengeCard(challenge: .showboatForTheCrowd, bonusPlay: .rawTalent),
+                    ChallengeCard(challenge: .getTheBall, bonusPlay: .shadow),
+                    ChallengeCard(challenge: .makeARiskyPass, bonusPlay: .accuratePass),
+                ]),
+                playerNumber: playerNumber(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
             )
         )
 
@@ -486,36 +486,36 @@ struct MyFirstGameTests {
                     ]
                 ),
                 .updatedDeck(
-                    top: .breakSomeBones,
-                    count: 5
+                    top: .gangUp,
+                    count: 24
                 ),
                 .dealtNewObjective(
                     coachID: .away,
                     objectiveID: .first,
-                    objective: .breakSomeBones
+                    objective: .gangUp
                 ),
                 .updatedDeck(
-                    top: .breakSomeBones,
-                    count: 4
+                    top: .showNoFear,
+                    count: 23
                 ),
                 .dealtNewObjective(
                     coachID: .away,
                     objectiveID: .second,
-                    objective: .breakSomeBones
+                    objective: .showNoFear
                 ),
                 .updatedDeck(
-                    top: .freeUpTheBall,
-                    count: 3
+                    top: .moveTheBall,
+                    count: 22
                 ),
                 .dealtNewObjective(
                     coachID: .away,
                     objectiveID: .third,
-                    objective: .freeUpTheBall
+                    objective: .moveTheBall
                 ),
                 .updatedDeck(
-                    top: .freeUpTheBall,
-                    count: 2
-                ),
+                    top: .takeThemDown,
+                    count: 21
+                )
             ]
         )
 
@@ -626,9 +626,6 @@ struct MyFirstGameTests {
 
         // Second coach arrange players
 
-        let newBallID = Int()
-        ballIDProvider.nextResults = [newBallID]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
@@ -642,7 +639,8 @@ struct MyFirstGameTests {
                         sq(8, 14)
                     ]
                 )
-            )
+            ),
+            ballIDProvider: ballID(123)
         )
 
         #expect(
@@ -671,7 +669,7 @@ struct MyFirstGameTests {
                     playerID: pl(.home, 5),
                     to: sq(8, 14)
                 ),
-                .newBallAppeared(ballID: newBallID, in: sq(5, 7)),
+                .newBallAppeared(ballID: 123, in: sq(5, 7)),
                 .turnBegan(coachID: .away, isFinal: false)
             ]
         )

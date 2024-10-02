@@ -14,9 +14,6 @@ struct BlockingPlayTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -81,12 +78,7 @@ struct BlockingPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -206,9 +198,6 @@ struct BlockingPlayTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -273,12 +262,7 @@ struct BlockingPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -387,9 +371,6 @@ struct BlockingPlayTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -465,12 +446,7 @@ struct BlockingPlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare first run
@@ -496,7 +472,6 @@ struct BlockingPlayTests {
 
         #expect(latestPrompt?.coachID == .away)
         #expect(latestPrompt?.payload.case == .runActionEligibleForBlockingPlayBonusPlay)
-
 
         // Use bonus play
 
@@ -680,9 +655,6 @@ struct BlockingPlayTests {
 
         // Declare first block
 
-        blockDieRandomizer.nextResults = [.smash, .smash]
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -693,7 +665,8 @@ struct BlockingPlayTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash, .smash), d6: d6(6))
         )
 
         #expect(
@@ -787,14 +760,12 @@ struct BlockingPlayTests {
 
         // Specify second block
 
-        blockDieRandomizer.nextResults = [.shove]
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove), d6: d6(6))
         )
 
         #expect(

@@ -7,12 +7,17 @@
 
 import Foundation
 
-protocol CoachIDRandomizing: Sendable {
+public protocol CoachIDRandomizing {
     func flipForCoachID() -> CoachID
 }
 
-struct DefaultCoachIDRandomizer: CoachIDRandomizing {
-    func flipForCoachID() -> CoachID {
+public final class DefaultCoachIDRandomizer {
+    public init() { }
+}
+
+extension DefaultCoachIDRandomizer: CoachIDRandomizing {
+
+    public func flipForCoachID() -> CoachID {
         guard let coachID = CoachID.allCases.randomElement() else {
             fatalError("No CoachID cases")
         }

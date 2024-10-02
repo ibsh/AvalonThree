@@ -14,8 +14,6 @@ struct TieThemUpTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -90,16 +88,10 @@ struct TieThemUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.miss]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -111,7 +103,8 @@ struct TieThemUpTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(
@@ -131,8 +124,6 @@ struct TieThemUpTests {
     @Test func notAvailableWhenThreeOpponentsAreMarkedByOneTeammate() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -208,11 +199,7 @@ struct TieThemUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -263,8 +250,6 @@ struct TieThemUpTests {
     @Test func availableWhenActionWasMarkAndThreeOpponentsAreMarkedByTwoTeammates() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -340,11 +325,7 @@ struct TieThemUpTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark

@@ -65,9 +65,7 @@ struct InsignificantTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -216,9 +214,7 @@ struct InsignificantTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -397,9 +393,7 @@ struct InsignificantTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -536,11 +530,6 @@ struct InsignificantTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -592,20 +581,10 @@ struct InsignificantTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.tackle]
-        let newBallID = 123
-        ballIDProvider.nextResults = [newBallID]
-        directionRandomizer.nextResults = [.southEast]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -617,7 +596,9 @@ struct InsignificantTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.tackle), direction: direction(.southEast)),
+            ballIDProvider: ballID(123)
         )
 
         #expect(

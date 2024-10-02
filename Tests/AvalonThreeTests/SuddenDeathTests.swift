@@ -115,9 +115,7 @@ struct SuddenDeathTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -371,9 +369,7 @@ struct SuddenDeathTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -634,9 +630,7 @@ struct SuddenDeathTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run

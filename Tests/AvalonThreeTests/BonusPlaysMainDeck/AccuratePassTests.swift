@@ -73,9 +73,7 @@ struct AccuratePassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -176,8 +174,6 @@ struct AccuratePassTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -236,11 +232,7 @@ struct AccuratePassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -315,13 +307,12 @@ struct AccuratePassTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -340,8 +331,6 @@ struct AccuratePassTests {
     @Test func notOfferedWhenMakingALongHurlTeammate() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -401,11 +390,7 @@ struct AccuratePassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -434,13 +419,12 @@ struct AccuratePassTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(3, 11))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(6))
         )
 
         #expect(
@@ -458,8 +442,6 @@ struct AccuratePassTests {
     @Test func offeredWhenMakingAShortPass() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -519,11 +501,7 @@ struct AccuratePassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -568,13 +546,12 @@ struct AccuratePassTests {
 
         // Use bonus play
 
-        d6Randomizer.nextResults = [2]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionUseAccuratePassBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2))
         )
 
         #expect(
@@ -625,8 +602,6 @@ struct AccuratePassTests {
     @Test func offeredWhenMakingAShortHurlTeammate() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -686,11 +661,7 @@ struct AccuratePassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -735,13 +706,12 @@ struct AccuratePassTests {
 
         // Use bonus play
 
-        d6Randomizer.nextResults = [2]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionUseAccuratePassBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2))
         )
 
         #expect(
@@ -794,9 +764,6 @@ struct AccuratePassTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -855,12 +822,7 @@ struct AccuratePassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -905,14 +867,12 @@ struct AccuratePassTests {
 
         // Decline bonus play
 
-        d6Randomizer.nextResults = [2]
-        directionRandomizer.nextResults = [.southEast]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionDeclineAccuratePassBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2), direction: direction(.southEast))
         )
 
         #expect(

@@ -70,9 +70,7 @@ struct FrenziedTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -144,8 +142,6 @@ struct FrenziedTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -202,11 +198,7 @@ struct FrenziedTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -257,13 +249,12 @@ struct FrenziedTests {
 
         // Take free block
 
-        blockDieRandomizer.nextResults = [.shove]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useFrenziedSkillBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove))
         )
 
         #expect(
@@ -394,8 +385,6 @@ struct FrenziedTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -475,11 +464,7 @@ struct FrenziedTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -550,13 +535,12 @@ struct FrenziedTests {
 
         // Specify block
 
-        blockDieRandomizer.nextResults = [.miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(

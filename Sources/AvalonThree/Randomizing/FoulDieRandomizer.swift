@@ -7,12 +7,11 @@
 
 import Foundation
 
-protocol FoulDieRandomizing: Sendable {
+public protocol FoulDieRandomizing {
     func rollFoulDie() -> FoulDieResult
 }
 
-struct DefaultFoulDieRandomizer: FoulDieRandomizing {
-
+public final class DefaultFoulDieRandomizer {
     private static let FoulDieFaces: Set<FoulDieResult> =
         [
             .spotted,
@@ -23,7 +22,12 @@ struct DefaultFoulDieRandomizer: FoulDieRandomizing {
             .gotThem,
         ]
 
-    func rollFoulDie() -> FoulDieResult {
+    public init() { }
+}
+
+extension DefaultFoulDieRandomizer: FoulDieRandomizing {
+
+    public func rollFoulDie() -> FoulDieResult {
         guard let result = DefaultFoulDieRandomizer.FoulDieFaces.randomElement() else {
             fatalError("No sides on my foul die")
         }

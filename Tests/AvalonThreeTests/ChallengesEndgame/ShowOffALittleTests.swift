@@ -14,8 +14,6 @@ struct ShowOffALittleTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -77,11 +75,7 @@ struct ShowOffALittleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -110,13 +104,12 @@ struct ShowOffALittleTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -135,8 +128,6 @@ struct ShowOffALittleTests {
     @Test func notAvailableWithPriorHandoff() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -199,11 +190,7 @@ struct ShowOffALittleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare handoff
@@ -325,13 +312,12 @@ struct ShowOffALittleTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 0))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -354,8 +340,6 @@ struct ShowOffALittleTests {
     @Test func notAvailableWhenCompletingAHandoff() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -418,11 +402,7 @@ struct ShowOffALittleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -451,13 +431,12 @@ struct ShowOffALittleTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(6))
         )
 
         #expect(
@@ -569,8 +548,6 @@ struct ShowOffALittleTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -632,11 +609,7 @@ struct ShowOffALittleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare first pass
@@ -665,13 +638,12 @@ struct ShowOffALittleTests {
 
         // Specify first pass
 
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(6))
         )
 
         #expect(
@@ -711,13 +683,12 @@ struct ShowOffALittleTests {
 
         // Specify second pass
 
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 0))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(6))
         )
 
         #expect(
@@ -735,8 +706,6 @@ struct ShowOffALittleTests {
     @Test func availableWhenCompletingALongPassWithPriorShortOrLongPass() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -799,11 +768,7 @@ struct ShowOffALittleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare first pass
@@ -832,13 +797,12 @@ struct ShowOffALittleTests {
 
         // Specify first pass
 
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(6))
         )
 
         #expect(
@@ -924,13 +888,12 @@ struct ShowOffALittleTests {
 
         // Specify second pass
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 0))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(

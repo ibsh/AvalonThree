@@ -7,12 +7,17 @@
 
 import Foundation
 
-protocol TrapdoorRandomizing: Sendable {
+public protocol TrapdoorRandomizing {
     func selectRandomTrapdoor(from squares: Set<Square>) -> Square
 }
 
-struct DefaultTrapdoorRandomizer: TrapdoorRandomizing {
-    func selectRandomTrapdoor(from squares: Set<Square>) -> Square {
+public final class DefaultTrapdoorRandomizer {
+    public init() { }
+}
+
+extension DefaultTrapdoorRandomizer: TrapdoorRandomizing {
+
+    public func selectRandomTrapdoor(from squares: Set<Square>) -> Square {
         guard let square = squares.randomElement() else {
             fatalError("No trapdoor squares")
         }

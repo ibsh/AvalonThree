@@ -66,9 +66,7 @@ struct LastChanceTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -123,9 +121,6 @@ struct LastChanceTests {
     @Test func notAvailableWhenEarningAnotherCard() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -187,18 +182,10 @@ struct LastChanceTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -210,7 +197,8 @@ struct LastChanceTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -231,8 +219,6 @@ struct LastChanceTests {
     @Test func availableWhenAtLeastFourPointsBehindAndNoOtherCardClaimed() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -299,16 +285,10 @@ struct LastChanceTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.miss]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -320,7 +300,8 @@ struct LastChanceTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(

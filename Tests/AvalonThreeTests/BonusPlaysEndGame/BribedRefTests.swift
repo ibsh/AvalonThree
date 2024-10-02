@@ -10,9 +10,6 @@ import Testing
 
 struct BribedRefTests {
 
-    private let blockDieRandomizer = BlockDieRandomizerDouble()
-    private let d6Randomizer = D6RandomizerDouble()
-
     private func setup() -> Game {
         Game(
             phase: .active(
@@ -111,12 +108,7 @@ struct BribedRefTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
     }
 

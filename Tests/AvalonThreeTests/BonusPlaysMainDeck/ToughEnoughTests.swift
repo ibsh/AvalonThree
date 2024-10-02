@@ -14,9 +14,6 @@ struct ToughEnoughTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d8Randomizer = D8RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -70,17 +67,10 @@ struct ToughEnoughTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d8: d8Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -92,7 +82,8 @@ struct ToughEnoughTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -110,13 +101,12 @@ struct ToughEnoughTests {
 
         // Use bonus play
 
-        d8Randomizer.nextResults = [4]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionUseToughEnoughBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d8: d8(4))
         )
 
         #expect(
@@ -156,9 +146,6 @@ struct ToughEnoughTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -212,17 +199,10 @@ struct ToughEnoughTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -234,7 +214,8 @@ struct ToughEnoughTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -276,13 +257,12 @@ struct ToughEnoughTests {
 
         // Decline bonus play
 
-        d6Randomizer.nextResults = [4]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionDeclineToughEnoughBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(

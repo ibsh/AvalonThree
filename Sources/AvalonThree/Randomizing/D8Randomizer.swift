@@ -7,22 +7,26 @@
 
 import Foundation
 
-protocol D8Randomizing: DXRandomizing { }
+public protocol D8Randomizing: DXRandomizing { }
 
-struct DefaultD8Randomizer: D8Randomizing {
+public final class DefaultD8Randomizer {
+    public init() { }
+}
 
-    func roll() -> Int {
+extension DefaultD8Randomizer: D8Randomizing {
+
+    public func roll() -> Int {
         guard let result = range.randomElement() else {
             fatalError("No sides on my D8")
         }
         return result
     }
 
-    var range: ClosedRange<Int> {
+    public var range: ClosedRange<Int> {
         TableConstants.d8Range
     }
 
-    var die: Die {
+    public var die: Die {
         .d8
     }
 }

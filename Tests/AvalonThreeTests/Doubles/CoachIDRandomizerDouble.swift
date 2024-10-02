@@ -8,11 +8,19 @@
 import Foundation
 @testable import AvalonThree
 
-final class CoachIDRandomizerDouble: CoachIDRandomizing {
+func coachID(_ nextResults: CoachID...) -> CoachIDRandomizing {
+    CoachIDRandomizerDouble(nextResults)
+}
 
-    var nextResult: CoachID?
+private final class CoachIDRandomizerDouble: CoachIDRandomizing {
+
+    private var nextResults: [CoachID]
+
+    init(_ nextResults: [CoachID]) {
+        self.nextResults = nextResults
+    }
 
     func flipForCoachID() -> CoachID {
-        nextResult ?? DefaultCoachIDRandomizer().flipForCoachID()
+        nextResults.popFirst() ?? DefaultCoachIDRandomizer().flipForCoachID()
     }
 }

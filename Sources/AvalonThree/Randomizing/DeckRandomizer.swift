@@ -7,12 +7,31 @@
 
 import Foundation
 
-protocol DeckRandomizing: Sendable {
+public protocol DeckRandomizing {
     func deal(_ id: ChallengeDeckID) -> [ChallengeCard]
 }
 
-struct DefaultDeckRandomizer: DeckRandomizing {
-    func deal(_ id: ChallengeDeckID) -> [ChallengeCard] {
+public final class DefaultDeckRandomizer {
+
+    public init() { }
+
+    private func combine(
+        challenges: [Challenge],
+        bonusPlays: [BonusPlay]
+    ) -> [ChallengeCard] {
+        zip(challenges, bonusPlays)
+            .map {
+                ChallengeCard(
+                    challenge: $0,
+                    bonusPlay: $1
+                )
+            }
+    }
+}
+
+extension DefaultDeckRandomizer: DeckRandomizing {
+
+    public func deal(_ id: ChallengeDeckID) -> [ChallengeCard] {
         switch id {
         case .shortStandard:
             ChallengeCard.standardShortDeck.shuffled()
@@ -43,18 +62,5 @@ struct DefaultDeckRandomizer: DeckRandomizing {
             )
             .prefix(6)
         }
-    }
-
-    private func combine(
-        challenges: [Challenge],
-        bonusPlays: [BonusPlay]
-    ) -> [ChallengeCard] {
-        zip(challenges, bonusPlays)
-            .map {
-                ChallengeCard(
-                    challenge: $0,
-                    bonusPlay: $1
-                )
-            }
     }
 }

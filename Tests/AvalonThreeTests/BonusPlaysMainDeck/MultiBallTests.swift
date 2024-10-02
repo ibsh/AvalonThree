@@ -14,12 +14,6 @@ struct MultiBallTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-        let trapdoorRandomizer = TrapdoorRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
         var game = Game(
             phase: .active(
                 Table(
@@ -81,20 +75,10 @@ struct MultiBallTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer,
-                trapdoor: trapdoorRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -106,7 +90,8 @@ struct MultiBallTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -125,20 +110,16 @@ struct MultiBallTests {
 
         // Claim objective
 
-        trapdoorRandomizer.nextResults = [
-            sq(5, 5),
-            sq(5, 9),
-        ]
-
-        directionRandomizer.nextResults = [.south, .northEast]
-
-        ballIDProvider.nextResults = [456, 789]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
-            )
+            ),
+            randomizers: Randomizers(
+                direction: direction(.south, .northEast),
+                trapdoor: trapdoor(sq(5, 5), sq(5, 9))
+            ),
+            ballIDProvider: ballID(456, 789)
         )
 
         #expect(
@@ -228,12 +209,6 @@ struct MultiBallTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-        let trapdoorRandomizer = TrapdoorRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
         var game = Game(
             phase: .active(
                 Table(
@@ -295,20 +270,10 @@ struct MultiBallTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer,
-                trapdoor: trapdoorRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -320,7 +285,8 @@ struct MultiBallTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -339,20 +305,16 @@ struct MultiBallTests {
 
         // Claim objective
 
-        trapdoorRandomizer.nextResults = [
-            sq(5, 9),
-            sq(5, 5),
-        ]
-
-        directionRandomizer.nextResults = [.south, .northEast]
-
-        ballIDProvider.nextResults = [456, 789]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
-            )
+            ),
+            randomizers: Randomizers(
+                direction: direction(.south, .northEast),
+                trapdoor: trapdoor(sq(5, 5), sq(5, 9))
+            ),
+            ballIDProvider: ballID(456, 789)
         )
 
         #expect(
@@ -381,12 +343,6 @@ struct MultiBallTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-        let trapdoorRandomizer = TrapdoorRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
         var game = Game(
             phase: .active(
                 Table(
@@ -454,20 +410,10 @@ struct MultiBallTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer,
-                trapdoor: trapdoorRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -479,7 +425,8 @@ struct MultiBallTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -498,20 +445,16 @@ struct MultiBallTests {
 
         // Claim objective
 
-        trapdoorRandomizer.nextResults = [
-            sq(5, 5),
-            sq(5, 5),
-        ]
-
-        directionRandomizer.nextResults = [.south, .northEast]
-
-        ballIDProvider.nextResults = [456, 789]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
-            )
+            ),
+            randomizers: Randomizers(
+                direction: direction(.south, .northEast),
+                trapdoor: trapdoor(sq(5, 5), sq(5, 9))
+            ),
+            ballIDProvider: ballID(456, 789)
         )
 
         #expect(
@@ -541,12 +484,6 @@ struct MultiBallTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-        let trapdoorRandomizer = TrapdoorRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
         var game = Game(
             phase: .active(
                 Table(
@@ -608,20 +545,10 @@ struct MultiBallTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer,
-                trapdoor: trapdoorRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -633,7 +560,8 @@ struct MultiBallTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -652,22 +580,16 @@ struct MultiBallTests {
 
         // Claim objective
 
-        trapdoorRandomizer.nextResults = [
-            sq(5, 5),
-            sq(5, 9),
-        ]
-
-        directionRandomizer.nextResults = [.south, .northEast]
-
-        let firstNewBallID = 123
-        let secondNewBallID = 123
-        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
-            )
+            ),
+            randomizers: Randomizers(
+                direction: direction(.south, .northEast),
+                trapdoor: trapdoor(sq(5, 5), sq(5, 9))
+            ),
+            ballIDProvider: ballID(123, 456)
         )
 
         #expect(
@@ -697,12 +619,6 @@ struct MultiBallTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-        let trapdoorRandomizer = TrapdoorRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
         var game = Game(
             phase: .active(
                 Table(
@@ -770,20 +686,10 @@ struct MultiBallTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer,
-                trapdoor: trapdoorRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -795,7 +701,8 @@ struct MultiBallTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -814,22 +721,16 @@ struct MultiBallTests {
 
         // Claim objective
 
-        trapdoorRandomizer.nextResults = [
-            sq(5, 5),
-            sq(5, 5),
-        ]
-
-        directionRandomizer.nextResults = [.south, .northEast]
-
-        let firstNewBallID = 123
-        let secondNewBallID = 123
-        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
-            )
+            ),
+            randomizers: Randomizers(
+                direction: direction(.south, .northEast),
+                trapdoor: trapdoor(sq(5, 5), sq(5, 5))
+            ),
+            ballIDProvider: ballID(123, 456)
         )
 
         #expect(
@@ -861,12 +762,6 @@ struct MultiBallTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-        let trapdoorRandomizer = TrapdoorRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
         var game = Game(
             phase: .active(
                 Table(
@@ -940,20 +835,10 @@ struct MultiBallTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer,
-                trapdoor: trapdoorRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -965,7 +850,8 @@ struct MultiBallTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -984,26 +870,16 @@ struct MultiBallTests {
 
         // Claim objective
 
-        trapdoorRandomizer.nextResults = [
-            sq(5, 5),
-            sq(5, 5),
-        ]
-
-        directionRandomizer.nextResults = [
-            .east,
-            .west,
-            .southEast,
-        ]
-
-        let firstNewBallID = 123
-        let secondNewBallID = 123
-        ballIDProvider.nextResults = [firstNewBallID, secondNewBallID]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .second)
-            )
+            ),
+            randomizers: Randomizers(
+                direction: direction(.east, .west, .southEast),
+                trapdoor: trapdoor(sq(5, 5), sq(5, 5))
+            ),
+            ballIDProvider: ballID(123, 456)
         )
 
         #expect(

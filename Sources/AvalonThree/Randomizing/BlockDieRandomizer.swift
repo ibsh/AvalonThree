@@ -7,23 +7,28 @@
 
 import Foundation
 
-protocol BlockDieRandomizing: Sendable {
+public protocol BlockDieRandomizing {
     func rollBlockDie() -> BlockDieResult
 }
 
-struct DefaultBlockDieRandomizer: BlockDieRandomizing {
+public final class DefaultBlockDieRandomizer {
 
     private static let BlockDieFaces: Set<BlockDieResult> =
-        [
-            .miss,
-            .shove,
-            .shove,
-            .tackle,
-            .smash,
-            .kerrunch,
-        ]
+    [
+        .miss,
+        .shove,
+        .shove,
+        .tackle,
+        .smash,
+        .kerrunch,
+    ]
 
-    func rollBlockDie() -> BlockDieResult {
+    public init() { }
+}
+
+extension DefaultBlockDieRandomizer: BlockDieRandomizing {
+
+    public func rollBlockDie() -> BlockDieResult {
         guard let result = DefaultBlockDieRandomizer.BlockDieFaces.randomElement() else {
             fatalError("No sides on my block die")
         }

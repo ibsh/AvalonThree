@@ -70,9 +70,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -153,9 +151,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -236,9 +232,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -326,9 +320,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -409,9 +401,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -492,9 +482,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -575,9 +563,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -658,9 +644,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -740,9 +724,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
         #expect(throws: GameError("No matching declaration")) {
             try game.process(
@@ -820,9 +802,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -1084,9 +1064,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -1347,9 +1325,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -1548,8 +1524,6 @@ struct HurlTeammateTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1612,11 +1586,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -1799,15 +1769,14 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
                     targetSquare: sq(2, 6)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -1841,8 +1810,6 @@ struct HurlTeammateTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1905,11 +1872,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -2092,13 +2055,12 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -2131,8 +2093,6 @@ struct HurlTeammateTests {
     @Test func longDistanceModifiesRoll() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -2210,11 +2170,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -2397,15 +2353,14 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
                     targetSquare: sq(3, 11)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -2445,8 +2400,6 @@ struct HurlTeammateTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -2517,11 +2470,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -2704,13 +2653,12 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(0, 4))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -2749,8 +2697,6 @@ struct HurlTeammateTests {
     @Test func markedIntermediateSquareModifiesRoll() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -2822,11 +2768,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -3009,15 +2951,14 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
                     targetSquare: sq(4, 10)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -3056,8 +2997,6 @@ struct HurlTeammateTests {
     @Test func markedTargetSquareDoesNotModifyRoll() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -3121,11 +3060,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -3308,15 +3243,14 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
                     targetSquare: sq(4, 10)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -3349,8 +3283,6 @@ struct HurlTeammateTests {
     @Test func twoOrMoreModifiersOnlyModifyOnce() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -3422,11 +3354,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -3532,15 +3460,14 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
                     targetSquare: sq(3, 8)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -3581,9 +3508,6 @@ struct HurlTeammateTests {
     @Test func canFumbleTeammate() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -3647,12 +3571,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -3835,14 +3754,12 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [1]
-        directionRandomizer.nextResults = [.west]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(1), direction: direction(.west))
         )
 
         #expect(
@@ -3885,9 +3802,6 @@ struct HurlTeammateTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -3950,12 +3864,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -4138,14 +4047,12 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [3]
-        directionRandomizer.nextResults = [.west]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3), direction: direction(.west))
         )
 
         #expect(
@@ -4189,9 +4096,6 @@ struct HurlTeammateTests {
     @Test func canHurlOntoABall() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -4259,12 +4163,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -4447,14 +4346,12 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [3]
-        directionRandomizer.nextResults = [.east, .east, .south]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3), direction: direction(.east, .east, .south))
         )
 
         #expect(
@@ -4518,8 +4415,6 @@ struct HurlTeammateTests {
     @Test func promptedForTeammateIfMoreThanOneIsEligible() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -4589,11 +4484,7 @@ struct HurlTeammateTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -4804,15 +4695,14 @@ struct HurlTeammateTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
                     targetSquare: sq(4, 10)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(

@@ -14,8 +14,6 @@ struct HailMaryPassTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -74,11 +72,7 @@ struct HailMaryPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Try to declare pass without bonus play
@@ -125,15 +119,14 @@ struct HailMaryPassTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [4]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
                     target: pl(.away, 1)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -183,9 +176,6 @@ struct HailMaryPassTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -244,12 +234,7 @@ struct HailMaryPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -279,16 +264,14 @@ struct HailMaryPassTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [3]
-        directionRandomizer.nextResults = [.south]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
                     target: pl(.away, 1)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3), direction: direction(.south))
         )
 
         #expect(
@@ -349,9 +332,6 @@ struct HailMaryPassTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -410,12 +390,7 @@ struct HailMaryPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -445,16 +420,14 @@ struct HailMaryPassTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [2]
-        directionRandomizer.nextResults = [.south]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
                     target: pl(.away, 1)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2), direction: direction(.south))
         )
 
         #expect(
@@ -508,8 +481,6 @@ struct HailMaryPassTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -568,11 +539,7 @@ struct HailMaryPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -617,15 +584,14 @@ struct HailMaryPassTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [3]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
                     target: pl(.away, 1)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3))
         )
 
         #expect(
@@ -643,8 +609,6 @@ struct HailMaryPassTests {
     @Test func usedSuccessfullyPostDeclarationForAReallyEasyPass() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -704,11 +668,7 @@ struct HailMaryPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -755,15 +715,14 @@ struct HailMaryPassTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [4]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
                     target: pl(.away, 1)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -807,9 +766,6 @@ struct HailMaryPassTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -868,12 +824,7 @@ struct HailMaryPassTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -920,16 +871,14 @@ struct HailMaryPassTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [3]
-        directionRandomizer.nextResults = [.south]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
                     target: pl(.away, 1)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3), direction: direction(.south))
         )
 
         #expect(

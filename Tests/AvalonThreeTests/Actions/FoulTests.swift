@@ -14,8 +14,6 @@ struct FoulTests {
 
         // Init
 
-        let foulDieRandomizer = FoulDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -72,16 +70,10 @@ struct FoulTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                foulDie: foulDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare foul
-
-        foulDieRandomizer.nextResults = [.gotThem]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -93,7 +85,8 @@ struct FoulTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(foulDie: foul(.gotThem))
         )
 
         #expect(
@@ -146,8 +139,6 @@ struct FoulTests {
     @Test func promptedIfMoreThanOneEligibleTarget() async throws {
 
         // Init
-
-        let foulDieRandomizer = FoulDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -211,11 +202,7 @@ struct FoulTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                foulDie: foulDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare foul
@@ -262,13 +249,12 @@ struct FoulTests {
 
         // Specify foul
 
-        foulDieRandomizer.nextResults = [.gotThem]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .foulActionSpecifyTarget(target: pl(.home, 0))
-            )
+            ),
+            randomizers: Randomizers(foulDie: foul(.gotThem))
         )
 
         #expect(

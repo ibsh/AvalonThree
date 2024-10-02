@@ -14,9 +14,6 @@ struct CauseSomeCarnageTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -85,18 +82,10 @@ struct CauseSomeCarnageTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare first block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [1]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -108,7 +97,8 @@ struct CauseSomeCarnageTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(1))
         )
 
         #expect(
@@ -126,11 +116,7 @@ struct CauseSomeCarnageTests {
         #expect(latestPrompt?.coachID == .away)
         #expect(latestPrompt?.payload.case == .declarePlayerAction)
 
-
         // Declare second block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [5]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -142,7 +128,8 @@ struct CauseSomeCarnageTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(5))
         )
 
         #expect(
@@ -165,9 +152,6 @@ struct CauseSomeCarnageTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -236,17 +220,10 @@ struct CauseSomeCarnageTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare first block
-
-        blockDieRandomizer.nextResults = [.miss]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -258,7 +235,8 @@ struct CauseSomeCarnageTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(
@@ -276,9 +254,6 @@ struct CauseSomeCarnageTests {
 
         // Declare second block
 
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -289,7 +264,8 @@ struct CauseSomeCarnageTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(5))
         )
 
         #expect(
@@ -312,9 +288,6 @@ struct CauseSomeCarnageTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -383,18 +356,10 @@ struct CauseSomeCarnageTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare first block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [5]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -406,7 +371,8 @@ struct CauseSomeCarnageTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(5))
         )
 
         #expect(
@@ -426,9 +392,6 @@ struct CauseSomeCarnageTests {
 
         // Declare second block
 
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [1]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -439,7 +402,8 @@ struct CauseSomeCarnageTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(1))
         )
 
         #expect(

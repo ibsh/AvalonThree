@@ -14,9 +14,6 @@ struct DefensivePlayTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -90,12 +87,7 @@ struct DefensivePlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare first run
@@ -264,8 +256,6 @@ struct DefensivePlayTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.kerrunch, .smash]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -276,7 +266,8 @@ struct DefensivePlayTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch, .smash))
         )
 
         #expect(
@@ -303,9 +294,6 @@ struct DefensivePlayTests {
     @Test func notAppliedIfDeclined() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -380,12 +368,7 @@ struct DefensivePlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare first run
@@ -553,8 +536,6 @@ struct DefensivePlayTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -565,7 +546,8 @@ struct DefensivePlayTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(
@@ -608,9 +590,6 @@ struct DefensivePlayTests {
     @Test func noLongerAppliedToSubsequentTurn() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -687,12 +666,7 @@ struct DefensivePlayTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare first run
@@ -863,8 +837,6 @@ struct DefensivePlayTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.miss, .miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -875,7 +847,8 @@ struct DefensivePlayTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss, .miss))
         )
 
         #expect(
@@ -1177,9 +1150,6 @@ struct DefensivePlayTests {
 
         // Declare (final!) block
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [3]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -1190,7 +1160,8 @@ struct DefensivePlayTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(3))
         )
 
         #expect(
@@ -1239,9 +1210,6 @@ struct DefensivePlayTests {
     @Test func canEarnGangUp() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1300,12 +1268,7 @@ struct DefensivePlayTests {
             previousPrompt: Prompt(
                 coachID: .away,
                 payload: .eligibleForDefensivePlayBonusPlay
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Use bonus play
@@ -1331,8 +1294,6 @@ struct DefensivePlayTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.kerrunch, .smash]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -1343,7 +1304,8 @@ struct DefensivePlayTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch, .smash))
         )
 
         #expect(
@@ -1358,13 +1320,12 @@ struct DefensivePlayTests {
 
         // Choose block result
 
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .kerrunch)
-            )
+            ),
+            randomizers: Randomizers(d6: d6(6))
         )
 
         #expect(

@@ -14,8 +14,6 @@ struct HandlingSkillsTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -69,16 +67,10 @@ struct HandlingSkillsTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.shove]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -90,7 +82,8 @@ struct HandlingSkillsTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove))
         )
 
         #expect(

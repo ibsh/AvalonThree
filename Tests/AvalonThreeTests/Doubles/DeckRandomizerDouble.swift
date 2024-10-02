@@ -8,9 +8,17 @@
 import Foundation
 @testable import AvalonThree
 
-final class DeckRandomizerDouble: DeckRandomizing {
+func deck(_ nextResult: [ChallengeCard]?) -> DeckRandomizing {
+    DeckRandomizerDouble(nextResult)
+}
 
-    var nextResult: [ChallengeCard]?
+private final class DeckRandomizerDouble: DeckRandomizing {
+
+    private var nextResult: [ChallengeCard]?
+
+    init(_ nextResult: [ChallengeCard]?) {
+        self.nextResult = nextResult
+    }
 
     func deal(_ id: ChallengeDeckID) -> [ChallengeCard] {
         nextResult ?? DefaultDeckRandomizer().deal(id)

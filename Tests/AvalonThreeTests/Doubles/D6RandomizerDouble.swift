@@ -8,9 +8,17 @@
 import Foundation
 @testable import AvalonThree
 
-final class D6RandomizerDouble: D6Randomizing {
+func d6(_ nextResults: Int...) -> D6Randomizing {
+    D6RandomizerDouble(nextResults)
+}
 
-    var nextResults: [Int] = []
+private final class D6RandomizerDouble: D6Randomizing {
+
+    private var nextResults: [Int]
+
+    init(_ nextResults: [Int]) {
+        self.nextResults = nextResults
+    }
 
     func roll() -> Int {
         nextResults.popFirst() ?? DefaultD6Randomizer().roll()

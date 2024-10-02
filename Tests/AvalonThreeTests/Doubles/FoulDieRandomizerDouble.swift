@@ -8,9 +8,17 @@
 import Foundation
 @testable import AvalonThree
 
-final class FoulDieRandomizerDouble: FoulDieRandomizing {
+func foul(_ nextResults: FoulDieResult...) -> FoulDieRandomizing {
+    FoulDieRandomizerDouble(nextResults)
+}
 
-    var nextResults: [FoulDieResult] = []
+private final class FoulDieRandomizerDouble: FoulDieRandomizing {
+
+    private var nextResults: [FoulDieResult]
+
+    init(_ nextResults: [FoulDieResult]) {
+        self.nextResults = nextResults
+    }
 
     func rollFoulDie() -> FoulDieResult {
         nextResults.popFirst() ?? DefaultFoulDieRandomizer().rollFoulDie()

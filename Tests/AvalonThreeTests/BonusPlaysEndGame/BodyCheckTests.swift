@@ -10,9 +10,6 @@ import Testing
 
 struct BodyCheckTests {
 
-    private let blockDieRandomizer = BlockDieRandomizerDouble()
-    private let d6Randomizer = D6RandomizerDouble()
-
     private func setup() -> Game {
         Game(
             phase: .active(
@@ -67,12 +64,7 @@ struct BodyCheckTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
     }
 
@@ -108,13 +100,12 @@ struct BodyCheckTests {
 
         // Use bonus play
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseBodyCheckBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -200,14 +191,12 @@ struct BodyCheckTests {
 
         // Decline bonus play
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineBodyCheckBonusPlay
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(5))
         )
 
         #expect(

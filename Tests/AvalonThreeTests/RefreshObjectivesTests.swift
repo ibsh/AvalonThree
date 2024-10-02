@@ -14,10 +14,6 @@ struct RefreshObjectivesTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let foulDieRandomizer = FoulDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -105,13 +101,7 @@ struct RefreshObjectivesTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                foulDie: foulDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -238,9 +228,6 @@ struct RefreshObjectivesTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -251,7 +238,8 @@ struct RefreshObjectivesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -367,8 +355,6 @@ struct RefreshObjectivesTests {
 
         // Declare foul
 
-        foulDieRandomizer.nextResults = [.spotted]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -379,7 +365,8 @@ struct RefreshObjectivesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(foulDie: foul(.spotted))
         )
 
         #expect(
@@ -490,10 +477,6 @@ struct RefreshObjectivesTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let foulDieRandomizer = FoulDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -577,13 +560,7 @@ struct RefreshObjectivesTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                foulDie: foulDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -710,9 +687,6 @@ struct RefreshObjectivesTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -723,7 +697,8 @@ struct RefreshObjectivesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -791,8 +766,6 @@ struct RefreshObjectivesTests {
 
         // Declare foul
 
-        foulDieRandomizer.nextResults = [.spotted]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -803,7 +776,8 @@ struct RefreshObjectivesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(foulDie: foul(.spotted))
         )
 
         #expect(
@@ -981,10 +955,6 @@ struct RefreshObjectivesTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let foulDieRandomizer = FoulDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1072,13 +1042,7 @@ struct RefreshObjectivesTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                foulDie: foulDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -1205,9 +1169,6 @@ struct RefreshObjectivesTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -1218,7 +1179,8 @@ struct RefreshObjectivesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
         )
 
         #expect(
@@ -1286,8 +1248,6 @@ struct RefreshObjectivesTests {
 
         // Declare foul
 
-        foulDieRandomizer.nextResults = [.spotted]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -1298,7 +1258,8 @@ struct RefreshObjectivesTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(foulDie: foul(.spotted))
         )
 
         #expect(

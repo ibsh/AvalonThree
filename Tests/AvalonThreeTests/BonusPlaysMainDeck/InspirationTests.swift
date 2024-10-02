@@ -138,9 +138,7 @@ struct InspirationTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -427,9 +425,7 @@ struct InspirationTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -753,9 +749,7 @@ struct InspirationTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -949,9 +943,6 @@ struct InspirationTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1076,12 +1067,7 @@ struct InspirationTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -1246,16 +1232,14 @@ struct InspirationTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [2]
-        directionRandomizer.nextResults = [.west]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(
                     target: pl(CoachID.away, 5)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2), direction: direction(.west))
         )
 
         #expect(
@@ -1281,9 +1265,6 @@ struct InspirationTests {
     @Test func takeFreeHurlTeammateAction() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1409,12 +1390,7 @@ struct InspirationTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -1579,16 +1555,14 @@ struct InspirationTests {
 
         // Specify target
 
-        d6Randomizer.nextResults = [4]
-        directionRandomizer.nextResults = [.southEast]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(
                     targetSquare: sq(10, 10)
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4), direction: direction(.southEast))
         )
 
         #expect(
@@ -1615,8 +1589,6 @@ struct InspirationTests {
     @Test func takeFreeFoulAction() async throws {
 
         // Init
-
-        let foulDieRandomizer = FoulDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1742,11 +1714,7 @@ struct InspirationTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                foulDie: foulDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -1887,8 +1855,6 @@ struct InspirationTests {
 
         // Declare free foul
 
-        foulDieRandomizer.nextResults = [.gotThem]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -1898,7 +1864,8 @@ struct InspirationTests {
                         actionID: .foul
                     )
                 )
-            )
+            ),
+            randomizers: Randomizers(foulDie: foul(.gotThem))
         )
 
         #expect(
@@ -1922,8 +1889,6 @@ struct InspirationTests {
     @Test func takeFreeBlockAction() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -2049,11 +2014,7 @@ struct InspirationTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -2194,8 +2155,6 @@ struct InspirationTests {
 
         // Declare free block
 
-        blockDieRandomizer.nextResults = [.shove]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -2205,7 +2164,8 @@ struct InspirationTests {
                         actionID: .block
                     )
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove))
         )
 
         #expect(
@@ -2373,9 +2333,7 @@ struct InspirationTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -2689,9 +2647,7 @@ struct InspirationTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -2988,9 +2944,7 @@ struct InspirationTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark

@@ -10,9 +10,6 @@ import Testing
 
 struct AbsolutelyNailsTests {
 
-    private let blockDieRandomizer = BlockDieRandomizerDouble()
-    private let d6Randomizer = D6RandomizerDouble()
-
     private func setup() -> Game {
         Game(
             phase: .active(
@@ -70,12 +67,7 @@ struct AbsolutelyNailsTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
     }
 
@@ -87,8 +79,6 @@ struct AbsolutelyNailsTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -99,7 +89,8 @@ struct AbsolutelyNailsTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -117,13 +108,12 @@ struct AbsolutelyNailsTests {
 
         // Use bonus play
 
-        d6Randomizer.nextResults = [2]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionUseAbsolutelyNailsBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2))
         )
 
         #expect(
@@ -147,8 +137,6 @@ struct AbsolutelyNailsTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -159,7 +147,8 @@ struct AbsolutelyNailsTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -209,13 +198,12 @@ struct AbsolutelyNailsTests {
 
         // Decline bonus play
 
-        d6Randomizer.nextResults = [2]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineAbsoluteCarnageBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2))
         )
 
         #expect(

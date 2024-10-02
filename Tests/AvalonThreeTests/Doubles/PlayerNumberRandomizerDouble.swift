@@ -8,11 +8,19 @@
 import Foundation
 @testable import AvalonThree
 
-final class PlayerNumberRandomizerDouble: PlayerNumberRandomizing {
+func playerNumber(_ nextResults: Int...) -> PlayerNumberRandomizing {
+    PlayerNumberRandomizerDouble(nextResults)
+}
 
-    var nextResults: [[Int]] = []
+private final class PlayerNumberRandomizerDouble: PlayerNumberRandomizing {
 
-    func getPlayerNumbers(count: Int) -> [Int] {
-        nextResults.popFirst() ?? DefaultPlayerNumberRandomizer().getPlayerNumbers(count: count)
+    var nextResults: [Int]
+
+    init(_ nextResults: [Int]) {
+        self.nextResults = nextResults
+    }
+
+    func generate() -> Int {
+        nextResults.popFirst() ?? DefaultPlayerNumberRandomizer().generate()
     }
 }

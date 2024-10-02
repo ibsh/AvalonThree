@@ -14,9 +14,6 @@ struct TheKidsGotMoxyTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -70,12 +67,7 @@ struct TheKidsGotMoxyTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
@@ -104,14 +96,12 @@ struct TheKidsGotMoxyTests {
 
         // Use bonus play
 
-        blockDieRandomizer.nextResults = [.miss, .kerrunch, .shove]
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseTheKidsGotMoxyBonusPlay
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss, .kerrunch, .shove))
         )
 
         #expect(
@@ -130,7 +120,8 @@ struct TheKidsGotMoxyTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .kerrunch)
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -185,9 +176,6 @@ struct TheKidsGotMoxyTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -241,12 +229,7 @@ struct TheKidsGotMoxyTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
@@ -275,14 +258,12 @@ struct TheKidsGotMoxyTests {
 
         // Decline bonus play
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineTheKidsGotMoxyBonusPlay
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(5))
         )
 
         #expect(

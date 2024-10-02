@@ -14,9 +14,6 @@ struct OffensiveSpecialistTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -74,17 +71,10 @@ struct OffensiveSpecialistTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch, .miss]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -96,7 +86,8 @@ struct OffensiveSpecialistTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch, .miss))
         )
 
         #expect(
@@ -114,13 +105,12 @@ struct OffensiveSpecialistTests {
 
         // Choose block result rather than reroll
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineOffensiveSpecialistSkillReroll(result: .kerrunch)
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -143,9 +133,6 @@ struct OffensiveSpecialistTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -203,17 +190,10 @@ struct OffensiveSpecialistTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.shove, .miss]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -225,7 +205,8 @@ struct OffensiveSpecialistTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove, .miss))
         )
 
         #expect(
@@ -243,13 +224,12 @@ struct OffensiveSpecialistTests {
 
         // Choose to reroll
 
-        blockDieRandomizer.nextResults = [.smash, .miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash, .miss))
         )
 
         #expect(
@@ -264,13 +244,12 @@ struct OffensiveSpecialistTests {
 
         // Choose block result
 
-        d6Randomizer.nextResults = [3]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .smash)
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3))
         )
 
         #expect(

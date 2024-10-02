@@ -14,10 +14,6 @@ struct BomberTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -86,18 +82,10 @@ struct BomberTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.miss, .kerrunch]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -109,7 +97,8 @@ struct BomberTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss, .kerrunch))
         )
 
         #expect(
@@ -124,14 +113,12 @@ struct BomberTests {
 
         // Choose block result
 
-        d6Randomizer.nextResults = [4]
-        directionRandomizer.nextResults = [.southEast]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .kerrunch)
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4), direction: direction(.southEast))
         )
 
         #expect(
@@ -256,9 +243,7 @@ struct BomberTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
@@ -282,10 +267,6 @@ struct BomberTests {
     @Test func bomberHurlingBomb() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -361,13 +342,7 @@ struct BomberTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
@@ -396,15 +371,12 @@ struct BomberTests {
 
         // Specify block
 
-        blockDieRandomizer.nextResults = [.smash]
-        d6Randomizer.nextResults = [2]
-        directionRandomizer.nextResults = [.north]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSpecifyTarget(target: pl(.home, 0))
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash), d6: d6(2), direction: direction(.north))
         )
 
         #expect(
@@ -450,10 +422,6 @@ struct BomberTests {
     @Test func whenHurlingBombShoveBecomesMiss() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -523,20 +491,10 @@ struct BomberTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.shove]
-        d6Randomizer.nextResults = [2]
-        directionRandomizer.nextResults = [.north]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -548,7 +506,8 @@ struct BomberTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove), d6: d6(2), direction: direction(.north))
         )
 
         #expect(

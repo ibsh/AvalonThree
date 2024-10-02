@@ -14,9 +14,6 @@ struct ShoulderChargeTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -75,12 +72,7 @@ struct ShoulderChargeTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -131,14 +123,12 @@ struct ShoulderChargeTests {
 
         // Take free block
 
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [3]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useShoulderChargeBonusPlayBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(3))
         )
 
         #expect(
@@ -223,9 +213,7 @@ struct ShoulderChargeTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark

@@ -7,15 +7,19 @@
 
 import Foundation
 
-protocol BallIDProviding: Sendable {
+public protocol BallIDProviding {
     func generate() -> Int
 }
 
-final class DefaultBallIDProvider: BallIDProviding {
+public final class DefaultBallIDProvider {
 
     private var nextValue = 1
 
-    func generate() -> Int {
+    public init() { }
+}
+
+extension DefaultBallIDProvider: BallIDProviding {
+    public func generate() -> Int {
         let result = nextValue
         nextValue += 1
         return result

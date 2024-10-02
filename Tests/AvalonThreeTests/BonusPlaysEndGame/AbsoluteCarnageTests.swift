@@ -10,9 +10,6 @@ import Testing
 
 struct AbsoluteCarnageTests {
 
-    private let blockDieRandomizer = BlockDieRandomizerDouble()
-    private let d6Randomizer = D6RandomizerDouble()
-
     private func setup() -> Game {
         Game(
             phase: .active(
@@ -67,12 +64,7 @@ struct AbsoluteCarnageTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
     }
 
@@ -84,8 +76,6 @@ struct AbsoluteCarnageTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -96,7 +86,8 @@ struct AbsoluteCarnageTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -114,13 +105,12 @@ struct AbsoluteCarnageTests {
 
         // Use bonus play
 
-        d6Randomizer.nextResults = [6]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseAbsoluteCarnageBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(6))
         )
 
         #expect(
@@ -144,8 +134,6 @@ struct AbsoluteCarnageTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -156,7 +144,8 @@ struct AbsoluteCarnageTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         #expect(
@@ -174,13 +163,12 @@ struct AbsoluteCarnageTests {
 
         // Use bonus play
 
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseAbsoluteCarnageBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -205,8 +193,6 @@ struct AbsoluteCarnageTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.smash]
-
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -217,18 +203,18 @@ struct AbsoluteCarnageTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         // Decline bonus play
-
-        d6Randomizer.nextResults = [5]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineAbsoluteCarnageBonusPlay
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(

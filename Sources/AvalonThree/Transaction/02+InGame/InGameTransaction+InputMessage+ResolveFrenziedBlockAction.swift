@@ -44,7 +44,7 @@ extension InGameTransaction {
             )
 
         } else {
-            
+
             guard let playerSquare = table.getPlayer(id: playerID)?.square else {
                 throw GameError("Player is in reserves")
             }

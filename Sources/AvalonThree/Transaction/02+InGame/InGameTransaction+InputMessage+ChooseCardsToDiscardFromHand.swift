@@ -30,7 +30,6 @@ extension InGameTransaction {
 
         var newHand = hand
 
-
         for card in cards {
             _ = newHand.removeFirst(where: { $0 == card })
             events.append(

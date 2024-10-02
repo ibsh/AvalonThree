@@ -14,10 +14,6 @@ struct GetInThereTests {
 
         // Init
 
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -98,11 +94,7 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare run
@@ -131,9 +123,6 @@ struct GetInThereTests {
 
         // Specify run
 
-        ballIDProvider.nextResults = [456]
-        directionRandomizer.nextResults = [.northWest]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -143,7 +132,9 @@ struct GetInThereTests {
                         sq(5, 14),
                     ]
                 )
-            )
+            ),
+            randomizers: Randomizers(direction: direction(.northWest)),
+            ballIDProvider: ballID(456)
         )
 
         #expect(
@@ -208,10 +199,6 @@ struct GetInThereTests {
 
         // Init
 
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -292,11 +279,7 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare run
@@ -325,9 +308,6 @@ struct GetInThereTests {
 
         // Specify run
 
-        ballIDProvider.nextResults = [456]
-        directionRandomizer.nextResults = [.northWest]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -337,7 +317,9 @@ struct GetInThereTests {
                         sq(5, 14),
                     ]
                 )
-            )
+            ),
+            randomizers: Randomizers(direction: direction(.northWest)),
+            ballIDProvider: ballID(456)
         )
 
         #expect(
@@ -379,10 +361,6 @@ struct GetInThereTests {
     @Test func usedAfterFallingThroughTrapdoorAtBeginningOfOpponentsTurn() async throws {
 
         // Init
-
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
 
         var game = Game(
             phase: .active(
@@ -464,11 +442,7 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare run
@@ -497,9 +471,6 @@ struct GetInThereTests {
 
         // Specify run
 
-        ballIDProvider.nextResults = [456]
-        directionRandomizer.nextResults = [.northWest]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -509,7 +480,9 @@ struct GetInThereTests {
                         sq(5, 14),
                     ]
                 )
-            )
+            ),
+            randomizers: Randomizers(direction: direction(.northWest)),
+            ballIDProvider: ballID(456)
         )
 
         #expect(
@@ -574,10 +547,6 @@ struct GetInThereTests {
 
         // Init
 
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -658,11 +627,7 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare run
@@ -691,9 +656,6 @@ struct GetInThereTests {
 
         // Specify run
 
-        ballIDProvider.nextResults = [456]
-        directionRandomizer.nextResults = [.northWest]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -703,7 +665,9 @@ struct GetInThereTests {
                         sq(5, 14),
                     ]
                 )
-            )
+            ),
+            randomizers: Randomizers(direction: direction(.northWest)),
+            ballIDProvider: ballID(456)
         )
 
         #expect(
@@ -745,10 +709,6 @@ struct GetInThereTests {
     @Test func usedAfterFallingThroughTrapdoorDuringPlayersTurn() async throws {
 
         // Init
-
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
 
         var game = Game(
             phase: .active(
@@ -835,11 +795,7 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare run
@@ -894,14 +850,13 @@ struct GetInThereTests {
 
         // Claim objective
 
-        ballIDProvider.nextResults = [456, 789]
-        directionRandomizer.nextResults = [.northWest, .east]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
-            )
+            ),
+            randomizers: Randomizers(direction: direction(.northWest, .east)),
+            ballIDProvider: ballID(456, 789)
         )
 
         #expect(
@@ -970,10 +925,6 @@ struct GetInThereTests {
 
         // Init
 
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1059,11 +1010,7 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare run
@@ -1118,14 +1065,13 @@ struct GetInThereTests {
 
         // Claim objective
 
-        ballIDProvider.nextResults = [456, 789]
-        directionRandomizer.nextResults = [.northWest, .east]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
-            )
+            ),
+            randomizers: Randomizers(direction: direction(.northWest, .east)),
+            ballIDProvider: ballID(456, 789)
         )
 
         #expect(
@@ -1172,10 +1118,6 @@ struct GetInThereTests {
 
         // Init
 
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1261,11 +1203,7 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare run
@@ -1318,17 +1256,15 @@ struct GetInThereTests {
         #expect(latestPrompt?.coachID == .away)
         #expect(latestPrompt?.payload.case == .earnedObjective)
 
-
         // Claim objective
-
-        ballIDProvider.nextResults = [456, 789]
-        directionRandomizer.nextResults = [.northWest, .east]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
-            )
+            ),
+            randomizers: Randomizers(direction: direction(.northWest, .east)),
+            ballIDProvider: ballID(456, 789)
         )
 
         #expect(
@@ -1370,7 +1306,6 @@ struct GetInThereTests {
         #expect(latestPrompt?.coachID == .home)
         #expect(latestPrompt?.payload.case == .reservesActionSpecifySquare)
 
-
         // Specify reserves
 
         (latestEvents, latestPrompt) = try game.process(
@@ -1379,7 +1314,6 @@ struct GetInThereTests {
                 message: .reservesActionSpecifySquare(square: sq(3, 14))
             )
         )
-
 
         #expect(
             latestEvents.map { $0.case } == [
@@ -1398,10 +1332,6 @@ struct GetInThereTests {
     @Test func declinedAfterFallingThroughTrapdoorDuringOpponentsTurn() async throws {
 
         // Init
-
-        let directionRandomizer = DirectionRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
 
         var game = Game(
             phase: .active(
@@ -1488,11 +1418,7 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                direction: directionRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            )
         )
 
         // Declare run
@@ -1547,14 +1473,13 @@ struct GetInThereTests {
 
         // Claim objective
 
-        ballIDProvider.nextResults = [456, 789]
-        directionRandomizer.nextResults = [.northWest, .east]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveID: .first)
-            )
+            ),
+            randomizers: Randomizers(direction: direction(.northWest, .east)),
+            ballIDProvider: ballID(456, 789)
         )
 
         #expect(
@@ -1576,7 +1501,6 @@ struct GetInThereTests {
 
         #expect(latestPrompt?.coachID == .home)
         #expect(latestPrompt?.payload.case == .eligibleForGetInThereBonusPlayReservesAction)
-
 
         // Decline bonus play
 
@@ -1601,9 +1525,6 @@ struct GetInThereTests {
     @Test func usedAfterBeingBlocked() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1663,18 +1584,10 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [2]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1686,7 +1599,8 @@ struct GetInThereTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(2))
         )
 
         #expect(
@@ -1714,7 +1628,6 @@ struct GetInThereTests {
             )
         )
 
-
         #expect(
             latestEvents.map { $0.case } == [
                 .activatedBonusPlay,
@@ -1724,7 +1637,6 @@ struct GetInThereTests {
 
         #expect(latestPrompt?.coachID == .home)
         #expect(latestPrompt?.payload.case == .reservesActionSpecifySquare)
-
 
         // Specify reserves
 
@@ -1750,9 +1662,6 @@ struct GetInThereTests {
     @Test func declinedAfterBeingBlocked() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1812,18 +1721,10 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [2]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1835,9 +1736,9 @@ struct GetInThereTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(2))
         )
-
 
         #expect(
             latestEvents.map { $0.case } == [
@@ -1875,8 +1776,6 @@ struct GetInThereTests {
     @Test func usedAfterBeingFouled() async throws {
 
         // Init
-
-        let foulDieRandomizer = FoulDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1936,16 +1835,10 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                foulDie: foulDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare foul
-
-        foulDieRandomizer.nextResults = [.gotThem]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1957,7 +1850,8 @@ struct GetInThereTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(foulDie: foul(.gotThem))
         )
 
         #expect(
@@ -2016,8 +1910,6 @@ struct GetInThereTests {
 
         // Init
 
-        let foulDieRandomizer = FoulDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -2076,16 +1968,10 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
-            ),
-            randomizers: Randomizers(
-                foulDie: foulDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare foul
-
-        foulDieRandomizer.nextResults = [.gotThem]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -2097,7 +1983,8 @@ struct GetInThereTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(foulDie: foul(.gotThem))
         )
 
         #expect(
@@ -2132,9 +2019,6 @@ struct GetInThereTests {
     @Test func usedAfterBeingFumbled() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -2200,12 +2084,7 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -2234,14 +2113,12 @@ struct GetInThereTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [1]
-        directionRandomizer.nextResults = [.west]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(1), direction: direction(.west))
         )
 
         #expect(
@@ -2302,9 +2179,6 @@ struct GetInThereTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -2369,12 +2243,7 @@ struct GetInThereTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -2403,14 +2272,12 @@ struct GetInThereTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [1]
-        directionRandomizer.nextResults = [.west]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(1), direction: direction(.west))
         )
 
         #expect(

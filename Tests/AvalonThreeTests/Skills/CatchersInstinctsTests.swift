@@ -76,9 +76,7 @@ struct CatchersInstinctsTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare sidestep
@@ -221,8 +219,6 @@ struct CatchersInstinctsTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -285,11 +281,7 @@ struct CatchersInstinctsTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare sidestep
@@ -408,13 +400,12 @@ struct CatchersInstinctsTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [2]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 0))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2))
         )
 
         #expect(
@@ -453,9 +444,6 @@ struct CatchersInstinctsTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -518,12 +506,7 @@ struct CatchersInstinctsTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare sidestep
@@ -642,13 +625,12 @@ struct CatchersInstinctsTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [2]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 0))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(2))
         )
 
         #expect(
@@ -689,8 +671,6 @@ struct CatchersInstinctsTests {
 
         // Specify block
 
-        blockDieRandomizer.nextResults = [.shove]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -698,7 +678,8 @@ struct CatchersInstinctsTests {
                     sq(7, 7),
                     sq(8, 8),
                 ])
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove))
         )
 
         #expect(

@@ -72,9 +72,7 @@ struct DivingTackleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -144,8 +142,6 @@ struct DivingTackleTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -204,11 +200,7 @@ struct DivingTackleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -259,13 +251,12 @@ struct DivingTackleTests {
 
         // Take free block
 
-        blockDieRandomizer.nextResults = [.shove]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useDivingTackleBonusPlayBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove))
         )
 
         #expect(
@@ -307,9 +298,6 @@ struct DivingTackleTests {
     @Test func freeBlockActionKerrunch() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -369,12 +357,7 @@ struct DivingTackleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -425,14 +408,12 @@ struct DivingTackleTests {
 
         // Take free block
 
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [3]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useDivingTackleBonusPlayBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(3))
         )
 
         #expect(
@@ -459,8 +440,6 @@ struct DivingTackleTests {
     @Test func freeBlockActionMiss() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -520,11 +499,7 @@ struct DivingTackleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -575,13 +550,12 @@ struct DivingTackleTests {
 
         // Take free block
 
-        blockDieRandomizer.nextResults = [.miss]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useDivingTackleBonusPlayBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         #expect(
@@ -608,10 +582,6 @@ struct DivingTackleTests {
     @Test func freeBlockActionWhileHoldingABall() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -671,13 +641,7 @@ struct DivingTackleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -728,15 +692,12 @@ struct DivingTackleTests {
 
         // Take free block
 
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [3]
-        directionRandomizer.nextResults = [.south]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useDivingTackleBonusPlayBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(3), direction: direction(.south))
         )
 
         #expect(
@@ -766,10 +727,6 @@ struct DivingTackleTests {
     @Test func safeHandsHasNoEffect() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -829,13 +786,7 @@ struct DivingTackleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -886,15 +837,12 @@ struct DivingTackleTests {
 
         // Take free block
 
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [3]
-        directionRandomizer.nextResults = [.south]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useDivingTackleBonusPlayBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(3), direction: direction(.south))
         )
 
         #expect(
@@ -924,10 +872,6 @@ struct DivingTackleTests {
     @Test func usedWithEnforcer() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -993,13 +937,7 @@ struct DivingTackleTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare mark
@@ -1050,15 +988,12 @@ struct DivingTackleTests {
 
         // Take free block
 
-        blockDieRandomizer.nextResults = [.miss, .smash, .smash]
-        d6Randomizer.nextResults = [2]
-        directionRandomizer.nextResults = [.south]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useDivingTackleBonusPlayBlockAction
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss, .smash, .smash), d6: d6(2), direction: direction(.south))
         )
 
         #expect(

@@ -14,24 +14,10 @@ struct RawTalentTests {
 
         // Init
 
-        let coachIDRandomizer = CoachIDRandomizerDouble()
-        let deckRandomizer = DeckRandomizerDouble()
-        let playerNumberRandomizer = PlayerNumberRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .config(Config()),
-            previousPrompt: nil,
-            randomizers: Randomizers(
-                coachID: coachIDRandomizer,
-                deck: deckRandomizer,
-                playerNumber: playerNumberRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            previousPrompt: nil
         )
-
-        coachIDRandomizer.nextResult = .away
 
         // Begin
 
@@ -39,7 +25,8 @@ struct RawTalentTests {
             InputMessageWrapper(
                 coachID: .home,
                 message: .begin
-            )
+            ),
+            randomizers: Randomizers(coachID: coachID(.away))
         )
 
         // Second coach config
@@ -74,14 +61,14 @@ struct RawTalentTests {
 
         // First coach config
 
-        deckRandomizer.nextResult = Array(ChallengeCard.standardShortDeck.prefix(5))
-
-        playerNumberRandomizer.nextResults = [[2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24]]
-
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .specifyCoinFlipLoserTeam(teamID: .orc)
+            ),
+            randomizers: Randomizers(
+                deck: deck(Array(ChallengeCard.standardShortDeck.prefix(5))),
+                playerNumber: playerNumber(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24)
             )
         )
 
@@ -379,24 +366,10 @@ struct RawTalentTests {
 
         // Init
 
-        let coachIDRandomizer = CoachIDRandomizerDouble()
-        let deckRandomizer = DeckRandomizerDouble()
-        let playerNumberRandomizer = PlayerNumberRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .config(Config()),
-            previousPrompt: nil,
-            randomizers: Randomizers(
-                coachID: coachIDRandomizer,
-                deck: deckRandomizer,
-                playerNumber: playerNumberRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            previousPrompt: nil
         )
-
-        coachIDRandomizer.nextResult = .away
 
         // Begin
 
@@ -404,7 +377,8 @@ struct RawTalentTests {
             InputMessageWrapper(
                 coachID: .home,
                 message: .begin
-            )
+            ),
+            randomizers: Randomizers(coachID: coachID(.away))
         )
 
         // Second coach config
@@ -439,14 +413,14 @@ struct RawTalentTests {
 
         // First coach config
 
-        deckRandomizer.nextResult = Array(ChallengeCard.standardShortDeck.prefix(5))
-
-        playerNumberRandomizer.nextResults = [[2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24]]
-
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .specifyCoinFlipLoserTeam(teamID: .orc)
+            ),
+            randomizers: Randomizers(
+                deck: deck(Array(ChallengeCard.standardShortDeck.prefix(5))),
+                playerNumber: playerNumber(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24)
             )
         )
 
@@ -744,24 +718,10 @@ struct RawTalentTests {
 
         // Init
 
-        let coachIDRandomizer = CoachIDRandomizerDouble()
-        let deckRandomizer = DeckRandomizerDouble()
-        let playerNumberRandomizer = PlayerNumberRandomizerDouble()
-
-        let ballIDProvider = BallIDProviderDouble()
-
         var game = Game(
             phase: .config(Config()),
-            previousPrompt: nil,
-            randomizers: Randomizers(
-                coachID: coachIDRandomizer,
-                deck: deckRandomizer,
-                playerNumber: playerNumberRandomizer
-            ),
-            ballIDProvider: ballIDProvider
+            previousPrompt: nil
         )
-
-        coachIDRandomizer.nextResult = .away
 
         // Begin
 
@@ -769,7 +729,8 @@ struct RawTalentTests {
             InputMessageWrapper(
                 coachID: .home,
                 message: .begin
-            )
+            ),
+            randomizers: Randomizers(coachID: coachID(.away))
         )
 
         // Second coach config
@@ -804,14 +765,14 @@ struct RawTalentTests {
 
         // First coach config
 
-        deckRandomizer.nextResult = Array(ChallengeCard.standardShortDeck.prefix(5))
-
-        playerNumberRandomizer.nextResults = [[2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24]]
-
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .specifyCoinFlipLoserTeam(teamID: .orc)
+            ),
+            randomizers: Randomizers(
+                deck: deck(Array(ChallengeCard.standardShortDeck.prefix(5))),
+                playerNumber: playerNumber(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24)
             )
         )
 
@@ -1100,8 +1061,6 @@ struct RawTalentTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1166,11 +1125,7 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -1190,24 +1145,22 @@ struct RawTalentTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [3]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3))
         )
 
         // Use reroll
-
-        d6Randomizer.nextResults = [4]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionUseRawTalentBonusPlayReroll
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -1268,9 +1221,6 @@ struct RawTalentTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1335,12 +1285,7 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare pass
@@ -1360,24 +1305,23 @@ struct RawTalentTests {
 
         // Specify pass
 
-        d6Randomizer.nextResults = [3]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3))
+
         )
 
         // Decline reroll
-
-        directionRandomizer.nextResults = [.north]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionDeclineRawTalentBonusPlayReroll
-            )
+            ),
+            randomizers: Randomizers(direction: direction(.north))
         )
 
         #expect(
@@ -1415,8 +1359,6 @@ struct RawTalentTests {
     @Test func usedAfterHurlTeammateRoll() async throws {
 
         // Init
-
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1482,11 +1424,7 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -1506,24 +1444,22 @@ struct RawTalentTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [1]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(1))
         )
 
         // Use reroll
-
-        d6Randomizer.nextResults = [5]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionUseRawTalentBonusPlayReroll
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -1576,9 +1512,6 @@ struct RawTalentTests {
 
         // Init
 
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1643,12 +1576,7 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare hurl teammate
@@ -1668,24 +1596,22 @@ struct RawTalentTests {
 
         // Specify target square
 
-        d6Randomizer.nextResults = [1]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
-            )
+            ),
+            randomizers: Randomizers(d6: d6(1))
         )
 
         // Decline reroll
-
-        directionRandomizer.nextResults = [.west]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionDeclineRawTalentBonusPlayReroll
-            )
+            ),
+            randomizers: Randomizers(direction: direction(.west))
         )
 
         #expect(
@@ -1722,8 +1648,6 @@ struct RawTalentTests {
     @Test func usedAfterBlockRoll() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -1783,16 +1707,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.smash]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1804,18 +1722,18 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash))
         )
 
         // Use reroll
-
-        blockDieRandomizer.nextResults = [.shove]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseRawTalentBonusPlayRerollForBlockDieResults
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove))
         )
 
         #expect(
@@ -1882,8 +1800,6 @@ struct RawTalentTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1942,16 +1858,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.miss]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1963,7 +1873,8 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss))
         )
 
         // Decline reroll
@@ -2011,9 +1922,6 @@ struct RawTalentTests {
     @Test func ineligibleAfterDecliningOffensiveSpecialistSkillReroll() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -2074,17 +1982,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch, .miss]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -2096,18 +1997,18 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch, .miss))
         )
 
         // Choose block result rather than reroll
-
-        d6Randomizer.nextResults = [5]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineOffensiveSpecialistSkillReroll(result: .kerrunch)
-            )
+            ),
+            randomizers: Randomizers(d6: d6(5))
         )
 
         #expect(
@@ -2163,9 +2064,6 @@ struct RawTalentTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -2225,17 +2123,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.shove, .miss]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -2247,29 +2138,28 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove, .miss))
         )
 
         // Choose to reroll
-
-        blockDieRandomizer.nextResults = [.smash, .miss]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash, .miss))
         )
 
         // Choose block result
-
-        d6Randomizer.nextResults = [3]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .smash)
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3))
         )
 
         #expect(
@@ -2314,10 +2204,6 @@ struct RawTalentTests {
     @Test func usedWhenBlockingAsEnforcer() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -2383,20 +2269,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.shove, .miss, .shove]
-        d6Randomizer.nextResults = [3, 3]
-        directionRandomizer.nextResults = [.east]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -2408,20 +2284,18 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove, .miss, .shove), d6: d6(3, 3), direction: direction(.east))
         )
 
         // Use reroll
-
-        blockDieRandomizer.nextResults = [.smash, .kerrunch, .smash]
-        d6Randomizer.nextResults = [1]
-        directionRandomizer.nextResults = [.east]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseRawTalentBonusPlayRerollForBlockDieResults
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash, .kerrunch, .smash), d6: d6(1), direction: direction(.east))
         )
 
         #expect(
@@ -2520,10 +2394,6 @@ struct RawTalentTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-        let directionRandomizer = DirectionRandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -2588,20 +2458,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer,
-                direction: directionRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.shove, .miss, .shove]
-        d6Randomizer.nextResults = [3, 3]
-        directionRandomizer.nextResults = [.east]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -2613,19 +2473,18 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove, .miss, .shove), d6: d6(3, 3), direction: direction(.east))
         )
 
         // Decline reroll
-
-        d6Randomizer.nextResults = [3]
-        directionRandomizer.nextResults = [.south]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(result: nil)
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3), direction: direction(.south))
         )
 
         #expect(
@@ -2712,9 +2571,6 @@ struct RawTalentTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -2768,18 +2624,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [5]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -2791,18 +2639,18 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(5))
         )
 
         // Use reroll
-
-        d6Randomizer.nextResults = [6]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseRawTalentBonusPlayRerollForBlockDieResults
-            )
+            ),
+            randomizers: Randomizers(d6: d6(6))
         )
 
         #expect(
@@ -2857,9 +2705,6 @@ struct RawTalentTests {
     @Test func usedWhenBlockingWithMultipleDice() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -2925,17 +2770,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.miss, .tackle, .shove]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -2947,19 +2785,18 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss, .tackle, .shove))
         )
 
         // Use reroll
-
-        blockDieRandomizer.nextResults = [.miss, .miss, .tackle]
-        d6Randomizer.nextResults = [1]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseRawTalentBonusPlayRerollForBlockDieResults
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss, .miss, .tackle))
         )
 
         // Select die
@@ -2968,7 +2805,8 @@ struct RawTalentTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .tackle)
-            )
+            ),
+            randomizers: Randomizers(d6: d6(1))
         )
 
         #expect(
@@ -3014,8 +2852,6 @@ struct RawTalentTests {
     @Test func declinedWhenBlockingWithMultipleDice() async throws {
 
         // Init
-
-        let blockDieRandomizer = BlockDieRandomizerDouble()
 
         var game = Game(
             phase: .active(
@@ -3075,16 +2911,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.miss, .tackle, .shove]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -3096,7 +2926,8 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.miss, .tackle, .shove))
         )
 
         // Decline reroll
@@ -3151,9 +2982,6 @@ struct RawTalentTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -3212,18 +3040,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [2]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -3235,18 +3055,18 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(2))
         )
 
         // Use reroll
-
-        d6Randomizer.nextResults = [4]
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionUseRawTalentBonusPlayRerollForArmourResult
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -3292,9 +3112,6 @@ struct RawTalentTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -3353,18 +3170,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [2]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -3376,7 +3185,8 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(2))
         )
 
         #expect(
@@ -3417,9 +3227,6 @@ struct RawTalentTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -3478,18 +3285,10 @@ struct RawTalentTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch]
-        d6Randomizer.nextResults = [4]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -3501,7 +3300,8 @@ struct RawTalentTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch), d6: d6(4))
         )
 
         #expect(

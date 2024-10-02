@@ -14,9 +14,6 @@ struct WarMachineTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -73,17 +70,10 @@ struct WarMachineTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
-
-        d6Randomizer.nextResults = [4]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -95,7 +85,8 @@ struct WarMachineTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -214,9 +205,6 @@ struct WarMachineTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -273,17 +261,10 @@ struct WarMachineTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
-
-        d6Randomizer.nextResults = [3]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -295,7 +276,8 @@ struct WarMachineTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(3))
         )
 
         #expect(
@@ -414,9 +396,6 @@ struct WarMachineTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -468,17 +447,10 @@ struct WarMachineTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
-
-        d6Randomizer.nextResults = [4]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -490,7 +462,8 @@ struct WarMachineTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -607,9 +580,6 @@ struct WarMachineTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -655,17 +625,10 @@ struct WarMachineTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
-
-        d6Randomizer.nextResults = [4]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -677,7 +640,8 @@ struct WarMachineTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -764,9 +728,6 @@ struct WarMachineTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -818,17 +779,10 @@ struct WarMachineTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
-
-        d6Randomizer.nextResults = [4]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -840,7 +794,8 @@ struct WarMachineTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -927,9 +882,6 @@ struct WarMachineTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -981,17 +933,10 @@ struct WarMachineTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
-
-        d6Randomizer.nextResults = [4]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1003,7 +948,8 @@ struct WarMachineTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -1120,9 +1066,6 @@ struct WarMachineTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1174,17 +1117,10 @@ struct WarMachineTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
-
-        d6Randomizer.nextResults = [4]
 
         var (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1196,7 +1132,8 @@ struct WarMachineTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(d6: d6(4))
         )
 
         #expect(
@@ -1313,9 +1250,6 @@ struct WarMachineTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -1373,18 +1307,10 @@ struct WarMachineTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare block
-
-        blockDieRandomizer.nextResults = [.kerrunch, .tackle, .shove]
-        d6Randomizer.nextResults = [3, 3]
 
         let (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
@@ -1396,7 +1322,8 @@ struct WarMachineTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch, .tackle, .shove), d6: d6(3, 3))
         )
 
         #expect(

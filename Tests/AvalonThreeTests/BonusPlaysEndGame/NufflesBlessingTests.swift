@@ -14,9 +14,6 @@ struct NufflesBlessingTests {
 
         // Init
 
-        let blockDieRandomizer = BlockDieRandomizerDouble()
-        let d6Randomizer = D6RandomizerDouble()
-
         var game = Game(
             phase: .active(
                 Table(
@@ -78,12 +75,7 @@ struct NufflesBlessingTests {
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
-            ),
-            randomizers: Randomizers(
-                blockDie: blockDieRandomizer,
-                d6: d6Randomizer
-            ),
-            ballIDProvider: DefaultBallIDProvider()
+            )
         )
 
         // Declare run
@@ -203,9 +195,6 @@ struct NufflesBlessingTests {
 
         // Declare block
 
-        blockDieRandomizer.nextResults = [.kerrunch, .kerrunch]
-        d6Randomizer.nextResults = [5]
-
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
@@ -216,7 +205,8 @@ struct NufflesBlessingTests {
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(blockDie: block(.kerrunch, .kerrunch), d6: d6(5))
         )
 
         #expect(

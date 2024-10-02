@@ -8,11 +8,23 @@
 import Foundation
 @testable import AvalonThree
 
-final class BallIDProviderDouble: BallIDProviding {
+func ballID(_ nextResults: Int...) -> BallIDProviding {
+    BallIDProviderDouble(nextResults)
+}
 
-    var nextResults: [Int] = []
+private final class BallIDProviderDouble: BallIDProviding {
+
+    private var nextResults: [Int]
+    private var nextValue = 1
+
+    init(_ nextResults: [Int]) {
+        self.nextResults = nextResults
+    }
 
     func generate() -> Int {
-        nextResults.popFirst() ?? 123
+        if let result = nextResults.popFirst() { return result }
+        let result = nextValue
+        nextValue += 1
+        return result
     }
 }

@@ -7,12 +7,17 @@
 
 import Foundation
 
-protocol DirectionRandomizing: Sendable {
+public protocol DirectionRandomizing {
     func rollForDirection() -> Direction
 }
 
-struct DefaultDirectionRandomizer: DirectionRandomizing {
-    func rollForDirection() -> Direction {
+public final class DefaultDirectionRandomizer {
+    public init() { }
+}
+
+extension DefaultDirectionRandomizer: DirectionRandomizing {
+
+    public func rollForDirection() -> Direction {
         guard let direction = Direction.allCases.randomElement() else {
             fatalError("No Direction cases")
         }

@@ -8,9 +8,17 @@
 import Foundation
 @testable import AvalonThree
 
-final class DirectionRandomizerDouble: DirectionRandomizing {
+func direction(_ nextResults: Direction...) -> DirectionRandomizing {
+    DirectionRandomizerDouble(nextResults)
+}
 
-    var nextResults: [Direction] = []
+private final class DirectionRandomizerDouble: DirectionRandomizing {
+
+    var nextResults: [Direction]
+
+    init(_ nextResults: [Direction]) {
+        self.nextResults = nextResults
+    }
 
     func rollForDirection() -> Direction {
         nextResults.popFirst() ?? DefaultDirectionRandomizer().rollForDirection()
