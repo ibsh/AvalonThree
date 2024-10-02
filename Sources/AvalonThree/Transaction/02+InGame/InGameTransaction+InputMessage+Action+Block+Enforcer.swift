@@ -60,7 +60,10 @@ extension InGameTransaction {
                         player.canTakeActions = false
                         table.players.update(with: player)
                         events.append(
-                            .playerCannotTakeActions(playerID: player.id, in: player.square)
+                            .playerCannotTakeActions(
+                                playerID: player.id,
+                                playerSquare: player.square
+                            )
                         )
                     }
                 }

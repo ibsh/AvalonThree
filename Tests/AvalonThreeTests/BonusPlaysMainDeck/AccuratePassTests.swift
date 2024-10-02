@@ -584,7 +584,7 @@ struct AccuratePassTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 1),
-                    in: sq(6, 6),
+                    playerSquare: sq(6, 6),
                     ballID: 123
                 ),
                 .discardedActiveBonusPlay(
@@ -753,7 +753,7 @@ struct AccuratePassTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(2, 6)
+                    playerSquare: sq(2, 6)
                 ),
                 .discardedActiveBonusPlay(
                     coachID: .away,
@@ -901,10 +901,10 @@ struct AccuratePassTests {
                 ),
                 .playerFailedCatch(
                     playerID: pl(.away, 1),
-                    in: sq(6, 6),
+                    playerSquare: sq(6, 6),
                     ballID: 123
                 ),
-                .ballCameLoose(ballID: 123, in: sq(6, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(6, 6)),
                 .rolledForDirection(coachID: .away, direction: .southEast),
                 .ballBounced(
                     ballID: 123,

@@ -53,7 +53,7 @@ extension InGameTransaction {
                 coachID: targetPlayerID.coachID,
                 payload: .blockActionEligibleForStepAsideBonusPlaySidestepAction(
                     playerID: targetPlayerID,
-                    in: targetPlayerSquare
+                    playerSquare: targetPlayerSquare
                 )
             )
         }
@@ -71,7 +71,7 @@ extension InGameTransaction {
                 coachID: actionContext.coachID,
                 payload: .blockActionEligibleForBodyCheckBonusPlay(
                     playerID: actionContext.playerID,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }
@@ -92,7 +92,7 @@ extension InGameTransaction {
                 coachID: actionContext.coachID,
                 payload: .blockActionEligibleForTheKidsGotMoxyBonusPlay(
                     playerID: actionContext.playerID,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }

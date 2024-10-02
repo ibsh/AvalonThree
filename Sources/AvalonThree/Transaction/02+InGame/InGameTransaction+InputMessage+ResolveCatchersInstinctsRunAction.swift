@@ -50,7 +50,7 @@ extension InGameTransaction {
             events.append(
                 .declinedCatchersInstinctsSkillRunAction(
                     playerID: targetPlayerID,
-                    in: targetPlayerSquare
+                    playerSquare: targetPlayerSquare
                 )
             )
             return try endAction()

@@ -127,7 +127,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
-                    in: sq(6, 6),
+                    playerSquare: sq(6, 6),
                     results: [.smash]
                 )
             )
@@ -147,7 +147,7 @@ struct DiscardFromHandTests {
             latestEvents == [
                 .usedOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
-                    in: sq(6, 6)
+                    playerSquare: sq(6, 6)
                 ),
                 .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(
@@ -164,10 +164,10 @@ struct DiscardFromHandTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(7, 6),
+                    playerSquare: sq(7, 6),
                     reason: .blocked
                 ),
-                .ballCameLoose(ballID: 123, in: sq(7, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(7, 6)),
                 .rolledForDirection(coachID: .away, direction: .northWest),
                 .ballBounced(
                     ballID: 123,
@@ -289,7 +289,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(6, 6),
+                    playerSquare: sq(6, 6),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -357,7 +357,7 @@ struct DiscardFromHandTests {
                 ),
                 .playerPickedUpLooseBall(
                     playerID: pl(.away, 0),
-                    in: sq(6, 5),
+                    playerSquare: sq(6, 5),
                     ballID: 123
                 ),
                 .playerMoved(
@@ -499,7 +499,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(6, 8),
+                    playerSquare: sq(6, 8),
                     validTargets: [
                         PassTarget(
                             targetPlayerID: pl(.away, 1),
@@ -535,7 +535,7 @@ struct DiscardFromHandTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 1),
-                    in: sq(6, 12),
+                    playerSquare: sq(6, 12),
                     ballID: 123
                 ),
             ]
@@ -783,7 +783,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
-                    in: sq(6, 6),
+                    playerSquare: sq(6, 6),
                     results: [.smash]
                 )
             )
@@ -803,7 +803,7 @@ struct DiscardFromHandTests {
             latestEvents == [
                 .usedOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
-                    in: sq(6, 6)
+                    playerSquare: sq(6, 6)
                 ),
                 .rolledForBlock(coachID: .away, results: [.smash]),
                 .selectedBlockDieResult(
@@ -820,10 +820,10 @@ struct DiscardFromHandTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(7, 6),
+                    playerSquare: sq(7, 6),
                     reason: .blocked
                 ),
-                .ballCameLoose(ballID: 123, in: sq(7, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(7, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .northWest
@@ -960,7 +960,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(6, 6),
+                    playerSquare: sq(6, 6),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1028,7 +1028,7 @@ struct DiscardFromHandTests {
                 ),
                 .playerPickedUpLooseBall(
                     playerID: pl(.away, 0),
-                    in: sq(6, 5),
+                    playerSquare: sq(6, 5),
                     ballID: 123
                 ),
                 .playerMoved(
@@ -1182,7 +1182,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(6, 8),
+                    playerSquare: sq(6, 8),
                     validTargets: [
                         PassTarget(
                             targetPlayerID: pl(.away, 1),
@@ -1218,7 +1218,7 @@ struct DiscardFromHandTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 1),
-                    in: sq(6, 12),
+                    playerSquare: sq(6, 12),
                     ballID: 123
                 ),
             ]

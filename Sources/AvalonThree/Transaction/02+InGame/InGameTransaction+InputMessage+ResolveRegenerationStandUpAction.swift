@@ -50,7 +50,7 @@ extension InGameTransaction {
             }
 
             events.append(
-                .declinedRegenerationSkillStandUpAction(playerID: playerID, in: playerSquare)
+                .declinedRegenerationSkillStandUpAction(playerID: playerID, playerSquare: playerSquare)
             )
             return try endAction()
         }

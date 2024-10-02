@@ -30,7 +30,7 @@ extension InGameTransaction {
             table.players.update(with: player)
 
             events.append(
-                .playerFellDown(playerID: player.id, in: playerSquare, reason: .divingTackle)
+                .playerFellDown(playerID: player.id, playerSquare: playerSquare, reason: .divingTackle)
             )
 
             if let ball = table.playerHasABall(player) {

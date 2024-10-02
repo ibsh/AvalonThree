@@ -195,7 +195,7 @@ struct ReadyToGoTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 1),
-                    in: sq(5, 11),
+                    playerSquare: sq(5, 11),
                     maxRunDistance: 1,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -279,7 +279,7 @@ struct ReadyToGoTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 4),
-                    in: sq(9, 9),
+                    playerSquare: sq(9, 9),
                     maxRunDistance: 1,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""

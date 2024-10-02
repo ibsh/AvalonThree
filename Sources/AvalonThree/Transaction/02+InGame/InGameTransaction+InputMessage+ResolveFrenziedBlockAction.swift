@@ -50,7 +50,7 @@ extension InGameTransaction {
             }
 
             events.append(
-                .declinedFrenziedSkillBlockAction(playerID: playerID, in: playerSquare)
+                .declinedFrenziedSkillBlockAction(playerID: playerID, playerSquare: playerSquare)
             )
             return try endAction()
         }

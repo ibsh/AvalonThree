@@ -215,7 +215,7 @@ extension InGameTransaction {
             }
 
             events.append(
-                .playerPickedUpLooseBall(playerID: player.id, in: playerSquare, ballID: ball.id)
+                .playerPickedUpLooseBall(playerID: player.id, playerSquare: playerSquare, ballID: ball.id)
             )
         }
     }

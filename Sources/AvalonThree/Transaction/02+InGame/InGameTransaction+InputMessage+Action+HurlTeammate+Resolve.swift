@@ -72,7 +72,7 @@ extension InGameTransaction {
             events.append(
                 .playerFumbledTeammate(
                     playerID: player.id,
-                    in: playerSquare,
+                    playerSquare: playerSquare,
                     teammateID: teammateID,
                     ballID: teammatesBallID
                 )
@@ -120,7 +120,7 @@ extension InGameTransaction {
                 .hurledTeammateLanded(
                     playerID: teammateID,
                     ballID: teammatesBallID,
-                    in: target.targetSquare
+                    playerSquare: target.targetSquare
                 )
             )
 
@@ -156,7 +156,7 @@ extension InGameTransaction {
             .hurledTeammateCrashed(
                 playerID: teammateID,
                 ballID: teammatesBallID,
-                in: target.targetSquare
+                playerSquare: target.targetSquare
             )
         )
 

@@ -101,7 +101,7 @@ struct RushTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(3, 5),
+                    playerSquare: sq(3, 5),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -271,7 +271,7 @@ struct RushTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(3, 5),
+                    playerSquare: sq(3, 5),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -419,7 +419,7 @@ struct RushTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(3, 5),
+                    playerSquare: sq(3, 5),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -581,7 +581,7 @@ struct RushTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""

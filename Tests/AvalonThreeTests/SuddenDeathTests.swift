@@ -151,7 +151,7 @@ struct SuddenDeathTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(6, 10),
+                    playerSquare: sq(6, 10),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -245,7 +245,7 @@ struct SuddenDeathTests {
                 ),
                 .playerScoredTouchdown(
                     playerID: pl(.away, 0),
-                    in: sq(6, 14),
+                    playerSquare: sq(6, 14),
                     ballID: 123
                 ),
                 .scoreUpdated(
@@ -405,7 +405,7 @@ struct SuddenDeathTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(6, 10),
+                    playerSquare: sq(6, 10),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -499,7 +499,7 @@ struct SuddenDeathTests {
                 ),
                 .playerScoredTouchdown(
                     playerID: pl(.away, 0),
-                    in: sq(6, 14),
+                    playerSquare: sq(6, 14),
                     ballID: 123
                 ),
                 .scoreUpdated(
@@ -666,7 +666,7 @@ struct SuddenDeathTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(6, 10),
+                    playerSquare: sq(6, 10),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -760,7 +760,7 @@ struct SuddenDeathTests {
                 ),
                 .playerScoredTouchdown(
                     playerID: pl(.away, 0),
-                    in: sq(6, 14),
+                    playerSquare: sq(6, 14),
                     ballID: 123
                 ),
                 .scoreUpdated(

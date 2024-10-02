@@ -167,7 +167,7 @@ struct InterferenceTests {
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(6, 6),
+                    playerSquare: sq(6, 6),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -874,7 +874,7 @@ struct InterferenceTests {
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(4, 5),
+                    playerSquare: sq(4, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

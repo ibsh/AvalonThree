@@ -51,7 +51,7 @@ extension InGameTransaction {
         events.append(
             .selectedLooseBallDirection(
                 playerID: targetPlayerID,
-                in: targetSquare,
+                playerSquare: targetSquare,
                 direction: direction
             )
         )

@@ -125,7 +125,7 @@ extension InGameTransaction {
             coachID: player.coachID,
             payload: .eligibleForFrenziedSkillBlockAction(
                 playerID: player.id,
-                in: playerSquare
+                playerSquare: playerSquare
             )
         )
     }
@@ -180,7 +180,7 @@ extension InGameTransaction {
             coachID: lastActionContext.coachID,
             payload: .eligibleForShoulderChargeBonusPlayBlockAction(
                 playerID: player.id,
-                in: playerSquare
+                playerSquare: playerSquare
             )
         )
     }
@@ -235,7 +235,7 @@ extension InGameTransaction {
             coachID: lastActionContext.coachID,
             payload: .eligibleForDivingTackleBonusPlayBlockAction(
                 playerID: player.id,
-                in: playerSquare
+                playerSquare: playerSquare
             )
         )
     }
@@ -293,7 +293,7 @@ extension InGameTransaction {
             coachID: player.coachID,
             payload: .eligibleForHeadbuttSkillBlockAction(
                 playerID: lastActionContext.playerID,
-                in: playerSquare
+                playerSquare: playerSquare
             )
         )
     }
@@ -351,7 +351,7 @@ extension InGameTransaction {
             coachID: lastActionContext.coachID,
             payload: .eligibleForBlitzBonusPlayBlockAction(
                 playerID: player.id,
-                in: playerSquare
+                playerSquare: playerSquare
             )
         )
     }
@@ -406,7 +406,7 @@ extension InGameTransaction {
             coachID: lastActionContext.coachID,
             payload: .eligibleForComboPlayBonusPlayFreeAction(
                 validDeclaration: validDeclaration.toPromptDeclaration(),
-                in: try {
+                playerSquare: try {
                     guard let playerSquare = table.getPlayer(id: validDeclaration.playerID)?.square else {
                         throw GameError("Player is in reserves")
                     }

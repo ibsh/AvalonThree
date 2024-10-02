@@ -75,7 +75,7 @@ extension InGameTransaction {
             events.append(
                 .playerScoredTouchdown(
                     playerID: scoringPlayer.id,
-                    in: square,
+                    playerSquare: square,
                     ballID: ball.id
                 )
             )

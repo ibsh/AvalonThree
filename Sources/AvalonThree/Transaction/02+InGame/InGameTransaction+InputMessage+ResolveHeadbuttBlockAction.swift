@@ -50,7 +50,7 @@ extension InGameTransaction {
             }
 
             events.append(
-                .declinedHeadbuttSkillBlockAction(playerID: playerID, in: playerSquare)
+                .declinedHeadbuttSkillBlockAction(playerID: playerID, playerSquare: playerSquare)
             )
             return try endAction()
         }

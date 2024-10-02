@@ -375,7 +375,7 @@ extension InGameTransaction {
                 coachID: proneRegeneratingPlayer.coachID,
                 payload: .eligibleForRegenerationSkillStandUpAction(
                     playerID: proneRegeneratingPlayer.id,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }

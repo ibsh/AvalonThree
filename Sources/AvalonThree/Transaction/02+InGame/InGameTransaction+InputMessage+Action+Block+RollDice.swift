@@ -100,7 +100,11 @@ extension InGameTransaction {
                     )
                 }
                 events.append(
-                    .playerFellDown(playerID: targetPlayerID, in: targetSquare, reason: .blocked)
+                    .playerFellDown(
+                        playerID: targetPlayerID,
+                        playerSquare: targetSquare,
+                        reason: .blocked
+                    )
                 )
 
                 try playerIsInjured(playerID: targetPlayerID, reason: .blocked)
@@ -200,7 +204,7 @@ extension InGameTransaction {
                 coachID: actionContext.coachID,
                 payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: actionContext.playerID,
-                    in: playerSquare,
+                    playerSquare: playerSquare,
                     results: results
                 )
             )
@@ -220,7 +224,7 @@ extension InGameTransaction {
                 coachID: actionContext.coachID,
                 payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
                     playerID: actionContext.playerID,
-                    in: playerSquare,
+                    playerSquare: playerSquare,
                     results: results,
                     clawsResult: clawsResult,
                     maySelectResultToDecline:
@@ -242,7 +246,7 @@ extension InGameTransaction {
             coachID: actionContext.coachID,
             payload: .blockActionSelectResult(
                 playerID: actionContext.playerID,
-                in: playerSquare,
+                playerSquare: playerSquare,
                 results: results
             )
         )

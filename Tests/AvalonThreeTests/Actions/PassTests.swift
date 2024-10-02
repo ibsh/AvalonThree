@@ -106,7 +106,7 @@ struct PassTests {
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 5),
+                    playerSquare: sq(3, 5),
                     validTargets: [
                         PassTarget(
                             targetPlayerID: pl(.away, 1),
@@ -141,10 +141,10 @@ struct PassTests {
                 ),
                 .playerFailedCatch(
                     playerID: pl(.away, 1),
-                    in: sq(4, 5),
+                    playerSquare: sq(4, 5),
                     ballID: 123
                 ),
-                .ballCameLoose(ballID: 123, in: sq(4, 5)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(4, 5)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .south
@@ -284,7 +284,7 @@ struct PassTests {
                 coachID: .away,
                 payload: .passActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(2, 5),
+                    playerSquare: sq(2, 5),
                     validTargets: [
                         PassTarget(
                             targetPlayerID: pl(.away, 1),
@@ -324,10 +324,10 @@ struct PassTests {
                 ),
                 .playerFailedCatch(
                     playerID: pl(.away, 1),
-                    in: sq(4, 5),
+                    playerSquare: sq(4, 5),
                     ballID: 123
                 ),
-                .ballCameLoose(ballID: 123, in: sq(4, 5)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(4, 5)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .south

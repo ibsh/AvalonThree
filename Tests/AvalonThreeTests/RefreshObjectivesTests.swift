@@ -137,7 +137,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(5, 5),
+                    playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -270,7 +270,7 @@ struct RefreshObjectivesTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(5, 7),
+                    playerSquare: sq(5, 7),
                     reason: .blocked
                 ),
                 .rolledForArmour(
@@ -392,7 +392,7 @@ struct RefreshObjectivesTests {
                 ),
                 .playerSentOff(
                     playerID: pl(.away, 0),
-                    from: sq(5, 6)
+                    playerSquare: sq(5, 6)
                 ),
                 .turnEnded(coachID: .away),
                 .dealtNewObjective(
@@ -596,7 +596,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(5, 5),
+                    playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -729,7 +729,7 @@ struct RefreshObjectivesTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(5, 7),
+                    playerSquare: sq(5, 7),
                     reason: .blocked
                 ),
                 .rolledForArmour(
@@ -803,7 +803,7 @@ struct RefreshObjectivesTests {
                 ),
                 .playerSentOff(
                     playerID: pl(.away, 0),
-                    from: sq(5, 6)
+                    playerSquare: sq(5, 6)
                 ),
                 .turnEnded(coachID: .away),
             ]
@@ -1078,7 +1078,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(5, 5),
+                    playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1211,7 +1211,7 @@ struct RefreshObjectivesTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(5, 7),
+                    playerSquare: sq(5, 7),
                     reason: .blocked
                 ),
                 .rolledForArmour(
@@ -1285,7 +1285,7 @@ struct RefreshObjectivesTests {
                 ),
                 .playerSentOff(
                     playerID: pl(.away, 0),
-                    from: sq(5, 6)
+                    playerSquare: sq(5, 6)
                 ),
                 .turnEnded(coachID: .away),
             ]

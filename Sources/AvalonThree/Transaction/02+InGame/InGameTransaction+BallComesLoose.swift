@@ -21,6 +21,6 @@ extension InGameTransaction {
         ball.state = .loose(square: square)
         table.balls.update(with: ball)
 
-        events.append(.ballCameLoose(ballID: ballID, in: square))
+        events.append(.ballCameLoose(ballID: ballID, ballSquare: square))
     }
 }

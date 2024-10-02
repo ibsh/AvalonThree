@@ -142,7 +142,7 @@ struct BodyCheckTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     reason: .blocked
                 ),
                 .rolledForArmour(
@@ -223,7 +223,7 @@ struct BodyCheckTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     reason: .blocked
                 ),
                 .rolledForArmour(coachID: .home, die: .d6, unmodified: 5),

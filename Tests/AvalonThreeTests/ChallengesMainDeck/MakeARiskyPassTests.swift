@@ -143,10 +143,10 @@ struct MakeARiskyPassTests {
                 ),
                 .playerFailedCatch(
                     playerID: pl(.away, 1),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     ballID: 123
                 ),
-                .ballCameLoose(ballID: 123, in: sq(2, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(2, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .west
@@ -159,7 +159,7 @@ struct MakeARiskyPassTests {
                 ),
                 .playerCaughtBouncingBall(
                     playerID: pl(.home, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     ballID: 123
                 ),
             ]
@@ -301,7 +301,7 @@ struct MakeARiskyPassTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 1),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     ballID: 123
                 ),
             ]
@@ -452,7 +452,7 @@ struct MakeARiskyPassTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 1),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     ballID: 123
                 ),
             ]
@@ -606,16 +606,16 @@ struct MakeARiskyPassTests {
                 ),
                 .playerFumbledTeammate(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     teammateID: pl(.away, 1),
                     ballID: 123
                 ),
                 .playerInjured(
                     playerID: pl(.away, 1),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     reason: .fumbled
                 ),
-                .ballCameLoose(ballID: 123, in: sq(3, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(3, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .west
@@ -767,7 +767,7 @@ struct MakeARiskyPassTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(7, 6)
+                    playerSquare: sq(7, 6)
                 ),
             ]
         )
@@ -924,7 +924,7 @@ struct MakeARiskyPassTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(0, 4)
+                    playerSquare: sq(0, 4)
                 ),
             ]
         )

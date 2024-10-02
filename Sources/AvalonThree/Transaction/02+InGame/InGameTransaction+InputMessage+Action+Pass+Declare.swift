@@ -60,7 +60,7 @@ extension InGameTransaction {
                 coachID: playerID.coachID,
                 payload: .passActionSpecifyTarget(
                     playerID: playerID,
-                    in: playerSquare,
+                    playerSquare: playerSquare,
                     validTargets: hailMaryPassValidTargets
                 )
             )
@@ -76,7 +76,7 @@ extension InGameTransaction {
                 coachID: playerID.coachID,
                 payload: .passActionEligibleForHailMaryPassBonusPlay(
                     playerID: playerID,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }
@@ -85,7 +85,7 @@ extension InGameTransaction {
             coachID: playerID.coachID,
             payload: .passActionSpecifyTarget(
                 playerID: playerID,
-                in: playerSquare,
+                playerSquare: playerSquare,
                 validTargets: basicValidTargets
             )
         )

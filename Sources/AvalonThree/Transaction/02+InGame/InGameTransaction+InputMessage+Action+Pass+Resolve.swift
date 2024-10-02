@@ -74,10 +74,10 @@ extension InGameTransaction {
             history.append(.actionFinished)
 
             events.append(
-                .playerFumbledBall(playerID: player.id, in: playerSquare, ballID: ball.id)
+                .playerFumbledBall(playerID: player.id, playerSquare: playerSquare, ballID: ball.id)
             )
             events.append(
-                .ballCameLoose(ballID: ball.id, in: playerSquare)
+                .ballCameLoose(ballID: ball.id, ballSquare: playerSquare)
             )
 
             try bounceBall(id: ball.id)
@@ -116,7 +116,7 @@ extension InGameTransaction {
                 events.append(
                     .playerCaughtPass(
                         playerID: target.targetPlayerID,
-                        in: target.targetSquare,
+                        playerSquare: target.targetSquare,
                         ballID: ball.id
                     )
                 )
@@ -141,7 +141,7 @@ extension InGameTransaction {
         events.append(
             .playerFailedCatch(
                 playerID: target.targetPlayerID,
-                in: target.targetSquare,
+                playerSquare: target.targetSquare,
                 ballID: ball.id
             )
         )

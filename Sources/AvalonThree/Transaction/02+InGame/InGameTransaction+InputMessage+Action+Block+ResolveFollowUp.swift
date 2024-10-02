@@ -49,7 +49,7 @@ extension InGameTransaction {
             events.append(
                 .declinedFollowUp(
                     playerID: actionContext.playerID,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }

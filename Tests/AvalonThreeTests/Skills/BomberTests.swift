@@ -153,10 +153,10 @@ struct BomberTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     reason: .blocked
                 ),
-                .ballCameLoose(ballID: 123, in: sq(3, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(3, 6)),
                 .rolledForDirection(coachID: .away, direction: .southEast),
                 .ballBounced(
                     ballID: 123,
@@ -166,7 +166,7 @@ struct BomberTests {
                 ),
                 .playerCaughtBouncingBall(
                     playerID: pl(.away, 2),
-                    in: sq(4, 7),
+                    playerSquare: sq(4, 7),
                     ballID: 123
                 ),
                 .rolledForArmour(coachID: .home, die: .d6, unmodified: 4),
@@ -395,10 +395,10 @@ struct BomberTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(7, 8),
+                    playerSquare: sq(7, 8),
                     reason: .blocked
                 ),
-                .ballCameLoose(ballID: 123, in: sq(7, 8)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(7, 8)),
                 .rolledForDirection(coachID: .away, direction: .north),
                 .ballBounced(
                     ballID: 123,
@@ -409,7 +409,7 @@ struct BomberTests {
                 .rolledForArmour(coachID: .home, die: .d6, unmodified: 2),
                 .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(7, 8),
+                    playerSquare: sq(7, 8),
                     reason: .blocked
                 ),
             ]
@@ -542,7 +542,7 @@ struct BomberTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(4, 5)
+                    playerSquare: sq(4, 5)
                 ),
             ]
         )

@@ -117,12 +117,12 @@ struct BlockTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(5, 12)
+                    playerSquare: sq(5, 12)
                 ),
                 .turnEnded(coachID: .away),
                 .playerCanTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(5, 12)
+                    playerSquare: sq(5, 12)
                 ),
                 .turnBegan(coachID: .home, isFinal: true),
             ]
@@ -255,7 +255,7 @@ struct BlockTests {
                 coachID: .away,
                 payload: .blockActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(5, 12),
+                    playerSquare: sq(5, 12),
                     validTargets: [
                         pl(.home, 0),
                         pl(.home, 1),
@@ -294,12 +294,12 @@ struct BlockTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(5, 12)
+                    playerSquare: sq(5, 12)
                 ),
                 .turnEnded(coachID: .away),
                 .playerCanTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(5, 12)
+                    playerSquare: sq(5, 12)
                 ),
                 .turnBegan(coachID: .home, isFinal: true),
             ]

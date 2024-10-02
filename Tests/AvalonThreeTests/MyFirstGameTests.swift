@@ -669,7 +669,7 @@ struct MyFirstGameTests {
                     playerID: pl(.home, 5),
                     to: sq(8, 14)
                 ),
-                .newBallAppeared(ballID: 123, in: sq(5, 7)),
+                .newBallAppeared(ballID: 123, ballSquare: sq(5, 7)),
                 .turnBegan(coachID: .away, isFinal: false)
             ]
         )
@@ -772,7 +772,7 @@ struct MyFirstGameTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 2),
-                    in: sq(4, 0),
+                    playerSquare: sq(4, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -972,7 +972,7 @@ struct MyFirstGameTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 3),
-                    in: sq(6, 0),
+                    playerSquare: sq(6, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1163,7 +1163,7 @@ struct MyFirstGameTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 1),
-                    in: sq(1, 0),
+                    playerSquare: sq(1, 0),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""

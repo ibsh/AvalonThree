@@ -124,7 +124,7 @@ struct HulkingBruteTests {
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     results: [.kerrunch, .miss]
                 )
             )
@@ -229,7 +229,7 @@ struct HulkingBruteTests {
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     results: [.shove, .kerrunch]
                 )
             )
@@ -346,15 +346,15 @@ struct HulkingBruteTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6)
+                    playerSquare: sq(2, 6)
                 ), .turnEnded(coachID: .away),
                 .playerCanTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6)
+                    playerSquare: sq(2, 6)
                 ),
                 .newBallAppeared(
                     ballID: 123,
-                    in: sq(5, 7)
+                    ballSquare: sq(5, 7)
                 ),
                 .rolledForDirection(
                     coachID: .home,

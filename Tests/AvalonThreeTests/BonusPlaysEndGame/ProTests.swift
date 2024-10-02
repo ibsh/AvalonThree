@@ -163,7 +163,7 @@ struct ProTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 1),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     ballID: 123
                 ),
                 .discardedActiveBonusPlay(
@@ -321,7 +321,7 @@ struct ProTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 1),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     ballID: 123
                 ),
             ]
@@ -478,7 +478,7 @@ struct ProTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(1, 6)
+                    playerSquare: sq(1, 6)
                 ),
                 .discardedActiveBonusPlay(
                     coachID: .away,
@@ -629,7 +629,7 @@ struct ProTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(1, 6)
+                    playerSquare: sq(1, 6)
                 ),
             ]
         )

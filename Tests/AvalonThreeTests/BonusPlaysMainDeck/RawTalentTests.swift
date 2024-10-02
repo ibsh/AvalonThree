@@ -1202,7 +1202,7 @@ struct RawTalentTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 1),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     ballID: 123
                 ),
                 .discardedActiveBonusPlay(
@@ -1342,10 +1342,10 @@ struct RawTalentTests {
                 ),
                 .playerFailedCatch(
                     playerID: pl(.away, 1),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     ballID: 123
                 ),
-                .ballCameLoose(ballID: 123, in: sq(2, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(2, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .north
@@ -1501,7 +1501,7 @@ struct RawTalentTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(7, 6)
+                    playerSquare: sq(7, 6)
                 ),
                 .discardedActiveBonusPlay(
                     coachID: .away,
@@ -1632,16 +1632,16 @@ struct RawTalentTests {
             latestEvents == [
                 .playerFumbledTeammate(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     teammateID: pl(.away, 1),
                     ballID: 123
                 ),
                 .playerInjured(
                     playerID: pl(.away, 1),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     reason: .fumbled
                 ),
-                .ballCameLoose(ballID: 123, in: sq(3, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(3, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .west
@@ -1810,8 +1810,8 @@ struct RawTalentTests {
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
-                    square: sq(2, 6)
+                    from: sq(3, 6),
+                    to: sq(2, 6)
                 )
             )
         )
@@ -1925,12 +1925,12 @@ struct RawTalentTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6)
+                    playerSquare: sq(3, 6)
                 ),
                 .turnEnded(coachID: .away),
                 .playerCanTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6)
+                    playerSquare: sq(3, 6)
                 ),
                 .turnBegan(coachID: .home, isFinal: true),
             ]
@@ -2036,7 +2036,7 @@ struct RawTalentTests {
             latestEvents == [
                 .declinedOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6)
+                    playerSquare: sq(3, 6)
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
@@ -2060,7 +2060,7 @@ struct RawTalentTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     reason: .blocked
                 ),
                 .rolledForArmour(
@@ -2207,7 +2207,7 @@ struct RawTalentTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     reason: .blocked
                 ),
                 .rolledForArmour(
@@ -2361,10 +2361,10 @@ struct RawTalentTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     reason: .blocked
                 ),
-                .ballCameLoose(ballID: 123, in: sq(1, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(1, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .east
@@ -2377,7 +2377,7 @@ struct RawTalentTests {
                 ),
                 .playerCaughtBouncingBall(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     ballID: 123
                 ),
                 .rolledForArmour(
@@ -2387,7 +2387,7 @@ struct RawTalentTests {
                 ),
                 .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     reason: .blocked
                 ),
                 .selectedBlockDieResult(
@@ -2560,10 +2560,10 @@ struct RawTalentTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(0, 6),
+                    playerSquare: sq(0, 6),
                     reason: .blocked
                 ),
-                .ballCameLoose(ballID: 123, in: sq(0, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(0, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .south
@@ -2586,7 +2586,7 @@ struct RawTalentTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(1, 6)
+                    playerSquare: sq(1, 6)
                 ),
             ]
         )
@@ -2710,12 +2710,12 @@ struct RawTalentTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     reason: .blocked
                 ),
                 .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     reason: .blocked
                 ),
                 .discardedActiveBonusPlay(
@@ -2860,11 +2860,11 @@ struct RawTalentTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6)
+                    playerSquare: sq(3, 6)
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     reason: .blocked
                 ),
                 .rolledForArmour(
@@ -2874,7 +2874,7 @@ struct RawTalentTests {
                 ),
                 .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     reason: .blocked
                 ),
             ]
@@ -3006,8 +3006,8 @@ struct RawTalentTests {
                 coachID: .away,
                 payload: .blockActionEligibleForFollowUp(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
-                    square: sq(2, 6)
+                    from: sq(3, 6),
+                    to: sq(2, 6)
                 )
             )
         )

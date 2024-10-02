@@ -109,7 +109,7 @@ struct FoulTests {
                 ),
                 .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(5, 11),
+                    playerSquare: sq(5, 11),
                     reason: .fouled
                 ),
             ]
@@ -238,7 +238,7 @@ struct FoulTests {
                 coachID: .away,
                 payload: .foulActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(5, 12),
+                    playerSquare: sq(5, 12),
                     validTargets: [
                         pl(.home, 0),
                         pl(.home, 1),
@@ -269,7 +269,7 @@ struct FoulTests {
                 ),
                 .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(5, 11),
+                    playerSquare: sq(5, 11),
                     reason: .fouled
                 ),
             ]

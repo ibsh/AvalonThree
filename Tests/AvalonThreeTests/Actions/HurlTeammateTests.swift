@@ -838,7 +838,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 3), sq(2, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
@@ -1100,7 +1100,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1361,7 +1361,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1622,7 +1622,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1797,7 +1797,7 @@ struct HurlTeammateTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(2, 6)
+                    playerSquare: sq(2, 6)
                 ),
             ]
         )
@@ -1908,7 +1908,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2081,7 +2081,7 @@ struct HurlTeammateTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(7, 6)
+                    playerSquare: sq(7, 6)
                 ),
             ]
         )
@@ -2206,7 +2206,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2387,7 +2387,7 @@ struct HurlTeammateTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(3, 11)
+                    playerSquare: sq(3, 11)
                 ),
             ]
         )
@@ -2506,7 +2506,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2685,7 +2685,7 @@ struct HurlTeammateTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(0, 4)
+                    playerSquare: sq(0, 4)
                 ),
             ]
         )
@@ -2804,7 +2804,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(2, 4), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 3), sq(1, 3), sq(2, 4), sq(1, 4)]),
@@ -2985,7 +2985,7 @@ struct HurlTeammateTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(4, 10)
+                    playerSquare: sq(4, 10)
                 ),
             ]
         )
@@ -3096,7 +3096,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(2, 4), sq(1, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 4), sq(1, 3), sq(2, 4), sq(2, 3)]),
@@ -3271,7 +3271,7 @@ struct HurlTeammateTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(4, 10)
+                    playerSquare: sq(4, 10)
                 ),
             ]
         )
@@ -3390,7 +3390,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(0, 0),
+                    playerSquare: sq(0, 0),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 2), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(0, 3), distance: .short, obstructingSquares: []),
@@ -3496,7 +3496,7 @@ struct HurlTeammateTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(3, 8)
+                    playerSquare: sq(3, 8)
                 ),
             ]
         )
@@ -3607,7 +3607,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -3771,16 +3771,16 @@ struct HurlTeammateTests {
                 ),
                 .playerFumbledTeammate(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     teammateID: pl(.away, 1),
                     ballID: 123
                 ),
                 .playerInjured(
                     playerID: pl(.away, 1),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     reason: .fumbled
                 ),
-                .ballCameLoose(ballID: 123, in: sq(3, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(3, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .west
@@ -3900,7 +3900,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4073,9 +4073,9 @@ struct HurlTeammateTests {
                 .hurledTeammateCrashed(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(7, 6)
+                    playerSquare: sq(7, 6)
                 ),
-                .ballCameLoose(ballID: 123, in: sq(7, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(7, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .west
@@ -4199,7 +4199,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4372,7 +4372,7 @@ struct HurlTeammateTests {
                 .hurledTeammateCrashed(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(7, 6)
+                    playerSquare: sq(7, 6)
                 ),
                 .rolledForDirection(
                     coachID: .away,
@@ -4384,7 +4384,7 @@ struct HurlTeammateTests {
                     to: sq(8, 6),
                     direction: .east
                 ),
-                .ballCameLoose(ballID: 123, in: sq(7, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(7, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .east
@@ -4520,7 +4520,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTeammate(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTeammates: [
                         pl(.away, 1): sq(4, 6),
                         pl(.away, 2): sq(2, 6),
@@ -4549,7 +4549,7 @@ struct HurlTeammateTests {
                 coachID: .away,
                 payload: .hurlTeammateActionSpecifyTarget(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(2, 4), sq(1, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 4), sq(1, 3), sq(2, 4), sq(2, 3)]),
@@ -4723,7 +4723,7 @@ struct HurlTeammateTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(4, 10)
+                    playerSquare: sq(4, 10)
                 ),
             ]
         )

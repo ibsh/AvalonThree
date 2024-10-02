@@ -118,12 +118,12 @@ public enum Event: Equatable, Codable, Sendable {
 
     case usedOffensiveSpecialistSkillReroll(
         playerID: PlayerID,
-        in: Square
+        playerSquare: Square
     )
 
     case declinedOffensiveSpecialistSkillReroll(
         playerID: PlayerID,
-        in: Square
+        playerSquare: Square
     )
 
     case changedBlockResults(
@@ -140,12 +140,12 @@ public enum Event: Equatable, Codable, Sendable {
 
     case declinedFollowUp(
         playerID: PlayerID,
-        in: Square
+        playerSquare: Square
     )
 
     case selectedLooseBallDirection(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         direction: Direction
     )
 
@@ -178,13 +178,13 @@ public enum Event: Equatable, Codable, Sendable {
 
     case playerCaughtBouncingBall(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         ballID: Int
     )
 
     case playerPickedUpLooseBall(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         ballID: Int
     )
 
@@ -198,19 +198,19 @@ public enum Event: Equatable, Codable, Sendable {
 
     case playerFumbledBall(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         ballID: Int
     )
 
     case playerCaughtPass(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         ballID: Int
     )
 
     case playerFailedCatch(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         ballID: Int
     )
 
@@ -224,7 +224,7 @@ public enum Event: Equatable, Codable, Sendable {
 
     case playerCaughtHandoff(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         ballID: Int
     )
 
@@ -239,7 +239,7 @@ public enum Event: Equatable, Codable, Sendable {
 
     case playerFumbledTeammate(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         teammateID: PlayerID,
         ballID: Int?
     )
@@ -247,13 +247,13 @@ public enum Event: Equatable, Codable, Sendable {
     case hurledTeammateLanded(
         playerID: PlayerID,
         ballID: Int?,
-        in: Square
+        playerSquare: Square
     )
 
     case hurledTeammateCrashed(
         playerID: PlayerID,
         ballID: Int?,
-        in: Square
+        playerSquare: Square
     )
 
     case playerFouled(
@@ -290,23 +290,23 @@ public enum Event: Equatable, Codable, Sendable {
 
     case playerScoredTouchdown(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         ballID: Int
     )
 
     case newBallAppeared(
         ballID: Int,
-        in: Square
+        ballSquare: Square
     )
 
     case ballCameLoose(
         ballID: Int,
-        in: Square
+        ballSquare: Square
     )
 
     case ballDisappeared(
         ballID: Int,
-        in: Square
+        ballSquare: Square
     )
 
     case ballBounced(
@@ -318,49 +318,49 @@ public enum Event: Equatable, Codable, Sendable {
 
     case playerFellDown(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         reason: PlayerFallDownReason
     )
 
     case playerStoodUp(
         playerID: PlayerID,
-        in: Square
+        playerSquare: Square
     )
 
     case playerInjured(
         playerID: PlayerID,
-        in: Square,
+        playerSquare: Square,
         reason: PlayerInjuryReason
     )
 
     case playerSentOff(
         playerID: PlayerID,
-        from: Square
+        playerSquare: Square
     )
 
     case playerCannotTakeActions(
         playerID: PlayerID,
-        in: Square?
+        playerSquare: Square?
     )
 
     case playerCanTakeActions(
         playerID: PlayerID,
-        in: Square?
+        playerSquare: Square?
     )
 
     case declinedRegenerationSkillStandUpAction(
         playerID: PlayerID,
-        in: Square
+        playerSquare: Square
     )
 
     case declinedFrenziedSkillBlockAction(
         playerID: PlayerID,
-        in: Square
+        playerSquare: Square
     )
 
     case declinedHeadbuttSkillBlockAction(
         playerID: PlayerID,
-        in: Square
+        playerSquare: Square
     )
 
     case claimedObjective(
@@ -377,7 +377,7 @@ public enum Event: Equatable, Codable, Sendable {
 
     case declinedCatchersInstinctsSkillRunAction(
         playerID: PlayerID,
-        in: Square
+        playerSquare: Square
     )
 
     case earnedCleanSweep(

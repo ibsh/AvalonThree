@@ -21,7 +21,7 @@ extension InGameTransaction {
         events.append(
             .usedOffensiveSpecialistSkillReroll(
                 playerID: actionContext.playerID,
-                in: playerSquare
+                playerSquare: playerSquare
             )
         )
 
@@ -45,7 +45,7 @@ extension InGameTransaction {
         events.append(
             .declinedOffensiveSpecialistSkillReroll(
                 playerID: actionContext.playerID,
-                in: playerSquare
+                playerSquare: playerSquare
             )
         )
 

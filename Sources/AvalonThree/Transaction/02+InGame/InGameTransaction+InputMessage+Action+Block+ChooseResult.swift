@@ -116,7 +116,7 @@ extension InGameTransaction {
                 player.canTakeActions = false
                 table.players.update(with: player)
                 events.append(
-                    .playerCannotTakeActions(playerID: player.id, in: player.square)
+                    .playerCannotTakeActions(playerID: player.id, playerSquare: player.square)
                 )
             }
 
@@ -175,8 +175,8 @@ extension InGameTransaction {
                     coachID: actionContext.coachID,
                     payload: .blockActionEligibleForFollowUp(
                         playerID: actionContext.playerID,
-                        in: playerSquare,
-                        square: targetPlayerSquare
+                        from: playerSquare,
+                        to: targetPlayerSquare
                     )
                 )
             }
@@ -190,7 +190,7 @@ extension InGameTransaction {
             targetPlayer.state = .prone(square: targetPlayerSquare)
             table.players.update(with: targetPlayer)
             events.append(
-                .playerFellDown(playerID: targetPlayerID, in: targetPlayerSquare, reason: .blocked)
+                .playerFellDown(playerID: targetPlayerID, playerSquare: targetPlayerSquare, reason: .blocked)
             )
 
             if let ball = table.playerHasABall(targetPlayer) {
@@ -217,7 +217,7 @@ extension InGameTransaction {
                         coachID: targetPlayerID.coachID,
                         payload: .blockActionSelectSafeHandsLooseBallDirection(
                             playerID: targetPlayerID,
-                            in: targetPlayerSquare,
+                            playerSquare: targetPlayerSquare,
                             directions: directions
                         )
                     )

@@ -117,7 +117,7 @@ struct DodgeTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(3, 5),
+                    playerSquare: sq(3, 5),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -286,7 +286,7 @@ struct DodgeTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(3, 5),
+                    playerSquare: sq(3, 5),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""

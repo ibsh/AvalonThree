@@ -48,7 +48,7 @@ extension InGameTransaction {
                 coachID: actionContext.coachID,
                 payload: .hurlTeammateActionEligibleForProBonusPlay(
                     playerID: actionContext.playerID,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }
@@ -140,7 +140,7 @@ extension InGameTransaction {
                 coachID: player.coachID,
                 payload: .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll(
                     playerID: player.id,
-                    in: playerSquare,
+                    playerSquare: playerSquare,
                     result: modifiedRoll
                 )
             )

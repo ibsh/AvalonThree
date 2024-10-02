@@ -101,7 +101,7 @@ struct InsignificantTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -250,7 +250,7 @@ struct InsignificantTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -429,7 +429,7 @@ struct InsignificantTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -636,16 +636,16 @@ struct InsignificantTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6)
+                    playerSquare: sq(3, 6)
                 ),
                 .turnEnded(coachID: .away),
                 .playerCanTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6)
+                    playerSquare: sq(3, 6)
                 ),
                 .newBallAppeared(
                     ballID: 123,
-                    in: sq(5, 7)
+                    ballSquare: sq(5, 7)
                 ),
                 .rolledForDirection(
                     coachID: .home,

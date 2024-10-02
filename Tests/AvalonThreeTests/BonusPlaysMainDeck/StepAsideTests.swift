@@ -371,7 +371,7 @@ struct StepAsideTests {
                 coachID: .home,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.home, 0),
-                    in: sq(0, 6),
+                    playerSquare: sq(0, 6),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

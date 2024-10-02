@@ -99,7 +99,7 @@ extension InGameTransaction {
                 coachID: playerID.coachID,
                 payload: .markActionSpecifySquares(
                     playerID: playerID,
-                    in: playerSquare,
+                    playerSquare: playerSquare,
                     validSquares: interferenceValidSquares
                 )
             )
@@ -130,7 +130,7 @@ extension InGameTransaction {
                 coachID: playerID.coachID,
                 payload: .markActionEligibleForInterferenceBonusPlay(
                     playerID: playerID,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }
@@ -139,7 +139,7 @@ extension InGameTransaction {
             coachID: playerID.coachID,
             payload: .markActionSpecifySquares(
                 playerID: playerID,
-                in: playerSquare,
+                playerSquare: playerSquare,
                 validSquares: basicValidSquares
             )
         )

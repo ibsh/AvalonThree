@@ -125,7 +125,7 @@ struct BlockingPlayTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(2, 7),
+                    playerSquare: sq(2, 7),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -307,7 +307,7 @@ struct BlockingPlayTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(2, 7),
+                    playerSquare: sq(2, 7),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -493,7 +493,7 @@ struct BlockingPlayTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(2, 7),
+                    playerSquare: sq(2, 7),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -587,7 +587,7 @@ struct BlockingPlayTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 1),
-                    in: sq(9, 7),
+                    playerSquare: sq(9, 7),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -887,7 +887,7 @@ struct BlockingPlayTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(5, 7),
+                    playerSquare: sq(5, 7),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""

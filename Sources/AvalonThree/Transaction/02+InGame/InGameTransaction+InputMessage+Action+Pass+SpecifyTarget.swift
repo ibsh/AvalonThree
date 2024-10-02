@@ -49,7 +49,7 @@ extension InGameTransaction {
                 coachID: actionContext.coachID,
                 payload: .passActionEligibleForAccuratePassBonusPlay(
                     playerID: actionContext.playerID,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }

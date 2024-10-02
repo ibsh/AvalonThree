@@ -61,7 +61,7 @@ extension InGameTransaction {
             coachID: actionContext.coachID,
             payload: .passActionSpecifyTarget(
                 playerID: actionContext.playerID,
-                in: playerSquare,
+                playerSquare: playerSquare,
                 validTargets: validTargets
             )
         )

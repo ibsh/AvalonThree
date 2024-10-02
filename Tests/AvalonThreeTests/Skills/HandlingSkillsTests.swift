@@ -122,7 +122,7 @@ struct HandlingSkillsTests {
                 ),
                 .playerPickedUpLooseBall(
                     playerID: pl(.home, 0),
-                    in: sq(0, 6),
+                    playerSquare: sq(0, 6),
                     ballID: 123
                 ),
             ]

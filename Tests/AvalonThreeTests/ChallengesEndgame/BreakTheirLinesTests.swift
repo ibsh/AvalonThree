@@ -472,7 +472,7 @@ struct BreakTheirLinesTests {
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .playerScoredTouchdown(
                     playerID: pl(.away, 0),
-                    in: sq(6, 14),
+                    playerSquare: sq(6, 14),
                     ballID: 123
                 ),
                 .scoreUpdated(coachID: .away, increment: 4, total: 6),

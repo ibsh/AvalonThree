@@ -278,7 +278,7 @@ struct InterventionTests {
                 coachID: .home,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.home, 0),
-                    in: sq(1, 12),
+                    playerSquare: sq(1, 12),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -506,7 +506,7 @@ struct InterventionTests {
                 coachID: .home,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.home, 1),
-                    in: sq(7, 12),
+                    playerSquare: sq(7, 12),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -722,7 +722,7 @@ struct InterventionTests {
                 coachID: .home,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.home, 1),
-                    in: sq(8, 12),
+                    playerSquare: sq(8, 12),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1502,7 +1502,7 @@ struct InterventionTests {
                 coachID: .home,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.home, 0),
-                    in: sq(1, 12),
+                    playerSquare: sq(1, 12),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1860,7 +1860,7 @@ struct InterventionTests {
                 coachID: .home,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.home, 0),
-                    in: sq(1, 12),
+                    playerSquare: sq(1, 12),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -2086,7 +2086,7 @@ struct InterventionTests {
                 coachID: .home,
                 payload: .markActionSpecifySquares(
                     playerID: pl(.home, 0),
-                    in: sq(1, 12),
+                    playerSquare: sq(1, 12),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

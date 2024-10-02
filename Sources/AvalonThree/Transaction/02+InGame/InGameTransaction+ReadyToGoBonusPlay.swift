@@ -48,7 +48,7 @@ extension InGameTransaction {
                     coachID: coachID,
                     payload: .eligibleForReadyToGoBonusPlayRunAction(
                         playerID: player.id,
-                        in: playerSquare
+                        playerSquare: playerSquare
                     )
                 )
             }
@@ -68,7 +68,7 @@ extension InGameTransaction {
                     coachID: coachID,
                     payload: .eligibleForReadyToGoBonusPlaySidestepAction(
                         playerID: player.id,
-                        in: playerSquare
+                        playerSquare: playerSquare
                     )
                 )
             }
@@ -88,7 +88,7 @@ extension InGameTransaction {
                     coachID: coachID,
                     payload: .eligibleForReadyToGoBonusPlayStandUpAction(
                         playerID: player.id,
-                        in: playerSquare
+                        playerSquare: playerSquare
                     )
                 )
             }

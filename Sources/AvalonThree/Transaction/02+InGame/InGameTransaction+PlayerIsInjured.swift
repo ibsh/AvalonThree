@@ -27,7 +27,7 @@ extension InGameTransaction {
 
         history.append(.playerInjured(playerID))
         events.append(
-            .playerInjured(playerID: playerID, in: playerSquare, reason: reason)
+            .playerInjured(playerID: playerID, playerSquare: playerSquare, reason: reason)
         )
 
         switch reason {

@@ -88,7 +88,7 @@ extension InGameTransaction {
                 coachID: playerID.coachID,
                 payload: .blockActionSpecifyTarget(
                     playerID: playerID,
-                    in: playerSquare,
+                    playerSquare: playerSquare,
                     validTargets: validTargetPlayerIDs
                 )
             )

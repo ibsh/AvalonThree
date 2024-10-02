@@ -63,7 +63,7 @@ extension InGameTransaction {
                 coachID: playerID.coachID,
                 payload: .hurlTeammateActionSpecifyTeammate(
                     playerID: playerID,
-                    in: playerSquare,
+                    playerSquare: playerSquare,
                     validTeammates: try validTeammates.reduce([:]) { partialResult, teammate in
                         guard let teammateSquare = teammate.square else {
                             throw GameError("Player is in reserves")

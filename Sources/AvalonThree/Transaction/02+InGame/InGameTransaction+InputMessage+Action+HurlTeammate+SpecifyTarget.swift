@@ -53,7 +53,7 @@ extension InGameTransaction {
                 coachID: actionContext.coachID,
                 payload: .hurlTeammateActionEligibleForAccuratePassBonusPlay(
                     playerID: actionContext.playerID,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }

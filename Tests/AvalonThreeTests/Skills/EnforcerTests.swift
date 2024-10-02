@@ -155,10 +155,10 @@ struct EnforcerTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(0, 6),
+                    playerSquare: sq(0, 6),
                     reason: .blocked
                 ),
-                .ballCameLoose(ballID: 123, in: sq(0, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(0, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .east
@@ -171,7 +171,7 @@ struct EnforcerTests {
                 ),
                 .playerCaughtBouncingBall(
                     playerID: pl(.away, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     ballID: 123
                 ),
                 .rolledForArmour(
@@ -192,7 +192,7 @@ struct EnforcerTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(1, 6)
+                    playerSquare: sq(1, 6)
                 ),
                 .rolledForArmour(
                     coachID: .home,
@@ -201,7 +201,7 @@ struct EnforcerTests {
                 ),
                 .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(0, 6),
+                    playerSquare: sq(0, 6),
                     reason: .blocked
                 ),
             ]
@@ -370,10 +370,10 @@ struct EnforcerTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     reason: .blocked
                 ),
-                .ballCameLoose(ballID: 123, in: sq(1, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(1, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .south
@@ -391,7 +391,7 @@ struct EnforcerTests {
                 ),
                 .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     reason: .blocked
                 ),
                 .selectedBlockDieResult(
@@ -406,7 +406,7 @@ struct EnforcerTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6)
+                    playerSquare: sq(2, 6)
                 ),
             ]
         )

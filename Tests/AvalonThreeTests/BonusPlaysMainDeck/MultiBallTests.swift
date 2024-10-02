@@ -163,7 +163,7 @@ struct MultiBallTests {
                 ),
                 .newBallAppeared(
                     ballID: 456,
-                    in: sq(5, 5)
+                    ballSquare: sq(5, 5)
                 ),
                 .rolledForDirection(
                     coachID: .away,
@@ -181,7 +181,7 @@ struct MultiBallTests {
                 ),
                 .newBallAppeared(
                     ballID: 789,
-                    in: sq(5, 9)
+                    ballSquare: sq(5, 9)
                 ),
                 .rolledForDirection(
                     coachID: .away,

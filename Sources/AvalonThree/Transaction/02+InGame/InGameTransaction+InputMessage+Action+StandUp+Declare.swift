@@ -45,7 +45,7 @@ extension InGameTransaction {
             .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
         )
         events.append(
-            .playerStoodUp(playerID: playerID, in: playerSquare)
+            .playerStoodUp(playerID: playerID, playerSquare: playerSquare)
         )
 
         return try endAction()

@@ -67,7 +67,7 @@ extension InGameTransaction {
                 coachID: actionContext.coachID,
                 payload: .blockActionEligibleForBladedKnuckleDustersBonusPlay(
                     playerID: actionContext.playerID,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }
@@ -83,7 +83,7 @@ extension InGameTransaction {
                 coachID: targetPlayerID.coachID,
                 payload: .blockActionEligibleForAbsolutelyNailsBonusPlay(
                     playerID: targetPlayerID,
-                    in: targetPlayerSquare
+                    playerSquare: targetPlayerSquare
                 )
             )
         }
@@ -102,7 +102,7 @@ extension InGameTransaction {
                 coachID: targetPlayerID.coachID,
                 payload: .blockActionEligibleForToughEnoughBonusPlay(
                     playerID: targetPlayerID,
-                    in: targetPlayerSquare
+                    playerSquare: targetPlayerSquare
                 )
             )
         }
@@ -122,7 +122,7 @@ extension InGameTransaction {
                 coachID: targetPlayerID.coachID,
                 payload: .blockActionEligibleForProBonusPlay(
                     playerID: targetPlayerID,
-                    in: targetPlayerSquare
+                    playerSquare: targetPlayerSquare
                 )
             )
         }
@@ -141,7 +141,7 @@ extension InGameTransaction {
                 coachID: actionContext.coachID,
                 payload: .blockActionEligibleForAbsoluteCarnageBonusPlay(
                     playerID: actionContext.playerID,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }
@@ -233,7 +233,7 @@ extension InGameTransaction {
                     coachID: targetPlayerID.coachID,
                     payload: .blockActionArmourResultEligibleForRawTalentBonusPlayReroll(
                         playerID: targetPlayerID,
-                        in: playerSquare,
+                        playerSquare: playerSquare,
                         result: modifiedRoll
                     )
                 )

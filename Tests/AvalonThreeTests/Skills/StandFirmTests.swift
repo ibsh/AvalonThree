@@ -122,12 +122,12 @@ struct StandFirmTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6)
+                    playerSquare: sq(2, 6)
                 ),
                 .turnEnded(coachID: .away),
                 .playerCanTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6)
+                    playerSquare: sq(2, 6)
                 ),
                 .turnBegan(coachID: .home, isFinal: true),
             ]

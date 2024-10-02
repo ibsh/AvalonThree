@@ -151,7 +151,7 @@ struct HailMaryPassTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 1),
-                    in: sq(9, 6),
+                    playerSquare: sq(9, 6),
                     ballID: 123
                 ),
                 .discardedActiveBonusPlay(
@@ -297,10 +297,10 @@ struct HailMaryPassTests {
                 ),
                 .playerFailedCatch(
                     playerID: pl(.away, 1),
-                    in: sq(9, 6),
+                    playerSquare: sq(9, 6),
                     ballID: 123
                 ),
-                .ballCameLoose(ballID: 123, in: sq(9, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(9, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .south
@@ -447,10 +447,10 @@ struct HailMaryPassTests {
                 ),
                 .playerFumbledBall(
                     playerID: pl(.away, 0),
-                    in: sq(0, 6),
+                    playerSquare: sq(0, 6),
                     ballID: 123
                 ),
-                .ballCameLoose(ballID: 123, in: sq(0, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(0, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .south
@@ -744,7 +744,7 @@ struct HailMaryPassTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 1),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     ballID: 123
                 ),
                 .discardedActiveBonusPlay(
@@ -901,10 +901,10 @@ struct HailMaryPassTests {
                 ),
                 .playerFailedCatch(
                     playerID: pl(.away, 1),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     ballID: 123
                 ),
-                .ballCameLoose(ballID: 123, in: sq(2, 6)),
+                .ballCameLoose(ballID: 123, ballSquare: sq(2, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .south

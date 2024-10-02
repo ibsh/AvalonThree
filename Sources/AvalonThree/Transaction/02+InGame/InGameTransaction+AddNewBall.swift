@@ -48,7 +48,7 @@ extension InGameTransaction {
         table.balls.insert(newBall)
 
         events.append(
-            .newBallAppeared(ballID: newBall.id, in: trapdoorSquare)
+            .newBallAppeared(ballID: newBall.id, ballSquare: trapdoorSquare)
         )
 
         if bounce {

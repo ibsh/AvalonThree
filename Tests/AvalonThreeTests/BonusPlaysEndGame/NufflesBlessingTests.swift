@@ -237,7 +237,7 @@ struct NufflesBlessingTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(5, 12),
+                    playerSquare: sq(5, 12),
                     reason: .blocked
                 ),
                 .rolledForArmour(

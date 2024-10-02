@@ -578,7 +578,7 @@ struct DefensivePlayTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(2, 7)
+                    playerSquare: sq(2, 7)
                 ),
             ]
         )
@@ -879,7 +879,7 @@ struct DefensivePlayTests {
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
-                    in: sq(2, 7)
+                    playerSquare: sq(2, 7)
                 ),
             ]
         )
@@ -1192,7 +1192,7 @@ struct DefensivePlayTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 1),
-                    in: sq(10, 8),
+                    playerSquare: sq(10, 8),
                     reason: .blocked
                 ),
                 .rolledForArmour(

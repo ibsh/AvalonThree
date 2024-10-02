@@ -140,7 +140,7 @@ struct TheKidsGotMoxyTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     reason: PlayerFallDownReason.blocked
                 ),
                 .rolledForArmour(
@@ -287,7 +287,7 @@ struct TheKidsGotMoxyTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     reason: PlayerFallDownReason.blocked
                 ),
                 .rolledForArmour(

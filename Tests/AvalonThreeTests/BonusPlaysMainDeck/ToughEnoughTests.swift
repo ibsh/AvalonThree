@@ -253,7 +253,7 @@ struct ToughEnoughTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     reason: PlayerFallDownReason.blocked
                 ),
             ]

@@ -128,7 +128,7 @@ extension InGameTransaction {
             coachID: targetPlayer.coachID,
             payload: .eligibleForCatchersInstinctsSkillRunAction(
                 playerID: targetPlayerID,
-                in: targetPlayerSquare
+                playerSquare: targetPlayerSquare
             )
         )
     }

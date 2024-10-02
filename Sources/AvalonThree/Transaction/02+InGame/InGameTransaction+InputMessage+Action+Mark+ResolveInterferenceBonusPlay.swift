@@ -95,7 +95,7 @@ extension InGameTransaction {
             coachID: actionContext.coachID,
             payload: .markActionSpecifySquares(
                 playerID: actionContext.playerID,
-                in: playerSquare,
+                playerSquare: playerSquare,
                 validSquares: validSquares
             )
         )

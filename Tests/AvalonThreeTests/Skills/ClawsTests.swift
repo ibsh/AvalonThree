@@ -110,7 +110,7 @@ struct ClawsTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     reason: .blocked
                 ),
                 .rolledForArmour(coachID: .home, die: .d6, unmodified: 6),
@@ -229,12 +229,12 @@ struct ClawsTests {
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     reason: .blocked
                 ),
                 .playerInjured(
                     playerID: pl(.home, 0),
-                    in: sq(1, 6),
+                    playerSquare: sq(1, 6),
                     reason: .blocked
                 ),
             ]

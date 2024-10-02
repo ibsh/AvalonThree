@@ -108,7 +108,7 @@ struct MightyBlowTests {
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
-                    in: sq(3, 6),
+                    playerSquare: sq(3, 6),
                     results: [.shove, .kerrunch]
                 )
             )

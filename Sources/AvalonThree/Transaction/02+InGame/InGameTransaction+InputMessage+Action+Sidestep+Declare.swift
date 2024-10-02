@@ -53,7 +53,7 @@ extension InGameTransaction {
             coachID: playerID.coachID,
             payload: .sidestepActionSpecifySquare(
                 playerID: playerID,
-                in: playerSquare,
+                playerSquare: playerSquare,
                 validSquares: validSquares
             )
         )

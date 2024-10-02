@@ -22,11 +22,11 @@ extension InGameTransaction {
 
         switch ball.state {
         case .held:
-            events.append(.ballCameLoose(ballID: ballID, in: square))
+            events.append(.ballCameLoose(ballID: ballID, ballSquare: square))
         case .loose:
             break
         }
 
-        events.append(.ballDisappeared(ballID: ballID, in: square))
+        events.append(.ballDisappeared(ballID: ballID, ballSquare: square))
     }
 }

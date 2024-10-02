@@ -99,7 +99,7 @@ struct EtherealTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(3, 5),
+                    playerSquare: sq(3, 5),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -586,7 +586,7 @@ struct EtherealTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(0, 6),
+                    playerSquare: sq(0, 6),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""

@@ -74,7 +74,7 @@ extension InGameTransaction {
             table.players.update(with: player)
 
             events.append(
-                .playerSentOff(playerID: player.id, from: playerSquare)
+                .playerSentOff(playerID: player.id, playerSquare: playerSquare)
             )
 
             if let ball = table.playerHasABall(player) {
@@ -85,7 +85,7 @@ extension InGameTransaction {
         case .slipped:
             player.canTakeActions = false
             table.players.update(with: player)
-            events.append(.playerCannotTakeActions(playerID: player.id, in: playerSquare))
+            events.append(.playerCannotTakeActions(playerID: player.id, playerSquare: playerSquare))
 
         case .gotThem:
             break

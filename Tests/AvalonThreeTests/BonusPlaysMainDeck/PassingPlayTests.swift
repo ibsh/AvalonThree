@@ -332,7 +332,7 @@ struct PassingPlayTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(9, 12)
+                    playerSquare: sq(9, 12)
                 ),
             ]
         )
@@ -398,7 +398,7 @@ struct PassingPlayTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 2),
-                    in: sq(9, 7),
+                    playerSquare: sq(9, 7),
                     ballID: 123
                 ),
             ]
@@ -780,7 +780,7 @@ struct PassingPlayTests {
                 .hurledTeammateLanded(
                     playerID: pl(.away, 1),
                     ballID: 123,
-                    in: sq(9, 12)
+                    playerSquare: sq(9, 12)
                 ),
             ]
         )
@@ -846,7 +846,7 @@ struct PassingPlayTests {
                 ),
                 .playerCaughtPass(
                     playerID: pl(.away, 2),
-                    in: sq(9, 7),
+                    playerSquare: sq(9, 7),
                     ballID: 123
                 ),
             ]

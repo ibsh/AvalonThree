@@ -96,7 +96,7 @@ struct ShadowTests {
                 coachID: .away,
                 payload: .sidestepActionSpecifySquare(
                     playerID: pl(.away, 0),
-                    in: sq(5, 5),
+                    playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

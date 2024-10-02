@@ -105,7 +105,7 @@ struct SafeHandsTests {
                 coachID: .home,
                 payload: .blockActionSelectSafeHandsLooseBallDirection(
                     playerID: pl(.home, 0),
-                    in: sq(3, 4),
+                    playerSquare: sq(3, 4),
                     directions: [
                         .north,
                         .northEast,
@@ -132,7 +132,7 @@ struct SafeHandsTests {
             latestEvents == [
                 .selectedLooseBallDirection(
                     playerID: pl(.home, 0),
-                    in: sq(3, 4),
+                    playerSquare: sq(3, 4),
                     direction: .east
                 ),
                 .ballBounced(

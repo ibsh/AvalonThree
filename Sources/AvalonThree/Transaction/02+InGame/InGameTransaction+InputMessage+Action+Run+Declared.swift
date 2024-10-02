@@ -49,7 +49,7 @@ extension InGameTransaction {
             coachID: actionContext.coachID,
             payload: .runActionSpecifySquares(
                 playerID: actionContext.playerID,
-                in: playerSquare,
+                playerSquare: playerSquare,
                 maxRunDistance: maxRunDistance,
                 validSquares: validSquares
             )
@@ -83,7 +83,7 @@ extension InGameTransaction {
             coachID: actionContext.coachID,
             payload: .runActionEligibleForBlockingPlayBonusPlay(
                 playerID: actionContext.playerID,
-                in: playerSquare
+                playerSquare: playerSquare
             )
         )
     }
@@ -113,7 +113,7 @@ extension InGameTransaction {
             coachID: actionContext.coachID,
             payload: .runActionEligibleForDodgeBonusPlay(
                 playerID: actionContext.playerID,
-                in: playerSquare
+                playerSquare: playerSquare
             )
         )
     }
@@ -143,7 +143,7 @@ extension InGameTransaction {
             coachID: actionContext.coachID,
             payload: .runActionEligibleForSprintBonusPlay(
                 playerID: actionContext.playerID,
-                in: playerSquare
+                playerSquare: playerSquare
             )
         )
     }

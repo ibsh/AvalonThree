@@ -52,7 +52,7 @@ extension InGameTransaction {
                 coachID: actionContext.coachID,
                 payload: .passActionEligibleForProBonusPlay(
                     playerID: player.id,
-                    in: playerSquare
+                    playerSquare: playerSquare
                 )
             )
         }
@@ -97,7 +97,7 @@ extension InGameTransaction {
                 events.append(
                     .playerCaughtHandoff(
                         playerID: target.targetPlayerID,
-                        in: target.targetSquare,
+                        playerSquare: target.targetSquare,
                         ballID: ball.id
                     )
                 )
@@ -121,7 +121,7 @@ extension InGameTransaction {
                 events.append(
                     .playerFailedCatch(
                         playerID: target.targetPlayerID,
-                        in: target.targetSquare,
+                        playerSquare: target.targetSquare,
                         ballID: ball.id
                     )
                 )
@@ -214,7 +214,7 @@ extension InGameTransaction {
                 coachID: player.coachID,
                 payload: .passActionResultEligibleForRawTalentBonusPlayReroll(
                     playerID: player.id,
-                    in: playerSquare,
+                    playerSquare: playerSquare,
                     result: modifiedRoll
                 )
             )

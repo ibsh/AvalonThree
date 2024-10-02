@@ -53,7 +53,7 @@ extension InGameTransaction {
             table.balls.update(with: ball)
 
             events.append(
-                .playerCaughtBouncingBall(playerID: player.id, in: square, ballID: ball.id)
+                .playerCaughtBouncingBall(playerID: player.id, playerSquare: square, ballID: ball.id)
             )
         }
     }

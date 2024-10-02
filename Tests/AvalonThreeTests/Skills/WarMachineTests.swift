@@ -111,7 +111,7 @@ struct WarMachineTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -302,7 +302,7 @@ struct WarMachineTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     maxRunDistance: 3,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -488,7 +488,7 @@ struct WarMachineTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -666,7 +666,7 @@ struct WarMachineTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -820,7 +820,7 @@ struct WarMachineTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -974,7 +974,7 @@ struct WarMachineTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1158,7 +1158,7 @@ struct WarMachineTests {
                 coachID: .away,
                 payload: .runActionSpecifySquares(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1345,7 +1345,7 @@ struct WarMachineTests {
                 coachID: .away,
                 payload: .blockActionSelectResult(
                     playerID: pl(.away, 0),
-                    in: sq(2, 6),
+                    playerSquare: sq(2, 6),
                     results: [.kerrunch, .tackle, .shove]
                 )
             )
