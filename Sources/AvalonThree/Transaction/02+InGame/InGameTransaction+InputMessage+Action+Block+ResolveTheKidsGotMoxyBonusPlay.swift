@@ -13,7 +13,7 @@ extension InGameTransaction {
 
     mutating func blockActionUseTheKidsGotMoxyBonusPlay() throws -> Prompt? {
 
-        try useBonusPlay(
+        _ = try useBonusPlay(
             bonusPlay: bonusPlay,
             coachID: try history.latestTurnContext().coachID
         )

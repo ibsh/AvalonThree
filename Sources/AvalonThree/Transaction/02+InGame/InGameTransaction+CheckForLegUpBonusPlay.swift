@@ -20,7 +20,7 @@ extension InGameTransaction {
             coachID: coachID
         ).contains(where: { $0.bonusPlay == bonusPlay }) {
 
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
+            let card = try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
 
             table.incrementScore(
                 coachID: coachID,
@@ -35,14 +35,7 @@ extension InGameTransaction {
                 )
             )
 
-            let card = try table.removeActiveBonus(coachID: coachID, activeBonus: bonusPlay)
-            table.discards.append(card)
-            events.append(
-                .discardedActiveBonusPlay(coachID: coachID, card: card)
-            )
-            events.append(
-                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
-            )
+            try discardActiveBonusPlay(card: card, coachID: coachID)
         }
     }
 }

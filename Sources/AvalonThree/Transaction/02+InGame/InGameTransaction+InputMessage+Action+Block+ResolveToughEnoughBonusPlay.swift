@@ -26,7 +26,7 @@ extension InGameTransaction {
         let bonusPlay = BonusPlay.toughEnough
 
         if use {
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
+            _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
         }
 
         return try blockActionRollForArmour()

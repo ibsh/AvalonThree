@@ -116,7 +116,13 @@ struct BodyCheckTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .bodyCheck
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .bodyCheck
+                        ),
+                    ]
                 ),
                 .rolledForBlock(
                     coachID: .away,
@@ -155,7 +161,8 @@ struct BodyCheckTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .bodyCheck
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .bodyCheck,

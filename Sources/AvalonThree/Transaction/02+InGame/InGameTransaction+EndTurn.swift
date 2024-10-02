@@ -86,31 +86,19 @@ extension InGameTransaction {
 
         // remove turn-long bonuses
 
-        let activeBonusCards = table.getActiveBonuses(coachID: oldTurnCoachID)
-        var maintainCards = [ChallengeCard]()
-        var discardCards = [ChallengeCard]()
-        for activeBonusCard in activeBonusCards {
-            switch activeBonusCard.bonusPlay.persistence {
+        let activeCards = table.getActiveBonuses(coachID: oldTurnCoachID)
+        for activeCard in activeCards {
+            switch activeCard.bonusPlay.persistence {
             case .oneAction,
                  .oneTurn:
-                discardCards.append(activeBonusCard)
+                try discardActiveBonusPlay(
+                    card: activeCard,
+                    coachID: oldTurnCoachID
+                )
             case .custom,
                  .game:
-                maintainCards.append(activeBonusCard)
+                break
             }
-        }
-        table.setActiveBonuses(coachID: oldTurnCoachID, activeBonuses: maintainCards)
-        for discardCard in discardCards {
-            table.discards.append(discardCard)
-            events.append(
-                .discardedActiveBonusPlay(
-                    coachID: oldTurnCoachID,
-                    card: discardCard
-                )
-            )
-            events.append(
-                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
-            )
         }
 
         history.append(

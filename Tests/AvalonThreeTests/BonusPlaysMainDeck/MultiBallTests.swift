@@ -149,7 +149,13 @@ struct MultiBallTests {
                         challenge: .takeThemDown,
                         bonusPlay: .multiBall
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .multiBall
+                        ),
+                    ]
                 ),
                 .rolledForTrapdoor(
                     coachID: .away,
@@ -192,7 +198,8 @@ struct MultiBallTests {
                     card: ChallengeCard(
                         challenge: .takeThemDown,
                         bonusPlay: .multiBall
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .multiBall,

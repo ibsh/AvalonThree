@@ -45,7 +45,7 @@ extension InGameTransaction {
         action: RawTalentAction
     ) throws -> Prompt? {
         let bonusPlay = BonusPlay.rawTalent
-        try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
+        let card = try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
 
         let prompt = try {
             switch action {
@@ -60,13 +60,9 @@ extension InGameTransaction {
             }
         }()
 
-        let card = try table.removeActiveBonus(coachID: coachID, activeBonus: bonusPlay)
-        table.discards.append(card)
-        events.append(
-            .discardedActiveBonusPlay(coachID: coachID, card: card)
-        )
-        events.append(
-            .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
+        try discardActiveBonusPlay(
+            card: card,
+            coachID: coachID
         )
 
         return prompt

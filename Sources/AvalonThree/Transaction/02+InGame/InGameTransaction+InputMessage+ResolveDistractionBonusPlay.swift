@@ -52,7 +52,7 @@ extension InGameTransaction {
                 throw GameError("Invalid player")
             }
 
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
+            _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
 
             return try declareSidestepAction(
                 playerID: playerID,

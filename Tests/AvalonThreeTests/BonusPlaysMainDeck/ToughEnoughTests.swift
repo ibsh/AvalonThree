@@ -117,7 +117,13 @@ struct ToughEnoughTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .toughEnough
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .toughEnough
+                        ),
+                    ]
                 ),
                 .rolledForArmour(
                     coachID: .home,
@@ -129,7 +135,8 @@ struct ToughEnoughTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .toughEnough
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .toughEnough,

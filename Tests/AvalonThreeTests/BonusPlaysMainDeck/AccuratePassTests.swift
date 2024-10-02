@@ -562,7 +562,13 @@ struct AccuratePassTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .accuratePass
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .accuratePass
+                        ),
+                    ]
                 ),
                 .rolledForPass(
                     coachID: .away,
@@ -586,7 +592,8 @@ struct AccuratePassTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .accuratePass
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .accuratePass,
@@ -722,7 +729,13 @@ struct AccuratePassTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .accuratePass
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .accuratePass
+                        ),
+                    ]
                 ),
                 .rolledForHurlTeammate(
                     coachID: .away,
@@ -747,7 +760,8 @@ struct AccuratePassTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .accuratePass
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .accuratePass,

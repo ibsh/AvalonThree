@@ -31,7 +31,7 @@ extension InGameTransaction {
             throw GameError("No valid declaration")
         }
 
-        try useBonusPlay(bonusPlay: .comboPlay, coachID: actionContext.coachID)
+        _ = try useBonusPlay(bonusPlay: .comboPlay, coachID: actionContext.coachID)
         return try declareAction(
             declaration: validDeclaration.declaration,
             consumesBonusPlays: validDeclaration.consumesBonusPlays,

@@ -32,7 +32,7 @@ extension InGameTransaction {
         }
 
         for bonusPlay in consumesBonusPlays {
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: declaration.coachID)
+            _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: declaration.coachID)
         }
 
         let prompt = try {

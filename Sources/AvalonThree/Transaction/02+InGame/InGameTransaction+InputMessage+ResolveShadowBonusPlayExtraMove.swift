@@ -48,7 +48,7 @@ extension InGameTransaction {
                 throw GameError("Invalid player")
             }
 
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
+            let card = try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
 
             try playerMovesIntoSquare(
                 playerID: playerID,
@@ -57,14 +57,7 @@ extension InGameTransaction {
                 reason: .shadow
             )
 
-            let card = try table.removeActiveBonus(coachID: coachID, activeBonus: bonusPlay)
-            table.discards.append(card)
-            events.append(
-                .discardedActiveBonusPlay(coachID: coachID, card: card)
-            )
-            events.append(
-                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
-            )
+            try discardActiveBonusPlay(card: card, coachID: coachID)
         }
 
         return try endAction()

@@ -29,7 +29,7 @@ extension InGameTransaction {
             throw GameError("Invalid player")
         }
 
-        try useBonusPlay(bonusPlay: bonusPlay, coachID: playerID.coachID)
+        _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: playerID.coachID)
         return try declareStandUpAction(
             playerID: playerID,
             isFree: true

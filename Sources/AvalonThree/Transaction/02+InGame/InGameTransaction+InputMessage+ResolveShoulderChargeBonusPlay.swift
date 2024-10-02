@@ -16,7 +16,7 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
-        try useBonusPlay(bonusPlay: .shoulderCharge, coachID: actionContext.coachID)
+        _ = try useBonusPlay(bonusPlay: .shoulderCharge, coachID: actionContext.coachID)
 
         return try declareBlockAction(
             playerID: actionContext.playerID,

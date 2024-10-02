@@ -29,7 +29,7 @@ extension InGameTransaction {
         }
 
         if use {
-            try useBonusPlay(bonusPlay: .pro, coachID: actionContext.coachID)
+            _ = try useBonusPlay(bonusPlay: .pro, coachID: actionContext.coachID)
         }
         return try passActionRollDie()
     }

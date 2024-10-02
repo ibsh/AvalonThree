@@ -1171,7 +1171,13 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .rawTalent
+                        ),
+                    ]
                 ),
                 .rolledForPass(
                     coachID: .away,
@@ -1204,7 +1210,8 @@ struct RawTalentTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .rawTalent,
@@ -1470,7 +1477,13 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .rawTalent
+                        ),
+                    ]
                 ),
                 .rolledForHurlTeammate(
                     coachID: .away,
@@ -1495,7 +1508,8 @@ struct RawTalentTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .rawTalent,
@@ -1744,7 +1758,13 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .rawTalent
+                        ),
+                    ]
                 ),
                 .rolledForBlock(
                     coachID: .away,
@@ -1775,7 +1795,8 @@ struct RawTalentTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .rawTalent,
@@ -2306,7 +2327,13 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .rawTalent
+                        ),
+                    ]
                 ),
                 .rolledForBlock(
                     coachID: .away,
@@ -2378,7 +2405,8 @@ struct RawTalentTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .rawTalent, count: 1
@@ -2661,7 +2689,13 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .rawTalent
+                        ),
+                    ]
                 ),
                 .rolledForClaws(
                     coachID: .away,
@@ -2689,7 +2723,8 @@ struct RawTalentTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .rawTalent,
@@ -3077,7 +3112,13 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .rawTalent
+                        ),
+                    ]
                 ),
                 .rolledForArmour(
                     coachID: .home,
@@ -3095,7 +3136,8 @@ struct RawTalentTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .rawTalent,

@@ -32,7 +32,7 @@ extension InGameTransaction {
 
         // update the action
         if use {
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: actionContext.coachID)
+            _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: actionContext.coachID)
         }
         return try hurlTeammateActionRollDie()
     }

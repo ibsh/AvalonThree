@@ -21,11 +21,11 @@ extension InGameTransaction {
         // remove action-long bonuses
 
         if let actionContext = actionContexts.last {
-            removeActionLongBonuses(
+            try removeActionLongBonuses(
                 actionContext: actionContext,
                 coachID: actionContext.coachID
             )
-            removeActionLongBonuses(
+            try removeActionLongBonuses(
                 actionContext: actionContext,
                 coachID: actionContext.coachID.inverse
             )
@@ -145,32 +145,20 @@ extension InGameTransaction {
     private mutating func removeActionLongBonuses(
         actionContext: ActionContext,
         coachID: CoachID
-    ) {
-        let activeBonuses = table.getActiveBonuses(coachID: coachID)
-        var maintainBonuses = [ChallengeCard]()
-        var discardBonuses = [ChallengeCard]()
-        for activeBonus in activeBonuses {
-            switch activeBonus.bonusPlay.persistence {
+    ) throws {
+        let activeCards = table.getActiveBonuses(coachID: coachID)
+        for activeCard in activeCards {
+            switch activeCard.bonusPlay.persistence {
             case .oneAction:
-                discardBonuses.append(activeBonus)
+                try discardActiveBonusPlay(
+                    card: activeCard,
+                    coachID: coachID
+                )
             case .oneTurn,
                  .custom,
                  .game:
-                maintainBonuses.append(activeBonus)
+                break
             }
-        }
-        table.setActiveBonuses(coachID: coachID, activeBonuses: maintainBonuses)
-        for discardBonus in discardBonuses {
-            table.discards.append(discardBonus)
-            events.append(
-                .discardedActiveBonusPlay(
-                    coachID: coachID,
-                    card: discardBonus
-                )
-            )
-            events.append(
-                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
-            )
         }
     }
 }

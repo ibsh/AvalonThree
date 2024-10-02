@@ -174,7 +174,11 @@ struct ShadowTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .shadow
                     ),
-                    hand: []
+                    hand: [],
+                    active: [ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .shadow
+                    ),]
                 ),
                 .playerMoved(
                     playerID: pl(.home, 0),
@@ -189,7 +193,8 @@ struct ShadowTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .shadow
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .shadow,

@@ -24,7 +24,7 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
-        try useBonusPlay(bonusPlay: bonusPlay, coachID: targetPlayerID.coachID)
+        _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: targetPlayerID.coachID)
 
         history.append(.actionCancelled)
         history.append(.actionFinished)

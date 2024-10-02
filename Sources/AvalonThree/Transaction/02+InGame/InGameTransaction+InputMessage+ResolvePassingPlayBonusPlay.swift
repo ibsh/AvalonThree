@@ -26,7 +26,7 @@ extension InGameTransaction {
         let bonusPlay = BonusPlay.passingPlay
 
         if use {
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: turnContext.coachID)
+            _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: turnContext.coachID)
         }
 
         return try beginTurn()

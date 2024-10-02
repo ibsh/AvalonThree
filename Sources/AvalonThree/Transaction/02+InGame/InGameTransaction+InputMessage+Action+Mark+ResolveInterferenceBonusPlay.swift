@@ -50,7 +50,7 @@ extension InGameTransaction {
         let bonusPlay = BonusPlay.interference
 
         if use {
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: actionContext.coachID)
+            _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: actionContext.coachID)
 
             // refresh valid squares now that the player has the bonus active
 

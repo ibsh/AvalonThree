@@ -38,7 +38,7 @@ extension InGameTransaction {
 
         if use {
 
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: actionContext.coachID)
+            _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: actionContext.coachID)
 
             maxRunDistance += TableConstants.sprintBonusPlayMaxRunDistanceDelta
 

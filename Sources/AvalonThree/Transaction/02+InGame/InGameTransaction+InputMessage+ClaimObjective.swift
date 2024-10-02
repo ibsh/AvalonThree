@@ -70,13 +70,13 @@ extension InGameTransaction {
         case .multiBall:
             try multiBall(objective: objective, coachID: turnContext.coachID)
         case .bribedRef:
-            try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
+            _ = try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
         case .nufflesBlessing:
-            try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
+            _ = try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
         case .readyToGo:
-            try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
+            _ = try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
         case .yourTimeToShine:
-            try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
+            _ = try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: turnContext.coachID)
         case .accuratePass,
              .blitz,
              .blockingPlay,
@@ -152,18 +152,9 @@ extension InGameTransaction {
     }
 
     private mutating func multiBall(objective: ChallengeCard, coachID: CoachID) throws {
-        try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: coachID)
+        let card = try useBonusPlay(bonusPlay: objective.bonusPlay, coachID: coachID)
         try addNewBall()
         try addNewBall()
-        table.discards.append(objective)
-        events.append(
-            .discardedActiveBonusPlay(
-                coachID: coachID,
-                card: objective
-            )
-        )
-        events.append(
-            .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
-        )
+        try discardActiveBonusPlay(card: card, coachID: coachID)
     }
 }

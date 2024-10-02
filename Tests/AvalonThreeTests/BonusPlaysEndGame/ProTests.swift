@@ -133,7 +133,13 @@ struct ProTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .pro
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .pro
+                        ),
+                    ]
                 ),
                 .rolledForPass(
                     coachID: .away,
@@ -165,7 +171,8 @@ struct ProTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .pro
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(top: .pro, count: 1),
             ]
@@ -447,7 +454,13 @@ struct ProTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .pro
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .pro
+                        ),
+                    ]
                 ),
                 .rolledForHurlTeammate(
                     coachID: .away,
@@ -472,7 +485,8 @@ struct ProTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .pro
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(top: .pro, count: 1),
             ]
@@ -731,7 +745,13 @@ struct ProTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .pro
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .pro
+                        ),
+                    ]
                 ),
                 .rolledForArmour(
                     coachID: .home,
@@ -743,7 +763,8 @@ struct ProTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .pro
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(top: .pro, count: 1),
             ]

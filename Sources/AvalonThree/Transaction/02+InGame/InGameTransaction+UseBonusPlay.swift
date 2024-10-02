@@ -12,27 +12,25 @@ extension InGameTransaction {
     mutating func useBonusPlay(
         bonusPlay: BonusPlay,
         coachID: CoachID
-    ) throws {
+    ) throws -> ChallengeCard {
 
         var hand = table.getHand(coachID: coachID)
         guard let card = hand.removeFirst(where: { $0.bonusPlay == bonusPlay }) else {
             throw GameError("No bonus play")
         }
-        table.setHand(coachID: coachID, hand: hand)
 
-        let wrappedHand: [WrappedChallengeCard] = hand.map { .open(card: $0) }
+        table.setHand(coachID: coachID, hand: hand)
+        table.addActiveBonus(coachID: coachID, activeBonus: card)
 
         events.append(
             .activatedBonusPlay(
                 coachID: coachID,
                 card: card,
-                hand: wrappedHand
+                hand: hand.map { .open(card: $0) },
+                active: table.getActiveBonuses(coachID: coachID)
             )
         )
-        let bonuses = table.getActiveBonuses(coachID: coachID)
-        table.setActiveBonuses(
-            coachID: coachID,
-            activeBonuses: bonuses + [card]
-        )
+
+        return card
     }
 }

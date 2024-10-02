@@ -415,12 +415,14 @@ public enum Event: Equatable, Codable, Sendable {
     case activatedBonusPlay(
         coachID: CoachID,
         card: ChallengeCard,
-        hand: [WrappedChallengeCard]
+        hand: [WrappedChallengeCard],
+        active: [ChallengeCard]
     )
 
     case discardedActiveBonusPlay(
         coachID: CoachID,
-        card: ChallengeCard
+        card: ChallengeCard,
+        active: [ChallengeCard]
     )
 
     case scoreUpdated(

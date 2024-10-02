@@ -50,7 +50,7 @@ extension InGameTransaction {
 
         if let playerID = use {
 
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
+            _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
 
             let playerDeclarations = validDeclarations.filter { $0.playerID == playerID }
             guard !playerDeclarations.isEmpty else {
@@ -62,7 +62,7 @@ extension InGameTransaction {
                 guard bonusPlayRequirements == [[.interference]] else {
                     throw GameError("Unexpected bonus plays")
                 }
-                try useBonusPlay(bonusPlay: .interference, coachID: coachID)
+                _ = try useBonusPlay(bonusPlay: .interference, coachID: coachID)
             }
 
             return try declareMarkAction(

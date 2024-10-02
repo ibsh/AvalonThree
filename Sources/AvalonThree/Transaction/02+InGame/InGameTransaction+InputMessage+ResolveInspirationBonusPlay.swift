@@ -18,7 +18,7 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
-        try useBonusPlay(bonusPlay: .inspiration, coachID: actionContext.coachID)
+        _ = try useBonusPlay(bonusPlay: .inspiration, coachID: actionContext.coachID)
         return try declareAction(
             declaration: declaration,
             consumesBonusPlays: [],

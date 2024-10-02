@@ -27,7 +27,7 @@ extension InGameTransaction {
             throw GameError("Invalid player")
         }
 
-        try useBonusPlay(bonusPlay: .reserves, coachID: playerID.coachID)
+        _ = try useBonusPlay(bonusPlay: .reserves, coachID: playerID.coachID)
         return try declareReservesAction(
             playerID: playerID,
             isFree: true

@@ -44,30 +44,36 @@ extension Table {
         coachID == coinFlipLoserCoachID ? coinFlipLoserActiveBonuses : coinFlipWinnerActiveBonuses
     }
 
-    mutating func setActiveBonuses(
+    mutating func addActiveBonus(
         coachID: CoachID,
-        activeBonuses: [ChallengeCard]
+        activeBonus: ChallengeCard
     ) {
         if coachID == coinFlipLoserCoachID {
-            coinFlipLoserActiveBonuses = activeBonuses
+            coinFlipLoserActiveBonuses.append(activeBonus)
         } else {
-            coinFlipWinnerActiveBonuses = activeBonuses
+            coinFlipWinnerActiveBonuses.append(activeBonus)
         }
     }
 
     mutating func removeActiveBonus(
         coachID: CoachID,
-        activeBonus: BonusPlay
+        activeBonus: ChallengeCard
     ) throws -> ChallengeCard {
-        var bonuses = getActiveBonuses(coachID: coachID)
-        guard let card = bonuses.removeFirst(where: { $0.bonusPlay == activeBonus }) else {
-            throw GameError("No active bonus")
+        if coachID == coinFlipLoserCoachID {
+            guard let card = coinFlipLoserActiveBonuses.removeFirst(
+                where: { $0 == activeBonus }
+            ) else {
+                throw GameError("No active bonus")
+            }
+            return card
+        } else {
+            guard let card = coinFlipWinnerActiveBonuses.removeFirst(
+                where: { $0 == activeBonus }
+            ) else {
+                throw GameError("No active bonus")
+            }
+            return card
         }
-        setActiveBonuses(
-            coachID: coachID,
-            activeBonuses: bonuses
-        )
-        return card
     }
 
     func getScore(

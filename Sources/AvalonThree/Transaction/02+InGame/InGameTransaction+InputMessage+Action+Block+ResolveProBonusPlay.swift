@@ -24,7 +24,7 @@ extension InGameTransaction {
         let coachID = try history.latestTurnContext().coachID.inverse
 
         if use {
-            try useBonusPlay(bonusPlay: .pro, coachID: coachID)
+            _ = try useBonusPlay(bonusPlay: .pro, coachID: coachID)
         }
 
         return try blockActionRollForArmour()

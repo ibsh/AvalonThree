@@ -159,7 +159,8 @@ struct HailMaryPassTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .hailMaryPass
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .hailMaryPass,
@@ -315,7 +316,8 @@ struct HailMaryPassTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .hailMaryPass
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .hailMaryPass,
@@ -464,7 +466,8 @@ struct HailMaryPassTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .hailMaryPass
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .hailMaryPass,
@@ -749,7 +752,8 @@ struct HailMaryPassTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .hailMaryPass
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .hailMaryPass,
@@ -916,7 +920,8 @@ struct HailMaryPassTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .hailMaryPass
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .hailMaryPass,

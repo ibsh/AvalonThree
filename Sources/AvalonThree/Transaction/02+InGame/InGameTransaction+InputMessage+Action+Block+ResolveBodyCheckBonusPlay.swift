@@ -15,7 +15,7 @@ extension InGameTransaction {
 
         let coachID = try history.latestTurnContext().coachID
 
-        try useBonusPlay(
+        _ = try useBonusPlay(
             bonusPlay: bonusPlay,
             coachID: coachID
         )

@@ -347,7 +347,13 @@ struct StepAsideTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .stepAside
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .stepAside
+                        ),
+                    ]
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
@@ -430,7 +436,8 @@ struct StepAsideTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .stepAside
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .stepAside,

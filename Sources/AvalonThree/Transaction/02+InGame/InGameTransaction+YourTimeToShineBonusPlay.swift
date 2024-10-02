@@ -131,29 +131,15 @@ extension InGameTransaction {
         let turnContext = try history.latestTurnContext()
         let coachID = turnContext.coachID
 
-        let activeBonusCards = table.getActiveBonuses(coachID: coachID)
-        var maintainCards = [ChallengeCard]()
-        var discardCards = [ChallengeCard]()
-        for activeBonusCard in activeBonusCards {
-            if activeBonusCard.bonusPlay == bonusPlay {
-                discardCards.append(activeBonusCard)
-            } else {
-                maintainCards.append(activeBonusCard)
-            }
+        guard
+            let card = table
+                .getActiveBonuses(coachID: coachID)
+                .first(where: { $0.bonusPlay == bonusPlay })
+        else {
+            throw GameError("No active bonus")
         }
-        table.setActiveBonuses(coachID: coachID, activeBonuses: maintainCards)
-        for discardCard in discardCards {
-            table.discards.append(discardCard)
-            events.append(
-                .discardedActiveBonusPlay(
-                    coachID: coachID,
-                    card: discardCard
-                )
-            )
-            events.append(
-                .updatedDiscards(top: table.discards.last?.bonusPlay, count: table.discards.count)
-            )
-        }
+
+        try discardActiveBonusPlay(card: card, coachID: coachID)
 
         return try endAction()
     }

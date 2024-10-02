@@ -160,7 +160,13 @@ struct ReservesTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .reserves
                     ),
-                    hand: []
+                    hand: [],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .reserves
+                        ),
+                    ]
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(

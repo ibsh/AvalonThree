@@ -29,7 +29,7 @@ extension InGameTransaction {
             throw GameError("No player ID")
         }
 
-        try useBonusPlay(bonusPlay: .getInThere, coachID: playerID.coachID)
+        _ = try useBonusPlay(bonusPlay: .getInThere, coachID: playerID.coachID)
 
         return try declareReservesAction(
             playerID: playerID,

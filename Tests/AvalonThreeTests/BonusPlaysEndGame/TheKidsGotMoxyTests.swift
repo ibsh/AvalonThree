@@ -159,7 +159,8 @@ struct TheKidsGotMoxyTests {
                     card: ChallengeCard(
                         challenge: .breakSomeBones,
                         bonusPlay: .theKidsGotMoxy
-                    )
+                    ),
+                    active: []
                 ),
                 .updatedDiscards(
                     top: .theKidsGotMoxy,

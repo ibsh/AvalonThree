@@ -45,7 +45,7 @@ extension InGameTransaction {
         let bonusPlay = BonusPlay.hailMaryPass
 
         if use {
-            try useBonusPlay(bonusPlay: bonusPlay, coachID: actionContext.coachID)
+            _ = try useBonusPlay(bonusPlay: bonusPlay, coachID: actionContext.coachID)
 
             // refresh valid targets now that the player has the bonus active
 
