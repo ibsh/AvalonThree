@@ -323,7 +323,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     )
 
     case earnedObjective(
-        objectives: [ObjectiveID: Challenge]
+        objectives: [Int: Challenge]
     )
 
     case eligibleForReadyToGoBonusPlayRunAction(
@@ -375,7 +375,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     case eligibleForPassingPlayBonusPlay
 
     case selectObjectiveToDiscard(
-        objectives: [ObjectiveID: Challenge]
+        objectives: [Int: Challenge]
     )
 }
 

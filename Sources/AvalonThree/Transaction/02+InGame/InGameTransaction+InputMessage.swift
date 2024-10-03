@@ -308,9 +308,9 @@ extension InGameTransaction {
         case .declineInterventionBonusPlayMarkAction:
             return try declineInterventionBonusPlayMarkAction()
 
-        case .claimObjective(let objectiveID):
+        case .claimObjective(let objectiveIndex):
             return try claimObjective(
-                objectiveID: objectiveID
+                objectiveIndex: objectiveIndex
             )
 
         case .declineToClaimObjective:
@@ -389,9 +389,9 @@ extension InGameTransaction {
         case .declinePassingPlayBonusPlay:
             return try declinePassingPlayBonusPlay()
 
-        case .selectObjectiveToDiscard(let objectiveID):
+        case .selectObjectiveToDiscard(let objectiveIndex):
             return try selectObjectiveToDiscard(
-                objectiveID: objectiveID
+                objectiveIndex: objectiveIndex
             )
 
         case .begin,

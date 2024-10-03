@@ -113,7 +113,7 @@ struct MultiBallTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
                 direction: direction(.south, .northEast),
@@ -126,7 +126,7 @@ struct MultiBallTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .takeThemDown,
@@ -315,7 +315,7 @@ struct MultiBallTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
                 direction: direction(.south, .northEast),
@@ -455,7 +455,7 @@ struct MultiBallTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
                 direction: direction(.south, .northEast),
@@ -590,7 +590,7 @@ struct MultiBallTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
                 direction: direction(.south, .northEast),
@@ -731,7 +731,7 @@ struct MultiBallTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
                 direction: direction(.south, .northEast),
@@ -880,7 +880,7 @@ struct MultiBallTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
                 direction: direction(.east, .west, .southEast),

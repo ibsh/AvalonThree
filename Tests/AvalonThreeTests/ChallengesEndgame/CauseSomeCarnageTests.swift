@@ -426,7 +426,7 @@ struct CauseSomeCarnageTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             )
         )
 

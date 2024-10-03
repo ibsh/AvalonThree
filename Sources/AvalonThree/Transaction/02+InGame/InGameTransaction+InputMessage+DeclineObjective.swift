@@ -15,18 +15,18 @@ extension InGameTransaction {
 
         guard
             let entry = turnContext.history.last,
-            case .choosingObjectiveToClaim(let objectiveIDs) = entry
+            case .choosingObjectiveToClaim(let objectiveIndices) = entry
         else {
             throw GameError("No claim in history")
         }
 
-        let objectives = try objectiveIDs.reduce(
-            [ObjectiveID: Challenge]()) { partialResult, objectiveID in
-                guard let objective = table.objectives.getObjective(id: objectiveID) else {
+        let objectives = try objectiveIndices.reduce(
+            [Int: Challenge]()) { partialResult, objectiveIndex in
+                guard let objective = try table.objectives.getObjective(index: objectiveIndex) else {
                     throw GameError("No objective")
                 }
                 return partialResult.adding(
-                    key: objectiveID,
+                    key: objectiveIndex,
                     value: objective.challenge
                 )
             }

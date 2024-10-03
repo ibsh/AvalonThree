@@ -147,7 +147,7 @@ public enum InputMessage: Codable, Sendable {
     case useInterventionBonusPlayMarkAction(playerID: PlayerID)
     case declineInterventionBonusPlayMarkAction
 
-    case claimObjective(objectiveID: ObjectiveID)
+    case claimObjective(objectiveIndex: Int)
     case declineToClaimObjective
 
     case useReadyToGoBonusPlayRunAction
@@ -184,7 +184,7 @@ public enum InputMessage: Codable, Sendable {
     case declineDefensivePlayBonusPlay
     case usePassingPlayBonusPlay
     case declinePassingPlayBonusPlay
-    case selectObjectiveToDiscard(objectiveID: ObjectiveID)
+    case selectObjectiveToDiscard(objectiveIndex: Int)
 }
 
 public struct InputMessageWrapper: Codable, Sendable {

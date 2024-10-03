@@ -286,7 +286,7 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .first: .takeThemDown,
+                        0: .takeThemDown,
                     ]
                 )
             )
@@ -297,7 +297,7 @@ struct RefreshObjectivesTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .first)
+                message: .claimObjective(objectiveIndex: 0)
             )
         )
 
@@ -305,7 +305,7 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .takeThemDown,
@@ -397,7 +397,7 @@ struct RefreshObjectivesTests {
                 .turnEnded(coachID: .away),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .goDeep
                 ),
                 .updatedDeck(top: .lastChance, count: 2),
@@ -814,8 +814,8 @@ struct RefreshObjectivesTests {
                 coachID: .home,
                 payload: .selectObjectiveToDiscard(
                     objectives: [
-                        .second: .spreadOut,
-                        .third: .showNoFear,
+                        1: .spreadOut,
+                        2: .showNoFear,
                     ]
                 )
             )
@@ -844,7 +844,7 @@ struct RefreshObjectivesTests {
             (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .home,
-                    message: .selectObjectiveToDiscard(objectiveID: .first)
+                    message: .selectObjectiveToDiscard(objectiveIndex: 0)
                 )
             )
         }
@@ -854,7 +854,7 @@ struct RefreshObjectivesTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .selectObjectiveToDiscard(objectiveID: .second)
+                message: .selectObjectiveToDiscard(objectiveIndex: 1)
             )
         )
 
@@ -862,7 +862,7 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .discardedObjective(
                     coachID: .home,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: ChallengeCard(
                         challenge: .spreadOut,
                         bonusPlay: .absoluteCarnage
@@ -874,13 +874,13 @@ struct RefreshObjectivesTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .goDeep
                 ),
                 .updatedDeck(top: .lastChance, count: 2),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .lastChance
                 ),
                 .updatedDeck(top: .pileOn, count: 1),
@@ -1296,9 +1296,9 @@ struct RefreshObjectivesTests {
                 coachID: .home,
                 payload: .selectObjectiveToDiscard(
                     objectives: [
-                        .first: .showboatForTheCrowd,
-                        .second: .spreadOut,
-                        .third: .showNoFear,
+                        0: .showboatForTheCrowd,
+                        1: .spreadOut,
+                        2: .showNoFear,
                     ]
                 )
             )
@@ -1326,7 +1326,7 @@ struct RefreshObjectivesTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .selectObjectiveToDiscard(objectiveID: .second)
+                message: .selectObjectiveToDiscard(objectiveIndex: 1)
             )
         )
 
@@ -1334,7 +1334,7 @@ struct RefreshObjectivesTests {
             latestEvents == [
                 .discardedObjective(
                     coachID: .home,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: ChallengeCard(
                         challenge: .spreadOut,
                         bonusPlay: .absoluteCarnage
@@ -1346,7 +1346,7 @@ struct RefreshObjectivesTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .goDeep
                 ),
                 .updatedDeck(top: .lastChance, count: 2),

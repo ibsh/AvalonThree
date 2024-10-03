@@ -144,20 +144,20 @@ extension InGameTransaction {
         }
 
         history.append(
-            .choosingObjectiveToDiscard(objectiveIDs: objectives.map { $0.0 })
+            .choosingObjectiveToDiscard(objectiveIndices: objectives.map { $0.0 })
         )
 
         if objectives.count == 1 {
             let objective = objectives.first!
             history.append(
-                .discardedObjective(objectiveID: objective.0)
+                .discardedObjective(objectiveIndex: objective.0)
             )
-            table.objectives.remove(objective.0)
+            try table.objectives.remove(objective.0)
             table.discards.append(objective.1)
             events.append(
                 .discardedObjective(
                     coachID: turnContext.coachID,
-                    objectiveID: objective.0,
+                    objectiveIndex: objective.0,
                     objective: objective.1
                 )
             )
@@ -191,7 +191,7 @@ extension InGameTransaction {
             events.append(
                 .dealtNewObjective(
                     coachID: turnContext.coachID,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: card.challenge
                 )
             )
@@ -205,7 +205,7 @@ extension InGameTransaction {
             events.append(
                 .dealtNewObjective(
                     coachID: turnContext.coachID,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: card.challenge
                 )
             )
@@ -219,7 +219,7 @@ extension InGameTransaction {
             events.append(
                 .dealtNewObjective(
                     coachID: turnContext.coachID,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: card.challenge
                 )
             )

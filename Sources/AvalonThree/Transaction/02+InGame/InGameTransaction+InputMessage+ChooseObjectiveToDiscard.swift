@@ -10,35 +10,35 @@ import Foundation
 extension InGameTransaction {
 
     mutating func selectObjectiveToDiscard(
-        objectiveID: ObjectiveID
+        objectiveIndex: Int
     ) throws -> Prompt? {
 
         let turnContext = try history.latestTurnContext()
         guard
             let entry = turnContext.history.last,
-            case .choosingObjectiveToDiscard(let objectiveIDs) = entry
+            case .choosingObjectiveToDiscard(let objectiveIndices) = entry
         else {
             throw GameError("No discard prompt in history")
         }
 
-        guard objectiveIDs.contains(objectiveID) else {
+        guard objectiveIndices.contains(objectiveIndex) else {
             throw GameError("Invalid objective ID")
         }
 
-        guard let objective = table.objectives.getObjective(id: objectiveID) else {
+        guard let objective = try table.objectives.getObjective(index: objectiveIndex) else {
             throw GameError("No objective")
         }
 
         history.append(
-            .discardedObjective(objectiveID: objectiveID)
+            .discardedObjective(objectiveIndex: objectiveIndex)
         )
 
-        table.objectives.remove(objectiveID)
+        try table.objectives.remove(objectiveIndex)
         table.discards.append(objective)
         events.append(
             .discardedObjective(
                 coachID: turnContext.coachID,
-                objectiveID: objectiveID,
+                objectiveIndex: objectiveIndex,
                 objective: objective
             )
         )

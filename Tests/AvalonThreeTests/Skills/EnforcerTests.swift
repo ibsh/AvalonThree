@@ -213,7 +213,7 @@ struct EnforcerTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             )
         )
 
@@ -221,7 +221,7 @@ struct EnforcerTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .freeUpTheBall,

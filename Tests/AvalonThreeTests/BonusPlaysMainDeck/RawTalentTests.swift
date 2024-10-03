@@ -328,7 +328,7 @@ struct RawTalentTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .breakSomeBones
                 ),
                 .updatedDeck(
@@ -337,7 +337,7 @@ struct RawTalentTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .breakSomeBones
                 ),
                 .updatedDeck(
@@ -346,7 +346,7 @@ struct RawTalentTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: .freeUpTheBall
                 ),
                 .updatedDeck(
@@ -680,7 +680,7 @@ struct RawTalentTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .breakSomeBones
                 ),
                 .updatedDeck(
@@ -689,7 +689,7 @@ struct RawTalentTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .breakSomeBones
                 ),
                 .updatedDeck(
@@ -698,7 +698,7 @@ struct RawTalentTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: .freeUpTheBall
                 ),
                 .updatedDeck(
@@ -1025,7 +1025,7 @@ struct RawTalentTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .breakSomeBones
                 ),
                 .updatedDeck(
@@ -1034,7 +1034,7 @@ struct RawTalentTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .breakSomeBones
                 ),
                 .updatedDeck(
@@ -1043,7 +1043,7 @@ struct RawTalentTests {
                 ),
                 .dealtNewObjective(
                     coachID: .home,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: .freeUpTheBall
                 ),
                 .updatedDeck(

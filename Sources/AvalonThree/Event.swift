@@ -365,14 +365,14 @@ public enum Event: Equatable, Codable, Sendable {
 
     case claimedObjective(
         coachID: CoachID,
-        objectiveID: ObjectiveID,
+        objectiveIndex: Int,
         objective: WrappedChallengeCard,
         hand: [WrappedChallengeCard]
     )
 
     case declinedObjectives(
         coachID: CoachID,
-        objectives: [ObjectiveID: Challenge]
+        objectives: [Int: Challenge]
     )
 
     case declinedCatchersInstinctsSkillRunAction(
@@ -396,13 +396,13 @@ public enum Event: Equatable, Codable, Sendable {
 
     case dealtNewObjective(
         coachID: CoachID,
-        objectiveID: ObjectiveID,
+        objectiveIndex: Int,
         objective: Challenge
     )
 
     case discardedObjective(
         coachID: CoachID,
-        objectiveID: ObjectiveID,
+        objectiveIndex: Int,
         objective: ChallengeCard
     )
 

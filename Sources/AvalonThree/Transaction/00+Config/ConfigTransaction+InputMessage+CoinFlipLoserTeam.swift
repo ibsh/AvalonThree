@@ -139,7 +139,7 @@ extension ConfigTransaction {
             events.append(
                 .dealtNewObjective(
                     coachID: coinFlipWinnerCoachID.inverse,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: card.challenge
                 )
             )
@@ -153,7 +153,7 @@ extension ConfigTransaction {
             events.append(
                 .dealtNewObjective(
                     coachID: coinFlipWinnerCoachID.inverse,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: card.challenge
                 )
             )
@@ -167,7 +167,7 @@ extension ConfigTransaction {
             events.append(
                 .dealtNewObjective(
                     coachID: coinFlipWinnerCoachID.inverse,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: card.challenge
                 )
             )

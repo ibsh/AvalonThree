@@ -491,7 +491,7 @@ struct MyFirstGameTests {
                 ),
                 .dealtNewObjective(
                     coachID: .away,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .gangUp
                 ),
                 .updatedDeck(
@@ -500,7 +500,7 @@ struct MyFirstGameTests {
                 ),
                 .dealtNewObjective(
                     coachID: .away,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .showNoFear
                 ),
                 .updatedDeck(
@@ -509,7 +509,7 @@ struct MyFirstGameTests {
                 ),
                 .dealtNewObjective(
                     coachID: .away,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: .moveTheBall
                 ),
                 .updatedDeck(

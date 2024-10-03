@@ -516,9 +516,9 @@ struct SuddenDeathTests {
                 coachID: .home,
                 payload: .selectObjectiveToDiscard(
                     objectives: [
-                        .first: .breakSomeBones,
-                        .second: .breakSomeBones,
-                        .third: .breakTheirLines
+                        0: .breakSomeBones,
+                        1: .breakSomeBones,
+                        2: .breakTheirLines
                     ]
                 )
             )
@@ -777,9 +777,9 @@ struct SuddenDeathTests {
                 coachID: .home,
                 payload: .selectObjectiveToDiscard(
                     objectives: [
-                        .first: .breakSomeBones,
-                        .second: .breakSomeBones,
-                        .third: .breakSomeBones,
+                        0: .breakSomeBones,
+                        1: .breakSomeBones,
+                        2: .breakSomeBones,
                     ]
                 )
             )

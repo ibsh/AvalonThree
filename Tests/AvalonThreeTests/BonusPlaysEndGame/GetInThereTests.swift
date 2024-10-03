@@ -853,7 +853,7 @@ struct GetInThereTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .first)
+                message: .claimObjective(objectiveIndex: 0)
             ),
             randomizers: Randomizers(direction: direction(.northWest, .east)),
             ballIDProvider: ballID(456, 789)
@@ -1068,7 +1068,7 @@ struct GetInThereTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .first)
+                message: .claimObjective(objectiveIndex: 0)
             ),
             randomizers: Randomizers(direction: direction(.northWest, .east)),
             ballIDProvider: ballID(456, 789)
@@ -1261,7 +1261,7 @@ struct GetInThereTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .first)
+                message: .claimObjective(objectiveIndex: 0)
             ),
             randomizers: Randomizers(direction: direction(.northWest, .east)),
             ballIDProvider: ballID(456, 789)
@@ -1476,7 +1476,7 @@ struct GetInThereTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .first)
+                message: .claimObjective(objectiveIndex: 0)
             ),
             randomizers: Randomizers(direction: direction(.northWest, .east)),
             ballIDProvider: ballID(456, 789)

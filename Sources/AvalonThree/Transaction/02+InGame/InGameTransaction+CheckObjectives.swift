@@ -65,7 +65,7 @@ extension InGameTransaction {
             }
         }
 
-        history.append(.choosingObjectiveToClaim(objectiveIDs: canClaim.map { $0.0 }))
+        history.append(.choosingObjectiveToClaim(objectiveIndices: canClaim.map { $0.0 }))
         return Prompt(
             coachID: turnContext.coachID,
             payload: .earnedObjective(

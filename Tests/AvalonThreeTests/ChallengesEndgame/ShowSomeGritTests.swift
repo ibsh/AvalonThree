@@ -532,7 +532,7 @@ struct ShowSomeGritTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .selectObjectiveToDiscard(objectiveID: .third)
+                message: .selectObjectiveToDiscard(objectiveIndex: 2)
             )
         )
 
@@ -589,7 +589,7 @@ struct ShowSomeGritTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             )
         )
 

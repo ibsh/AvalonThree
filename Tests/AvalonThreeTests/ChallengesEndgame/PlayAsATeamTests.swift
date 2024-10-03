@@ -657,7 +657,7 @@ struct PlayAsATeamTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .third)
+                message: .claimObjective(objectiveIndex: 2)
             )
         )
 

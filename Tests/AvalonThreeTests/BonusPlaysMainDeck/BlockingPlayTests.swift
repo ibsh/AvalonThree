@@ -692,7 +692,7 @@ struct BlockingPlayTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .selectObjectiveToDiscard(objectiveID: .first)
+                message: .selectObjectiveToDiscard(objectiveIndex: 0)
             )
         )
 
@@ -846,7 +846,7 @@ struct BlockingPlayTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .selectObjectiveToDiscard(objectiveID: .third)
+                message: .selectObjectiveToDiscard(objectiveIndex: 2)
             )
         )
 

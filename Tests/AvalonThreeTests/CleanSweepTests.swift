@@ -346,7 +346,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .first: .getTheBall,
+                        0: .getTheBall,
                     ]
                 )
             )
@@ -357,7 +357,7 @@ struct CleanSweepTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .first)
+                message: .claimObjective(objectiveIndex: 0)
             )
         )
 
@@ -365,7 +365,7 @@ struct CleanSweepTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .getTheBall,
@@ -494,7 +494,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .third: .moveTheBall,
+                        2: .moveTheBall,
                     ]
                 )
             )
@@ -505,7 +505,7 @@ struct CleanSweepTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .third)
+                message: .claimObjective(objectiveIndex: 2)
             )
         )
 
@@ -513,7 +513,7 @@ struct CleanSweepTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .moveTheBall,
@@ -742,7 +742,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .second: .takeThemDown,
+                        1: .takeThemDown,
                     ]
                 )
             )
@@ -753,7 +753,7 @@ struct CleanSweepTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             )
         )
 
@@ -761,7 +761,7 @@ struct CleanSweepTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .takeThemDown,
@@ -950,7 +950,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .first: .getTheBall,
+                        0: .getTheBall,
                     ]
                 )
             )
@@ -970,7 +970,7 @@ struct CleanSweepTests {
                 .declinedObjectives(
                     coachID: .away,
                     objectives: [
-                        .first: .getTheBall,
+                        0: .getTheBall,
                     ]
                 )
             ]
@@ -1085,7 +1085,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .third: .moveTheBall,
+                        2: .moveTheBall,
                     ]
                 )
             )
@@ -1096,7 +1096,7 @@ struct CleanSweepTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .third)
+                message: .claimObjective(objectiveIndex: 2)
             )
         )
 
@@ -1104,7 +1104,7 @@ struct CleanSweepTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .moveTheBall,
@@ -1330,7 +1330,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .second: .takeThemDown,
+                        1: .takeThemDown,
                     ]
                 )
             )
@@ -1341,7 +1341,7 @@ struct CleanSweepTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             )
         )
 
@@ -1349,7 +1349,7 @@ struct CleanSweepTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .takeThemDown,
@@ -1508,7 +1508,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .first: .getTheBall,
+                        0: .getTheBall,
                     ]
                 )
             )
@@ -1519,7 +1519,7 @@ struct CleanSweepTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .first)
+                message: .claimObjective(objectiveIndex: 0)
             )
         )
 
@@ -1527,7 +1527,7 @@ struct CleanSweepTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .getTheBall,
@@ -1662,7 +1662,7 @@ struct CleanSweepTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .third: .moveTheBall,
+                        2: .moveTheBall,
                     ]
                 )
             )
@@ -1673,7 +1673,7 @@ struct CleanSweepTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .third)
+                message: .claimObjective(objectiveIndex: 2)
             )
         )
 
@@ -1681,7 +1681,7 @@ struct CleanSweepTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .moveTheBall,

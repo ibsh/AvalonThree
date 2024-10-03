@@ -13,40 +13,36 @@ public struct Objectives: Codable, Sendable {
     var third: ChallengeCard?
 }
 
-public enum ObjectiveID: String, Codable, Sendable {
-    case first
-    case second
-    case third
-}
-
 extension Objectives {
 
-    func getObjective(id: ObjectiveID) -> ChallengeCard? {
-        switch id {
-        case .first: first
-        case .second: second
-        case .third: third
+    func getObjective(index: Int) throws -> ChallengeCard? {
+        switch index {
+        case 0: first
+        case 1: second
+        case 2: third
+        default: throw GameError("Invalid objective index")
         }
     }
 
-    mutating func remove(_ id: ObjectiveID) {
-        switch id {
-        case .first: first = nil
-        case .second: second = nil
-        case .third: third = nil
+    mutating func remove(_ index: Int) throws {
+        switch index {
+        case 0: first = nil
+        case 1: second = nil
+        case 2: third = nil
+        default: throw GameError("Invalid objective index")
         }
     }
 
-    var notEmpty: [ObjectiveID: ChallengeCard] {
-        var result = [ObjectiveID: ChallengeCard]()
+    var notEmpty: [Int: ChallengeCard] {
+        var result = [Int: ChallengeCard]()
         if let first {
-            result[.first] = first
+            result[0] = first
         }
         if let second {
-            result[.second] = second
+            result[1] = second
         }
         if let third {
-            result[.third] = third
+            result[2] = third
         }
         return result
     }

@@ -20,8 +20,8 @@ enum HistoryEntry: Equatable, Sendable {
     case eligibleForDefensivePlayBonusPlay
     case eligibleForPassingPlayBonusPlay
 
-    case choosingObjectiveToDiscard(objectiveIDs: [ObjectiveID])
-    case discardedObjective(objectiveID: ObjectiveID)
+    case choosingObjectiveToDiscard(objectiveIndices: [Int])
+    case discardedObjective(objectiveIndex: Int)
 
     case declareEmergencyReservesAction
     case eligibleForRegenerationSkillStandUpAction(playerID: PlayerID)
@@ -129,8 +129,8 @@ enum HistoryEntry: Equatable, Sendable {
         target: PlayerID
     )
 
-    case choosingObjectiveToClaim(objectiveIDs: [ObjectiveID])
-    case claimedObjective(objectiveID: ObjectiveID)
+    case choosingObjectiveToClaim(objectiveIndices: [Int])
+    case claimedObjective(objectiveIndex: Int)
     case declinedToClaimObjective
 
     case eligibleForReadyToGoBonusPlayFreeAction(PlayerID)

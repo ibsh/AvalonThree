@@ -10,10 +10,10 @@ import Foundation
 extension InGameTransaction {
 
     mutating func claimObjective(
-        objectiveID: ObjectiveID
+        objectiveIndex: Int
     ) throws -> Prompt? {
 
-        guard let objective = table.objectives.getObjective(id: objectiveID) else {
+        guard let objective = try table.objectives.getObjective(index: objectiveIndex) else {
             throw GameError("No objective")
         }
 
@@ -21,12 +21,12 @@ extension InGameTransaction {
 
         guard
             let entry = turnContext.history.last,
-            case .choosingObjectiveToClaim(let objectiveIDs) = entry
+            case .choosingObjectiveToClaim(let objectiveIndices) = entry
         else {
             throw GameError("No history entry")
         }
 
-        guard objectiveIDs.contains(objectiveID) else {
+        guard objectiveIndices.contains(objectiveIndex) else {
             throw GameError("Invalid objective")
         }
 
@@ -38,13 +38,13 @@ extension InGameTransaction {
         )
 
         history.append(
-            .claimedObjective(objectiveID: objectiveID)
+            .claimedObjective(objectiveIndex: objectiveIndex)
         )
-        table.objectives.remove(objectiveID)
+        try table.objectives.remove(objectiveIndex)
         events.append(
             .claimedObjective(
                 coachID: turnContext.coachID,
-                objectiveID: objectiveID,
+                objectiveIndex: objectiveIndex,
                 objective: .open(card: objective),
                 hand: newHand.map { .open(card: $0) }
             )
@@ -122,18 +122,15 @@ extension InGameTransaction {
     private mutating func checkForCleanSweep() throws {
         let turnContext = try history.latestTurnContext()
 
-        let claimedObjectives: [ObjectiveID] = turnContext.history
-            .compactMap { entry in
-                guard case .claimedObjective(let objectiveID) = entry else {
-                    return nil
+        let claimedObjectiveCount: Int = turnContext.history
+            .reduce(0) { partialResult, entry in
+                guard case .claimedObjective = entry else {
+                    return partialResult
                 }
-                return objectiveID
+                return partialResult + 1
             }
 
-        if claimedObjectives.contains(.first),
-            claimedObjectives.contains(.second),
-            claimedObjectives.contains(.third)
-        {
+        if claimedObjectiveCount == 3 {
             events.append(
                 .earnedCleanSweep(coachID: turnContext.coachID)
             )

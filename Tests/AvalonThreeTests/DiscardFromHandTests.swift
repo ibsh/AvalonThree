@@ -184,7 +184,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .second: .takeThemDown,
+                        1: .takeThemDown,
                     ]
                 )
             )
@@ -195,7 +195,7 @@ struct DiscardFromHandTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             )
         )
 
@@ -203,7 +203,7 @@ struct DiscardFromHandTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .takeThemDown,
@@ -392,7 +392,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .first: .getTheBall,
+                        0: .getTheBall,
                     ]
                 )
             )
@@ -403,7 +403,7 @@ struct DiscardFromHandTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .first)
+                message: .claimObjective(objectiveIndex: 0)
             )
         )
 
@@ -411,7 +411,7 @@ struct DiscardFromHandTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .getTheBall,
@@ -546,7 +546,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .third: .moveTheBall,
+                        2: .moveTheBall,
                     ]
                 )
             )
@@ -557,7 +557,7 @@ struct DiscardFromHandTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .third)
+                message: .claimObjective(objectiveIndex: 2)
             )
         )
 
@@ -565,7 +565,7 @@ struct DiscardFromHandTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .moveTheBall,
@@ -843,7 +843,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .second: .takeThemDown,
+                        1: .takeThemDown,
                     ]
                 )
             )
@@ -854,7 +854,7 @@ struct DiscardFromHandTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .second)
+                message: .claimObjective(objectiveIndex: 1)
             )
         )
 
@@ -862,7 +862,7 @@ struct DiscardFromHandTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .second,
+                    objectiveIndex: 1,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .takeThemDown,
@@ -1063,7 +1063,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .first: .getTheBall,
+                        0: .getTheBall,
                     ]
                 )
             )
@@ -1074,7 +1074,7 @@ struct DiscardFromHandTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .first)
+                message: .claimObjective(objectiveIndex: 0)
             )
         )
 
@@ -1082,7 +1082,7 @@ struct DiscardFromHandTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .first,
+                    objectiveIndex: 0,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .getTheBall,
@@ -1229,7 +1229,7 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 payload: .earnedObjective(
                     objectives: [
-                        .third: .moveTheBall,
+                        2: .moveTheBall,
                     ]
                 )
             )
@@ -1240,7 +1240,7 @@ struct DiscardFromHandTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .claimObjective(objectiveID: .third)
+                message: .claimObjective(objectiveIndex: 2)
             )
         )
 
@@ -1248,7 +1248,7 @@ struct DiscardFromHandTests {
             latestEvents == [
                 .claimedObjective(
                     coachID: .away,
-                    objectiveID: .third,
+                    objectiveIndex: 2,
                     objective: .open(
                         card: ChallengeCard(
                             challenge: .moveTheBall,

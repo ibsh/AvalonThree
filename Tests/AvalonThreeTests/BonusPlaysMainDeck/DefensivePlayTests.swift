@@ -982,7 +982,7 @@ struct DefensivePlayTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .selectObjectiveToDiscard(objectiveID: .second)
+                message: .selectObjectiveToDiscard(objectiveIndex: 1)
             )
         )
 
@@ -1133,7 +1133,7 @@ struct DefensivePlayTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .selectObjectiveToDiscard(objectiveID: .first)
+                message: .selectObjectiveToDiscard(objectiveIndex: 0)
             )
         )
 
