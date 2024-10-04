@@ -12,16 +12,14 @@ public protocol BallIDRandomizing {
 }
 
 public final class DefaultBallIDRandomizer {
-
-    private var nextValue = 1
-
     public init() { }
 }
 
 extension DefaultBallIDRandomizer: BallIDRandomizing {
     public func generate() -> Int {
-        let result = nextValue
-        nextValue += 1
+        guard let result = (0...99).randomElement() else {
+            fatalError("No player numbers in my range")
+        }
         return result
     }
 }
