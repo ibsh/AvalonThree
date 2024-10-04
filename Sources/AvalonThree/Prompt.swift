@@ -168,7 +168,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     case foulActionSpecifyTarget(
         playerID: PlayerID,
         playerSquare: Square,
-        validTargets: Set<PlayerID>
+        validTargets: [PlayerID: Square]
     )
 
     // MARK: - Block action
@@ -176,7 +176,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     case blockActionSpecifyTarget(
         playerID: PlayerID,
         playerSquare: Square,
-        validTargets: Set<PlayerID>
+        validTargets: [PlayerID: Square]
     )
 
     case blockActionEligibleForStepAsideBonusPlaySidestepAction(

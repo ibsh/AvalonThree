@@ -240,8 +240,8 @@ struct FoulTests {
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 12),
                     validTargets: [
-                        pl(.home, 0),
-                        pl(.home, 1),
+                        pl(.home, 0): sq(5, 11),
+                        pl(.home, 1): sq(4, 13),
                     ]
                 )
             )

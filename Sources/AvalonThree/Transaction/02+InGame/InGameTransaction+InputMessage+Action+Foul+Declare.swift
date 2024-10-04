@@ -22,14 +22,12 @@ extension InGameTransaction {
             throw GameError("Player is not open")
         }
 
-        let validTargetPlayerIDs = table
+        let validTargetPlayers = table
             .playersInSquares(playerSquare.adjacentSquares)
             .filter { possibleTarget in
                 possibleTarget.coachID != player.coachID
                 && table.playerIsProne(possibleTarget) != nil
             }
-            .map { $0.id }
-            .toSet()
 
         let declaration = ActionDeclaration(
             playerID: playerID,
@@ -46,15 +44,15 @@ extension InGameTransaction {
         if isFree {
             history.append(.actionIsFree)
         }
-        history.append(.foulValidTargets(validTargetPlayerIDs))
+        history.append(.foulValidTargets(validTargetPlayers.map { $0.id }.toSet()))
         events.append(
             .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
         )
 
-        if validTargetPlayerIDs.count == 1 {
+        if validTargetPlayers.count == 1 {
 
             return try foulActionSpecifyTarget(
-                target: validTargetPlayerIDs.first!
+                target: validTargetPlayers.first!.id
             )
 
         } else {
@@ -64,7 +62,15 @@ extension InGameTransaction {
                 payload: .foulActionSpecifyTarget(
                     playerID: playerID,
                     playerSquare: playerSquare,
-                    validTargets: validTargetPlayerIDs
+                    validTargets: try validTargetPlayers.reduce([:]) { partialResult, player in
+                        guard let playerSquare = player.square else {
+                            throw GameError("Player is in reserves")
+                        }
+                        return partialResult.adding(
+                            key: player.id,
+                            value: playerSquare
+                        )
+                    }
                 )
             )
         }
