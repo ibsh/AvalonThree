@@ -19,16 +19,6 @@ extension Ball {
     }
 }
 
-extension Ball {
-    init(
-        idProvider: BallIDProviding,
-        state: State
-    ) {
-        id = idProvider.generate()
-        self.state = state
-    }
-}
-
 extension Ball: Equatable {
     static func == (lhs: Ball, rhs: Ball) -> Bool {
         lhs.id == rhs.id

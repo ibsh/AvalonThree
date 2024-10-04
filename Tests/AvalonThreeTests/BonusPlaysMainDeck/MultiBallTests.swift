@@ -116,10 +116,10 @@ struct MultiBallTests {
                 message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
+                ballID: ballID(456, 789),
                 direction: direction(.south, .northEast),
                 trapdoor: trapdoor(sq(5, 5), sq(5, 9))
-            ),
-            ballIDProvider: ballID(456, 789)
+            )
         )
 
         #expect(
@@ -318,10 +318,10 @@ struct MultiBallTests {
                 message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
+                ballID: ballID(456, 789),
                 direction: direction(.south, .northEast),
                 trapdoor: trapdoor(sq(5, 5), sq(5, 9))
-            ),
-            ballIDProvider: ballID(456, 789)
+            )
         )
 
         #expect(
@@ -458,10 +458,10 @@ struct MultiBallTests {
                 message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
+                ballID: ballID(456, 789),
                 direction: direction(.south, .northEast),
                 trapdoor: trapdoor(sq(5, 5), sq(5, 9))
-            ),
-            ballIDProvider: ballID(456, 789)
+            )
         )
 
         #expect(
@@ -593,10 +593,10 @@ struct MultiBallTests {
                 message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
+                ballID: ballID(123, 456),
                 direction: direction(.south, .northEast),
                 trapdoor: trapdoor(sq(5, 5), sq(5, 9))
-            ),
-            ballIDProvider: ballID(123, 456)
+            )
         )
 
         #expect(
@@ -734,10 +734,10 @@ struct MultiBallTests {
                 message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
+                ballID: ballID(123, 456),
                 direction: direction(.south, .northEast),
                 trapdoor: trapdoor(sq(5, 5), sq(5, 5))
-            ),
-            ballIDProvider: ballID(123, 456)
+            )
         )
 
         #expect(
@@ -883,10 +883,10 @@ struct MultiBallTests {
                 message: .claimObjective(objectiveIndex: 1)
             ),
             randomizers: Randomizers(
+                ballID: ballID(123, 456),
                 direction: direction(.east, .west, .southEast),
                 trapdoor: trapdoor(sq(5, 5), sq(5, 5))
-            ),
-            ballIDProvider: ballID(123, 456)
+            )
         )
 
         #expect(

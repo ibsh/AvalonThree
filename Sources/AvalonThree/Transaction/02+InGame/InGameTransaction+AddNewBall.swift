@@ -41,8 +41,21 @@ extension InGameTransaction {
             try ballDisappears(id: looseBall.id, in: trapdoorSquare)
         }
 
+        let existingBallIDs = table.balls.map { $0.id }
+        let newBallID: Int = {
+            let newBallID: Int
+            while (true) {
+                let id = randomizers.ballID.generate()
+                if !existingBallIDs.contains(id) {
+                    newBallID = id
+                    break
+                }
+            }
+            return newBallID
+        }()
+
         let newBall = Ball(
-            idProvider: ballIDProvider,
+            id: newBallID,
             state: .loose(square: trapdoorSquare)
         )
         table.balls.insert(newBall)

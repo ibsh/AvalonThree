@@ -11,23 +11,20 @@ extension Game {
 
     public mutating func process(
         _ messageWrapper: InputMessageWrapper,
-        randomizers: Randomizers = Randomizers(),
-        ballIDProvider: BallIDProviding = DefaultBallIDProvider()
+        randomizers: Randomizers = Randomizers()
     ) throws -> ([Event], Prompt?) {
         try validate(messageWrapper)
         return try process(
             messageWrapper: messageWrapper,
             priorEvents: [],
-            randomizers: randomizers,
-            ballIDProvider: ballIDProvider
+            randomizers: randomizers
         )
     }
 
     private mutating func process(
         messageWrapper: InputMessageWrapper,
         priorEvents: [Event],
-        randomizers: Randomizers,
-        ballIDProvider: BallIDProviding
+        randomizers: Randomizers
     ) throws -> ([Event], Prompt?) {
         switch phase {
         case .config(let config):
@@ -44,8 +41,7 @@ extension Game {
                 return try process(
                     messageWrapper: messageWrapper,
                     priorEvents: priorEvents + transaction.events,
-                    randomizers: randomizers,
-                    ballIDProvider: ballIDProvider
+                    randomizers: randomizers
                 )
             } else {
                 throw GameError("No prompt or table")
@@ -54,8 +50,7 @@ extension Game {
         case .setup(let table):
             var transaction = SetupTransaction(
                 table: table,
-                randomizers: randomizers,
-                ballIDProvider: ballIDProvider
+                randomizers: randomizers
             )
             if let prompt = try transaction.processInputMessageWrapper(messageWrapper) {
                 phase = .setup(transaction.table)
@@ -66,8 +61,7 @@ extension Game {
                 return try process(
                     messageWrapper: messageWrapper,
                     priorEvents: priorEvents + transaction.events,
-                    randomizers: randomizers,
-                    ballIDProvider: ballIDProvider
+                    randomizers: randomizers
                 )
             }
 
@@ -92,8 +86,7 @@ extension Game {
                 table: table,
                 history: history,
                 previousPromptPayload: previousPrompt.payload,
-                randomizers: randomizers,
-                ballIDProvider: ballIDProvider
+                randomizers: randomizers
             )
             if let prompt = try transaction.processInputMessageWrapper(messageWrapper) {
                 phase = .active(transaction.table, transaction.history)
@@ -104,8 +97,7 @@ extension Game {
                 return try process(
                     messageWrapper: messageWrapper,
                     priorEvents: priorEvents + transaction.events,
-                    randomizers: randomizers,
-                    ballIDProvider: ballIDProvider
+                    randomizers: randomizers
                 )
             }
 

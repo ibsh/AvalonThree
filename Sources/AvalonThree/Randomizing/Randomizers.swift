@@ -8,6 +8,7 @@
 import Foundation
 
 public struct Randomizers {
+    let ballID: BallIDRandomizing
     let blockDie: BlockDieRandomizing
     let coachID: CoachIDRandomizing
     let d6: D6Randomizing
@@ -19,6 +20,7 @@ public struct Randomizers {
     let trapdoor: TrapdoorRandomizing
 
     public init(
+        ballID: BallIDRandomizing = DefaultBallIDRandomizer(),
         blockDie: BlockDieRandomizing = DefaultBlockDieRandomizer(),
         coachID: CoachIDRandomizing = DefaultCoachIDRandomizer(),
         d6: D6Randomizing = DefaultD6Randomizer(),
@@ -29,6 +31,7 @@ public struct Randomizers {
         playerNumber: PlayerNumberRandomizing = DefaultPlayerNumberRandomizer(),
         trapdoor: TrapdoorRandomizing = DefaultTrapdoorRandomizer()
     ) {
+        self.ballID = ballID
         self.blockDie = blockDie
         self.coachID = coachID
         self.d6 = d6

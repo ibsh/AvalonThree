@@ -597,8 +597,11 @@ struct InsignificantTests {
                     consumesBonusPlays: []
                 )
             ),
-            randomizers: Randomizers(blockDie: block(.tackle), direction: direction(.southEast)),
-            ballIDProvider: ballID(123)
+            randomizers: Randomizers(
+                ballID: ballID(123),
+                blockDie: block(.tackle),
+                direction: direction(.southEast)
+            )
         )
 
         #expect(

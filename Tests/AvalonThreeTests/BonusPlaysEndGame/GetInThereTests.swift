@@ -133,8 +133,10 @@ struct GetInThereTests {
                     ]
                 )
             ),
-            randomizers: Randomizers(direction: direction(.northWest)),
-            ballIDProvider: ballID(456)
+            randomizers: Randomizers(
+                ballID: ballID(456),
+                direction: direction(.northWest)
+            )
         )
 
         #expect(
@@ -318,8 +320,10 @@ struct GetInThereTests {
                     ]
                 )
             ),
-            randomizers: Randomizers(direction: direction(.northWest)),
-            ballIDProvider: ballID(456)
+            randomizers: Randomizers(
+                ballID: ballID(456),
+                direction: direction(.northWest)
+            )
         )
 
         #expect(
@@ -481,8 +485,10 @@ struct GetInThereTests {
                     ]
                 )
             ),
-            randomizers: Randomizers(direction: direction(.northWest)),
-            ballIDProvider: ballID(456)
+            randomizers: Randomizers(
+                ballID: ballID(456),
+                direction: direction(.northWest)
+            )
         )
 
         #expect(
@@ -666,8 +672,10 @@ struct GetInThereTests {
                     ]
                 )
             ),
-            randomizers: Randomizers(direction: direction(.northWest)),
-            ballIDProvider: ballID(456)
+            randomizers: Randomizers(
+                ballID: ballID(456),
+                direction: direction(.northWest)
+            )
         )
 
         #expect(
@@ -855,8 +863,10 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 0)
             ),
-            randomizers: Randomizers(direction: direction(.northWest, .east)),
-            ballIDProvider: ballID(456, 789)
+            randomizers: Randomizers(
+                ballID: ballID(456, 456, 456, 456, 456, 789),
+                direction: direction(.northWest, .east)
+            )
         )
 
         #expect(
@@ -1070,8 +1080,10 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 0)
             ),
-            randomizers: Randomizers(direction: direction(.northWest, .east)),
-            ballIDProvider: ballID(456, 789)
+            randomizers: Randomizers(
+                ballID: ballID(456, 789),
+                direction: direction(.northWest, .east)
+            )
         )
 
         #expect(
@@ -1263,8 +1275,10 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 0)
             ),
-            randomizers: Randomizers(direction: direction(.northWest, .east)),
-            ballIDProvider: ballID(456, 789)
+            randomizers: Randomizers(
+                ballID: ballID(456, 789),
+                direction: direction(.northWest, .east)
+            )
         )
 
         #expect(
@@ -1478,8 +1492,10 @@ struct GetInThereTests {
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 0)
             ),
-            randomizers: Randomizers(direction: direction(.northWest, .east)),
-            ballIDProvider: ballID(456, 789)
+            randomizers: Randomizers(
+                ballID: ballID(456, 789),
+                direction: direction(.northWest, .east)
+            )
         )
 
         #expect(

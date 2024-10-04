@@ -189,8 +189,12 @@ struct JumpUpTests {
                     consumesBonusPlays: []
                 )
             ),
-            randomizers: Randomizers(blockDie: block(.smash), d6: d6(4), direction: direction(.northWest)),
-            ballIDProvider: ballID(123)
+            randomizers: Randomizers(
+                ballID: ballID(123),
+                blockDie: block(.smash),
+                d6: d6(4),
+                direction: direction(.northWest)
+            )
         )
 
         #expect(
@@ -417,8 +421,12 @@ struct JumpUpTests {
                     consumesBonusPlays: []
                 )
             ),
-            randomizers: Randomizers(blockDie: block(.smash), d6: d6(4), direction: direction(.northWest)),
-            ballIDProvider: ballID(123)
+            randomizers: Randomizers(
+                ballID: ballID(123),
+                blockDie: block(.smash),
+                d6: d6(4),
+                direction: direction(.northWest)
+            )
         )
 
         #expect(
