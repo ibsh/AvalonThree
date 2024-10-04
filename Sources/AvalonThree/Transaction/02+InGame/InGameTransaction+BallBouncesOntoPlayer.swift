@@ -43,7 +43,11 @@ extension InGameTransaction {
                 throw GameError("Ball can't bounce onto player in another square")
             }
 
-            if table.playerHasABall(player) != nil || player.spec.pass == nil {
+            if
+                table.playerHasABall(player) != nil
+                || table.playerIsMarked(player) != nil
+                || player.spec.pass == nil
+            {
                 try bounceBall(id: ball.id)
                 return
             }

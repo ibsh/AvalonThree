@@ -115,7 +115,7 @@ struct MakeARiskyPassTests {
                 coachID: .away,
                 message: .passActionSpecifyTarget(target: pl(.away, 1))
             ),
-            randomizers: Randomizers(d6: d6(3), direction: direction(.west))
+            randomizers: Randomizers(d6: d6(3), direction: direction(.west, .northWest))
         )
 
         #expect(
@@ -157,10 +157,15 @@ struct MakeARiskyPassTests {
                     to: sq(1, 6),
                     direction: .west
                 ),
-                .playerCaughtBouncingBall(
-                    playerID: pl(.home, 0),
-                    playerSquare: sq(1, 6),
-                    ballID: 123
+                .rolledForDirection(
+                    coachID: .away,
+                    direction: .northWest
+                ),
+                .ballBounced(
+                    ballID: 123,
+                    from: sq(1, 6),
+                    to: sq(0, 5),
+                    direction: .northWest
                 ),
             ]
         )
