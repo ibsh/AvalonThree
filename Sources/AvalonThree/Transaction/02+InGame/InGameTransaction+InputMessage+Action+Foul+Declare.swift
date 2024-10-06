@@ -26,7 +26,7 @@ extension InGameTransaction {
             .playersInSquares(playerSquare.adjacentSquares)
             .filter { possibleTarget in
                 possibleTarget.coachID != player.coachID
-                && table.playerIsProne(possibleTarget) != nil
+                && possibleTarget.isProne != nil
             }
 
         let declaration = ActionDeclaration(

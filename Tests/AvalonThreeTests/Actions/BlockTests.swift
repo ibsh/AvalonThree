@@ -153,6 +153,125 @@ struct BlockTests {
         )
     }
 
+    @Test func notPromptedForProneTargets() async throws {
+
+        // Init
+
+        var game = Game(
+            phase: .active(
+                Table(
+                    config: FinalizedConfig(
+                        coinFlipWinnerCoachID: .home,
+                        boardSpecID: .season1Board2,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .darkElf,
+                        coinFlipLoserTeamID: .chaos
+                    ),
+                    players: [
+                        Player(
+                            id: pl(.away, 0),
+                            spec: .chaos_chosenBlocker,
+                            state: .standing(square: sq(2, 8)),
+                            canTakeActions: true
+                        ),Player(
+                            id: pl(.away, 1),
+                            spec: .chaos_beastman,
+                            state: .standing(square: sq(1, 8)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 0),
+                            spec: .darkElf_blitzer,
+                            state: .standing(square: sq(1, 7)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 1),
+                            spec: .darkElf_witchElf,
+                            state: .prone(square: sq(3, 8)),
+                            canTakeActions: true
+                        ),
+                    ],
+                    playerNumbers: [:],
+                    coinFlipLoserHand: [],
+                    coinFlipWinnerHand: [],
+                    coinFlipLoserActiveBonuses: [],
+                    coinFlipWinnerActiveBonuses: [],
+                    coinFlipLoserScore: 0,
+                    coinFlipWinnerScore: 0,
+                    balls: [
+                        Ball(
+                            id: 123,
+                            state: .loose(square: sq(0, 8))
+                        )
+                    ],
+                    deck: [],
+                    objectives: Objectives(),
+                    discards: []
+                ),
+                [
+                    .prepareForTurn(
+                        coachID: .away,
+                        isSpecial: nil,
+                        mustDiscardObjective: false
+                    ),
+                ]
+            ),
+            previousPrompt: Prompt(
+                coachID: .away,
+                payload: .declarePlayerAction(
+                    validDeclarations: [:],
+                    playerActionsLeft: 1
+                )
+            )
+        )
+
+        // Declare block
+
+        let (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 0),
+                        actionID: .block
+                    ),
+                    consumesBonusPlays: []
+                )
+            ),
+            randomizers: Randomizers(blockDie: block(.shove, .kerrunch, .smash))
+        )
+
+        #expect(
+            latestEvents == [
+                .declaredAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 0),
+                        actionID: .block
+                    ),
+                    isFree: false,
+                    playerSquare: sq(2, 8)
+                ),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.shove, .kerrunch, .smash]
+                ),
+            ]
+        )
+
+        #expect(
+            latestPrompt == Prompt(
+                coachID: .away,
+                payload: .blockActionSelectResult(
+                    playerID: pl(.away, 0),
+                    playerSquare: sq(2, 8),
+                    results: [.shove, .kerrunch, .smash]
+                )
+            )
+        )
+    }
+
     @Test func promptedIfMoreThanOneEligibleTarget() async throws {
 
         // Init

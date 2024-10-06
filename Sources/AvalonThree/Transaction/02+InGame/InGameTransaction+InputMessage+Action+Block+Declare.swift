@@ -32,14 +32,14 @@ extension InGameTransaction {
                     )
                     .filter { possibleTarget in
                         possibleTarget.coachID != player.coachID
-                        && player.isStanding != nil
+                        && possibleTarget.isStanding != nil
                     }
             } else {
                 return table
                     .playersInSquares(playerSquare.adjacentSquares)
                     .filter { possibleTarget in
                         possibleTarget.coachID != player.coachID
-                        && player.isStanding != nil
+                        && possibleTarget.isStanding != nil
                     }
             }
         }()
