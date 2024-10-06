@@ -107,12 +107,12 @@ struct SafeHandsTests {
                     playerID: pl(.home, 0),
                     playerSquare: sq(3, 4),
                     directions: [
-                        .north,
-                        .northEast,
-                        .east,
-                        .southEast,
-                        .south,
-                        .southWest,
+                        .north: sq(3, 3),
+                        .northEast: sq(4, 3),
+                        .east: sq(4, 4),
+                        .southEast: sq(4, 5),
+                        .south: sq(3, 5),
+                        .southWest: sq(2, 5),
                     ]
                 )
             )

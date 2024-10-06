@@ -199,19 +199,24 @@ extension InGameTransaction {
 
                 if targetPlayer.spec.skills.contains(.safeHands) {
 
-                    let directions = targetPlayerSquare
+                    let directions: [Direction: Square] = try targetPlayerSquare
                         .adjacentSquares
-                        .filter { adjacentSquare in
-                            table.squareIsUnobstructed(adjacentSquare)
-                        }
-                        .compactMap { adjacentSquare in
-                            targetPlayerSquare.direction(to: adjacentSquare)
-                        }
-                        .toSet()
+                        .reduce([:], { partialResult, adjacentSquare in
+                            guard
+                                adjacentSquare != targetPlayerSquare,
+                                table.squareIsUnobstructed(adjacentSquare)
+                            else {
+                                return partialResult
+                            }
+                            guard
+                                let direction = targetPlayerSquare.direction(to: adjacentSquare)
+                            else { throw GameError("Square is not adjacent") }
+                            return partialResult.adding(key: direction, value: adjacentSquare)
+                        })
 
                     // update the action
                     history.append(.blockResult(result))
-                    history.append(.blockSafeHandsDirections(directions))
+                    history.append(.blockSafeHandsDirections(Set(directions.keys)))
 
                     return Prompt(
                         coachID: targetPlayerID.coachID,

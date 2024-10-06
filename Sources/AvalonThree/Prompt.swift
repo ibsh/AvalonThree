@@ -217,7 +217,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     case blockActionSelectSafeHandsLooseBallDirection(
         playerID: PlayerID,
         playerSquare: Square,
-        directions: Set<Direction>
+        directions: [Direction: Square]
     )
 
     case blockActionEligibleForFollowUp(
