@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func declareAction(
         declaration: ActionDeclaration,
-        consumesBonusPlays: [BonusPlay],
+        consumesBonusPlays: Set<BonusPlay>,
         isFree: Bool
     ) throws -> Prompt? {
 

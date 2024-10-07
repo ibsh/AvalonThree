@@ -54,7 +54,10 @@ extension InGameTransaction {
         if hand.count > TableConstants.maxHandCount {
             return Prompt(
                 coachID: oldTurnCoachID,
-                payload: .selectCardsToDiscardFromHand(cards: hand)
+                payload: .selectCardsToDiscardFromHand(
+                    cards: hand,
+                    count: hand.count - TableConstants.maxHandCount
+                )
             )
         }
 

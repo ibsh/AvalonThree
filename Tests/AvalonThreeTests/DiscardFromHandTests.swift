@@ -1297,28 +1297,31 @@ struct DiscardFromHandTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .selectCardsToDiscardFromHand(cards: [
-                    ChallengeCard(
-                        challenge: .tieThemUp,
-                        bonusPlay: .blitz
-                    ),
-                    ChallengeCard(
-                        challenge: .spreadOut,
-                        bonusPlay: .blitz
-                    ),
-                    ChallengeCard(
-                        challenge: .takeThemDown,
-                        bonusPlay: .blitz
-                    ),
-                    ChallengeCard(
-                        challenge: .getTheBall,
-                        bonusPlay: .blitz
-                    ),
-                    ChallengeCard(
-                        challenge: .moveTheBall,
-                        bonusPlay: .blitz
-                    ),
-                ])
+                payload: .selectCardsToDiscardFromHand(
+                    cards: [
+                        ChallengeCard(
+                            challenge: .tieThemUp,
+                            bonusPlay: .blitz
+                        ),
+                        ChallengeCard(
+                            challenge: .spreadOut,
+                            bonusPlay: .blitz
+                        ),
+                        ChallengeCard(
+                            challenge: .takeThemDown,
+                            bonusPlay: .blitz
+                        ),
+                        ChallengeCard(
+                            challenge: .getTheBall,
+                            bonusPlay: .blitz
+                        ),
+                        ChallengeCard(
+                            challenge: .moveTheBall,
+                            bonusPlay: .blitz
+                        ),
+                    ],
+                    count: 2
+                )
             )
         )
 

@@ -8,7 +8,7 @@
 import Foundation
 
 enum CanDeclareAction: Equatable {
-    case canDeclare(consumesBonusPlays: [BonusPlay])
+    case canDeclare(consumesBonusPlays: Set<BonusPlay>)
     case cannotDeclare
 }
 
@@ -197,13 +197,13 @@ extension InGameTransaction {
             table.playerHasABall(player) != nil
         else { return .cannotDeclare }
 
-        var consumesBonusPlays: [BonusPlay] = []
+        var consumesBonusPlays = Set<BonusPlay>()
 
         if table.playerIsMarked(player) != nil {
             if table.getHand(coachID: player.coachID).contains(
                 where: { $0.bonusPlay == .nervesOfSteel }
             ) {
-                consumesBonusPlays.append(.nervesOfSteel)
+                consumesBonusPlays.insert(.nervesOfSteel)
             } else {
                 return .cannotDeclare
             }
@@ -237,7 +237,7 @@ extension InGameTransaction {
                 .players(coachID: player.coachID)
                 .contains(where: { validTeammate(teammate: $0, hailMaryPass: true) })
         {
-            consumesBonusPlays.append(.hailMaryPass)
+            consumesBonusPlays.insert(.hailMaryPass)
             return .canDeclare(consumesBonusPlays: consumesBonusPlays)
         }
 
@@ -264,13 +264,13 @@ extension InGameTransaction {
             return .cannotDeclare
         }
 
-        var consumesBonusPlays: [BonusPlay] = []
+        var consumesBonusPlays = Set<BonusPlay>()
 
         if table.playerIsMarked(player) != nil {
             if table.getHand(coachID: player.coachID).contains(
                 where: { $0.bonusPlay == .nervesOfSteel }
             ) {
-                consumesBonusPlays.append(.nervesOfSteel)
+                consumesBonusPlays.insert(.nervesOfSteel)
             } else {
                 return .cannotDeclare
             }

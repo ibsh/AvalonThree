@@ -10,7 +10,7 @@ import Foundation
 extension InGameTransaction {
 
     mutating func selectCardsToDiscardFromHand(
-        cards: [ChallengeCard]
+        cards: Set<ChallengeCard>
     ) throws -> Prompt? {
 
         let turnContext = try history.latestTurnContext()
@@ -24,13 +24,14 @@ extension InGameTransaction {
             throw GameError("No need to discard")
         }
 
-        guard !cards.contains(where: { !hand.contains($0) }) else {
+        guard cards.isSubset(of: hand) else {
             throw GameError("Invalid cards")
         }
 
         var newHand = hand
 
-        for card in cards {
+        for card in hand {
+            guard cards.contains(card) else { continue }
             _ = newHand.removeFirst(where: { $0 == card })
             events.append(
                 .discardedCardFromHand(

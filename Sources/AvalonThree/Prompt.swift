@@ -366,7 +366,8 @@ public enum PromptPayload: Equatable, Codable, Sendable {
     // MARK: - End turn
 
     case selectCardsToDiscardFromHand(
-        cards: [ChallengeCard]
+        cards: [ChallengeCard],
+        count: Int
     )
 
     // MARK: - Pre-turn
@@ -386,7 +387,7 @@ public struct PromptValidDeclaringPlayer: Hashable, Codable, Sendable {
 
 public struct PromptValidDeclaration: Hashable, Codable, Sendable {
     public let actionID: ActionID
-    public let consumesBonusPlays: [BonusPlay]
+    public let consumesBonusPlays: Set<BonusPlay>
 }
 
 public struct ValidMoveSquares: Hashable, Codable, Sendable {

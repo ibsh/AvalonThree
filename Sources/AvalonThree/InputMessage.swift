@@ -24,7 +24,7 @@ public enum InputMessage: Codable, Sendable {
 
     // MARK: - Turn
 
-    case declarePlayerAction(declaration: ActionDeclaration, consumesBonusPlays: [BonusPlay])
+    case declarePlayerAction(declaration: ActionDeclaration, consumesBonusPlays: Set<BonusPlay>)
     case declareEmergencyReservesAction(playerID: PlayerID)
     case useRegenerationSkillStandUpAction
     case declineRegenerationSkillStandUpAction
@@ -176,7 +176,7 @@ public enum InputMessage: Codable, Sendable {
 
     // MARK: - End turn
 
-    case selectCardsToDiscardFromHand(cards: [ChallengeCard])
+    case selectCardsToDiscardFromHand(cards: Set<ChallengeCard>)
 
     // MARK: - Pre-turn
 
