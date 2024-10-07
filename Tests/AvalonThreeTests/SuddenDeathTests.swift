@@ -254,7 +254,7 @@ struct SuddenDeathTests {
                     total: 11
                 ),
                 .gameEnded(
-                    endConditions: .suddenDeath(.home)
+                    endConditions: .suddenDeath(coachID: .home)
                 )
             ]
         )

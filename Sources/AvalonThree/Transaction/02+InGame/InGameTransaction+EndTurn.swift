@@ -30,7 +30,7 @@ extension InGameTransaction {
             !table.discards.contains(where: { $0.challenge.isEndgame })
         {
             if coachScore + TableConstants.suddenDeathDelta <= opponentScore {
-                events.append(.gameEnded(endConditions: .suddenDeath(newTurnCoachID)))
+                events.append(.gameEnded(endConditions: .suddenDeath(coachID: newTurnCoachID)))
                 return nil
             }
         }
@@ -39,9 +39,9 @@ extension InGameTransaction {
 
         if turnContext.isFinal {
             if coachScore > opponentScore {
-                events.append(.gameEnded(endConditions: .clock(oldTurnCoachID)))
+                events.append(.gameEnded(endConditions: .clock(coachID: oldTurnCoachID)))
             } else if opponentScore > coachScore {
-                events.append(.gameEnded(endConditions: .clock(newTurnCoachID)))
+                events.append(.gameEnded(endConditions: .clock(coachID: newTurnCoachID)))
             } else {
                 events.append(.gameEnded(endConditions: .tie))
             }

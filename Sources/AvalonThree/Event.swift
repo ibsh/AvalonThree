@@ -477,8 +477,8 @@ public enum Die: String, Equatable, Codable, Sendable {
 }
 
 public enum EndConditions: Equatable, Codable, Sendable {
-    case suddenDeath(CoachID)
-    case clock(CoachID)
+    case suddenDeath(coachID: CoachID)
+    case clock(coachID: CoachID)
     case tie
 }
 
