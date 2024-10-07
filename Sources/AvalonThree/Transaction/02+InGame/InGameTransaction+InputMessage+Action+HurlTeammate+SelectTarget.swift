@@ -1,5 +1,5 @@
 //
-//  InGameTransaction+InputMessage+Action+HurlTeammate+SpecifyTarget.swift
+//  InGameTransaction+InputMessage+Action+HurlTeammate+SelectTarget.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 6/27/24.
@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func hurlTeammateActionSpecifyTarget(
+    mutating func hurlTeammateActionSelectTarget(
         targetSquare: Square
     ) throws -> Prompt? {
 

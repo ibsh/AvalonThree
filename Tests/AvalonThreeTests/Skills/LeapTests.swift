@@ -99,7 +99,7 @@ struct LeapTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 5),
                     maxRunDistance: 6,
@@ -143,12 +143,12 @@ struct LeapTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(2, 5),
                     sq(1, 5),
                     sq(0, 4),
@@ -287,7 +287,7 @@ struct LeapTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 5),
                     maxRunDistance: 6,
@@ -331,13 +331,13 @@ struct LeapTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         #expect(throws: GameError("Invalid final square")) {
             (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(squares: [
+                    message: .runActionSelectSquares(squares: [
                         sq(2, 5),
                         sq(1, 5),
                         sq(0, 5),
@@ -436,7 +436,7 @@ struct LeapTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 5),
                     maxRunDistance: 6,
@@ -480,13 +480,13 @@ struct LeapTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         #expect(throws: GameError("Invalid intermediate square")) {
             (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(squares: [
+                    message: .runActionSelectSquares(squares: [
                         sq(2, 4),
                         sq(1, 3),
                         sq(0, 2),
@@ -608,7 +608,7 @@ struct LeapTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(0, 6),
                     maxRunDistance: 6,
@@ -652,12 +652,12 @@ struct LeapTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(1, 6),
                     sq(2, 6),
                     sq(3, 6),

@@ -1,5 +1,5 @@
 //
-//  InGameTransaction+InputMessage+Action+Sidestep+SpecifySquare.swift
+//  InGameTransaction+InputMessage+Action+Reserves+SelectSquare.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 6/18/24.
@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func sidestepActionSpecifySquare(
+    mutating func reservesActionSelectSquare(
         square: Square
     ) throws -> Prompt? {
 
@@ -18,7 +18,7 @@ extension InGameTransaction {
             !actionContext.isFinished,
             let validSquares = actionContext.history.lastResult(
                 { entry -> ValidMoveSquares? in
-                    guard case .sidestepValidSquares(let validSquares) = entry else { return nil }
+                    guard case .reservesValidSquares(let validSquares) = entry else { return nil }
                     return validSquares
                 }
             )
@@ -31,15 +31,10 @@ extension InGameTransaction {
         }
 
         guard validSquares.final.contains(square) else {
-            throw GameError("Invalid squares")
+            throw GameError("Invalid square")
         }
 
-        try playerMovesIntoSquare(
-            playerID: player.id,
-            newSquare: square,
-            isFinalSquare: true,
-            reason: .sidestep
-        )
+        try playerMovesOutOfReservesIntoSquare(playerID: player.id, newSquare: square)
 
         // finish the action
         history.append(.actionFinished)

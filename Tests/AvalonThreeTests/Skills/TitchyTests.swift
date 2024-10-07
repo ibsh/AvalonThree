@@ -99,7 +99,7 @@ struct TitchyTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     maxRunDistance: 6,
@@ -143,12 +143,12 @@ struct TitchyTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(3, 7),
                     sq(3, 8),
                     sq(2, 8),
@@ -287,7 +287,7 @@ struct TitchyTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     maxRunDistance: 6,
@@ -331,13 +331,13 @@ struct TitchyTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         #expect(throws: GameError("Invalid intermediate square")) {
             (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(squares: [
+                    message: .runActionSelectSquares(squares: [
                         sq(3, 7),
                         sq(3, 8),
                         sq(2, 8),

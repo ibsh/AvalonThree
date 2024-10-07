@@ -95,14 +95,14 @@ struct HeadbuttTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(
+                message: .markActionSelectSquares(
                     squares: [
                         sq(2, 6)
                     ]
@@ -205,14 +205,14 @@ struct HeadbuttTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .sidestepActionSpecifySquare(square: sq(4, 6))
+                message: .sidestepActionSelectSquare(square: sq(4, 6))
             )
         )
 
@@ -247,14 +247,14 @@ struct HeadbuttTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(5, 6),
                     sq(6, 6),
                     sq(5, 6),
@@ -297,14 +297,14 @@ struct HeadbuttTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(3, 6)
                 ])
             )
@@ -425,14 +425,14 @@ struct HeadbuttTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .sidestepActionSpecifySquare(square: sq(4, 6))
+                message: .sidestepActionSelectSquare(square: sq(4, 6))
             )
         )
 
@@ -467,14 +467,14 @@ struct HeadbuttTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(5, 6),
                     sq(6, 6),
                     sq(5, 6),
@@ -517,14 +517,14 @@ struct HeadbuttTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(3, 6)
                 ])
             )
@@ -691,14 +691,14 @@ struct HeadbuttTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 6),
                         sq(3, 6),
@@ -739,14 +739,14 @@ struct HeadbuttTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(
+                message: .markActionSelectSquares(
                     squares: [
                         sq(2, 6)
                     ]
@@ -781,14 +781,14 @@ struct HeadbuttTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .blockActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .blockActionSelectTarget)
 
-        // Specify block
+        // Select block
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
+                message: .blockActionSelectTarget(target: pl(.home, 0))
             ),
             randomizers: Randomizers(blockDie: block(.miss))
         )

@@ -135,7 +135,7 @@ struct RefreshObjectivesTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
@@ -178,12 +178,12 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(5, 6)
                 ])
             )
@@ -594,7 +594,7 @@ struct RefreshObjectivesTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
@@ -637,12 +637,12 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(5, 6)
                 ])
             )
@@ -1076,7 +1076,7 @@ struct RefreshObjectivesTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
@@ -1119,12 +1119,12 @@ struct RefreshObjectivesTests {
             )
         )
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(5, 6)
                 ])
             )

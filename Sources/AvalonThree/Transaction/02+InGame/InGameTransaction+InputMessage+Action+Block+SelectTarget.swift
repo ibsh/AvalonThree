@@ -1,5 +1,5 @@
 //
-//  InGameTransaction+InputMessage+Action+Block+SpecifyTarget.swift
+//  InGameTransaction+InputMessage+Action+Block+SelectTarget.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 6/18/24.
@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionSpecifyTarget(
+    mutating func blockActionSelectTarget(
         target targetPlayerID: PlayerID
     ) throws -> Prompt? {
 

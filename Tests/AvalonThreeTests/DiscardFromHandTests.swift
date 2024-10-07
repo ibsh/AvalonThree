@@ -287,7 +287,7 @@ struct DiscardFromHandTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     maxRunDistance: 6,
@@ -331,12 +331,12 @@ struct DiscardFromHandTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(6, 5),
                     sq(6, 6),
                     sq(6, 7),
@@ -497,7 +497,7 @@ struct DiscardFromHandTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .passActionSpecifyTarget(
+                payload: .passActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 8),
                     validTargets: [
@@ -513,12 +513,12 @@ struct DiscardFromHandTests {
             )
         )
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(d6: d6(5))
         )
@@ -958,7 +958,7 @@ struct DiscardFromHandTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     maxRunDistance: 6,
@@ -1002,12 +1002,12 @@ struct DiscardFromHandTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(6, 5),
                     sq(6, 6),
                     sq(6, 7),
@@ -1180,7 +1180,7 @@ struct DiscardFromHandTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .passActionSpecifyTarget(
+                payload: .passActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 8),
                     validTargets: [
@@ -1196,12 +1196,12 @@ struct DiscardFromHandTests {
             )
         )
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(d6: d6(5))
         )
@@ -1322,7 +1322,7 @@ struct DiscardFromHandTests {
             )
         )
 
-        // Specify cards that aren't in hand
+        // Select cards that aren't in hand
 
         #expect(throws: GameError("Invalid cards")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -1344,7 +1344,7 @@ struct DiscardFromHandTests {
             )
         }
 
-        // Specify too few cards
+        // Select too few cards
 
         #expect(throws: GameError("Invalid card count")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -1362,7 +1362,7 @@ struct DiscardFromHandTests {
             )
         }
 
-        // Specify too many cards
+        // Select too many cards
 
         #expect(throws: GameError("Invalid card count")) {
             (latestEvents, latestPrompt) = try game.process(
@@ -1388,7 +1388,7 @@ struct DiscardFromHandTests {
             )
         }
 
-        // Specify valid cards
+        // Select valid cards
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(

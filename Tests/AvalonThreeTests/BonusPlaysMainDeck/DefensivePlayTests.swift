@@ -112,14 +112,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify first run
+        // Select first run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(10, 11),
                         sq(10, 10),
@@ -162,14 +162,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify first mark
+        // Select first mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(4, 7),
                     sq(3, 8),
                 ])
@@ -208,14 +208,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify first mark
+        // Select first mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(10, 8),
                 ])
             )
@@ -393,14 +393,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify first run
+        // Select first run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(10, 11),
                         sq(10, 10),
@@ -443,14 +443,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify first mark
+        // Select first mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(4, 7),
                     sq(3, 8),
                 ])
@@ -489,14 +489,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify first mark
+        // Select first mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(10, 8),
                 ])
             )
@@ -691,14 +691,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify first run
+        // Select first run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(10, 11),
                         sq(10, 10),
@@ -741,14 +741,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify first mark
+        // Select first mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(4, 7),
                     sq(3, 8),
                 ])
@@ -787,14 +787,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify first mark
+        // Select first mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(10, 8),
                 ])
             )
@@ -909,14 +909,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .sidestepActionSpecifySquare(square: sq(9, 6))
+                message: .sidestepActionSelectSquare(square: sq(9, 6))
             )
         )
 
@@ -951,14 +951,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(9, 7),
                 ])
             )
@@ -1021,14 +1021,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .sidestepActionSpecifySquare(square: sq(10, 9))
+                message: .sidestepActionSelectSquare(square: sq(10, 9))
             )
         )
 
@@ -1063,14 +1063,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .sidestepActionSpecifySquare(square: sq(4, 9))
+                message: .sidestepActionSelectSquare(square: sq(4, 9))
             )
         )
 
@@ -1105,14 +1105,14 @@ struct DefensivePlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(10, 8),
                 ])
             )

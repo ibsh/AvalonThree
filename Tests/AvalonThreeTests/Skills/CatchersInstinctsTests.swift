@@ -101,14 +101,14 @@ struct CatchersInstinctsTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .sidestepActionSpecifySquare(square: sq(3, 7))
+                message: .sidestepActionSelectSquare(square: sq(3, 7))
             )
         )
 
@@ -143,14 +143,14 @@ struct CatchersInstinctsTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(4, 7),
                     sq(5, 7),
                     sq(6, 7),
@@ -191,14 +191,14 @@ struct CatchersInstinctsTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify handoff
+        // Select handoff
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 0))
+                message: .passActionSelectTarget(target: pl(.away, 0))
             )
         )
 
@@ -306,14 +306,14 @@ struct CatchersInstinctsTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .sidestepActionSpecifySquare(square: sq(3, 7))
+                message: .sidestepActionSelectSquare(square: sq(3, 7))
             )
         )
 
@@ -348,14 +348,14 @@ struct CatchersInstinctsTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(4, 7),
                     sq(5, 8),
                     sq(6, 9),
@@ -396,14 +396,14 @@ struct CatchersInstinctsTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 0))
+                message: .passActionSelectTarget(target: pl(.away, 0))
             ),
             randomizers: Randomizers(d6: d6(2))
         )
@@ -531,14 +531,14 @@ struct CatchersInstinctsTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .sidestepActionSpecifySquare(square: sq(3, 7))
+                message: .sidestepActionSelectSquare(square: sq(3, 7))
             )
         )
 
@@ -573,14 +573,14 @@ struct CatchersInstinctsTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(4, 7),
                     sq(5, 8),
                     sq(6, 9),
@@ -621,14 +621,14 @@ struct CatchersInstinctsTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 0))
+                message: .passActionSelectTarget(target: pl(.away, 0))
             ),
             randomizers: Randomizers(d6: d6(2))
         )
@@ -667,14 +667,14 @@ struct CatchersInstinctsTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify block
+        // Select block
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(7, 7),
                     sq(8, 8),
                 ])

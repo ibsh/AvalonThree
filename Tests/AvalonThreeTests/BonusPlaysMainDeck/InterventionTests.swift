@@ -97,14 +97,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -225,14 +225,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -276,7 +276,7 @@ struct InterventionTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.home, 0),
                     playerSquare: sq(1, 12),
                     validSquares: ValidMoveSquares(
@@ -325,7 +325,7 @@ struct InterventionTests {
             _ = try game.process(
                 InputMessageWrapper(
                     coachID: .home,
-                    message: .markActionSpecifySquares(
+                    message: .markActionSelectSquares(
                         squares: [
                             sq(0, 11),
                             sq(0, 10),
@@ -335,12 +335,12 @@ struct InterventionTests {
             )
         }
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(2, 13),
                     sq(3, 14),
                 ])
@@ -453,14 +453,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -504,7 +504,7 @@ struct InterventionTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.home, 1),
                     playerSquare: sq(7, 12),
                     validSquares: ValidMoveSquares(
@@ -547,12 +547,12 @@ struct InterventionTests {
             )
         )
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(6, 13),
                     sq(5, 14),
                 ])
@@ -666,14 +666,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -720,7 +720,7 @@ struct InterventionTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.home, 1),
                     playerSquare: sq(8, 12),
                     validSquares: ValidMoveSquares(
@@ -763,12 +763,12 @@ struct InterventionTests {
             )
         )
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(7, 12),
                     sq(6, 12),
                     sq(5, 12),
@@ -887,14 +887,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -936,14 +936,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(2, 13),
                     sq(3, 14),
                 ])
@@ -1098,14 +1098,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -1147,14 +1147,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(2, 13),
                     sq(3, 14),
                 ])
@@ -1306,14 +1306,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -1447,14 +1447,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -1500,7 +1500,7 @@ struct InterventionTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.home, 0),
                     playerSquare: sq(1, 12),
                     validSquares: ValidMoveSquares(
@@ -1543,12 +1543,12 @@ struct InterventionTests {
             )
         )
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(2, 13),
                     sq(3, 14),
                 ])
@@ -1663,14 +1663,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -1807,14 +1807,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -1858,7 +1858,7 @@ struct InterventionTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.home, 0),
                     playerSquare: sq(1, 12),
                     validSquares: ValidMoveSquares(
@@ -1901,12 +1901,12 @@ struct InterventionTests {
             )
         )
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(2, 13),
                     sq(3, 14),
                 ])
@@ -2033,14 +2033,14 @@ struct InterventionTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(4, 9),
                         sq(4, 10),
@@ -2084,7 +2084,7 @@ struct InterventionTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.home, 0),
                     playerSquare: sq(1, 12),
                     validSquares: ValidMoveSquares(
@@ -2133,7 +2133,7 @@ struct InterventionTests {
             _ = try game.process(
                 InputMessageWrapper(
                     coachID: .home,
-                    message: .markActionSpecifySquares(
+                    message: .markActionSelectSquares(
                         squares: [
                             sq(0, 11),
                             sq(0, 10),
@@ -2143,12 +2143,12 @@ struct InterventionTests {
             )
         }
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(2, 13),
                     sq(3, 14),
                 ])

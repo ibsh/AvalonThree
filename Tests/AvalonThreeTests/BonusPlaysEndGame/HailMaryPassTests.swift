@@ -115,14 +115,14 @@ struct HailMaryPassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(
+                message: .passActionSelectTarget(
                     target: pl(.away, 1)
                 )
             ),
@@ -261,14 +261,14 @@ struct HailMaryPassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(
+                message: .passActionSelectTarget(
                     target: pl(.away, 1)
                 )
             ),
@@ -418,14 +418,14 @@ struct HailMaryPassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(
+                message: .passActionSelectTarget(
                     target: pl(.away, 1)
                 )
             ),
@@ -583,14 +583,14 @@ struct HailMaryPassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(
+                message: .passActionSelectTarget(
                     target: pl(.away, 1)
                 )
             ),
@@ -714,14 +714,14 @@ struct HailMaryPassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(
+                message: .passActionSelectTarget(
                     target: pl(.away, 1)
                 )
             ),
@@ -871,14 +871,14 @@ struct HailMaryPassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(
+                message: .passActionSelectTarget(
                     target: pl(.away, 1)
                 )
             ),

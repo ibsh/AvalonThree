@@ -99,7 +99,7 @@ struct RushTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 5),
                     maxRunDistance: 8,
@@ -143,12 +143,12 @@ struct RushTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(3, 6),
                     sq(2, 6),
                 ])
@@ -269,7 +269,7 @@ struct RushTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 5),
                     maxRunDistance: 8,
@@ -313,13 +313,13 @@ struct RushTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         #expect(throws: GameError("Invalid intermediate square")) {
             (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(squares: [
+                    message: .runActionSelectSquares(squares: [
                         sq(2, 5),
                         sq(3, 6),
                     ])
@@ -417,7 +417,7 @@ struct RushTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 5),
                     maxRunDistance: 8,
@@ -461,13 +461,13 @@ struct RushTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         #expect(throws: GameError("Invalid intermediate square")) {
             (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(squares: [
+                    message: .runActionSelectSquares(squares: [
                         sq(2, 5),
                         sq(1, 5),
                         sq(0, 6),
@@ -579,7 +579,7 @@ struct RushTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     maxRunDistance: 8,

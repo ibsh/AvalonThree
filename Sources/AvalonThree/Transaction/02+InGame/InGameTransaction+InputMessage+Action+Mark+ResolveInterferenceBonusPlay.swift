@@ -93,7 +93,7 @@ extension InGameTransaction {
 
         return Prompt(
             coachID: actionContext.coachID,
-            payload: .markActionSpecifySquares(
+            payload: .markActionSelectSquares(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare,
                 validSquares: validSquares

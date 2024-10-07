@@ -34,28 +34,28 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyBoardSpec(boardSpecID: .season2Board1)
+                message: .selectBoardSpec(boardSpecID: .season2Board1)
             )
         )
 
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyChallengeDeck(challengeDeckID: .shortStandard)
+                message: .selectChallengeDeck(challengeDeckID: .shortStandard)
             )
         )
 
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyRookieBonusRecipient(rookieBonusRecipientID: .coinFlipLoser)
+                message: .selectRookieBonusRecipient(rookieBonusRecipientID: .coinFlipLoser)
             )
         )
 
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyCoinFlipWinnerTeam(teamID: .lizardmen)
+                message: .selectCoinFlipWinnerTeam(teamID: .lizardmen)
             )
         )
 
@@ -64,7 +64,7 @@ struct RawTalentTests {
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .specifyCoinFlipLoserTeam(teamID: .orc)
+                message: .selectCoinFlipLoserTeam(teamID: .orc)
             ),
             randomizers: Randomizers(
                 deck: deck(Array(ChallengeCard.standardShortDeck.prefix(5))),
@@ -386,28 +386,28 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyBoardSpec(boardSpecID: .season2Board1)
+                message: .selectBoardSpec(boardSpecID: .season2Board1)
             )
         )
 
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyChallengeDeck(challengeDeckID: .shortStandard)
+                message: .selectChallengeDeck(challengeDeckID: .shortStandard)
             )
         )
 
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyRookieBonusRecipient(rookieBonusRecipientID: .coinFlipWinner)
+                message: .selectRookieBonusRecipient(rookieBonusRecipientID: .coinFlipWinner)
             )
         )
 
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyCoinFlipWinnerTeam(teamID: .lizardmen)
+                message: .selectCoinFlipWinnerTeam(teamID: .lizardmen)
             )
         )
 
@@ -416,7 +416,7 @@ struct RawTalentTests {
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .specifyCoinFlipLoserTeam(teamID: .orc)
+                message: .selectCoinFlipLoserTeam(teamID: .orc)
             ),
             randomizers: Randomizers(
                 deck: deck(Array(ChallengeCard.standardShortDeck.prefix(5))),
@@ -738,28 +738,28 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyBoardSpec(boardSpecID: .season2Board1)
+                message: .selectBoardSpec(boardSpecID: .season2Board1)
             )
         )
 
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyChallengeDeck(challengeDeckID: .shortStandard)
+                message: .selectChallengeDeck(challengeDeckID: .shortStandard)
             )
         )
 
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyRookieBonusRecipient(rookieBonusRecipientID: .noOne)
+                message: .selectRookieBonusRecipient(rookieBonusRecipientID: .noOne)
             )
         )
 
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyCoinFlipWinnerTeam(teamID: .lizardmen)
+                message: .selectCoinFlipWinnerTeam(teamID: .lizardmen)
             )
         )
 
@@ -768,7 +768,7 @@ struct RawTalentTests {
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .specifyCoinFlipLoserTeam(teamID: .orc)
+                message: .selectCoinFlipLoserTeam(teamID: .orc)
             ),
             randomizers: Randomizers(
                 deck: deck(Array(ChallengeCard.standardShortDeck.prefix(5))),
@@ -1143,12 +1143,12 @@ struct RawTalentTests {
             )
         )
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(d6: d6(3))
         )
@@ -1310,12 +1310,12 @@ struct RawTalentTests {
             )
         )
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(d6: d6(3))
 
@@ -1449,12 +1449,12 @@ struct RawTalentTests {
             )
         )
 
-        // Specify target square
+        // Select target square
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
+                message: .hurlTeammateActionSelectTarget(targetSquare: sq(7, 6))
             ),
             randomizers: Randomizers(d6: d6(1))
         )
@@ -1608,12 +1608,12 @@ struct RawTalentTests {
             )
         )
 
-        // Specify target square
+        // Select target square
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(7, 6))
+                message: .hurlTeammateActionSelectTarget(targetSquare: sq(7, 6))
             ),
             randomizers: Randomizers(d6: d6(1))
         )

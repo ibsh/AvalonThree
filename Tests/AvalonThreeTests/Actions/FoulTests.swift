@@ -236,7 +236,7 @@ struct FoulTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .foulActionSpecifyTarget(
+                payload: .foulActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 12),
                     validTargets: [
@@ -247,12 +247,12 @@ struct FoulTests {
             )
         )
 
-        // Specify foul
+        // Select foul
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .foulActionSpecifyTarget(target: pl(.home, 0))
+                message: .foulActionSelectTarget(target: pl(.home, 0))
             ),
             randomizers: Randomizers(foulDie: foul(.gotThem))
         )

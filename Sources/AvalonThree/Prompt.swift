@@ -16,23 +16,23 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     // MARK: - Config
 
-    case specifyBoardSpec(
+    case selectBoardSpec(
         boardSpecIDs: [BoardSpecID]
     )
 
-    case specifyChallengeDeck(
+    case selectChallengeDeck(
         challengeDeckIDs: [ChallengeDeckID]
     )
 
-    case specifyRookieBonusRecipient(
+    case selectRookieBonusRecipient(
         rookieBonusRecipientIDs: [RookieBonusRecipientID]
     )
 
-    case specifyCoinFlipWinnerTeam(
+    case selectCoinFlipWinnerTeam(
         teamIDs: [TeamID]
     )
 
-    case specifyCoinFlipLoserTeam(
+    case selectCoinFlipLoserTeam(
         teamIDs: [TeamID]
     )
 
@@ -84,7 +84,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
         playerSquare: Square
     )
 
-    case runActionSpecifySquares(
+    case runActionSelectSquares(
         playerID: PlayerID,
         playerSquare: Square,
         maxRunDistance: Int,
@@ -98,7 +98,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
         playerSquare: Square
     )
 
-    case markActionSpecifySquares(
+    case markActionSelectSquares(
         playerID: PlayerID,
         playerSquare: Square,
         validSquares: ValidMoveSquares
@@ -111,7 +111,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
         playerSquare: Square
     )
 
-    case passActionSpecifyTarget(
+    case passActionSelectTarget(
         playerID: PlayerID,
         playerSquare: Square,
         validTargets: Set<PassTarget>
@@ -135,13 +135,13 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     // MARK: - Hurl teammate action
 
-    case hurlTeammateActionSpecifyTeammate(
+    case hurlTeammateActionSelectTeammate(
         playerID: PlayerID,
         playerSquare: Square,
         validTeammates: [PlayerID: Square]
     )
 
-    case hurlTeammateActionSpecifyTarget(
+    case hurlTeammateActionSelectTarget(
         playerID: PlayerID,
         playerSquare: Square,
         validTargets: Set<HurlTeammateTarget>
@@ -165,7 +165,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     // MARK: - Foul action
 
-    case foulActionSpecifyTarget(
+    case foulActionSelectTarget(
         playerID: PlayerID,
         playerSquare: Square,
         validTargets: [PlayerID: Square]
@@ -173,7 +173,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     // MARK: - Block action
 
-    case blockActionSpecifyTarget(
+    case blockActionSelectTarget(
         playerID: PlayerID,
         playerSquare: Square,
         validTargets: [PlayerID: Square]
@@ -259,7 +259,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     // MARK: - Sidestep action
 
-    case sidestepActionSpecifySquare(
+    case sidestepActionSelectSquare(
         playerID: PlayerID,
         playerSquare: Square,
         validSquares: ValidMoveSquares
@@ -269,7 +269,7 @@ public enum PromptPayload: Equatable, Codable, Sendable {
 
     // MARK: - Reserves action
 
-    case reservesActionSpecifySquare(
+    case reservesActionSelectSquare(
         playerID: PlayerID,
         validSquares: ValidMoveSquares
     )

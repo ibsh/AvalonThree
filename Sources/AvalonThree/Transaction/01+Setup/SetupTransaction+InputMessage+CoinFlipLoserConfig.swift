@@ -9,7 +9,7 @@ import Foundation
 
 extension SetupTransaction {
 
-    mutating func specifyCoinFlipLoserTeam() throws -> Prompt? {
+    mutating func selectCoinFlipLoserTeam() throws -> Prompt? {
 
         return Prompt(
             coachID: table.coinFlipLoserCoachID,

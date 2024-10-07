@@ -372,7 +372,7 @@ struct BlockTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .blockActionSpecifyTarget(
+                payload: .blockActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 12),
                     validTargets: [
@@ -383,12 +383,12 @@ struct BlockTests {
             )
         )
 
-        // Specify block
+        // Select block
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
+                message: .blockActionSelectTarget(target: pl(.home, 0))
             ),
             randomizers: Randomizers(blockDie: block(.miss))
         )

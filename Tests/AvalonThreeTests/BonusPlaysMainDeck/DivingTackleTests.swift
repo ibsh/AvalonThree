@@ -97,14 +97,14 @@ struct DivingTackleTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(
+                message: .markActionSelectSquares(
                     squares: [
                         sq(2, 6)
                     ]
@@ -225,14 +225,14 @@ struct DivingTackleTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(
+                message: .markActionSelectSquares(
                     squares: [
                         sq(2, 6)
                     ]
@@ -382,14 +382,14 @@ struct DivingTackleTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(
+                message: .markActionSelectSquares(
                     squares: [
                         sq(2, 6)
                     ]
@@ -524,14 +524,14 @@ struct DivingTackleTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(
+                message: .markActionSelectSquares(
                     squares: [
                         sq(2, 6)
                     ]
@@ -666,14 +666,14 @@ struct DivingTackleTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(
+                message: .markActionSelectSquares(
                     squares: [
                         sq(2, 6)
                     ]
@@ -811,14 +811,14 @@ struct DivingTackleTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(
+                message: .markActionSelectSquares(
                     squares: [
                         sq(2, 6)
                     ]
@@ -962,14 +962,14 @@ struct DivingTackleTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(
+                message: .markActionSelectSquares(
                     squares: [
                         sq(2, 6)
                     ]

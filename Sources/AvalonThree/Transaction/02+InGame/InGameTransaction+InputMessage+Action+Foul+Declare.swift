@@ -51,7 +51,7 @@ extension InGameTransaction {
 
         if validTargetPlayers.count == 1 {
 
-            return try foulActionSpecifyTarget(
+            return try foulActionSelectTarget(
                 target: validTargetPlayers.first!.id
             )
 
@@ -59,7 +59,7 @@ extension InGameTransaction {
 
             return Prompt(
                 coachID: playerID.coachID,
-                payload: .foulActionSpecifyTarget(
+                payload: .foulActionSelectTarget(
                     playerID: playerID,
                     playerSquare: playerSquare,
                     validTargets: try validTargetPlayers.reduce([:]) { partialResult, player in

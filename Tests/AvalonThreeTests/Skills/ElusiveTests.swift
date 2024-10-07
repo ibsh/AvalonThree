@@ -95,14 +95,14 @@ struct ElusiveTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(2, 5),
                     sq(1, 6),
                     sq(0, 5),
@@ -212,15 +212,15 @@ struct ElusiveTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         #expect(throws: GameError("Invalid final square")) {
             (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(squares: [
+                    message: .runActionSelectSquares(squares: [
                         sq(2, 5),
                         sq(1, 6),
                         sq(0, 7),
@@ -316,15 +316,15 @@ struct ElusiveTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         #expect(throws: GameError("Invalid intermediate square")) {
             (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(squares: [
+                    message: .runActionSelectSquares(squares: [
                         sq(2, 5),
                         sq(1, 5),
                         sq(0, 6),
@@ -438,14 +438,14 @@ struct ElusiveTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(1, 6),
                     sq(2, 6),
                     sq(3, 6),

@@ -75,7 +75,7 @@ extension InGameTransaction {
 
         if validTargetPlayers.count == 1 {
 
-            return try blockActionSpecifyTarget(
+            return try blockActionSelectTarget(
                 target: validTargetPlayers.first!.id
             )
 
@@ -83,7 +83,7 @@ extension InGameTransaction {
 
             return Prompt(
                 coachID: playerID.coachID,
-                payload: .blockActionSpecifyTarget(
+                payload: .blockActionSelectTarget(
                     playerID: playerID,
                     playerSquare: playerSquare,
                     validTargets: try validTargetPlayers.reduce([:]) { partialResult, player in

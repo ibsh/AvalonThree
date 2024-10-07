@@ -99,7 +99,7 @@ struct InsignificantTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     maxRunDistance: 6,
@@ -143,13 +143,13 @@ struct InsignificantTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         #expect(throws: GameError("Invalid intermediate square")) {
             (latestEvents, latestPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(squares: [
+                    message: .runActionSelectSquares(squares: [
                         sq(2, 5),
                         sq(1, 5),
                         sq(0, 4),
@@ -248,7 +248,7 @@ struct InsignificantTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     maxRunDistance: 6,
@@ -292,12 +292,12 @@ struct InsignificantTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(2, 5),
                     sq(1, 5),
                     sq(0, 4),
@@ -427,7 +427,7 @@ struct InsignificantTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     maxRunDistance: 6,
@@ -471,12 +471,12 @@ struct InsignificantTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(2, 5),
                     sq(1, 5),
                     sq(0, 4),

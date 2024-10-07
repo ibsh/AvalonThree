@@ -59,7 +59,7 @@ extension InGameTransaction {
 
         return Prompt(
             coachID: actionContext.coachID,
-            payload: .passActionSpecifyTarget(
+            payload: .passActionSelectTarget(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare,
                 validTargets: validTargets

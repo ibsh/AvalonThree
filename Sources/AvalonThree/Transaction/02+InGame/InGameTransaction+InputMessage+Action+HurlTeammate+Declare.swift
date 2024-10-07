@@ -53,7 +53,7 @@ extension InGameTransaction {
 
         if validTeammates.count == 1 {
 
-            return try hurlTeammateActionSpecifyTeammate(
+            return try hurlTeammateActionSelectTeammate(
                 teammate: validTeammates.first!.id
             )
 
@@ -61,7 +61,7 @@ extension InGameTransaction {
 
             return Prompt(
                 coachID: playerID.coachID,
-                payload: .hurlTeammateActionSpecifyTeammate(
+                payload: .hurlTeammateActionSelectTeammate(
                     playerID: playerID,
                     playerSquare: playerSquare,
                     validTeammates: try validTeammates.reduce([:]) { partialResult, teammate in

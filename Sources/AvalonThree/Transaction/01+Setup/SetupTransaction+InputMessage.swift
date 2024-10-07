@@ -14,8 +14,8 @@ extension SetupTransaction {
     ) throws -> Prompt? {
 
         switch messageWrapper.message {
-        case .specifyCoinFlipLoserTeam:
-            return try specifyCoinFlipLoserTeam()
+        case .selectCoinFlipLoserTeam:
+            return try selectCoinFlipLoserTeam()
 
         case .arrangePlayers(let playerPositions):
             return try arrangePlayers(
@@ -24,10 +24,10 @@ extension SetupTransaction {
             )
 
         case .begin,
-             .specifyBoardSpec,
-             .specifyChallengeDeck,
-             .specifyRookieBonusRecipient,
-             .specifyCoinFlipWinnerTeam,
+             .selectBoardSpec,
+             .selectChallengeDeck,
+             .selectRookieBonusRecipient,
+             .selectCoinFlipWinnerTeam,
              .declarePlayerAction,
              .declareEmergencyReservesAction,
              .useRegenerationSkillStandUpAction,
@@ -42,29 +42,29 @@ extension SetupTransaction {
              .runActionDeclineDodgeBonusPlay,
              .runActionUseSprintBonusPlay,
              .runActionDeclineSprintBonusPlay,
-             .runActionSpecifySquares,
+             .runActionSelectSquares,
              .markActionUseInterferenceBonusPlay,
              .markActionDeclineInterferenceBonusPlay,
-             .markActionSpecifySquares,
+             .markActionSelectSquares,
              .passActionUseHailMaryPassBonusPlay,
              .passActionDeclineHailMaryPassBonusPlay,
-             .passActionSpecifyTarget,
+             .passActionSelectTarget,
              .passActionUseAccuratePassBonusPlay,
              .passActionDeclineAccuratePassBonusPlay,
              .passActionUseProBonusPlay,
              .passActionDeclineProBonusPlay,
              .passActionUseRawTalentBonusPlayReroll,
              .passActionDeclineRawTalentBonusPlayReroll,
-             .hurlTeammateActionSpecifyTeammate,
-             .hurlTeammateActionSpecifyTarget,
+             .hurlTeammateActionSelectTeammate,
+             .hurlTeammateActionSelectTarget,
              .hurlTeammateActionUseAccuratePassBonusPlay,
              .hurlTeammateActionDeclineAccuratePassBonusPlay,
              .hurlTeammateActionUseProBonusPlay,
              .hurlTeammateActionDeclineProBonusPlay,
              .hurlTeammateActionUseRawTalentBonusPlayReroll,
              .hurlTeammateActionDeclineRawTalentBonusPlayReroll,
-             .foulActionSpecifyTarget,
-             .blockActionSpecifyTarget,
+             .foulActionSelectTarget,
+             .blockActionSelectTarget,
              .blockActionUseStepAsideBonusPlaySidestepAction,
              .blockActionDeclineStepAsideBonusPlaySidestepAction,
              .blockActionUseBodyCheckBonusPlay,
@@ -91,8 +91,8 @@ extension SetupTransaction {
              .blockActionDeclineAbsoluteCarnageBonusPlay,
              .blockActionUseRawTalentBonusPlayRerollForArmourResult,
              .blockActionDeclineRawTalentBonusPlayRerollForArmourResult,
-             .sidestepActionSpecifySquare,
-             .reservesActionSpecifySquare,
+             .sidestepActionSelectSquare,
+             .reservesActionSelectSquare,
              .useGetInThereBonusPlayReservesAction,
              .declineGetInThereBonusPlayReservesAction,
              .useFrenziedSkillBlockAction,

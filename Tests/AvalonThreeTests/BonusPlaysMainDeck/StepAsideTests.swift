@@ -369,7 +369,7 @@ struct StepAsideTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .sidestepActionSpecifySquare(
+                payload: .sidestepActionSelectSquare(
                     playerID: pl(.home, 0),
                     playerSquare: sq(0, 6),
                     validSquares: ValidMoveSquares(
@@ -412,12 +412,12 @@ struct StepAsideTests {
             )
         )
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .sidestepActionSpecifySquare(square: sq(1, 5))
+                message: .sidestepActionSelectSquare(square: sq(1, 5))
             )
         )
 
@@ -496,14 +496,14 @@ struct StepAsideTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(1, 6)
                 ])
             )
@@ -608,14 +608,14 @@ struct StepAsideTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(5, 6),
                     sq(6, 6),
                 ])
@@ -738,14 +738,14 @@ struct StepAsideTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(3, 6),
                     sq(2, 6),
                     sq(1, 6),
@@ -792,14 +792,14 @@ struct StepAsideTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(5, 6),
                     sq(6, 6),
                 ])

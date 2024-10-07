@@ -12,11 +12,11 @@ public enum InputMessage: Codable, Sendable {
     // MARK: - Config
 
     case begin
-    case specifyBoardSpec(boardSpecID: BoardSpecID)
-    case specifyChallengeDeck(challengeDeckID: ChallengeDeckID)
-    case specifyRookieBonusRecipient(rookieBonusRecipientID: RookieBonusRecipientID)
-    case specifyCoinFlipWinnerTeam(teamID: TeamID)
-    case specifyCoinFlipLoserTeam(teamID: TeamID)
+    case selectBoardSpec(boardSpecID: BoardSpecID)
+    case selectChallengeDeck(challengeDeckID: ChallengeDeckID)
+    case selectRookieBonusRecipient(rookieBonusRecipientID: RookieBonusRecipientID)
+    case selectCoinFlipWinnerTeam(teamID: TeamID)
+    case selectCoinFlipLoserTeam(teamID: TeamID)
 
     // MARK: - Table config
 
@@ -41,19 +41,19 @@ public enum InputMessage: Codable, Sendable {
     case runActionDeclineDodgeBonusPlay
     case runActionUseSprintBonusPlay
     case runActionDeclineSprintBonusPlay
-    case runActionSpecifySquares(squares: [Square])
+    case runActionSelectSquares(squares: [Square])
 
     // MARK: - Mark action
 
     case markActionUseInterferenceBonusPlay
     case markActionDeclineInterferenceBonusPlay
-    case markActionSpecifySquares(squares: [Square])
+    case markActionSelectSquares(squares: [Square])
 
     // MARK: - Pass action
 
     case passActionUseHailMaryPassBonusPlay
     case passActionDeclineHailMaryPassBonusPlay
-    case passActionSpecifyTarget(target: PlayerID)
+    case passActionSelectTarget(target: PlayerID)
     case passActionUseAccuratePassBonusPlay
     case passActionDeclineAccuratePassBonusPlay
     case passActionUseProBonusPlay
@@ -63,8 +63,8 @@ public enum InputMessage: Codable, Sendable {
 
     // MARK: - Hurl teammate action
 
-    case hurlTeammateActionSpecifyTeammate(teammate: PlayerID)
-    case hurlTeammateActionSpecifyTarget(targetSquare: Square)
+    case hurlTeammateActionSelectTeammate(teammate: PlayerID)
+    case hurlTeammateActionSelectTarget(targetSquare: Square)
     case hurlTeammateActionUseAccuratePassBonusPlay
     case hurlTeammateActionDeclineAccuratePassBonusPlay
     case hurlTeammateActionUseProBonusPlay
@@ -74,11 +74,11 @@ public enum InputMessage: Codable, Sendable {
 
     // MARK: - Foul action
 
-    case foulActionSpecifyTarget(target: PlayerID)
+    case foulActionSelectTarget(target: PlayerID)
 
     // MARK: - Block action
 
-    case blockActionSpecifyTarget(target: PlayerID)
+    case blockActionSelectTarget(target: PlayerID)
     case blockActionUseStepAsideBonusPlaySidestepAction
     case blockActionDeclineStepAsideBonusPlaySidestepAction
     case blockActionUseBodyCheckBonusPlay
@@ -108,13 +108,13 @@ public enum InputMessage: Codable, Sendable {
 
     // MARK: - Sidestep action
 
-    case sidestepActionSpecifySquare(square: Square)
+    case sidestepActionSelectSquare(square: Square)
 
     // MARK: - Stand up action
 
     // MARK: - Reserves action
 
-    case reservesActionSpecifySquare(square: Square)
+    case reservesActionSelectSquare(square: Square)
 
     // MARK: - After injury
 

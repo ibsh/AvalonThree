@@ -1,5 +1,5 @@
 //
-//  ConfigTransaction+InputMessage+SpecifyCoinFlipWinnerTeam.swift
+//  ConfigTransaction+InputMessage+SelectCoinFlipWinnerTeam.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 6/17/24.
@@ -9,7 +9,7 @@ import Foundation
 
 extension ConfigTransaction {
 
-    mutating func specifyCoinFlipWinnerTeam(
+    mutating func selectCoinFlipWinnerTeam(
         teamID: TeamID
     ) throws -> Prompt? {
 
@@ -37,7 +37,7 @@ extension ConfigTransaction {
 
         return Prompt(
             coachID: coinFlipWinnerCoachID.inverse,
-            payload: .specifyCoinFlipLoserTeam(
+            payload: .selectCoinFlipLoserTeam(
                 teamIDs: TeamID.availableCases
             )
         )

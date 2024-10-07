@@ -60,7 +60,7 @@ extension InGameTransaction {
 
         return Prompt(
             coachID: playerID.coachID,
-            payload: .reservesActionSpecifySquare(playerID: playerID, validSquares: validSquares)
+            payload: .reservesActionSelectSquare(playerID: playerID, validSquares: validSquares)
         )
     }
 }

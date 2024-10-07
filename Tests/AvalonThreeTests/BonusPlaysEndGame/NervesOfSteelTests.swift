@@ -191,14 +191,14 @@ struct NervesOfSteelTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(
+                message: .passActionSelectTarget(
                     target: pl(.away, 1)
                 )
             ),
@@ -362,14 +362,14 @@ struct NervesOfSteelTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(
+                message: .passActionSelectTarget(
                     target: pl(.away, 1)
                 )
             ),
@@ -574,14 +574,14 @@ struct NervesOfSteelTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .hurlTeammateActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .hurlTeammateActionSelectTarget)
 
-        // Specify target square
+        // Select target square
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(2, 8))
+                message: .hurlTeammateActionSelectTarget(targetSquare: sq(2, 8))
             ),
             randomizers: Randomizers(d6: d6(5))
         )

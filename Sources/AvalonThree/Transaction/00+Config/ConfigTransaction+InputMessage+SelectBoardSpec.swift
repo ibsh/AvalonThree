@@ -1,5 +1,5 @@
 //
-//  ConfigTransaction+InputMessage+SpecifyBoardSpec.swift
+//  ConfigTransaction+InputMessage+SelectBoardSpec.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 6/17/24.
@@ -9,7 +9,7 @@ import Foundation
 
 extension ConfigTransaction {
 
-    mutating func specifyBoardSpec(
+    mutating func selectBoardSpec(
         boardSpecID: BoardSpecID
     ) throws -> Prompt? {
 
@@ -37,7 +37,7 @@ extension ConfigTransaction {
 
         return Prompt(
             coachID: coinFlipWinnerCoachID,
-            payload: .specifyChallengeDeck(
+            payload: .selectChallengeDeck(
                 challengeDeckIDs: ChallengeDeckID.availableCases
             )
         )

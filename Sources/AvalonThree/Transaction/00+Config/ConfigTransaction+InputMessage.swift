@@ -17,28 +17,28 @@ extension ConfigTransaction {
         case .begin:
             return try beginGame()
 
-        case .specifyBoardSpec(let boardSpecID):
-            return try specifyBoardSpec(
+        case .selectBoardSpec(let boardSpecID):
+            return try selectBoardSpec(
                 boardSpecID: boardSpecID
             )
 
-        case .specifyChallengeDeck(let challengeDeckID):
-            return try specifyChallengeDeck(
+        case .selectChallengeDeck(let challengeDeckID):
+            return try selectChallengeDeck(
                 challengeDeckID: challengeDeckID
             )
 
-        case .specifyRookieBonusRecipient(let rookieBonusRecipientID):
-            return try specifyRookieBonusRecipient(
+        case .selectRookieBonusRecipient(let rookieBonusRecipientID):
+            return try selectRookieBonusRecipient(
                 rookieBonusRecipientID: rookieBonusRecipientID
             )
 
-        case .specifyCoinFlipWinnerTeam(let teamID):
-            return try specifyCoinFlipWinnerTeam(
+        case .selectCoinFlipWinnerTeam(let teamID):
+            return try selectCoinFlipWinnerTeam(
                 teamID: teamID
             )
 
-        case .specifyCoinFlipLoserTeam(let teamID):
-            return try specifyCoinFlipLoserTeam(
+        case .selectCoinFlipLoserTeam(let teamID):
+            return try selectCoinFlipLoserTeam(
                 teamID: teamID
             )
 
@@ -57,29 +57,29 @@ extension ConfigTransaction {
              .runActionDeclineDodgeBonusPlay,
              .runActionUseSprintBonusPlay,
              .runActionDeclineSprintBonusPlay,
-             .runActionSpecifySquares,
+             .runActionSelectSquares,
              .markActionUseInterferenceBonusPlay,
              .markActionDeclineInterferenceBonusPlay,
-             .markActionSpecifySquares,
+             .markActionSelectSquares,
              .passActionUseHailMaryPassBonusPlay,
              .passActionDeclineHailMaryPassBonusPlay,
-             .passActionSpecifyTarget,
+             .passActionSelectTarget,
              .passActionUseAccuratePassBonusPlay,
              .passActionDeclineAccuratePassBonusPlay,
              .passActionUseProBonusPlay,
              .passActionDeclineProBonusPlay,
              .passActionUseRawTalentBonusPlayReroll,
              .passActionDeclineRawTalentBonusPlayReroll,
-             .hurlTeammateActionSpecifyTeammate,
-             .hurlTeammateActionSpecifyTarget,
+             .hurlTeammateActionSelectTeammate,
+             .hurlTeammateActionSelectTarget,
              .hurlTeammateActionUseAccuratePassBonusPlay,
              .hurlTeammateActionDeclineAccuratePassBonusPlay,
              .hurlTeammateActionUseProBonusPlay,
              .hurlTeammateActionDeclineProBonusPlay,
              .hurlTeammateActionUseRawTalentBonusPlayReroll,
              .hurlTeammateActionDeclineRawTalentBonusPlayReroll,
-             .foulActionSpecifyTarget,
-             .blockActionSpecifyTarget,
+             .foulActionSelectTarget,
+             .blockActionSelectTarget,
              .blockActionUseStepAsideBonusPlaySidestepAction,
              .blockActionDeclineStepAsideBonusPlaySidestepAction,
              .blockActionUseBodyCheckBonusPlay,
@@ -106,8 +106,8 @@ extension ConfigTransaction {
              .blockActionDeclineAbsoluteCarnageBonusPlay,
              .blockActionUseRawTalentBonusPlayRerollForArmourResult,
              .blockActionDeclineRawTalentBonusPlayRerollForArmourResult,
-             .sidestepActionSpecifySquare,
-             .reservesActionSpecifySquare,
+             .sidestepActionSelectSquare,
+             .reservesActionSelectSquare,
              .useGetInThereBonusPlayReservesAction,
              .declineGetInThereBonusPlayReservesAction,
              .useFrenziedSkillBlockAction,

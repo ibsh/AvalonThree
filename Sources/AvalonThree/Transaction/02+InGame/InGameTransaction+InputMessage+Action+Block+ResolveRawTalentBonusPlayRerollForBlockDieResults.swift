@@ -45,14 +45,14 @@ extension InGameTransaction {
         if player.spec.skills.contains(.enforcer) || results.count == 1 {
 
             guard result == nil else {
-                throw GameError("May not specify result")
+                throw GameError("May not select result")
             }
             return try blockActionSelectResult(result: results[0])
 
         } else {
 
             guard let result else {
-                throw GameError("Must specify result")
+                throw GameError("Must select result")
             }
             return try blockActionSelectResult(result: result)
         }

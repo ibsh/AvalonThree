@@ -124,14 +124,14 @@ struct YourTimeToShineTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .reservesActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .reservesActionSelectSquare)
 
-        // Specify reserves
+        // Select reserves
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .reservesActionSpecifySquare(square: sq(6, 0))
+                message: .reservesActionSelectSquare(square: sq(6, 0))
             )
         )
 
@@ -166,14 +166,14 @@ struct YourTimeToShineTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(5, 6),
                     ]
@@ -229,14 +229,14 @@ struct YourTimeToShineTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .reservesActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .reservesActionSelectSquare)
 
-        // Specify reserves
+        // Select reserves
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .reservesActionSpecifySquare(square: sq(2, 0))
+                message: .reservesActionSelectSquare(square: sq(2, 0))
             )
         )
 
@@ -267,14 +267,14 @@ struct YourTimeToShineTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .reservesActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .reservesActionSelectSquare)
 
-        // Specify reserves
+        // Select reserves
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .reservesActionSpecifySquare(square: sq(8, 0))
+                message: .reservesActionSelectSquare(square: sq(8, 0))
             )
         )
 
@@ -305,14 +305,14 @@ struct YourTimeToShineTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(1, 1),
                         sq(0, 2),
@@ -456,14 +456,14 @@ struct YourTimeToShineTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(5, 6),
                     ]

@@ -71,8 +71,8 @@ extension InGameTransaction {
         case .runActionDeclineSprintBonusPlay:
             return try runActionDeclineSprintBonusPlay()
 
-        case .runActionSpecifySquares(let squares):
-            return try runActionSpecifySquares(
+        case .runActionSelectSquares(let squares):
+            return try runActionSelectSquares(
                 squares: squares
             )
 
@@ -82,8 +82,8 @@ extension InGameTransaction {
         case .markActionDeclineInterferenceBonusPlay:
             return try markActionDeclineInterferenceBonusPlay()
 
-        case .markActionSpecifySquares(let squares):
-            return try markActionSpecifySquares(
+        case .markActionSelectSquares(let squares):
+            return try markActionSelectSquares(
                 squares: squares
             )
 
@@ -93,8 +93,8 @@ extension InGameTransaction {
         case .passActionDeclineHailMaryPassBonusPlay:
             return try passActionDeclineHailMaryPassBonusPlay()
 
-        case .passActionSpecifyTarget(let target):
-            return try passActionSpecifyTarget(
+        case .passActionSelectTarget(let target):
+            return try passActionSelectTarget(
                 target: target
             )
 
@@ -116,13 +116,13 @@ extension InGameTransaction {
         case .passActionDeclineRawTalentBonusPlayReroll:
             return try passActionDeclineRawTalentBonusPlayReroll()
 
-        case .hurlTeammateActionSpecifyTeammate(let teammate):
-            return try hurlTeammateActionSpecifyTeammate(
+        case .hurlTeammateActionSelectTeammate(let teammate):
+            return try hurlTeammateActionSelectTeammate(
                 teammate: teammate
             )
 
-        case .hurlTeammateActionSpecifyTarget(let targetSquare):
-            return try hurlTeammateActionSpecifyTarget(
+        case .hurlTeammateActionSelectTarget(let targetSquare):
+            return try hurlTeammateActionSelectTarget(
                 targetSquare: targetSquare
             )
 
@@ -144,13 +144,13 @@ extension InGameTransaction {
         case .hurlTeammateActionDeclineRawTalentBonusPlayReroll:
             return try hurlTeammateActionDeclineRawTalentBonusPlayReroll()
 
-        case .foulActionSpecifyTarget(let target):
-            return try foulActionSpecifyTarget(
+        case .foulActionSelectTarget(let target):
+            return try foulActionSelectTarget(
                 target: target
             )
 
-        case .blockActionSpecifyTarget(let target):
-            return try blockActionSpecifyTarget(
+        case .blockActionSelectTarget(let target):
+            return try blockActionSelectTarget(
                 target: target
             )
 
@@ -240,13 +240,13 @@ extension InGameTransaction {
         case .blockActionDeclineRawTalentBonusPlayRerollForArmourResult:
             return try blockActionDeclineRawTalentBonusPlayRerollForArmourResult()
 
-        case .sidestepActionSpecifySquare(let square):
-            return try sidestepActionSpecifySquare(
+        case .sidestepActionSelectSquare(let square):
+            return try sidestepActionSelectSquare(
                 square: square
             )
 
-        case .reservesActionSpecifySquare(let square):
-            return try reservesActionSpecifySquare(
+        case .reservesActionSelectSquare(let square):
+            return try reservesActionSelectSquare(
                 square: square
             )
 
@@ -395,11 +395,11 @@ extension InGameTransaction {
             )
 
         case .begin,
-             .specifyBoardSpec,
-             .specifyChallengeDeck,
-             .specifyRookieBonusRecipient,
-             .specifyCoinFlipWinnerTeam,
-             .specifyCoinFlipLoserTeam:
+             .selectBoardSpec,
+             .selectChallengeDeck,
+             .selectRookieBonusRecipient,
+             .selectCoinFlipWinnerTeam,
+             .selectCoinFlipLoserTeam:
             throw GameError("Invalid message for InGameTransaction")
         }
     }

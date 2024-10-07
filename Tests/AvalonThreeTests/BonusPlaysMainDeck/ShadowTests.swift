@@ -94,7 +94,7 @@ struct ShadowTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .sidestepActionSpecifySquare(
+                payload: .sidestepActionSelectSquare(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
@@ -137,12 +137,12 @@ struct ShadowTests {
             )
         )
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .sidestepActionSpecifySquare(square: sq(6, 6))
+                message: .sidestepActionSelectSquare(square: sq(6, 6))
             )
         )
 
@@ -301,14 +301,14 @@ struct ShadowTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .sidestepActionSpecifySquare(square: sq(6, 4))
+                message: .sidestepActionSelectSquare(square: sq(6, 4))
             )
         )
 
@@ -427,14 +427,14 @@ struct ShadowTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .sidestepActionSpecifySquare(square: sq(6, 5))
+                message: .sidestepActionSelectSquare(square: sq(6, 5))
             )
         )
 

@@ -98,14 +98,14 @@ struct AccuratePassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(3, 6),
                         sq(4, 6),
@@ -148,14 +148,14 @@ struct AccuratePassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify handoff
+        // Select handoff
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             )
         )
 
@@ -257,14 +257,14 @@ struct AccuratePassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(1, 6),
                     ]
@@ -303,14 +303,14 @@ struct AccuratePassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(d6: d6(5))
         )
@@ -415,14 +415,14 @@ struct AccuratePassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .hurlTeammateActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .hurlTeammateActionSelectTarget)
 
-        // Specify target square
+        // Select target square
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(3, 11))
+                message: .hurlTeammateActionSelectTarget(targetSquare: sq(3, 11))
             ),
             randomizers: Randomizers(d6: d6(6))
         )
@@ -526,14 +526,14 @@ struct AccuratePassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             )
         )
 
@@ -693,14 +693,14 @@ struct AccuratePassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .hurlTeammateActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .hurlTeammateActionSelectTarget)
 
-        // Specify target square
+        // Select target square
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(2, 6))
+                message: .hurlTeammateActionSelectTarget(targetSquare: sq(2, 6))
             )
         )
 
@@ -861,14 +861,14 @@ struct AccuratePassTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             )
         )
 

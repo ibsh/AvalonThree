@@ -144,14 +144,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .sidestepActionSpecifySquare(square: sq(8, 9))
+                message: .sidestepActionSelectSquare(square: sq(8, 9))
             )
         )
 
@@ -186,14 +186,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .sidestepActionSpecifySquare(square: sq(9, 9))
+                message: .sidestepActionSelectSquare(square: sq(9, 9))
             )
         )
 
@@ -228,14 +228,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .sidestepActionSpecifySquare(square: sq(10, 9))
+                message: .sidestepActionSelectSquare(square: sq(10, 9))
             )
         )
 
@@ -294,14 +294,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .hurlTeammateActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .hurlTeammateActionSelectTarget)
 
-        // Specify target square
+        // Select target square
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(9, 12))
+                message: .hurlTeammateActionSelectTarget(targetSquare: sq(9, 12))
             ),
             randomizers: Randomizers(d8: d8(5))
         )
@@ -362,14 +362,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 2))
+                message: .passActionSelectTarget(target: pl(.away, 2))
             ),
             randomizers: Randomizers(d8: d8(5))
         )
@@ -429,14 +429,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(8, 7),
                     sq(7, 7),
                     sq(6, 7),
@@ -593,14 +593,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .sidestepActionSpecifySquare(square: sq(8, 9))
+                message: .sidestepActionSelectSquare(square: sq(8, 9))
             )
         )
 
@@ -635,14 +635,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .sidestepActionSpecifySquare(square: sq(9, 9))
+                message: .sidestepActionSelectSquare(square: sq(9, 9))
             )
         )
 
@@ -677,14 +677,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .sidestepActionSpecifySquare(square: sq(10, 9))
+                message: .sidestepActionSelectSquare(square: sq(10, 9))
             )
         )
 
@@ -742,14 +742,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .hurlTeammateActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .hurlTeammateActionSelectTarget)
 
-        // Specify target square
+        // Select target square
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .hurlTeammateActionSpecifyTarget(targetSquare: sq(9, 12))
+                message: .hurlTeammateActionSelectTarget(targetSquare: sq(9, 12))
             ),
             randomizers: Randomizers(d6: d6(5))
         )
@@ -810,14 +810,14 @@ struct PassingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 2))
+                message: .passActionSelectTarget(target: pl(.away, 2))
             ),
             randomizers: Randomizers(d6: d6(5))
         )

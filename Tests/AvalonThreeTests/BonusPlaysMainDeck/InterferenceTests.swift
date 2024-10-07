@@ -97,14 +97,14 @@ struct InterferenceTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(4, 6),
                     sq(5, 6),
                     sq(6, 6),
@@ -165,7 +165,7 @@ struct InterferenceTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     validSquares: ValidMoveSquares(
@@ -208,12 +208,12 @@ struct InterferenceTests {
             )
         )
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(5, 6),
                     sq(4, 6),
                     sq(3, 6),
@@ -324,14 +324,14 @@ struct InterferenceTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(2, 6),
                 ])
             )
@@ -368,7 +368,7 @@ struct InterferenceTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
     }
 
     @Test func canBeAppliedPostDeclarationWhereAFurtherTargetExists() async throws {
@@ -458,14 +458,14 @@ struct InterferenceTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(3, 6),
                 ])
             )
@@ -520,14 +520,14 @@ struct InterferenceTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // Specify mark
+        // Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(2, 6),
                     sq(1, 7),
                     sq(0, 6),
@@ -636,14 +636,14 @@ struct InterferenceTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(3, 6),
                 ])
             )
@@ -696,14 +696,14 @@ struct InterferenceTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
 
-        // MARK: - Specify mark
+        // MARK: - Select mark
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .markActionSpecifySquares(squares: [
+                message: .markActionSelectSquares(squares: [
                     sq(2, 6),
                     sq(1, 7),
                 ])
@@ -808,14 +808,14 @@ struct InterferenceTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(4, 5),
                 ])
             )
@@ -872,7 +872,7 @@ struct InterferenceTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(4, 5),
                     validSquares: ValidMoveSquares(

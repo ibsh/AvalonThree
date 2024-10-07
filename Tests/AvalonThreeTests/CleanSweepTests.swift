@@ -241,7 +241,7 @@ struct CleanSweepTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     maxRunDistance: 6,
@@ -285,12 +285,12 @@ struct CleanSweepTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(6, 5),
                     sq(6, 6),
                     sq(6, 7),
@@ -445,7 +445,7 @@ struct CleanSweepTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .passActionSpecifyTarget(
+                payload: .passActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 8),
                     validTargets: [
@@ -461,12 +461,12 @@ struct CleanSweepTests {
             )
         )
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(d6: d6(5))
         )
@@ -845,7 +845,7 @@ struct CleanSweepTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     maxRunDistance: 6,
@@ -889,12 +889,12 @@ struct CleanSweepTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(6, 5),
                     sq(6, 6),
                     sq(6, 7),
@@ -1036,7 +1036,7 @@ struct CleanSweepTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .passActionSpecifyTarget(
+                payload: .passActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 8),
                     validTargets: [
@@ -1052,12 +1052,12 @@ struct CleanSweepTests {
             )
         )
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(d6: d6(5))
         )
@@ -1403,7 +1403,7 @@ struct CleanSweepTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     maxRunDistance: 6,
@@ -1447,12 +1447,12 @@ struct CleanSweepTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(6, 5),
                     sq(6, 6),
                     sq(6, 7),
@@ -1613,7 +1613,7 @@ struct CleanSweepTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .passActionSpecifyTarget(
+                payload: .passActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 8),
                     validTargets: [
@@ -1629,12 +1629,12 @@ struct CleanSweepTests {
             )
         )
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(d6: d6(5))
         )

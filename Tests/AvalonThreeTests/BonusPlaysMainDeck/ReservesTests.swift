@@ -114,14 +114,14 @@ struct ReservesTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(10, 9),
                         sq(9, 8),
@@ -180,14 +180,14 @@ struct ReservesTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .reservesActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .reservesActionSelectSquare)
 
-        // Specify reserves
+        // Select reserves
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .reservesActionSpecifySquare(square: sq(7, 14))
+                message: .reservesActionSelectSquare(square: sq(7, 14))
             )
         )
 
@@ -308,14 +308,14 @@ struct ReservesTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(10, 9),
                         sq(9, 8),
@@ -464,14 +464,14 @@ struct ReservesTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(10, 9),
                         sq(9, 8),
@@ -509,14 +509,14 @@ struct ReservesTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .reservesActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .reservesActionSelectSquare)
 
-        // Specify reserves
+        // Select reserves
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .reservesActionSpecifySquare(square: sq(7, 14))
+                message: .reservesActionSelectSquare(square: sq(7, 14))
             )
         )
 
@@ -548,14 +548,14 @@ struct ReservesTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .reservesActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .reservesActionSelectSquare)
 
-        // Specify reserves
+        // Select reserves
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .reservesActionSpecifySquare(square: sq(1, 14))
+                message: .reservesActionSelectSquare(square: sq(1, 14))
             )
         )
 
@@ -682,14 +682,14 @@ struct ReservesTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSpecifySquares)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(10, 9),
                         sq(9, 8),
@@ -727,14 +727,14 @@ struct ReservesTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .reservesActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .reservesActionSelectSquare)
 
-        // Specify reserves
+        // Select reserves
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .reservesActionSpecifySquare(square: sq(7, 14))
+                message: .reservesActionSelectSquare(square: sq(7, 14))
             )
         )
 

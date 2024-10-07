@@ -58,7 +58,7 @@ extension InGameTransaction {
 
             return Prompt(
                 coachID: playerID.coachID,
-                payload: .passActionSpecifyTarget(
+                payload: .passActionSelectTarget(
                     playerID: playerID,
                     playerSquare: playerSquare,
                     validTargets: hailMaryPassValidTargets
@@ -83,7 +83,7 @@ extension InGameTransaction {
 
         return Prompt(
             coachID: playerID.coachID,
-            payload: .passActionSpecifyTarget(
+            payload: .passActionSelectTarget(
                 playerID: playerID,
                 playerSquare: playerSquare,
                 validTargets: basicValidTargets

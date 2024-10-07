@@ -39,7 +39,7 @@ struct MyFirstGameTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .specifyBoardSpec(
+                payload: .selectBoardSpec(
                     boardSpecIDs: [
                         .season1Board1,
                         .season1Board2,
@@ -57,7 +57,7 @@ struct MyFirstGameTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .specifyBoardSpec(boardSpecID: .season1Board1)
+                message: .selectBoardSpec(boardSpecID: .season1Board1)
             )
         )
 
@@ -74,7 +74,7 @@ struct MyFirstGameTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .specifyChallengeDeck(
+                payload: .selectChallengeDeck(
                     challengeDeckIDs: [
                         .shortStandard,
                         .shortRandomised,
@@ -90,7 +90,7 @@ struct MyFirstGameTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .specifyChallengeDeck(challengeDeckID: .shortStandard)
+                message: .selectChallengeDeck(challengeDeckID: .shortStandard)
             )
         )
 
@@ -103,7 +103,7 @@ struct MyFirstGameTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .specifyRookieBonusRecipient(
+                payload: .selectRookieBonusRecipient(
                     rookieBonusRecipientIDs: [
                         .noOne,
                         .coinFlipLoser,
@@ -118,7 +118,7 @@ struct MyFirstGameTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .specifyRookieBonusRecipient(rookieBonusRecipientID: .noOne)
+                message: .selectRookieBonusRecipient(rookieBonusRecipientID: .noOne)
             )
         )
 
@@ -131,7 +131,7 @@ struct MyFirstGameTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .home,
-                payload: .specifyCoinFlipWinnerTeam(
+                payload: .selectCoinFlipWinnerTeam(
                     teamIDs: [
                         .blackOrc,
                         .chaos,
@@ -162,7 +162,7 @@ struct MyFirstGameTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .specifyCoinFlipWinnerTeam(teamID: .skaven)
+                message: .selectCoinFlipWinnerTeam(teamID: .skaven)
             )
         )
 
@@ -175,7 +175,7 @@ struct MyFirstGameTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .specifyCoinFlipLoserTeam(
+                payload: .selectCoinFlipLoserTeam(
                     teamIDs: [
                         .blackOrc,
                         .chaos,
@@ -206,7 +206,7 @@ struct MyFirstGameTests {
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .specifyCoinFlipLoserTeam(teamID: .human)
+                message: .selectCoinFlipLoserTeam(teamID: .human)
             ),
             randomizers: Randomizers(
                 deck: deck([
@@ -772,7 +772,7 @@ struct MyFirstGameTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 2),
                     playerSquare: sq(4, 0),
                     maxRunDistance: 6,
@@ -816,12 +816,12 @@ struct MyFirstGameTests {
             )
         )
 
-        // First coach specify turn 1 action 1
+        // First coach select turn 1 action 1
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(4, 1),
                     sq(4, 2),
                     sq(4, 3),
@@ -972,7 +972,7 @@ struct MyFirstGameTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 3),
                     playerSquare: sq(6, 0),
                     maxRunDistance: 6,
@@ -1016,12 +1016,12 @@ struct MyFirstGameTests {
             )
         )
 
-        // First coach specify turn 1 action 2
+        // First coach select turn 1 action 2
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(6, 1),
                     sq(6, 2),
                     sq(6, 3),
@@ -1163,7 +1163,7 @@ struct MyFirstGameTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 1),
                     playerSquare: sq(1, 0),
                     maxRunDistance: 6,
@@ -1207,12 +1207,12 @@ struct MyFirstGameTests {
             )
         )
 
-        // First coach specify turn 1 action 3
+        // First coach select turn 1 action 3
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(squares: [
+                message: .runActionSelectSquares(squares: [
                     sq(1, 1),
                     sq(1, 2),
                     sq(0, 3),

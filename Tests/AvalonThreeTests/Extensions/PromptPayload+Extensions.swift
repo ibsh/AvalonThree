@@ -9,11 +9,11 @@
 
 extension PromptPayload {
     enum Case {
-        case specifyBoardSpec
-        case specifyChallengeDeck
-        case specifyRookieBonusRecipient
-        case specifyCoinFlipWinnerTeam
-        case specifyCoinFlipLoserTeam
+        case selectBoardSpec
+        case selectChallengeDeck
+        case selectRookieBonusRecipient
+        case selectCoinFlipWinnerTeam
+        case selectCoinFlipLoserTeam
         case arrangePlayers
         case declarePlayerAction
         case declareEmergencyReservesAction
@@ -23,21 +23,21 @@ extension PromptPayload {
         case runActionEligibleForBlockingPlayBonusPlay
         case runActionEligibleForDodgeBonusPlay
         case runActionEligibleForSprintBonusPlay
-        case runActionSpecifySquares
+        case runActionSelectSquares
         case markActionEligibleForInterferenceBonusPlay
-        case markActionSpecifySquares
+        case markActionSelectSquares
         case passActionEligibleForHailMaryPassBonusPlay
-        case passActionSpecifyTarget
+        case passActionSelectTarget
         case passActionEligibleForAccuratePassBonusPlay
         case passActionEligibleForProBonusPlay
         case passActionResultEligibleForRawTalentBonusPlayReroll
-        case hurlTeammateActionSpecifyTeammate
-        case hurlTeammateActionSpecifyTarget
+        case hurlTeammateActionSelectTeammate
+        case hurlTeammateActionSelectTarget
         case hurlTeammateActionEligibleForAccuratePassBonusPlay
         case hurlTeammateActionEligibleForProBonusPlay
         case hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll
-        case foulActionSpecifyTarget
-        case blockActionSpecifyTarget
+        case foulActionSelectTarget
+        case blockActionSelectTarget
         case blockActionEligibleForStepAsideBonusPlaySidestepAction
         case blockActionEligibleForBodyCheckBonusPlay
         case blockActionEligibleForTheKidsGotMoxyBonusPlay
@@ -52,8 +52,8 @@ extension PromptPayload {
         case blockActionEligibleForProBonusPlay
         case blockActionEligibleForAbsoluteCarnageBonusPlay
         case blockActionArmourResultEligibleForRawTalentBonusPlayReroll
-        case sidestepActionSpecifySquare
-        case reservesActionSpecifySquare
+        case sidestepActionSelectSquare
+        case reservesActionSelectSquare
         case eligibleForGetInThereBonusPlayReservesAction
         case eligibleForFrenziedSkillBlockAction
         case eligibleForShoulderChargeBonusPlayBlockAction
@@ -80,11 +80,11 @@ extension PromptPayload {
 
     var `case`: Case {
         switch self {
-        case .specifyBoardSpec: .specifyBoardSpec
-        case .specifyChallengeDeck: .specifyChallengeDeck
-        case .specifyRookieBonusRecipient: .specifyRookieBonusRecipient
-        case .specifyCoinFlipWinnerTeam: .specifyCoinFlipWinnerTeam
-        case .specifyCoinFlipLoserTeam: .specifyCoinFlipLoserTeam
+        case .selectBoardSpec: .selectBoardSpec
+        case .selectChallengeDeck: .selectChallengeDeck
+        case .selectRookieBonusRecipient: .selectRookieBonusRecipient
+        case .selectCoinFlipWinnerTeam: .selectCoinFlipWinnerTeam
+        case .selectCoinFlipLoserTeam: .selectCoinFlipLoserTeam
         case .arrangePlayers: .arrangePlayers
         case .declarePlayerAction: .declarePlayerAction
         case .declareEmergencyReservesAction: .declareEmergencyReservesAction
@@ -94,21 +94,21 @@ extension PromptPayload {
         case .runActionEligibleForBlockingPlayBonusPlay: .runActionEligibleForBlockingPlayBonusPlay
         case .runActionEligibleForDodgeBonusPlay: .runActionEligibleForDodgeBonusPlay
         case .runActionEligibleForSprintBonusPlay: .runActionEligibleForSprintBonusPlay
-        case .runActionSpecifySquares: .runActionSpecifySquares
+        case .runActionSelectSquares: .runActionSelectSquares
         case .markActionEligibleForInterferenceBonusPlay: .markActionEligibleForInterferenceBonusPlay
-        case .markActionSpecifySquares: .markActionSpecifySquares
+        case .markActionSelectSquares: .markActionSelectSquares
         case .passActionEligibleForHailMaryPassBonusPlay: .passActionEligibleForHailMaryPassBonusPlay
-        case .passActionSpecifyTarget: .passActionSpecifyTarget
+        case .passActionSelectTarget: .passActionSelectTarget
         case .passActionEligibleForAccuratePassBonusPlay: .passActionEligibleForAccuratePassBonusPlay
         case .passActionEligibleForProBonusPlay: .passActionEligibleForProBonusPlay
         case .passActionResultEligibleForRawTalentBonusPlayReroll: .passActionResultEligibleForRawTalentBonusPlayReroll
-        case .hurlTeammateActionSpecifyTeammate: .hurlTeammateActionSpecifyTeammate
-        case .hurlTeammateActionSpecifyTarget: .hurlTeammateActionSpecifyTarget
+        case .hurlTeammateActionSelectTeammate: .hurlTeammateActionSelectTeammate
+        case .hurlTeammateActionSelectTarget: .hurlTeammateActionSelectTarget
         case .hurlTeammateActionEligibleForAccuratePassBonusPlay: .hurlTeammateActionEligibleForAccuratePassBonusPlay
         case .hurlTeammateActionEligibleForProBonusPlay: .hurlTeammateActionEligibleForProBonusPlay
         case .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll: .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll
-        case .foulActionSpecifyTarget: .foulActionSpecifyTarget
-        case .blockActionSpecifyTarget: .blockActionSpecifyTarget
+        case .foulActionSelectTarget: .foulActionSelectTarget
+        case .blockActionSelectTarget: .blockActionSelectTarget
         case .blockActionEligibleForStepAsideBonusPlaySidestepAction: .blockActionEligibleForStepAsideBonusPlaySidestepAction
         case .blockActionEligibleForBodyCheckBonusPlay: .blockActionEligibleForBodyCheckBonusPlay
         case .blockActionEligibleForTheKidsGotMoxyBonusPlay: .blockActionEligibleForTheKidsGotMoxyBonusPlay
@@ -123,8 +123,8 @@ extension PromptPayload {
         case .blockActionEligibleForProBonusPlay: .blockActionEligibleForProBonusPlay
         case .blockActionEligibleForAbsoluteCarnageBonusPlay: .blockActionEligibleForAbsoluteCarnageBonusPlay
         case .blockActionArmourResultEligibleForRawTalentBonusPlayReroll: .blockActionArmourResultEligibleForRawTalentBonusPlayReroll
-        case .sidestepActionSpecifySquare: .sidestepActionSpecifySquare
-        case .reservesActionSpecifySquare: .reservesActionSpecifySquare
+        case .sidestepActionSelectSquare: .sidestepActionSelectSquare
+        case .reservesActionSelectSquare: .reservesActionSelectSquare
         case .eligibleForGetInThereBonusPlayReservesAction: .eligibleForGetInThereBonusPlayReservesAction
         case .eligibleForFrenziedSkillBlockAction: .eligibleForFrenziedSkillBlockAction
         case .eligibleForShoulderChargeBonusPlayBlockAction: .eligibleForShoulderChargeBonusPlayBlockAction

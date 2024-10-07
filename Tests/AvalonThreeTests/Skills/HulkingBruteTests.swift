@@ -96,14 +96,14 @@ struct HulkingBruteTests {
         )
 
         #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .blockActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .blockActionSelectTarget)
 
-        // Specify block
+        // Select block
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSpecifyTarget(target: pl(.home, 0))
+                message: .blockActionSelectTarget(target: pl(.home, 0))
             ),
             randomizers: Randomizers(blockDie: block(.tackle, .miss))
         )

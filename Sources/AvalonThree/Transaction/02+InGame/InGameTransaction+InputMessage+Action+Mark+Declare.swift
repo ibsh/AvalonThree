@@ -97,7 +97,7 @@ extension InGameTransaction {
 
             return Prompt(
                 coachID: playerID.coachID,
-                payload: .markActionSpecifySquares(
+                payload: .markActionSelectSquares(
                     playerID: playerID,
                     playerSquare: playerSquare,
                     validSquares: interferenceValidSquares
@@ -137,7 +137,7 @@ extension InGameTransaction {
 
         return Prompt(
             coachID: playerID.coachID,
-            payload: .markActionSpecifySquares(
+            payload: .markActionSelectSquares(
                 playerID: playerID,
                 playerSquare: playerSquare,
                 validSquares: basicValidSquares

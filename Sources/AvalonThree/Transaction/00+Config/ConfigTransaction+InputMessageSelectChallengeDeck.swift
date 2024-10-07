@@ -1,5 +1,5 @@
 //
-//  ConfigTransaction+InputMessage+SpecifyChallengeDeck.swift
+//  ConfigTransaction+InputMessage+SelectChallengeDeck.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 6/17/24.
@@ -9,7 +9,7 @@ import Foundation
 
 extension ConfigTransaction {
 
-    mutating func specifyChallengeDeck(
+    mutating func selectChallengeDeck(
         challengeDeckID: ChallengeDeckID
     ) throws -> Prompt? {
 
@@ -40,7 +40,7 @@ extension ConfigTransaction {
 
         return Prompt(
             coachID: coinFlipWinnerCoachID,
-            payload: .specifyRookieBonusRecipient(
+            payload: .selectRookieBonusRecipient(
                 rookieBonusRecipientIDs: RookieBonusRecipientID.availableCases
             )
         )

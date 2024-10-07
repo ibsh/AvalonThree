@@ -30,32 +30,32 @@ extension Game {
         case .begin:
             throw GameError("Invalid message")
 
-        case .specifyBoardSpec:
-            guard case .specifyBoardSpec = payload else {
+        case .selectBoardSpec:
+            guard case .selectBoardSpec = payload else {
                 throw GameError("Invalid message")
             }
             return
 
-        case .specifyChallengeDeck:
-            guard case .specifyChallengeDeck = payload else {
+        case .selectChallengeDeck:
+            guard case .selectChallengeDeck = payload else {
                 throw GameError("Invalid message")
             }
             return
 
-        case .specifyRookieBonusRecipient:
-            guard case .specifyRookieBonusRecipient = payload else {
+        case .selectRookieBonusRecipient:
+            guard case .selectRookieBonusRecipient = payload else {
                 throw GameError("Invalid message")
             }
             return
 
-        case .specifyCoinFlipWinnerTeam:
-            guard case .specifyCoinFlipWinnerTeam = payload else {
+        case .selectCoinFlipWinnerTeam:
+            guard case .selectCoinFlipWinnerTeam = payload else {
                 throw GameError("Invalid message")
             }
             return
 
-        case .specifyCoinFlipLoserTeam:
-            guard case .specifyCoinFlipLoserTeam = payload else {
+        case .selectCoinFlipLoserTeam:
+            guard case .selectCoinFlipLoserTeam = payload else {
                 throw GameError("Invalid message")
             }
             return
@@ -120,8 +120,8 @@ extension Game {
             }
             return
 
-        case .runActionSpecifySquares:
-            guard case .runActionSpecifySquares = payload else {
+        case .runActionSelectSquares:
+            guard case .runActionSelectSquares = payload else {
                 throw GameError("Invalid message")
             }
             return
@@ -133,8 +133,8 @@ extension Game {
             }
             return
 
-        case .markActionSpecifySquares:
-            guard case .markActionSpecifySquares = payload else {
+        case .markActionSelectSquares:
+            guard case .markActionSelectSquares = payload else {
                 throw GameError("Invalid message")
             }
             return
@@ -146,8 +146,8 @@ extension Game {
             }
             return
 
-        case .passActionSpecifyTarget:
-            guard case .passActionSpecifyTarget = payload else {
+        case .passActionSelectTarget:
+            guard case .passActionSelectTarget = payload else {
                 throw GameError("Invalid message")
             }
             return
@@ -173,14 +173,14 @@ extension Game {
             }
             return
 
-        case .hurlTeammateActionSpecifyTeammate:
-            guard case .hurlTeammateActionSpecifyTeammate = payload else {
+        case .hurlTeammateActionSelectTeammate:
+            guard case .hurlTeammateActionSelectTeammate = payload else {
                 throw GameError("Invalid message")
             }
             return
 
-        case .hurlTeammateActionSpecifyTarget:
-            guard case .hurlTeammateActionSpecifyTarget = payload else {
+        case .hurlTeammateActionSelectTarget:
+            guard case .hurlTeammateActionSelectTarget = payload else {
                 throw GameError("Invalid message")
             }
             return
@@ -206,14 +206,14 @@ extension Game {
             }
             return
 
-        case .foulActionSpecifyTarget:
-            guard case .foulActionSpecifyTarget = payload else {
+        case .foulActionSelectTarget:
+            guard case .foulActionSelectTarget = payload else {
                 throw GameError("Invalid message")
             }
             return
 
-        case .blockActionSpecifyTarget:
-            guard case .blockActionSpecifyTarget = payload else {
+        case .blockActionSelectTarget:
+            guard case .blockActionSelectTarget = payload else {
                 throw GameError("Invalid message")
             }
             return
@@ -314,14 +314,14 @@ extension Game {
             }
             return
 
-        case .sidestepActionSpecifySquare:
-            guard case .sidestepActionSpecifySquare = payload else {
+        case .sidestepActionSelectSquare:
+            guard case .sidestepActionSelectSquare = payload else {
                 throw GameError("Invalid message")
             }
             return
 
-        case .reservesActionSpecifySquare:
-            guard case .reservesActionSpecifySquare = payload else {
+        case .reservesActionSelectSquare:
+            guard case .reservesActionSelectSquare = payload else {
                 throw GameError("Invalid message")
             }
             return

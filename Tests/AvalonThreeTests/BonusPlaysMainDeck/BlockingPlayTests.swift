@@ -123,7 +123,7 @@ struct BlockingPlayTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(2, 7),
                     maxRunDistance: 5,
@@ -167,12 +167,12 @@ struct BlockingPlayTests {
             )
         )
 
-        // Specify run
+        // Select run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(3, 7),
                         sq(4, 7),
@@ -305,7 +305,7 @@ struct BlockingPlayTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(2, 7),
                     maxRunDistance: 5,
@@ -349,13 +349,13 @@ struct BlockingPlayTests {
             )
         )
 
-        // MARK: - Specify run
+        // MARK: - Select run
 
         #expect(throws: GameError("Invalid final square")) {
             _ = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(
+                    message: .runActionSelectSquares(
                         squares: [
                             sq(3, 7),
                             sq(4, 7),
@@ -491,7 +491,7 @@ struct BlockingPlayTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(2, 7),
                     maxRunDistance: 5,
@@ -535,12 +535,12 @@ struct BlockingPlayTests {
             )
         )
 
-        // Specify first run
+        // Select first run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(3, 7),
                         sq(4, 7),
@@ -585,7 +585,7 @@ struct BlockingPlayTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 1),
                     playerSquare: sq(9, 7),
                     maxRunDistance: 5,
@@ -629,12 +629,12 @@ struct BlockingPlayTests {
             )
         )
 
-        // Specify second run
+        // Select second run
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .runActionSpecifySquares(
+                message: .runActionSelectSquares(
                     squares: [
                         sq(8, 7),
                         sq(7, 6),
@@ -756,14 +756,14 @@ struct BlockingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .blockActionSpecifyTarget)
+        #expect(latestPrompt?.payload.case == .blockActionSelectTarget)
 
-        // Specify second block
+        // Select second block
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .blockActionSpecifyTarget(target: pl(.away, 1))
+                message: .blockActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(blockDie: block(.shove), d6: d6(6))
         )
@@ -820,14 +820,14 @@ struct BlockingPlayTests {
         )
 
         #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSpecifySquare)
+        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
 
-        // Specify sidestep
+        // Select sidestep
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .sidestepActionSpecifySquare(square: sq(7, 7))
+                message: .sidestepActionSelectSquare(square: sq(7, 7))
             )
         )
 
@@ -885,7 +885,7 @@ struct BlockingPlayTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .runActionSpecifySquares(
+                payload: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 7),
                     maxRunDistance: 5,
@@ -935,7 +935,7 @@ struct BlockingPlayTests {
             _ = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(
+                    message: .runActionSelectSquares(
                         squares: [
                             sq(6, 7),
                         ]
@@ -950,7 +950,7 @@ struct BlockingPlayTests {
             _ = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .runActionSpecifySquares(
+                    message: .runActionSelectSquares(
                         squares: [
                             sq(6, 7),
                             sq(6, 8),

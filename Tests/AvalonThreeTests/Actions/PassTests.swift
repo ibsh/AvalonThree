@@ -104,7 +104,7 @@ struct PassTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .passActionSpecifyTarget(
+                payload: .passActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 5),
                     validTargets: [
@@ -120,12 +120,12 @@ struct PassTests {
             )
         )
 
-        // Specify handoff
+        // Select handoff
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(direction: direction(.south))
         )
@@ -282,7 +282,7 @@ struct PassTests {
         #expect(
             latestPrompt == Prompt(
                 coachID: .away,
-                payload: .passActionSpecifyTarget(
+                payload: .passActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(2, 5),
                     validTargets: [
@@ -298,12 +298,12 @@ struct PassTests {
             )
         )
 
-        // Specify pass
+        // Select pass
 
         (latestEvents, latestPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSpecifyTarget(target: pl(.away, 1))
+                message: .passActionSelectTarget(target: pl(.away, 1))
             ),
             randomizers: Randomizers(d6: d6(6), direction: direction(.south))
         )

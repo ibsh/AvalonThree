@@ -1,5 +1,5 @@
 //
-//  ConfigTransaction+InputMessage+SpecifyRookieBonusRecipient.swift
+//  ConfigTransaction+InputMessage+SelectRookieBonusRecipient.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 6/17/24.
@@ -9,7 +9,7 @@ import Foundation
 
 extension ConfigTransaction {
 
-    mutating func specifyRookieBonusRecipient(
+    mutating func selectRookieBonusRecipient(
         rookieBonusRecipientID: RookieBonusRecipientID
     ) throws -> Prompt? {
 
@@ -46,7 +46,7 @@ extension ConfigTransaction {
 
         return Prompt(
             coachID: coinFlipWinnerCoachID,
-            payload: .specifyCoinFlipWinnerTeam(
+            payload: .selectCoinFlipWinnerTeam(
                 teamIDs: TeamID.availableCases
             )
         )

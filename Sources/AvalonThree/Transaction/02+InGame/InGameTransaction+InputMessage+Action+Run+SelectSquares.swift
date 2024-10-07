@@ -1,5 +1,5 @@
 //
-//  InGameTransaction+InputMessage+Action+Run+SpecifySquares.swift
+//  InGameTransaction+InputMessage+Action+Run+SelectSquares.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 6/18/24.
@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func runActionSpecifySquares(
+    mutating func runActionSelectSquares(
         squares: [Square]
     ) throws -> Prompt? {
 

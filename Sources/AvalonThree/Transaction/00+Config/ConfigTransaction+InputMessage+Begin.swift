@@ -22,7 +22,7 @@ extension ConfigTransaction {
 
         return Prompt(
             coachID: coinFlipWinnerCoachID,
-            payload: .specifyBoardSpec(boardSpecIDs: BoardSpecID.availableCases)
+            payload: .selectBoardSpec(boardSpecIDs: BoardSpecID.availableCases)
         )
     }
 }

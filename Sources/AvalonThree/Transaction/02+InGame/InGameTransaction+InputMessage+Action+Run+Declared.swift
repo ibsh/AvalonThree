@@ -47,7 +47,7 @@ extension InGameTransaction {
 
         return Prompt(
             coachID: actionContext.coachID,
-            payload: .runActionSpecifySquares(
+            payload: .runActionSelectSquares(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare,
                 maxRunDistance: maxRunDistance,
