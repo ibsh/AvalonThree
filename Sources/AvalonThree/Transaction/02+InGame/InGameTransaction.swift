@@ -28,13 +28,3 @@ struct InGameTransaction: Transaction {
         self.randomizers = randomizers
     }
 }
-
-extension InGameTransaction {
-    var coinFlipWinnerCoachID: CoachID {
-        table.coinFlipWinnerCoachID
-    }
-
-    var coinFlipLoserCoachID: CoachID {
-        table.coinFlipLoserCoachID
-    }
-}

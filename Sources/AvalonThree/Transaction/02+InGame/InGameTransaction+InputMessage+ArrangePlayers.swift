@@ -15,7 +15,7 @@ extension InGameTransaction {
 
         history.append(
             .prepareForTurn(
-                coachID: coinFlipLoserCoachID,
+                coachID: table.coinFlipLoserCoachID,
                 isSpecial: .first,
                 mustDiscardObjective: false
             )

@@ -303,15 +303,15 @@ extension InGameTransaction {
             }
         }
 
-        if lastActionContext.coachID == coinFlipWinnerCoachID {
-            return newBallYDeltas.values.contains(
-                where: { $0 <= -TableConstants.moveTheBallTargetDeltaY }
-            )
-        } else {
-            return newBallYDeltas.values.contains(
-                where: { $0 >= TableConstants.moveTheBallTargetDeltaY }
-            )
-        }
+        let delta = TableConstants.moveTheBallTargetDeltaY
+        return newBallYDeltas.values.contains(
+            where: { value in
+                switch lastActionContext.coachID {
+                case .home: return value <= -delta
+                case .away: return value >= delta
+                }
+            }
+        )
     }
 
     private func canClaimShowboatForTheCrowd(
