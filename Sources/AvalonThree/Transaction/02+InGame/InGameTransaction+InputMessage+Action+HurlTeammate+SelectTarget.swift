@@ -46,11 +46,14 @@ extension InGameTransaction {
         if table
             .getHand(coachID: turnContext.coachID)
             .contains(where: { $0.bonusPlay == .accuratePass }),
+           !turnContext.history.contains(
+            .usedBonusPlay(coachID: turnContext.coachID, bonusPlay: .rawTalent)
+           ),
            validTarget.distance == .short
         {
 
             return Prompt(
-                coachID: actionContext.coachID,
+                coachID: turnContext.coachID,
                 payload: .hurlTeammateActionEligibleForAccuratePassBonusPlay(
                     playerID: actionContext.playerID,
                     playerSquare: playerSquare

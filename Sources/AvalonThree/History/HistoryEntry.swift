@@ -143,6 +143,11 @@ enum HistoryEntry: Equatable, Sendable {
         square: Square
     )
 
+    case usedBonusPlay(
+        coachID: CoachID,
+        bonusPlay: BonusPlay
+    )
+
     case turnFinished
 }
 

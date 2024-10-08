@@ -151,8 +151,11 @@ extension InGameTransaction {
         }
 
         guard
-            !lastActionContext.history.contains(
+            !turnContext.history.contains(
                 .eligibleForInspirationBonusPlayFreeAction
+            ),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: lastActionContext.coachID, bonusPlay: .inspiration)
             )
         else {
             return nil

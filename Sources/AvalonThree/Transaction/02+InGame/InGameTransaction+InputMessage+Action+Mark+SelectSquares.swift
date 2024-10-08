@@ -14,6 +14,7 @@ extension InGameTransaction {
     ) throws -> Prompt? {
 
         let turnContext = try history.latestTurnContext()
+        
         guard
             let actionContext = try turnContext.actionContexts().last,
             !actionContext.isFinished,

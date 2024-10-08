@@ -3361,4 +3361,209 @@ struct RawTalentTests {
         #expect(latestPrompt?.coachID == .away)
         #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
+
+    @Test func cantUseTwiceInOneTurn() async throws {
+
+        // Init
+
+        var game = Game(
+            phase: .active(
+                Table(
+                    config: FinalizedConfig(
+                        coinFlipWinnerCoachID: .home,
+                        boardSpecID: .season1Board1,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .orc
+                    ),
+                    players: [
+                        Player(
+                            id: pl(.away, 0),
+                            spec: .orc_passer,
+                            state: .standing(square: sq(8, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.away, 1),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(2, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 0),
+                            spec: .human_lineman,
+                            state: .standing(square: sq(0, 6)),
+                            canTakeActions: true
+                        )
+                    ],
+                    playerNumbers: [:],
+                    coinFlipLoserHand: [
+                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .rawTalent),
+                        ChallengeCard(challenge: .breakTheirLines, bonusPlay: .rawTalent),
+                    ],
+                    coinFlipWinnerHand: [],
+                    coinFlipLoserActiveBonuses: [],
+                    coinFlipWinnerActiveBonuses: [],
+                    coinFlipLoserScore: 0,
+                    coinFlipWinnerScore: 0,
+                    balls: [
+                        Ball(
+                            id: 123,
+                            state: .held(playerID: pl(.away, 0))
+                        )
+                    ],
+                    deck: [],
+                    objectives: Objectives(),
+                    discards: []
+                ),
+                [
+                    .prepareForTurn(
+                        coachID: .away,
+                        isSpecial: nil,
+                        mustDiscardObjective: false
+                    ),
+                ]
+            ),
+            previousPrompt: Prompt(
+                coachID: .away,
+                payload: .declarePlayerAction(
+                    validDeclarations: [:],
+                    playerActionsLeft: 3
+                )
+            )
+        )
+
+        // Declare first pass
+
+        var (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 0),
+                        actionID: .pass
+                    ),
+                    consumesBonusPlays: []
+                )
+            )
+        )
+
+        // Select first pass
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .passActionSelectTarget(target: pl(.away, 1))
+            ),
+            randomizers: Randomizers(d6: d6(3))
+        )
+
+        // Use reroll
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .passActionUseRawTalentBonusPlayReroll
+            ),
+            randomizers: Randomizers(d6: d6(4))
+        )
+
+        #expect(
+            latestEvents == [
+                .activatedBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    ),
+                    hand: [
+                        WrappedChallengeCard.open(
+                            card: ChallengeCard(
+                                challenge: .breakTheirLines,
+                                bonusPlay: .rawTalent
+                            )
+                        ),
+                    ],
+                    active: [
+                        ChallengeCard(
+                            challenge: .breakSomeBones,
+                            bonusPlay: .rawTalent
+                        ),
+                    ]
+                ),
+                .rolledForPass(
+                    coachID: .away,
+                    die: .d6,
+                    unmodified: 4
+                ),
+                .changedPassResult(
+                    die: .d6,
+                    unmodified: 4,
+                    modified: 3,
+                    modifications: [
+                        .longDistance
+                    ]
+                ),
+                .playerPassedBall(
+                    playerID: pl(.away, 0),
+                    from: sq(8, 6),
+                    to: sq(2, 6),
+                    angle: 270,
+                    ballID: 123
+                ),
+                .playerCaughtPass(
+                    playerID: pl(.away, 1),
+                    playerSquare: sq(2, 6),
+                    ballID: 123
+                ),
+                .discardedActiveBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(
+                        challenge: .breakSomeBones,
+                        bonusPlay: .rawTalent
+                    ),
+                    active: []
+                ),
+                .updatedDiscards(
+                    top: .rawTalent,
+                    count: 1
+                ),
+            ]
+        )
+
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+
+        // Declare second pass
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 1),
+                        actionID: .pass
+                    ),
+                    consumesBonusPlays: []
+                )
+            )
+        )
+
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
+
+        // Select second pass
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .passActionSelectTarget(target: pl(.away, 0))
+            ),
+            randomizers: Randomizers(d6: d6(1))
+        )
+
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+    }
 }

@@ -16,6 +16,10 @@ extension InGameTransaction {
 
         let bonusPlay = BonusPlay.legUp
 
+        guard !turnContext.history.contains(
+            .usedBonusPlay(coachID: coachID, bonusPlay: bonusPlay)
+        ) else { return }
+
         if table.getHand(
             coachID: coachID
         ).contains(where: { $0.bonusPlay == bonusPlay }) {

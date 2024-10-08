@@ -75,7 +75,9 @@ extension InGameTransaction {
         turnContext: TurnContext
     ) throws -> Prompt? {
 
-        if turnContext.history.contains(.eligibleForDefensivePlayBonusPlay) {
+        let historyEntry = HistoryEntry.eligibleForDefensivePlayBonusPlay
+
+        if turnContext.history.contains(historyEntry) {
             return nil
         }
 
@@ -87,7 +89,7 @@ extension InGameTransaction {
             return nil
         }
 
-        history.append(.eligibleForDefensivePlayBonusPlay)
+        history.append(historyEntry)
 
         return Prompt(
             coachID: turnContext.coachID,
@@ -99,7 +101,9 @@ extension InGameTransaction {
         turnContext: TurnContext
     ) throws -> Prompt? {
 
-        if turnContext.history.contains(.eligibleForPassingPlayBonusPlay) {
+        let historyEntry = HistoryEntry.eligibleForPassingPlayBonusPlay
+
+        if turnContext.history.contains(historyEntry) {
             return nil
         }
 
@@ -111,7 +115,7 @@ extension InGameTransaction {
             return nil
         }
 
-        history.append(.eligibleForPassingPlayBonusPlay)
+        history.append(historyEntry)
 
         return Prompt(
             coachID: turnContext.coachID,
@@ -245,7 +249,9 @@ extension InGameTransaction {
         turnContext: TurnContext
     ) throws -> Prompt? {
 
-        if turnContext.history.contains(.declareEmergencyReservesAction) {
+        let historyEntry = HistoryEntry.declareEmergencyReservesAction
+
+        if turnContext.history.contains(historyEntry) {
             return nil
         }
 
@@ -271,7 +277,7 @@ extension InGameTransaction {
             .toSet()
 
         if validPlayers.count >= table.teamID(coachID: turnContext.coachID).spec.emergencyReserves {
-            history.append(.declareEmergencyReservesAction)
+            history.append(historyEntry)
             return Prompt(
                 coachID: turnContext.coachID,
                 payload: .declareEmergencyReservesAction(validPlayers: validPlayers)
@@ -321,10 +327,9 @@ extension InGameTransaction {
         let validDeclarations = try validDeclarations(coachID: coachID)
 
         for playerID in playerIDs {
+            let historyEntry = HistoryEntry.eligibleForGetInThereBonusPlayReservesAction(playerID)
             guard
-                !turnContext.history.contains(
-                    .eligibleForGetInThereBonusPlayReservesAction(playerID)
-                ),
+                !turnContext.history.contains(historyEntry),
                 playerID.coachID == coachID,
                 validDeclarations.contains(where: { validDeclaration in
                     validDeclaration.playerID == playerID
@@ -334,7 +339,7 @@ extension InGameTransaction {
                 continue
             }
 
-            history.append(.eligibleForGetInThereBonusPlayReservesAction(playerID))
+            history.append(historyEntry)
 
             return Prompt(
                 coachID: coachID,
@@ -355,17 +360,17 @@ extension InGameTransaction {
             .sorted(by: { $0.index < $1.index })
         {
 
+            let historyEntry = HistoryEntry.eligibleForRegenerationSkillStandUpAction(
+                playerID: proneRegeneratingPlayer.id
+            )
+
             guard
-                !turnContext.history.contains(
-                    .eligibleForRegenerationSkillStandUpAction(playerID: proneRegeneratingPlayer.id)
-                )
+                !turnContext.history.contains(historyEntry)
             else {
                 continue
             }
 
-            history.append(
-                .eligibleForRegenerationSkillStandUpAction(playerID: proneRegeneratingPlayer.id)
-            )
+            history.append(historyEntry)
 
             guard let playerSquare = proneRegeneratingPlayer.square else {
                 throw GameError("Player is in reserves")
@@ -387,7 +392,9 @@ extension InGameTransaction {
         turnContext: TurnContext
     ) throws -> Prompt? {
 
-        if turnContext.history.contains(.eligibleForJumpUpBonusPlayStandUpAction) {
+        let historyEntry = HistoryEntry.eligibleForJumpUpBonusPlayStandUpAction
+
+        if turnContext.history.contains(historyEntry) {
             return nil
         }
 
@@ -412,7 +419,7 @@ extension InGameTransaction {
             return nil
         }
 
-        history.append(.eligibleForJumpUpBonusPlayStandUpAction)
+        history.append(historyEntry)
 
         return Prompt(
             coachID: turnContext.coachID,
@@ -434,7 +441,9 @@ extension InGameTransaction {
         turnContext: TurnContext
     ) throws -> Prompt? {
 
-        if turnContext.history.contains(.eligibleForReservesBonusPlayReservesAction) {
+        let historyEntry = HistoryEntry.eligibleForReservesBonusPlayReservesAction
+
+        if turnContext.history.contains(historyEntry) {
             return nil
         }
 
@@ -460,7 +469,7 @@ extension InGameTransaction {
             return nil
         }
 
-        history.append(.eligibleForReservesBonusPlayReservesAction)
+        history.append(historyEntry)
 
         return Prompt(
             coachID: turnContext.coachID,

@@ -100,22 +100,13 @@ extension InGameTransaction {
             return nil
         }
 
-        guard
-            !lastActionContext.history.contains(
-                where: { entry in
-                    guard case .eligibleForFrenziedSkillBlockAction = entry else {
-                        return false
-                    }
-                    return true
-                }
-            )
-        else {
-            return nil
-        }
-
-        history.append(
-            .eligibleForFrenziedSkillBlockAction(playerID: lastActionContext.playerID)
+        let historyEntry = HistoryEntry.eligibleForFrenziedSkillBlockAction(
+            playerID: lastActionContext.playerID
         )
+
+        guard !lastActionContext.history.contains(historyEntry) else { return nil }
+
+        history.append(historyEntry)
 
         guard let playerSquare = player.square else {
             throw GameError("Player is in reserves")
@@ -155,22 +146,13 @@ extension InGameTransaction {
             return nil
         }
 
-        guard
-            !lastActionContext.history.contains(
-                where: { entry in
-                    guard case .eligibleForShoulderChargeBonusPlayBlockAction = entry else {
-                        return false
-                    }
-                    return true
-                }
-            )
-        else {
-            return nil
-        }
-
-        history.append(
-            .eligibleForShoulderChargeBonusPlayBlockAction(playerID: lastActionContext.playerID)
+        let historyEntry = HistoryEntry.eligibleForShoulderChargeBonusPlayBlockAction(
+            playerID: lastActionContext.playerID
         )
+
+        guard !lastActionContext.history.contains(historyEntry) else { return nil }
+
+        history.append(historyEntry)
 
         guard let playerSquare = player.square else {
             throw GameError("Player is in reserves")
@@ -210,22 +192,13 @@ extension InGameTransaction {
             return nil
         }
 
-        guard
-            !lastActionContext.history.contains(
-                where: { entry in
-                    guard case .eligibleForDivingTackleBonusPlayBlockAction = entry else {
-                        return false
-                    }
-                    return true
-                }
-            )
-        else {
-            return nil
-        }
-
-        history.append(
-            .eligibleForDivingTackleBonusPlayBlockAction(playerID: lastActionContext.playerID)
+        let historyEntry = HistoryEntry.eligibleForDivingTackleBonusPlayBlockAction(
+            playerID: lastActionContext.playerID
         )
+
+        guard !lastActionContext.history.contains(historyEntry) else { return nil }
+
+        history.append(historyEntry)
 
         guard let playerSquare = player.square else {
             throw GameError("Player is in reserves")
@@ -268,22 +241,13 @@ extension InGameTransaction {
             return nil
         }
 
-        guard
-            !lastActionContext.history.contains(
-                where: { entry in
-                    guard case .eligibleForHeadbuttSkillBlockAction = entry else {
-                        return false
-                    }
-                    return true
-                }
-            )
-        else {
-            return nil
-        }
-
-        history.append(
-            .eligibleForHeadbuttSkillBlockAction(playerID: lastActionContext.playerID)
+        let historyEntry = HistoryEntry.eligibleForHeadbuttSkillBlockAction(
+            playerID: lastActionContext.playerID
         )
+
+        guard !lastActionContext.history.contains(historyEntry) else { return nil }
+
+        history.append(historyEntry)
 
         guard let playerSquare = player.square else {
             throw GameError("Player is in reserves")
@@ -311,9 +275,14 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
+        let bonusPlay = BonusPlay.blitz
+
         guard
             table.getHand(coachID: lastActionContext.coachID).contains(
-                where: { $0.bonusPlay == .blitz }
+                where: { $0.bonusPlay == bonusPlay }
+            ),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: lastActionContext.coachID, bonusPlay: bonusPlay)
             ),
             try turnContext.actionContexts().contains(
                 where: { $0.playerID == player.id && $0.actionID == .run }
@@ -326,22 +295,13 @@ extension InGameTransaction {
             return nil
         }
 
-        guard
-            !lastActionContext.history.contains(
-                where: { entry in
-                    guard case .eligibleForBlitzBonusPlayBlockAction = entry else {
-                        return false
-                    }
-                    return true
-                }
-            )
-        else {
-            return nil
-        }
-
-        history.append(
-            .eligibleForBlitzBonusPlayBlockAction(playerID: lastActionContext.playerID)
+        let historyEntry = HistoryEntry.eligibleForBlitzBonusPlayBlockAction(
+            playerID: lastActionContext.playerID
         )
+
+        guard !lastActionContext.history.contains(historyEntry) else { return nil }
+
+        history.append(historyEntry)
 
         guard let playerSquare = player.square else {
             throw GameError("Player is in reserves")
@@ -367,9 +327,14 @@ extension InGameTransaction {
 
         let allValidDeclarations = try validDeclarations()
 
+        let bonusPlay = BonusPlay.comboPlay
+
         guard
             table.getHand(coachID: lastActionContext.coachID).contains(
-                where: { $0.bonusPlay == .comboPlay }
+                where: { $0.bonusPlay == bonusPlay }
+            ),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: lastActionContext.coachID, bonusPlay: bonusPlay)
             ),
             let passTarget = history.lastResult({ entry -> PassTarget? in
                 guard case .passTarget(let passTarget) = entry else { return nil }
@@ -424,9 +389,10 @@ extension InGameTransaction {
 
         let bonusPlay = BonusPlay.getInThere
 
-        guard table.getHand(coachID: coachID).contains(
-            where: { $0.bonusPlay == bonusPlay }
-        ) else { return nil }
+        guard
+            table.getHand(coachID: coachID).contains(where: { $0.bonusPlay == bonusPlay }),
+            !turnContext.history.contains(.usedBonusPlay(coachID: coachID, bonusPlay: bonusPlay))
+        else { return nil }
 
         let playerIDs = lastActionContext.history.compactMap { entry -> PlayerID? in
             guard case .playerInjured(let playerID) = entry else { return nil }
@@ -467,10 +433,11 @@ extension InGameTransaction {
 
         let coachID = turnContext.coachID.inverse
 
+        let bonusPlay = BonusPlay.distraction
+
         guard
-            table.getHand(coachID: coachID).contains(
-                where: { $0.bonusPlay == .distraction }
-            ),
+            table.getHand(coachID: coachID).contains(where: { $0.bonusPlay == bonusPlay }),
+            !turnContext.history.contains(.usedBonusPlay(coachID: coachID, bonusPlay: bonusPlay)),
             let lastActionContext = try turnContext.actionContexts().last,
             lastActionContext.actionID == .mark,
             lastActionContext.coachID == turnContext.coachID,
@@ -534,9 +501,14 @@ extension InGameTransaction {
 
         let coachID = turnContext.coachID.inverse
 
+        let bonusPlay = BonusPlay.intervention
+
         guard
             table.getHand(coachID: coachID).contains(
-                where: { $0.bonusPlay == .intervention }
+                where: { $0.bonusPlay == bonusPlay }
+            ),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: lastActionContext.coachID, bonusPlay: bonusPlay)
             ),
             let lastActionContext = try turnContext.actionContexts().last,
             lastActionContext.actionID == .run,

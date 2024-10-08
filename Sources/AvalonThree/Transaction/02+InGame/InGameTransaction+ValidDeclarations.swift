@@ -144,9 +144,13 @@ extension InGameTransaction {
 
         let bonusPlay = BonusPlay.interference
 
-        if table.getHand(coachID: player.coachID).contains(
-            where: { $0.bonusPlay == bonusPlay }
-        ),
+        if
+            table.getHand(coachID: player.coachID).contains(
+                where: { $0.bonusPlay == bonusPlay }
+            ),
+            try !history.latestTurnContext().history.contains(
+                .usedBonusPlay(coachID: player.coachID, bonusPlay: bonusPlay)
+            ),
             try !opponentsThatCanBeMarked(
                 player: player,
                 maxMarkDistance: TableConstants.interferenceBonusPlayMaxMarkDistance
@@ -233,6 +237,9 @@ extension InGameTransaction {
             table.getHand(coachID: player.coachID).contains(
                 where: { $0.bonusPlay == .hailMaryPass }
             ),
+            try !history.latestTurnContext().history.contains(
+                .usedBonusPlay(coachID: player.coachID, bonusPlay: .hailMaryPass)
+            ),
             table
                 .players(coachID: player.coachID)
                 .contains(where: { validTeammate(teammate: $0, hailMaryPass: true) })
@@ -267,9 +274,14 @@ extension InGameTransaction {
         var consumesBonusPlays = Set<BonusPlay>()
 
         if table.playerIsMarked(player) != nil {
-            if table.getHand(coachID: player.coachID).contains(
-                where: { $0.bonusPlay == .nervesOfSteel }
-            ) {
+            if
+                table.getHand(coachID: player.coachID).contains(
+                    where: { $0.bonusPlay == .nervesOfSteel }
+                ),
+                try !history.latestTurnContext().history.contains(
+                    .usedBonusPlay(coachID: player.coachID, bonusPlay: .nervesOfSteel)
+                )
+            {
                 consumesBonusPlays.insert(.nervesOfSteel)
             } else {
                 return .cannotDeclare

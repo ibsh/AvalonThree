@@ -11,8 +11,10 @@ extension InGameTransaction {
 
     mutating func blockActionRollForArmour() throws -> Prompt? {
 
+        let turnContext = try history.latestTurnContext()
+
         guard
-            let actionContext = try history.latestTurnContext().actionContexts().last,
+            let actionContext = try turnContext.actionContexts().last,
             !actionContext.isFinished,
             let targetPlayerID = actionContext.history.lastResult(
                 { entry -> PlayerID? in
@@ -60,7 +62,10 @@ extension InGameTransaction {
             table.getHand(coachID: actionContext.coachID).contains(
                 where: { $0.bonusPlay == .bladedKnuckleDusters }
             ),
-            !actionContext.history.contains(.eligibleForBladedKnuckleDustersBonusPlay)
+            !actionContext.history.contains(.eligibleForBladedKnuckleDustersBonusPlay),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: actionContext.coachID, bonusPlay: .bladedKnuckleDusters)
+            )
         {
             history.append(.eligibleForBladedKnuckleDustersBonusPlay)
             return Prompt(
@@ -76,7 +81,10 @@ extension InGameTransaction {
             table.getHand(coachID: targetPlayer.coachID).contains(
                 where: { $0.bonusPlay == .absolutelyNails }
             ),
-            !actionContext.history.contains(.eligibleForAbsolutelyNailsBonusPlay)
+            !actionContext.history.contains(.eligibleForAbsolutelyNailsBonusPlay),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: targetPlayerID.coachID, bonusPlay: .absolutelyNails)
+            )
         {
             history.append(.eligibleForAbsolutelyNailsBonusPlay)
             return Prompt(
@@ -95,7 +103,10 @@ extension InGameTransaction {
             !table.getActiveBonuses(coachID: targetPlayer.coachID).contains(
                 where: { $0.bonusPlay == .absolutelyNails }
             ),
-            !actionContext.history.contains(.eligibleForToughEnoughBonusPlay)
+            !actionContext.history.contains(.eligibleForToughEnoughBonusPlay),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: targetPlayerID.coachID, bonusPlay: .toughEnough)
+            )
         {
             history.append(.eligibleForToughEnoughBonusPlay)
             return Prompt(
@@ -114,7 +125,10 @@ extension InGameTransaction {
             !table.getActiveBonuses(coachID: targetPlayer.coachID).contains(
                 where: { $0.bonusPlay == .absolutelyNails }
             ),
-            !actionContext.history.contains(.blockActionEligibleForProBonusPlay)
+            !actionContext.history.contains(.blockActionEligibleForProBonusPlay),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: targetPlayerID.coachID, bonusPlay: .pro)
+            )
         {
             history.append(.blockActionEligibleForProBonusPlay)
 
@@ -134,7 +148,10 @@ extension InGameTransaction {
             !table.getActiveBonuses(coachID: targetPlayer.coachID).contains(
                 where: { $0.bonusPlay == .absolutelyNails }
             ),
-            !actionContext.history.contains(.eligibleForAbsoluteCarnageBonusPlay)
+            !actionContext.history.contains(.eligibleForAbsoluteCarnageBonusPlay),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: actionContext.coachID, bonusPlay: .absoluteCarnage)
+            )
         {
             history.append(.eligibleForAbsoluteCarnageBonusPlay)
             return Prompt(
@@ -226,6 +243,9 @@ extension InGameTransaction {
                 ),
                 table.getHand(coachID: targetPlayerID.coachID).contains(
                     where: { $0.bonusPlay == .rawTalent }
+                ),
+                !turnContext.history.contains(
+                    .usedBonusPlay(coachID: targetPlayerID.coachID, bonusPlay: .rawTalent)
                 )
             {
                 history.append(.armourResultEligibleForRawTalentBonusPlayReroll)

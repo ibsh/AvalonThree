@@ -13,8 +13,10 @@ extension InGameTransaction {
         target targetPlayerID: PlayerID
     ) throws -> Prompt? {
 
+        let turnContext = try history.latestTurnContext()
+
         guard
-            let actionContext = try history.latestTurnContext().actionContexts().last,
+            let actionContext = try turnContext.actionContexts().last,
             !actionContext.isFinished,
             let validTargets = actionContext.history.lastResult(
                 { entry -> Set<PassTarget>? in
@@ -39,11 +41,16 @@ extension InGameTransaction {
 
         history.append(.passTarget(validTarget))
 
+        let bonusPlay = BonusPlay.accuratePass
+
         if
             table
                 .getHand(coachID: actionContext.coachID)
-                .contains(where: { $0.bonusPlay == .accuratePass }),
-            validTarget.distance == .short
+                .contains(where: { $0.bonusPlay == bonusPlay }),
+            validTarget.distance == .short,
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: actionContext.coachID, bonusPlay: bonusPlay)
+            )
         {
             return Prompt(
                 coachID: actionContext.coachID,

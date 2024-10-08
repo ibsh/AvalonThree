@@ -58,16 +58,21 @@ extension InGameTransaction {
 
     private mutating func checkForBlockingPlay() throws -> Prompt? {
 
-        guard let actionContext = try history.latestTurnContext().actionContexts().last else {
+        let turnContext = try history.latestTurnContext()
+
+        guard let actionContext = try turnContext.actionContexts().last else {
             throw GameError("No action in history")
         }
 
         let bonusPlay = BonusPlay.blockingPlay
 
         guard
-            !actionContext.history.contains(.runEligibleForBlockingPlayBonusPlay),
             table.getHand(coachID: actionContext.coachID).contains(
                 where: { $0.bonusPlay == bonusPlay }
+            ),
+            !actionContext.history.contains(.runEligibleForBlockingPlayBonusPlay),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: actionContext.coachID, bonusPlay: bonusPlay)
             )
         else {
             return nil
@@ -90,14 +95,21 @@ extension InGameTransaction {
 
     private mutating func checkForDodge() throws -> Prompt? {
 
-        guard let actionContext = try history.latestTurnContext().actionContexts().last else {
+        let turnContext = try history.latestTurnContext()
+
+        guard let actionContext = try turnContext.actionContexts().last else {
             throw GameError("No action in history")
         }
+
+        let bonusPlay = BonusPlay.dodge
 
         guard
             !actionContext.history.contains(.runEligibleForDodgeBonusPlay),
             table.getHand(coachID: actionContext.coachID).contains(
-                where: { $0.bonusPlay == .dodge }
+                where: { $0.bonusPlay == bonusPlay }
+            ),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: actionContext.coachID, bonusPlay: bonusPlay)
             )
         else {
             return nil
@@ -120,14 +132,21 @@ extension InGameTransaction {
 
     private mutating func checkForSprint() throws -> Prompt? {
 
-        guard let actionContext = try history.latestTurnContext().actionContexts().last else {
+        let turnContext = try history.latestTurnContext()
+
+        guard let actionContext = try turnContext.actionContexts().last else {
             throw GameError("No action in history")
         }
+
+        let bonusPlay = BonusPlay.sprint
 
         guard
             !actionContext.history.contains(.runEligibleForSprintBonusPlay),
             table.getHand(coachID: actionContext.coachID).contains(
-                where: { $0.bonusPlay == .sprint }
+                where: { $0.bonusPlay == bonusPlay }
+            ),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: actionContext.coachID, bonusPlay: bonusPlay)
             )
         else {
             return nil

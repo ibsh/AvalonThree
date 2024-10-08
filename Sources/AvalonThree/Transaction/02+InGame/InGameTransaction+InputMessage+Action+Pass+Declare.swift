@@ -47,7 +47,10 @@ extension InGameTransaction {
             )
         )
 
-        if table.getActiveBonuses(coachID: playerID.coachID).contains(where: { $0.bonusPlay == .hailMaryPass}) {
+        if
+            table.getActiveBonuses(coachID: playerID.coachID)
+                .contains(where: { $0.bonusPlay == .hailMaryPass})
+        {
 
             let hailMaryPassValidTargets = try getValidPassTargets(
                 playerID: playerID,
@@ -68,9 +71,16 @@ extension InGameTransaction {
 
         history.append(.passValidTargets(basicValidTargets))
 
+        let turnContext = try history.latestTurnContext()
+
+        let bonusPlay = BonusPlay.hailMaryPass
+
         if table
             .getHand(coachID: playerID.coachID)
-            .contains(where: { $0.bonusPlay == .hailMaryPass })
+            .contains(where: { $0.bonusPlay == bonusPlay }),
+           !turnContext.history.contains(
+            .usedBonusPlay(coachID: playerID.coachID, bonusPlay: bonusPlay)
+           )
         {
             return Prompt(
                 coachID: playerID.coachID,

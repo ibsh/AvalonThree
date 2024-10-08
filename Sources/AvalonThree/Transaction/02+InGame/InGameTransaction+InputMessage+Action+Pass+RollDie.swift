@@ -11,8 +11,10 @@ extension InGameTransaction {
 
     mutating func passActionRollDie() throws -> Prompt? {
 
+        let turnContext = try history.latestTurnContext()
+
         guard
-            let actionContext = try history.latestTurnContext().actionContexts().last,
+            let actionContext = try turnContext.actionContexts().last,
             !actionContext.isFinished,
             let target = actionContext.history.lastResult(
                 { entry -> PassTarget? in
@@ -44,7 +46,10 @@ extension InGameTransaction {
             table.getHand(coachID: actionContext.coachID).contains(
                 where: { $0.bonusPlay == .pro }
             ),
-            !actionContext.history.contains(.passActionEligibleForProBonusPlay)
+            !actionContext.history.contains(.passActionEligibleForProBonusPlay),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: actionContext.coachID, bonusPlay: .pro)
+            )
         {
             history.append(.passActionEligibleForProBonusPlay)
 
@@ -205,8 +210,11 @@ extension InGameTransaction {
         )
 
         if
+            table.getHand(coachID: player.coachID).contains(where: { $0.bonusPlay == .rawTalent }),
             !actionContext.history.contains(.passResultEligibleForRawTalentBonusPlayReroll),
-            table.getHand(coachID: player.coachID).contains(where: { $0.bonusPlay == .rawTalent })
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: player.coachID, bonusPlay: .rawTalent)
+            )
         {
             history.append(.passResultEligibleForRawTalentBonusPlayReroll)
 

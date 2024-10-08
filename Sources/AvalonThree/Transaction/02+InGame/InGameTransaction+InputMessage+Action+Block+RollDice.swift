@@ -11,8 +11,10 @@ extension InGameTransaction {
 
     mutating func blockActionRollDice() throws -> Prompt? {
 
+        let turnContext = try history.latestTurnContext()
+
         guard
-            let actionContext = try history.latestTurnContext().actionContexts().last,
+            let actionContext = try turnContext.actionContexts().last,
             actionContext.actionID == .block,
             !actionContext.isFinished,
             let targetPlayerID = actionContext.history.lastResult(
@@ -217,6 +219,9 @@ extension InGameTransaction {
             ),
             !actionContext.history.contains(
                 .blockDieResultsEligibleForRawTalentBonusPlayReroll
+            ),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: actionContext.coachID, bonusPlay: .rawTalent)
             )
         {
             history.append(.blockDieResultsEligibleForRawTalentBonusPlayReroll)

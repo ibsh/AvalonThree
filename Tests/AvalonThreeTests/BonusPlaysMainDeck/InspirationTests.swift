@@ -3129,4 +3129,319 @@ struct InspirationTests {
         #expect(latestPrompt?.coachID == .home)
         #expect(latestPrompt?.payload.case == .declarePlayerAction)
     }
+
+    @Test func cantUseTwiceInOneTurn() async throws {
+
+        // Init
+
+        var game = Game(
+            phase: .active(
+                Table(
+                    config: FinalizedConfig(
+                        coinFlipWinnerCoachID: .home,
+                        boardSpecID: .season1Board1,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .halfling
+                    ),
+                    players: [
+                        Player(
+                            id: pl(.away, 0),
+                            spec: .halfling_hopeful,
+                            state: .inReserves,
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.away, 1),
+                            spec: .halfling_hopeful,
+                            state: .standing(square: sq(0, 5)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.away, 2),
+                            spec: .halfling_hopeful,
+                            state: .standing(square: sq(5, 4)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.away, 3),
+                            spec: .halfling_hopeful,
+                            state: .standing(square: sq(4, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.away, 4),
+                            spec: .halfling_catcher,
+                            state: .prone(square: sq(7, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.away, 5),
+                            spec: .halfling_hefty,
+                            state: .standing(square: sq(8, 5)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.away, 6),
+                            spec: .halfling_treeman,
+                            state: .standing(square: sq(4, 4)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 0),
+                            spec: .human_lineman,
+                            state: .standing(square: sq(1, 7)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 1),
+                            spec: .human_lineman,
+                            state: .inReserves,
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 2),
+                            spec: .human_lineman,
+                            state: .standing(square: sq(6, 10)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 3),
+                            spec: .human_passer,
+                            state: .standing(square: sq(4, 11)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 4),
+                            spec: .human_catcher,
+                            state: .prone(square: sq(3, 9)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 5),
+                            spec: .human_blitzer,
+                            state: .standing(square: sq(7, 7)),
+                            canTakeActions: true
+                        ),
+                    ],
+                    playerNumbers: [:],
+                    coinFlipLoserHand: [
+                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .inspiration),
+                        ChallengeCard(challenge: .breakTheirLines, bonusPlay: .inspiration),
+                    ],
+                    coinFlipWinnerHand: [],
+                    coinFlipLoserActiveBonuses: [],
+                    coinFlipWinnerActiveBonuses: [],
+                    coinFlipLoserScore: 0,
+                    coinFlipWinnerScore: 0,
+                    balls: [
+                        Ball(
+                            id: 123,
+                            state: .held(playerID: pl(.away, 2))
+                        )
+                    ],
+                    deck: [],
+                    objectives: Objectives(),
+                    discards: []
+                ),
+                [
+                    .prepareForTurn(
+                        coachID: .away,
+                        isSpecial: nil,
+                        mustDiscardObjective: false
+                    ),
+                ]
+            ),
+            previousPrompt: Prompt(
+                coachID: .away,
+                payload: .declarePlayerAction(
+                    validDeclarations: [:],
+                    playerActionsLeft: 3
+                )
+            )
+        )
+
+        // Declare mark
+
+        var (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 1),
+                        actionID: .mark
+                    ),
+                    consumesBonusPlays: []
+                )
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .declaredAction,
+            ]
+        )
+
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
+
+        // Select mark
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .markActionSelectSquares(squares: [
+                    sq(1, 6)
+                ])
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .playerMoved,
+            ]
+        )
+
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+
+        // Declare mark
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 5),
+                        actionID: .mark
+                    ),
+                    consumesBonusPlays: []
+                )
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .declaredAction,
+            ]
+        )
+
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
+
+        // Select mark
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .markActionSelectSquares(squares: [
+                    sq(8, 6)
+                ])
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .playerMoved,
+            ]
+        )
+
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+
+        // Declare run
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 3),
+                        actionID: .run
+                    ),
+                    consumesBonusPlays: []
+                )
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .declaredAction,
+            ]
+        )
+
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
+
+        // Select run
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .runActionSelectSquares(
+                    squares: [
+                        sq(4, 7),
+                        sq(4, 8),
+                    ]
+                )
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .playerMoved,
+                .playerMoved,
+            ]
+        )
+
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .eligibleForInspirationBonusPlayFreeAction)
+
+        // Declare free reserves
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .useInspirationBonusPlayFreeAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 0),
+                        actionID: .reserves
+                    )
+                )
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .activatedBonusPlay,
+                .declaredAction,
+            ]
+        )
+
+        #expect(latestPrompt?.coachID == .away)
+        #expect(latestPrompt?.payload.case == .reservesActionSelectSquare)
+
+        // Select reserves
+
+        (latestEvents, latestPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .reservesActionSelectSquare(square: sq(6, 0))
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .playerMovedOutOfReserves,
+                .discardedActiveBonusPlay,
+                .updatedDiscards,
+                .turnEnded,
+                .turnBegan,
+            ]
+        )
+
+        #expect(latestPrompt?.coachID == .home)
+        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+    }
 }

@@ -11,8 +11,10 @@ extension InGameTransaction {
 
     mutating func hurlTeammateActionRollDie() throws -> Prompt? {
 
+        let turnContext = try history.latestTurnContext()
+
         guard
-            let actionContext = try history.latestTurnContext().actionContexts().last,
+            let actionContext = try turnContext.actionContexts().last,
             !actionContext.isFinished,
             let target = actionContext.history.lastResult(
                 { entry -> HurlTeammateTarget? in
@@ -40,7 +42,10 @@ extension InGameTransaction {
             table.getHand(coachID: actionContext.coachID).contains(
                 where: { $0.bonusPlay == .pro }
             ),
-            !actionContext.history.contains(.hurlTeammateActionEligibleForProBonusPlay)
+            !actionContext.history.contains(.hurlTeammateActionEligibleForProBonusPlay),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: actionContext.coachID, bonusPlay: .pro)
+            )
         {
             history.append(.hurlTeammateActionEligibleForProBonusPlay)
 
@@ -132,7 +137,10 @@ extension InGameTransaction {
 
         if
             !actionContext.history.contains(.hurlTeammateResultEligibleForRawTalentBonusPlayReroll),
-            table.getHand(coachID: player.coachID).contains(where: { $0.bonusPlay == .rawTalent })
+            table.getHand(coachID: player.coachID).contains(where: { $0.bonusPlay == .rawTalent }),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: player.coachID, bonusPlay: .rawTalent)
+            )
         {
             history.append(.hurlTeammateResultEligibleForRawTalentBonusPlayReroll)
 

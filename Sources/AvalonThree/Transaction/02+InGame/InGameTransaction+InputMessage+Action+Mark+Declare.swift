@@ -30,11 +30,13 @@ extension InGameTransaction {
         var targetPlayerID: PlayerID?
         var targetSquares: Set<Square>?
 
+        let turnContext = try history.latestTurnContext()
+
         if table.getActiveBonuses(coachID: playerID.coachID).contains(
             where: { $0.bonusPlay == .intervention }
         ) {
             guard
-                let previousActionContext = try history.latestTurnContext().actionContexts().last,
+                let previousActionContext = try turnContext.actionContexts().last,
                 previousActionContext.coachID == playerID.coachID.inverse,
                 previousActionContext.actionID == .run
             else {
@@ -124,6 +126,9 @@ extension InGameTransaction {
         if table
             .getHand(coachID: playerID.coachID)
             .contains(where: { $0.bonusPlay == bonusPlay }),
+           !turnContext.history.contains(
+            .usedBonusPlay(coachID: playerID.coachID, bonusPlay: bonusPlay)
+           ),
            !interferenceValidSquares.final.subtracting(basicValidSquares.final).isEmpty
         {
             return Prompt(

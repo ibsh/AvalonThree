@@ -11,8 +11,10 @@ extension InGameTransaction {
 
     mutating func blockActionPrepareToRollDice() throws -> Prompt? {
 
+        let turnContext = try history.latestTurnContext()
+
         guard
-            let actionContext = try history.latestTurnContext().actionContexts().last,
+            let actionContext = try turnContext.actionContexts().last,
             !actionContext.isFinished,
             let targetPlayerID = actionContext.history.lastResult(
                 { entry -> PlayerID? in
@@ -38,7 +40,10 @@ extension InGameTransaction {
 
         if
             table.getHand(coachID: targetPlayerID.coachID).contains(
-                where: { $0.bonusPlay == .stepAside}
+                where: { $0.bonusPlay == .stepAside }
+            ),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: targetPlayerID.coachID, bonusPlay: .stepAside)
             ),
             !actionContext.history.contains(
                 .blockDieResultsEligibleForStepAsideBonusPlaySidestepAction
@@ -60,7 +65,10 @@ extension InGameTransaction {
 
         if
             table.getHand(coachID: actionContext.coachID).contains(
-                where: { $0.bonusPlay == .bodyCheck}
+                where: { $0.bonusPlay == .bodyCheck }
+            ),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: targetPlayerID.coachID, bonusPlay: .bodyCheck)
             ),
             !actionContext.history.contains(
                 .blockDieResultsEligibleForBodyCheckBonusPlay
@@ -78,7 +86,10 @@ extension InGameTransaction {
 
         if
             table.getHand(coachID: actionContext.coachID).contains(
-                where: { $0.bonusPlay == .theKidsGotMoxy}
+                where: { $0.bonusPlay == .theKidsGotMoxy }
+            ),
+            !turnContext.history.contains(
+                .usedBonusPlay(coachID: targetPlayerID.coachID, bonusPlay: .theKidsGotMoxy)
             ),
             !actionContext.history.contains(
                 .blockAssisted

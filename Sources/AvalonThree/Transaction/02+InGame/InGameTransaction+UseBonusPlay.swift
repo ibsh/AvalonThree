@@ -19,8 +19,18 @@ extension InGameTransaction {
             throw GameError("No bonus play")
         }
 
+        let turnContext = try history.latestTurnContext()
+
+        guard !turnContext.history.contains(
+            .usedBonusPlay(coachID: coachID, bonusPlay: bonusPlay)
+        ) else {
+            throw GameError("Already used an identical bonus play this turn")
+        }
+
         table.setHand(coachID: coachID, hand: hand)
         table.addActiveBonus(coachID: coachID, activeBonus: card)
+
+        history.append(.usedBonusPlay(coachID: coachID, bonusPlay: bonusPlay))
 
         events.append(
             .activatedBonusPlay(
