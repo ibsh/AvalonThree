@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     private var bonusPlay: BonusPlay { .bladedKnuckleDusters }
 
-    mutating func blockActionUseBladedKnuckleDustersBonusPlay() throws -> Prompt? {
+    mutating func blockActionUseBladedKnuckleDustersBonusPlay() throws -> AddressedPrompt? {
         _ = try useBonusPlay(
             bonusPlay: bonusPlay,
             coachID: try history.latestTurnContext().coachID
@@ -19,7 +19,7 @@ extension InGameTransaction {
         return try blockActionTargetPlayerInjured()
     }
 
-    mutating func blockActionDeclineBladedKnuckleDustersBonusPlay() throws -> Prompt? {
+    mutating func blockActionDeclineBladedKnuckleDustersBonusPlay() throws -> AddressedPrompt? {
         return try blockActionRollForArmour()
     }
 }

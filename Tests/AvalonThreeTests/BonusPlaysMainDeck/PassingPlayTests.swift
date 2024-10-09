@@ -113,9 +113,9 @@ struct PassingPlayTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -124,7 +124,7 @@ struct PassingPlayTests {
 
         // Declare sidestep
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -143,12 +143,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .sidestepActionSelectSquare)
 
         // Select sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSelectSquare(square: sq(8, 9))
@@ -161,12 +161,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -185,12 +185,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .sidestepActionSelectSquare)
 
         // Select sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSelectSquare(square: sq(9, 9))
@@ -203,12 +203,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -227,12 +227,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .sidestepActionSelectSquare)
 
         // Select sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSelectSquare(square: sq(10, 9))
@@ -246,12 +246,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForPassingPlayBonusPlay)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForPassingPlayBonusPlay)
 
         // Use bonus play
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .usePassingPlayBonusPlay
@@ -269,12 +269,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare hurl teammate
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -293,12 +293,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .hurlTeammateActionSelectTarget)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .hurlTeammateActionSelectTarget)
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(targetSquare: sq(9, 12))
@@ -337,12 +337,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -361,12 +361,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .passActionSelectTarget)
 
         // Select pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSelectTarget(target: pl(.away, 2))
@@ -404,12 +404,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -428,12 +428,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .runActionSelectSquares)
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -455,8 +455,8 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .selectObjectiveToDiscard)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .selectObjectiveToDiscard)
     }
 
     @Test func notAppliedIfDeclined() async throws {
@@ -562,9 +562,9 @@ struct PassingPlayTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -573,7 +573,7 @@ struct PassingPlayTests {
 
         // Declare sidestep
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -592,12 +592,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .sidestepActionSelectSquare)
 
         // Select sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSelectSquare(square: sq(8, 9))
@@ -610,12 +610,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -634,12 +634,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .sidestepActionSelectSquare)
 
         // Select sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSelectSquare(square: sq(9, 9))
@@ -652,12 +652,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .declarePlayerAction(
@@ -676,12 +676,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .sidestepActionSelectSquare)
 
         // Select sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .sidestepActionSelectSquare(square: sq(10, 9))
@@ -695,12 +695,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForPassingPlayBonusPlay)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForPassingPlayBonusPlay)
 
         // Decline bonus play
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declinePassingPlayBonusPlay
@@ -717,12 +717,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare hurl teammate
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -741,12 +741,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .hurlTeammateActionSelectTarget)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .hurlTeammateActionSelectTarget)
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(targetSquare: sq(9, 12))
@@ -785,12 +785,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -809,12 +809,12 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .passActionSelectTarget)
 
         // Select pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSelectTarget(target: pl(.away, 2))
@@ -852,7 +852,7 @@ struct PassingPlayTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 }

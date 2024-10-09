@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionUseAbsolutelyNailsBonusPlay() throws -> Prompt? {
+    mutating func blockActionUseAbsolutelyNailsBonusPlay() throws -> AddressedPrompt? {
         return try blockActionResolveAbsolutelyNailsBonusPlay(use: true)
     }
 
-    mutating func blockActionDeclineAbsolutelyNailsBonusPlay() throws -> Prompt? {
+    mutating func blockActionDeclineAbsolutelyNailsBonusPlay() throws -> AddressedPrompt? {
         return try blockActionResolveAbsolutelyNailsBonusPlay(use: false)
     }
 
     private mutating func blockActionResolveAbsolutelyNailsBonusPlay(
         use: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let coachID = try history.latestTurnContext().coachID.inverse
 

@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func checkObjectives(
         postTouchdown: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
         let actionContexts = try turnContext.actionContexts()
@@ -66,9 +66,9 @@ extension InGameTransaction {
         }
 
         history.append(.choosingObjectiveToClaim(objectiveIndices: canClaim.map { $0.0 }))
-        return Prompt(
+        return AddressedPrompt(
             coachID: turnContext.coachID,
-            payload: .earnedObjective(
+            prompt: .earnedObjective(
                 objectives: canClaim.mapValues { $0.challenge }
             )
         )

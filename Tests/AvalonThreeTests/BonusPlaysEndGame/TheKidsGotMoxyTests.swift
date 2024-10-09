@@ -61,9 +61,9 @@ struct TheKidsGotMoxyTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -72,7 +72,7 @@ struct TheKidsGotMoxyTests {
 
         // Declare block
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -91,12 +91,12 @@ struct TheKidsGotMoxyTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .blockActionEligibleForTheKidsGotMoxyBonusPlay)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .blockActionEligibleForTheKidsGotMoxyBonusPlay)
 
         // Use bonus play
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseTheKidsGotMoxyBonusPlay
@@ -111,12 +111,12 @@ struct TheKidsGotMoxyTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .blockActionSelectResult)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .blockActionSelectResult)
 
         // Choose block result
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .kerrunch)
@@ -169,8 +169,8 @@ struct TheKidsGotMoxyTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func declined() async throws {
@@ -224,9 +224,9 @@ struct TheKidsGotMoxyTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -235,7 +235,7 @@ struct TheKidsGotMoxyTests {
 
         // Declare block
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -254,12 +254,12 @@ struct TheKidsGotMoxyTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .blockActionEligibleForTheKidsGotMoxyBonusPlay)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .blockActionEligibleForTheKidsGotMoxyBonusPlay)
 
         // Decline bonus play
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineTheKidsGotMoxyBonusPlay
@@ -298,7 +298,7 @@ struct TheKidsGotMoxyTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 }

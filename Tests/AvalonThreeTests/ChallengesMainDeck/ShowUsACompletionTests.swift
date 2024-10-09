@@ -69,9 +69,9 @@ struct ShowUsACompletionTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -80,7 +80,7 @@ struct ShowUsACompletionTests {
 
         // Declare pass
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -99,12 +99,12 @@ struct ShowUsACompletionTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .passActionSelectTarget)
 
         // Select pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSelectTarget(target: pl(.away, 1))
@@ -124,8 +124,8 @@ struct ShowUsACompletionTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func notAvailableForHandoff() async throws {
@@ -187,9 +187,9 @@ struct ShowUsACompletionTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -198,7 +198,7 @@ struct ShowUsACompletionTests {
 
         // Declare pass
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -217,12 +217,12 @@ struct ShowUsACompletionTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .passActionSelectTarget)
 
         // Select pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSelectTarget(target: pl(.away, 1))
@@ -236,8 +236,8 @@ struct ShowUsACompletionTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func availableWhenPassSuccessful() async throws {
@@ -299,9 +299,9 @@ struct ShowUsACompletionTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -310,7 +310,7 @@ struct ShowUsACompletionTests {
 
         // Declare pass
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -329,12 +329,12 @@ struct ShowUsACompletionTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .passActionSelectTarget)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .passActionSelectTarget)
 
         // Select pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSelectTarget(target: pl(.away, 1))
@@ -351,12 +351,12 @@ struct ShowUsACompletionTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .earnedObjective)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .earnedObjective)
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 1)
@@ -370,7 +370,7 @@ struct ShowUsACompletionTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 }

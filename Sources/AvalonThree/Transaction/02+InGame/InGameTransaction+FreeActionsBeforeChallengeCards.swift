@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func checkForFreeActionsBeforeChallengeCards() throws -> Prompt? {
+    mutating func checkForFreeActionsBeforeChallengeCards() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
         let actionContexts = try turnContext.actionContexts()
@@ -80,7 +80,7 @@ extension InGameTransaction {
     private mutating func checkForFrenzied(
         _ turnContext: TurnContext,
         _ lastActionContext: ActionContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard lastActionContext.actionID == .mark else {
             return nil
@@ -112,9 +112,9 @@ extension InGameTransaction {
             throw GameError("Player is in reserves")
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: player.coachID,
-            payload: .eligibleForFrenziedSkillBlockAction(
+            prompt: .eligibleForFrenziedSkillBlockAction(
                 playerID: player.id,
                 playerSquare: playerSquare
             )
@@ -124,7 +124,7 @@ extension InGameTransaction {
     private mutating func checkForShoulderCharge(
         _ turnContext: TurnContext,
         _ lastActionContext: ActionContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard lastActionContext.actionID == .mark else {
             return nil
@@ -158,9 +158,9 @@ extension InGameTransaction {
             throw GameError("Player is in reserves")
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: lastActionContext.coachID,
-            payload: .eligibleForShoulderChargeBonusPlayBlockAction(
+            prompt: .eligibleForShoulderChargeBonusPlayBlockAction(
                 playerID: player.id,
                 playerSquare: playerSquare
             )
@@ -170,7 +170,7 @@ extension InGameTransaction {
     private mutating func checkForDivingTackle(
         _ turnContext: TurnContext,
         _ lastActionContext: ActionContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard lastActionContext.actionID == .mark else {
             return nil
@@ -204,9 +204,9 @@ extension InGameTransaction {
             throw GameError("Player is in reserves")
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: lastActionContext.coachID,
-            payload: .eligibleForDivingTackleBonusPlayBlockAction(
+            prompt: .eligibleForDivingTackleBonusPlayBlockAction(
                 playerID: player.id,
                 playerSquare: playerSquare
             )
@@ -216,7 +216,7 @@ extension InGameTransaction {
     private mutating func checkForHeadbutt(
         _ turnContext: TurnContext,
         _ lastActionContext: ActionContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard lastActionContext.actionID == .mark else {
             return nil
@@ -253,9 +253,9 @@ extension InGameTransaction {
             throw GameError("Player is in reserves")
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: player.coachID,
-            payload: .eligibleForHeadbuttSkillBlockAction(
+            prompt: .eligibleForHeadbuttSkillBlockAction(
                 playerID: lastActionContext.playerID,
                 playerSquare: playerSquare
             )
@@ -265,7 +265,7 @@ extension InGameTransaction {
     private mutating func checkForBlitz(
         _ turnContext: TurnContext,
         _ lastActionContext: ActionContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard lastActionContext.actionID == .mark else {
             return nil
@@ -307,9 +307,9 @@ extension InGameTransaction {
             throw GameError("Player is in reserves")
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: lastActionContext.coachID,
-            payload: .eligibleForBlitzBonusPlayBlockAction(
+            prompt: .eligibleForBlitzBonusPlayBlockAction(
                 playerID: player.id,
                 playerSquare: playerSquare
             )
@@ -319,7 +319,7 @@ extension InGameTransaction {
     private mutating func checkForComboPlay(
         _ turnContext: TurnContext,
         _ lastActionContext: ActionContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard lastActionContext.actionID == .pass else {
             return nil
@@ -367,9 +367,9 @@ extension InGameTransaction {
             .eligibleForComboPlayBonusPlayFreeAction(validDeclaration: validDeclaration)
         )
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: lastActionContext.coachID,
-            payload: .eligibleForComboPlayBonusPlayFreeAction(
+            prompt: .eligibleForComboPlayBonusPlayFreeAction(
                 validDeclaration: validDeclaration.toPromptDeclaration(),
                 playerSquare: try {
                     guard let playerSquare = table.getPlayer(id: validDeclaration.playerID)?.square else {
@@ -385,7 +385,7 @@ extension InGameTransaction {
         _ turnContext: TurnContext,
         _ lastActionContext: ActionContext,
         _ coachID: CoachID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let bonusPlay = BonusPlay.getInThere
 
@@ -417,9 +417,9 @@ extension InGameTransaction {
 
             history.append(.eligibleForGetInThereBonusPlayReservesAction(playerID))
 
-            return Prompt(
+            return AddressedPrompt(
                 coachID: coachID,
-                payload: .eligibleForGetInThereBonusPlayReservesAction(playerID: playerID)
+                prompt: .eligibleForGetInThereBonusPlayReservesAction(playerID: playerID)
             )
         }
 
@@ -429,7 +429,7 @@ extension InGameTransaction {
     private mutating func checkForDistraction(
         _ turnContext: TurnContext,
         _ lastActionContext: ActionContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let coachID = turnContext.coachID.inverse
 
@@ -478,9 +478,9 @@ extension InGameTransaction {
 
         history.append(.eligibleForDistractionBonusPlaySidestepAction(validPlayerIDs))
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: coachID,
-            payload: .eligibleForDistractionBonusPlaySidestepAction(
+            prompt: .eligibleForDistractionBonusPlaySidestepAction(
                 validPlayers: try validPlayerIDs.reduce([:]) { partialResult, playerID in
                     guard let playerSquare = table.getPlayer(id: playerID)?.square else {
                         throw GameError("Player is in reserves")
@@ -497,7 +497,7 @@ extension InGameTransaction {
     private mutating func checkForIntervention(
         _ turnContext: TurnContext,
         _ lastActionContext: ActionContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let coachID = turnContext.coachID.inverse
 
@@ -555,9 +555,9 @@ extension InGameTransaction {
             .eligibleForInterventionBonusPlayMarkAction(validDeclarations, target: targetPlayer.id)
         )
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: coachID,
-            payload: .eligibleForInterventionBonusPlayMarkAction(
+            prompt: .eligibleForInterventionBonusPlayMarkAction(
                 validDeclarations: validDeclarations.toPromptDeclarations(table: table)
             )
         )

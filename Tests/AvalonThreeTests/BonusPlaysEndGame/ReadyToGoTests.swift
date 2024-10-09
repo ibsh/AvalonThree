@@ -99,9 +99,9 @@ struct ReadyToGoTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -110,7 +110,7 @@ struct ReadyToGoTests {
 
         // Declare run
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -129,12 +129,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .runActionSelectSquares)
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(
@@ -152,12 +152,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .earnedObjective)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .earnedObjective)
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 0)
@@ -172,12 +172,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForReadyToGoBonusPlayRunAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForReadyToGoBonusPlayRunAction)
 
         // Use run action
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useReadyToGoBonusPlayRunAction
@@ -191,9 +191,9 @@ struct ReadyToGoTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 1),
                     playerSquare: sq(5, 11),
                     maxRunDistance: 1,
@@ -239,7 +239,7 @@ struct ReadyToGoTests {
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(
@@ -256,12 +256,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForReadyToGoBonusPlayRunAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForReadyToGoBonusPlayRunAction)
 
         // Use run action
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useReadyToGoBonusPlayRunAction
@@ -275,9 +275,9 @@ struct ReadyToGoTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 4),
                     playerSquare: sq(9, 9),
                     maxRunDistance: 1,
@@ -323,7 +323,7 @@ struct ReadyToGoTests {
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(
@@ -340,12 +340,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForReadyToGoBonusPlaySidestepAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForReadyToGoBonusPlaySidestepAction)
 
         // Use sidestep action
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useReadyToGoBonusPlaySidestepAction
@@ -358,12 +358,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .sidestepActionSelectSquare)
 
         // Select sidestep
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .sidestepActionSelectSquare(square: sq(5, 13))
@@ -376,12 +376,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForReadyToGoBonusPlaySidestepAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForReadyToGoBonusPlaySidestepAction)
 
         // Use sidestep action
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useReadyToGoBonusPlaySidestepAction
@@ -394,12 +394,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .sidestepActionSelectSquare)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .sidestepActionSelectSquare)
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .sidestepActionSelectSquare(square: sq(9, 12))
@@ -412,12 +412,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForReadyToGoBonusPlayStandUpAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForReadyToGoBonusPlayStandUpAction)
 
         // Use stand up action
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .useReadyToGoBonusPlayStandUpAction
@@ -433,8 +433,8 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func declineFreeActions() async throws {
@@ -526,9 +526,9 @@ struct ReadyToGoTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -537,7 +537,7 @@ struct ReadyToGoTests {
 
         // Declare run
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -556,12 +556,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .runActionSelectSquares)
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(
@@ -579,12 +579,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .earnedObjective)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .earnedObjective)
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 0)
@@ -599,12 +599,12 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForReadyToGoBonusPlayRunAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForReadyToGoBonusPlayRunAction)
 
         // Decline run action
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineReadyToGoBonusPlayRunAction
@@ -615,12 +615,12 @@ struct ReadyToGoTests {
             latestEvents == []
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForReadyToGoBonusPlayRunAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForReadyToGoBonusPlayRunAction)
 
         // Decline run action
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineReadyToGoBonusPlayRunAction
@@ -631,12 +631,12 @@ struct ReadyToGoTests {
             latestEvents == []
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForReadyToGoBonusPlaySidestepAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForReadyToGoBonusPlaySidestepAction)
 
         // Decline sidestep action
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineReadyToGoBonusPlaySidestepAction
@@ -647,12 +647,12 @@ struct ReadyToGoTests {
             latestEvents == []
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForReadyToGoBonusPlaySidestepAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForReadyToGoBonusPlaySidestepAction)
 
         // Decline sidestep action
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineReadyToGoBonusPlaySidestepAction
@@ -663,12 +663,12 @@ struct ReadyToGoTests {
             latestEvents == []
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .eligibleForReadyToGoBonusPlayStandUpAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .eligibleForReadyToGoBonusPlayStandUpAction)
 
         // Decline stand up action
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineReadyToGoBonusPlayStandUpAction
@@ -682,7 +682,7 @@ struct ReadyToGoTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 }

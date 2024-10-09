@@ -9,11 +9,11 @@ import Foundation
 
 extension SetupTransaction {
 
-    mutating func selectCoinFlipLoserTeam() throws -> Prompt? {
+    mutating func selectCoinFlipLoserTeam() throws -> AddressedPrompt? {
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: table.coinFlipLoserCoachID,
-            payload: .arrangePlayers(
+            prompt: .arrangePlayers(
                 playerIDs: table
                     .config
                     .coinFlipLoserTeamID

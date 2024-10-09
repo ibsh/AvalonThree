@@ -12,7 +12,7 @@ extension InGameTransaction {
     mutating func declareReservesAction(
         playerID: PlayerID,
         isFree: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let emptySquares = Square
             .endZoneSquares(coachID: playerID.coachID)
@@ -58,9 +58,9 @@ extension InGameTransaction {
             .declaredAction(declaration: declaration, isFree: isFree, playerSquare: nil)
         )
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: playerID.coachID,
-            payload: .reservesActionSelectSquare(playerID: playerID, validSquares: validSquares)
+            prompt: .reservesActionSelectSquare(playerID: playerID, validSquares: validSquares)
         )
     }
 }

@@ -66,9 +66,9 @@ struct InterferenceTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -77,7 +77,7 @@ struct InterferenceTests {
 
         // Declare run
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -96,12 +96,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .runActionSelectSquares)
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -120,8 +120,8 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Try to declare mark without bonus play
 
@@ -142,7 +142,7 @@ struct InterferenceTests {
 
         // Declare mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -163,9 +163,9 @@ struct InterferenceTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .markActionSelectSquares(
+                prompt: .markActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     validSquares: ValidMoveSquares(
@@ -210,7 +210,7 @@ struct InterferenceTests {
 
         // Select mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSelectSquares(squares: [
@@ -233,8 +233,8 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func cannotBeAppliedPostDeclarationWhereNoFurtherTargetExists() async throws {
@@ -293,9 +293,9 @@ struct InterferenceTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -304,7 +304,7 @@ struct InterferenceTests {
 
         // Declare run
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -323,12 +323,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .runActionSelectSquares)
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -343,12 +343,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -367,8 +367,8 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .markActionSelectSquares)
     }
 
     @Test func canBeAppliedPostDeclarationWhereAFurtherTargetExists() async throws {
@@ -427,9 +427,9 @@ struct InterferenceTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -438,7 +438,7 @@ struct InterferenceTests {
 
         // Declare run
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -457,12 +457,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .runActionSelectSquares)
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -477,12 +477,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -501,12 +501,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionEligibleForInterferenceBonusPlay)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .markActionEligibleForInterferenceBonusPlay)
 
         // Use bonus play
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionUseInterferenceBonusPlay
@@ -519,12 +519,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .markActionSelectSquares)
 
         // Select mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSelectSquares(squares: [
@@ -545,8 +545,8 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func canBeDeclinedPostDeclarationWhereAFurtherTargetExists() async throws {
@@ -605,9 +605,9 @@ struct InterferenceTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -616,7 +616,7 @@ struct InterferenceTests {
 
         // Declare run
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -635,12 +635,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .runActionSelectSquares)
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -655,12 +655,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -679,12 +679,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionEligibleForInterferenceBonusPlay)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .markActionEligibleForInterferenceBonusPlay)
 
         // Decline bonus play
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionDeclineInterferenceBonusPlay
@@ -695,12 +695,12 @@ struct InterferenceTests {
             latestEvents == []
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .markActionSelectSquares)
 
         // MARK: - Select mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSelectSquares(squares: [
@@ -717,8 +717,8 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func baggyPathToMarkTarget() async throws {
@@ -777,9 +777,9 @@ struct InterferenceTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -788,7 +788,7 @@ struct InterferenceTests {
 
         // Declare run
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -807,12 +807,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .runActionSelectSquares)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .runActionSelectSquares)
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -827,12 +827,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -851,12 +851,12 @@ struct InterferenceTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .markActionEligibleForInterferenceBonusPlay)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .markActionEligibleForInterferenceBonusPlay)
 
         // Use bonus play
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionUseInterferenceBonusPlay
@@ -870,9 +870,9 @@ struct InterferenceTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .markActionSelectSquares(
+                prompt: .markActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(4, 5),
                     validSquares: ValidMoveSquares(

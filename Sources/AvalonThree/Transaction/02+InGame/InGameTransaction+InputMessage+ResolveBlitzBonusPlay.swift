@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useBlitzBonusPlayBlockAction() throws -> Prompt? {
+    mutating func useBlitzBonusPlayBlockAction() throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last
         else {
@@ -23,7 +23,7 @@ extension InGameTransaction {
         )
     }
 
-    mutating func declineBlitzBonusPlayBlockAction() throws -> Prompt? {
+    mutating func declineBlitzBonusPlayBlockAction() throws -> AddressedPrompt? {
         return try endAction()
     }
 }

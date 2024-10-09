@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func markActionUseInterferenceBonusPlay() throws -> Prompt? {
+    mutating func markActionUseInterferenceBonusPlay() throws -> AddressedPrompt? {
         return try markActionResolveInterferenceBonusPlay(use: true)
     }
 
-    mutating func markActionDeclineInterferenceBonusPlay() throws -> Prompt? {
+    mutating func markActionDeclineInterferenceBonusPlay() throws -> AddressedPrompt? {
         return try markActionResolveInterferenceBonusPlay(use: false)
     }
 
     private mutating func markActionResolveInterferenceBonusPlay(
         use: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
@@ -91,9 +91,9 @@ extension InGameTransaction {
             )
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: actionContext.coachID,
-            payload: .markActionSelectSquares(
+            prompt: .markActionSelectSquares(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare,
                 validSquares: validSquares

@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func hurlTeammateActionRollDie() throws -> Prompt? {
+    mutating func hurlTeammateActionRollDie() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -49,9 +49,9 @@ extension InGameTransaction {
         {
             history.append(.hurlTeammateActionEligibleForProBonusPlay)
 
-            return Prompt(
+            return AddressedPrompt(
                 coachID: actionContext.coachID,
-                payload: .hurlTeammateActionEligibleForProBonusPlay(
+                prompt: .hurlTeammateActionEligibleForProBonusPlay(
                     playerID: actionContext.playerID,
                     playerSquare: playerSquare
                 )
@@ -144,9 +144,9 @@ extension InGameTransaction {
         {
             history.append(.hurlTeammateResultEligibleForRawTalentBonusPlayReroll)
 
-            return Prompt(
+            return AddressedPrompt(
                 coachID: player.coachID,
-                payload: .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll(
+                prompt: .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll(
                     playerID: player.id,
                     playerSquare: playerSquare,
                     result: modifiedRoll

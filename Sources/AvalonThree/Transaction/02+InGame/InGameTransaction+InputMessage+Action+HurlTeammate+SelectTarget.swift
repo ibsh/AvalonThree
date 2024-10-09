@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func hurlTeammateActionSelectTarget(
         targetSquare: Square
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -52,9 +52,9 @@ extension InGameTransaction {
            validTarget.distance == .short
         {
 
-            return Prompt(
+            return AddressedPrompt(
                 coachID: turnContext.coachID,
-                payload: .hurlTeammateActionEligibleForAccuratePassBonusPlay(
+                prompt: .hurlTeammateActionEligibleForAccuratePassBonusPlay(
                     playerID: actionContext.playerID,
                     playerSquare: playerSquare
                 )

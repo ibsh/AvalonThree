@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionUseToughEnoughBonusPlay() throws -> Prompt? {
+    mutating func blockActionUseToughEnoughBonusPlay() throws -> AddressedPrompt? {
         return try blockActionResolveToughEnoughBonusPlay(use: true)
     }
 
-    mutating func blockActionDeclineToughEnoughBonusPlay() throws -> Prompt? {
+    mutating func blockActionDeclineToughEnoughBonusPlay() throws -> AddressedPrompt? {
         return try blockActionResolveToughEnoughBonusPlay(use: false)
     }
 
     private mutating func blockActionResolveToughEnoughBonusPlay(
         use: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let coachID = try history.latestTurnContext().coachID.inverse
 

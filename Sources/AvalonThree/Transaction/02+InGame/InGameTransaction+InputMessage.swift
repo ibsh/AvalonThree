@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func processInputMessageWrapper(
         _ messageWrapper: InputMessageWrapper
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         switch messageWrapper.message {
         case .arrangePlayers(let playerPositions):

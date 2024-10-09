@@ -11,7 +11,7 @@ extension ConfigTransaction {
 
     mutating func selectRookieBonusRecipient(
         rookieBonusRecipientID: RookieBonusRecipientID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard let coinFlipWinnerCoachID = config.coinFlipWinnerCoachID else {
             throw GameError("Coin has not been flipped yet")
@@ -44,9 +44,9 @@ extension ConfigTransaction {
 
         config.rookieBonusRecipientID = rookieBonusRecipientID
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: coinFlipWinnerCoachID,
-            payload: .selectCoinFlipWinnerTeam(
+            prompt: .selectCoinFlipWinnerTeam(
                 teamIDs: TeamID.availableCases
             )
         )

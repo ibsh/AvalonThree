@@ -15,14 +15,11 @@ struct MyFirstGameTests {
 
         // Init
 
-        var game = Game(
-            phase: .config(Config()),
-            previousPrompt: nil
-        )
+        var game = Game()
 
         // Begin
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .begin
@@ -37,9 +34,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .selectBoardSpec(
+                prompt: .selectBoardSpec(
                     boardSpecIDs: [
                         .season1Board1,
                         .season1Board2,
@@ -54,7 +51,7 @@ struct MyFirstGameTests {
 
         // Second coach config
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .selectBoardSpec(boardSpecID: .season1Board1)
@@ -72,9 +69,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .selectChallengeDeck(
+                prompt: .selectChallengeDeck(
                     challengeDeckIDs: [
                         .shortStandard,
                         .shortRandomised,
@@ -87,7 +84,7 @@ struct MyFirstGameTests {
 
         // Second coach config
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .selectChallengeDeck(challengeDeckID: .shortStandard)
@@ -101,9 +98,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .selectRookieBonusRecipient(
+                prompt: .selectRookieBonusRecipient(
                     rookieBonusRecipientIDs: [
                         .noOne,
                         .coinFlipLoser,
@@ -115,7 +112,7 @@ struct MyFirstGameTests {
 
         // Second coach config
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .selectRookieBonusRecipient(rookieBonusRecipientID: .noOne)
@@ -129,9 +126,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .selectCoinFlipWinnerTeam(
+                prompt: .selectCoinFlipWinnerTeam(
                     teamIDs: [
                         .blackOrc,
                         .chaos,
@@ -159,7 +156,7 @@ struct MyFirstGameTests {
 
         // Second coach config
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .selectCoinFlipWinnerTeam(teamID: .skaven)
@@ -173,9 +170,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .selectCoinFlipLoserTeam(
+                prompt: .selectCoinFlipLoserTeam(
                     teamIDs: [
                         .blackOrc,
                         .chaos,
@@ -203,7 +200,7 @@ struct MyFirstGameTests {
 
         // First coach config
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .selectCoinFlipLoserTeam(teamID: .human)
@@ -520,9 +517,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .arrangePlayers(
+                prompt: .arrangePlayers(
                     playerIDs: [
                         pl(.away, 0),
                         pl(.away, 1),
@@ -550,7 +547,7 @@ struct MyFirstGameTests {
 
         // First coach arrange players
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .arrangePlayers(
@@ -596,9 +593,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .arrangePlayers(
+                prompt: .arrangePlayers(
                     playerIDs: [
                         pl(.home, 0),
                         pl(.home, 1),
@@ -626,7 +623,7 @@ struct MyFirstGameTests {
 
         // Second coach arrange players
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .arrangePlayers(
@@ -677,9 +674,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -743,7 +740,7 @@ struct MyFirstGameTests {
 
         // First coach declare turn 1 action 1
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -770,9 +767,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 2),
                     playerSquare: sq(4, 0),
                     maxRunDistance: 6,
@@ -818,7 +815,7 @@ struct MyFirstGameTests {
 
         // First coach select turn 1 action 1
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -886,9 +883,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -943,7 +940,7 @@ struct MyFirstGameTests {
 
         // First coach declare turn 1 action 2
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -970,9 +967,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 3),
                     playerSquare: sq(6, 0),
                     maxRunDistance: 6,
@@ -1018,7 +1015,7 @@ struct MyFirstGameTests {
 
         // First coach select turn 1 action 2
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -1086,9 +1083,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -1134,7 +1131,7 @@ struct MyFirstGameTests {
 
         // First coach declare turn 1 action 3
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1161,9 +1158,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 1),
                     playerSquare: sq(1, 0),
                     maxRunDistance: 6,
@@ -1209,7 +1206,7 @@ struct MyFirstGameTests {
 
         // First coach select turn 1 action 3
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -1282,9 +1279,9 @@ struct MyFirstGameTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.home, 0): PromptValidDeclaringPlayer(
                             declarations: [

@@ -12,7 +12,7 @@ extension Game {
     public mutating func process(
         _ messageWrapper: InputMessageWrapper,
         randomizers: Randomizers = Randomizers()
-    ) throws -> ([Event], Prompt?) {
+    ) throws -> ([Event], AddressedPrompt?) {
         try validate(messageWrapper)
         return try process(
             messageWrapper: messageWrapper,
@@ -25,17 +25,17 @@ extension Game {
         messageWrapper: InputMessageWrapper,
         priorEvents: [Event],
         randomizers: Randomizers
-    ) throws -> ([Event], Prompt?) {
+    ) throws -> ([Event], AddressedPrompt?) {
         switch phase {
         case .config(let config):
             var transaction = ConfigTransaction(
                 config: config,
                 randomizers: randomizers
             )
-            if let prompt = try transaction.processInputMessageWrapper(messageWrapper) {
+            if let addressedPrompt = try transaction.processInputMessageWrapper(messageWrapper) {
                 phase = .config(transaction.config)
-                previousPrompt = prompt
-                return (priorEvents + transaction.events, prompt)
+                previousAddressedPrompt = addressedPrompt
+                return (priorEvents + transaction.events, addressedPrompt)
             } else if let table = transaction.table {
                 phase = .setup(table)
                 return try process(
@@ -52,10 +52,10 @@ extension Game {
                 table: table,
                 randomizers: randomizers
             )
-            if let prompt = try transaction.processInputMessageWrapper(messageWrapper) {
+            if let addressedPrompt = try transaction.processInputMessageWrapper(messageWrapper) {
                 phase = .setup(transaction.table)
-                previousPrompt = prompt
-                return (priorEvents + transaction.events, prompt)
+                previousAddressedPrompt = addressedPrompt
+                return (priorEvents + transaction.events, addressedPrompt)
             } else {
                 phase = .active(transaction.table, [])
                 return try process(
@@ -66,7 +66,7 @@ extension Game {
             }
 
         case .active(let table, let history):
-            guard let previousPrompt else {
+            guard let previousAddressedPrompt else {
                 throw GameError("No last prompt")
             }
 
@@ -85,13 +85,13 @@ extension Game {
             var transaction = InGameTransaction(
                 table: table,
                 history: history,
-                previousPromptPayload: previousPrompt.payload,
+                previousPrompt: previousAddressedPrompt.prompt,
                 randomizers: randomizers
             )
-            if let prompt = try transaction.processInputMessageWrapper(messageWrapper) {
+            if let addressedPrompt = try transaction.processInputMessageWrapper(messageWrapper) {
                 phase = .active(transaction.table, transaction.history)
-                self.previousPrompt = prompt
-                return (priorEvents + transaction.events, prompt)
+                self.previousAddressedPrompt = addressedPrompt
+                return (priorEvents + transaction.events, addressedPrompt)
             } else {
                 phase = .finished(transaction.table)
                 return try process(

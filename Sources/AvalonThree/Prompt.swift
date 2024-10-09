@@ -7,12 +7,12 @@
 
 import Foundation
 
-public struct Prompt: Equatable, Codable, Sendable {
+public struct AddressedPrompt: Equatable, Codable, Sendable {
     public let coachID: CoachID
-    public let payload: PromptPayload
+    public let prompt: Prompt
 }
 
-public enum PromptPayload: Equatable, Codable, Sendable {
+public enum Prompt: Equatable, Codable, Sendable {
 
     // MARK: - Config
 

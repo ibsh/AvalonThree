@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionRollDice() throws -> Prompt? {
+    mutating func blockActionRollDice() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -202,9 +202,9 @@ extension InGameTransaction {
             )
         {
             history.append(.blockDieResultsEligibleForOffensiveSpecialistSkillReroll)
-            return Prompt(
+            return AddressedPrompt(
                 coachID: actionContext.coachID,
-                payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
+                prompt: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: actionContext.playerID,
                     playerSquare: playerSquare,
                     results: results
@@ -225,9 +225,9 @@ extension InGameTransaction {
             )
         {
             history.append(.blockDieResultsEligibleForRawTalentBonusPlayReroll)
-            return Prompt(
+            return AddressedPrompt(
                 coachID: actionContext.coachID,
-                payload: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
+                prompt: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
                     playerID: actionContext.playerID,
                     playerSquare: playerSquare,
                     results: results,
@@ -247,9 +247,9 @@ extension InGameTransaction {
             return try blockActionSelectResult(result: results[0])
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: actionContext.coachID,
-            payload: .blockActionSelectResult(
+            prompt: .blockActionSelectResult(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare,
                 results: results

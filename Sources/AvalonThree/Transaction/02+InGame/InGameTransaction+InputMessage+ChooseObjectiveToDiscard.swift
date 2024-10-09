@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func selectObjectiveToDiscard(
         objectiveIndex: Int
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
         guard

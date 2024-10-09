@@ -59,9 +59,9 @@ struct InsignificantTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -70,7 +70,7 @@ struct InsignificantTests {
 
         // Declare run
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -97,9 +97,9 @@ struct InsignificantTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     maxRunDistance: 6,
@@ -146,7 +146,7 @@ struct InsignificantTests {
         // Select run
 
         #expect(throws: GameError("Invalid intermediate square")) {
-            (latestEvents, latestPrompt) = try game.process(
+            (latestEvents, latestAddressedPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
                     message: .runActionSelectSquares(squares: [
@@ -208,9 +208,9 @@ struct InsignificantTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -219,7 +219,7 @@ struct InsignificantTests {
 
         // Declare run
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -246,9 +246,9 @@ struct InsignificantTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     maxRunDistance: 6,
@@ -294,7 +294,7 @@ struct InsignificantTests {
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -334,8 +334,8 @@ struct InsignificantTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func playersCanFinishARunAdjacentToThisGuy() async throws {
@@ -387,9 +387,9 @@ struct InsignificantTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -398,7 +398,7 @@ struct InsignificantTests {
 
         // Declare run
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -425,9 +425,9 @@ struct InsignificantTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     maxRunDistance: 6,
@@ -473,7 +473,7 @@ struct InsignificantTests {
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -522,8 +522,8 @@ struct InsignificantTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func whenBlockingTackleBecomesMiss() async throws {
@@ -575,9 +575,9 @@ struct InsignificantTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -586,7 +586,7 @@ struct InsignificantTests {
 
         // Declare block
 
-        let (latestEvents, latestPrompt) = try game.process(
+        let (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -664,7 +664,7 @@ struct InsignificantTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .home)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 }

@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func runActionUseDodgeBonusPlay() throws -> Prompt? {
+    mutating func runActionUseDodgeBonusPlay() throws -> AddressedPrompt? {
         return try runActionResolveDodgeBonusPlay(use: true)
     }
 
-    mutating func runActionDeclineDodgeBonusPlay() throws -> Prompt? {
+    mutating func runActionDeclineDodgeBonusPlay() throws -> AddressedPrompt? {
         return try runActionResolveDodgeBonusPlay(use: false)
     }
 
     private mutating func runActionResolveDodgeBonusPlay(
         use: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,

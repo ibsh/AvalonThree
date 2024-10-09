@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useCatchersInstinctsSkillRunAction() throws -> Prompt? {
+    mutating func useCatchersInstinctsSkillRunAction() throws -> AddressedPrompt? {
         return try resolveCatchersInstinctsSkillRunAction(useFreeAction: true)
     }
 
-    mutating func declineCatchersInstinctsSkillRunAction() throws -> Prompt? {
+    mutating func declineCatchersInstinctsSkillRunAction() throws -> AddressedPrompt? {
         return try resolveCatchersInstinctsSkillRunAction(useFreeAction: false)
     }
 
     private mutating func resolveCatchersInstinctsSkillRunAction(
         useFreeAction: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let targetPlayerID = try history.latestTurnContext().history.lastResult(

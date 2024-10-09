@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func arrangePlayers(
         playerPositions: [Square]
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         history.append(
             .prepareForTurn(

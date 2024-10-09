@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionContinueWithEnforcer() throws -> Prompt? {
+    mutating func blockActionContinueWithEnforcer() throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,

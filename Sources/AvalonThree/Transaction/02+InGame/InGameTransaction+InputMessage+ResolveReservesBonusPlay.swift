@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useReservesBonusPlayReservesAction(playerID: PlayerID) throws -> Prompt? {
+    mutating func useReservesBonusPlayReservesAction(playerID: PlayerID) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -34,7 +34,7 @@ extension InGameTransaction {
         )
     }
 
-    mutating func declineReservesBonusPlayReservesAction() throws -> Prompt? {
+    mutating func declineReservesBonusPlayReservesAction() throws -> AddressedPrompt? {
         return try endAction()
     }
 }

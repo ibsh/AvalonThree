@@ -7,7 +7,7 @@
 
 @testable import AvalonThree
 
-extension PromptPayload {
+extension Prompt {
     enum Case {
         case selectBoardSpec
         case selectChallengeDeck

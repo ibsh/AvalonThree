@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useComboPlayBonusPlayFreeAction() throws -> Prompt? {
+    mutating func useComboPlayBonusPlayFreeAction() throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last
         else {
@@ -39,7 +39,7 @@ extension InGameTransaction {
         )
     }
 
-    mutating func declineComboPlayBonusPlayFreeAction() throws -> Prompt? {
+    mutating func declineComboPlayBonusPlayFreeAction() throws -> AddressedPrompt? {
         return try endAction()
     }
 }

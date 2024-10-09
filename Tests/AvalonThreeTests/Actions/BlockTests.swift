@@ -64,9 +64,9 @@ struct BlockTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
@@ -75,7 +75,7 @@ struct BlockTests {
 
         // Declare block
 
-        let (latestEvents, latestPrompt) = try game.process(
+        let (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -129,9 +129,9 @@ struct BlockTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.home, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -218,9 +218,9 @@ struct BlockTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
@@ -229,7 +229,7 @@ struct BlockTests {
 
         // Declare block
 
-        let (latestEvents, latestPrompt) = try game.process(
+        let (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -261,9 +261,9 @@ struct BlockTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .blockActionSelectResult(
+                prompt: .blockActionSelectResult(
                     playerID: pl(.away, 0),
                     playerSquare: sq(2, 8),
                     results: [.shove, .kerrunch, .smash]
@@ -332,9 +332,9 @@ struct BlockTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
@@ -343,7 +343,7 @@ struct BlockTests {
 
         // Declare block
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -370,9 +370,9 @@ struct BlockTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .blockActionSelectTarget(
+                prompt: .blockActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 12),
                     validTargets: [
@@ -385,7 +385,7 @@ struct BlockTests {
 
         // Select block
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectTarget(target: pl(.home, 0))
@@ -425,9 +425,9 @@ struct BlockTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.home, 0): PromptValidDeclaringPlayer(
                             declarations: [

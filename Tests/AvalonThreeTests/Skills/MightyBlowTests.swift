@@ -59,9 +59,9 @@ struct MightyBlowTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -70,7 +70,7 @@ struct MightyBlowTests {
 
         // Declare block
 
-        let (latestEvents, latestPrompt) = try game.process(
+        let (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -104,9 +104,9 @@ struct MightyBlowTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .blockActionSelectResult(
+                prompt: .blockActionSelectResult(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     results: [.shove, .kerrunch]

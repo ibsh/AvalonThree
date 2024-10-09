@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func declaredRunAction() throws -> Prompt? {
+    mutating func declaredRunAction() throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
@@ -45,9 +45,9 @@ extension InGameTransaction {
             throw GameError("Player is in reserves")
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: actionContext.coachID,
-            payload: .runActionSelectSquares(
+            prompt: .runActionSelectSquares(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare,
                 maxRunDistance: maxRunDistance,
@@ -56,7 +56,7 @@ extension InGameTransaction {
         )
     }
 
-    private mutating func checkForBlockingPlay() throws -> Prompt? {
+    private mutating func checkForBlockingPlay() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -84,16 +84,16 @@ extension InGameTransaction {
 
         history.append(.runEligibleForBlockingPlayBonusPlay)
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: actionContext.coachID,
-            payload: .runActionEligibleForBlockingPlayBonusPlay(
+            prompt: .runActionEligibleForBlockingPlayBonusPlay(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare
             )
         )
     }
 
-    private mutating func checkForDodge() throws -> Prompt? {
+    private mutating func checkForDodge() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -121,16 +121,16 @@ extension InGameTransaction {
 
         history.append(.runEligibleForDodgeBonusPlay)
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: actionContext.coachID,
-            payload: .runActionEligibleForDodgeBonusPlay(
+            prompt: .runActionEligibleForDodgeBonusPlay(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare
             )
         )
     }
 
-    private mutating func checkForSprint() throws -> Prompt? {
+    private mutating func checkForSprint() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -158,9 +158,9 @@ extension InGameTransaction {
 
         history.append(.runEligibleForSprintBonusPlay)
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: actionContext.coachID,
-            payload: .runActionEligibleForSprintBonusPlay(
+            prompt: .runActionEligibleForSprintBonusPlay(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare
             )

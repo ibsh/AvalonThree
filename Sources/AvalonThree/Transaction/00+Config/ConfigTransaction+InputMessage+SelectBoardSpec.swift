@@ -11,7 +11,7 @@ extension ConfigTransaction {
 
     mutating func selectBoardSpec(
         boardSpecID: BoardSpecID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard let coinFlipWinnerCoachID = config.coinFlipWinnerCoachID else {
             throw GameError("Coin has not been flipped yet")
@@ -35,9 +35,9 @@ extension ConfigTransaction {
 
         config.boardSpecID = boardSpecID
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: coinFlipWinnerCoachID,
-            payload: .selectChallengeDeck(
+            prompt: .selectChallengeDeck(
                 challengeDeckIDs: ChallengeDeckID.availableCases
             )
         )

@@ -12,7 +12,7 @@ extension InGameTransaction {
     mutating func declareBlockAction(
         playerID: PlayerID,
         isFree: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard let player = table.getPlayer(id: playerID) else {
             throw GameError("No player")
@@ -81,9 +81,9 @@ extension InGameTransaction {
 
         } else {
 
-            return Prompt(
+            return AddressedPrompt(
                 coachID: playerID.coachID,
-                payload: .blockActionSelectTarget(
+                prompt: .blockActionSelectTarget(
                     playerID: playerID,
                     playerSquare: playerSquare,
                     validTargets: try validTargetPlayers.reduce([:]) { partialResult, player in

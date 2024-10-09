@@ -64,9 +64,9 @@ struct FoulTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
@@ -75,7 +75,7 @@ struct FoulTests {
 
         // Declare foul
 
-        let (latestEvents, latestPrompt) = try game.process(
+        let (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -116,9 +116,9 @@ struct FoulTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -196,9 +196,9 @@ struct FoulTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 1
                 )
@@ -207,7 +207,7 @@ struct FoulTests {
 
         // Declare foul
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -234,9 +234,9 @@ struct FoulTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .foulActionSelectTarget(
+                prompt: .foulActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 12),
                     validTargets: [
@@ -249,7 +249,7 @@ struct FoulTests {
 
         // Select foul
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .foulActionSelectTarget(target: pl(.home, 0))
@@ -276,9 +276,9 @@ struct FoulTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [

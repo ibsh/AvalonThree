@@ -79,9 +79,9 @@ struct CleanSweepTests {
                     )
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -90,7 +90,7 @@ struct CleanSweepTests {
 
         // Declare block
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -119,9 +119,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
+                prompt: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     results: [.smash]
@@ -131,7 +131,7 @@ struct CleanSweepTests {
 
         // Choose to reroll
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
@@ -178,9 +178,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -212,7 +212,7 @@ struct CleanSweepTests {
 
         // Declare run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -239,9 +239,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     maxRunDistance: 6,
@@ -287,7 +287,7 @@ struct CleanSweepTests {
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -342,9 +342,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .earnedObjective(
+                prompt: .earnedObjective(
                     objectives: [
                         0: .getTheBall,
                     ]
@@ -354,7 +354,7 @@ struct CleanSweepTests {
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 0)
@@ -386,9 +386,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -416,7 +416,7 @@ struct CleanSweepTests {
 
         // Declare pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -443,9 +443,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .passActionSelectTarget(
+                prompt: .passActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 8),
                     validTargets: [
@@ -463,7 +463,7 @@ struct CleanSweepTests {
 
         // Select pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSelectTarget(target: pl(.away, 1))
@@ -490,9 +490,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .earnedObjective(
+                prompt: .earnedObjective(
                     objectives: [
                         2: .moveTheBall,
                     ]
@@ -502,7 +502,7 @@ struct CleanSweepTests {
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 2)
@@ -542,9 +542,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.home, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -638,9 +638,9 @@ struct CleanSweepTests {
                     )
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -649,7 +649,7 @@ struct CleanSweepTests {
 
         // Declare block
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -678,9 +678,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
+                prompt: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     results: [.smash]
@@ -690,7 +690,7 @@ struct CleanSweepTests {
 
         // Choose to reroll
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
@@ -738,9 +738,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .earnedObjective(
+                prompt: .earnedObjective(
                     objectives: [
                         1: .takeThemDown,
                     ]
@@ -750,7 +750,7 @@ struct CleanSweepTests {
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 1)
@@ -782,9 +782,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -816,7 +816,7 @@ struct CleanSweepTests {
 
         // Declare run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -843,9 +843,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     maxRunDistance: 6,
@@ -891,7 +891,7 @@ struct CleanSweepTests {
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -946,9 +946,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .earnedObjective(
+                prompt: .earnedObjective(
                     objectives: [
                         0: .getTheBall,
                     ]
@@ -958,7 +958,7 @@ struct CleanSweepTests {
 
         // Decline objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declineToClaimObjective
@@ -977,9 +977,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -1007,7 +1007,7 @@ struct CleanSweepTests {
 
         // Declare pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1034,9 +1034,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .passActionSelectTarget(
+                prompt: .passActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 8),
                     validTargets: [
@@ -1054,7 +1054,7 @@ struct CleanSweepTests {
 
         // Select pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSelectTarget(target: pl(.away, 1))
@@ -1081,9 +1081,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .earnedObjective(
+                prompt: .earnedObjective(
                     objectives: [
                         2: .moveTheBall,
                     ]
@@ -1093,7 +1093,7 @@ struct CleanSweepTests {
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 2)
@@ -1133,9 +1133,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.home, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -1229,9 +1229,9 @@ struct CleanSweepTests {
                     )
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -1240,7 +1240,7 @@ struct CleanSweepTests {
 
         // Declare block
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1269,9 +1269,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
+                prompt: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     results: [.smash]
@@ -1281,7 +1281,7 @@ struct CleanSweepTests {
 
         // Choose to reroll
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
@@ -1326,9 +1326,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .earnedObjective(
+                prompt: .earnedObjective(
                     objectives: [
                         1: .takeThemDown,
                     ]
@@ -1338,7 +1338,7 @@ struct CleanSweepTests {
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 1)
@@ -1369,12 +1369,12 @@ struct CleanSweepTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
 
         // Declare run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1401,9 +1401,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .runActionSelectSquares(
+                prompt: .runActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6),
                     maxRunDistance: 6,
@@ -1449,7 +1449,7 @@ struct CleanSweepTests {
 
         // Select run
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .runActionSelectSquares(squares: [
@@ -1504,9 +1504,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .earnedObjective(
+                prompt: .earnedObjective(
                     objectives: [
                         0: .getTheBall,
                     ]
@@ -1516,7 +1516,7 @@ struct CleanSweepTests {
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 0)
@@ -1554,9 +1554,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -1584,7 +1584,7 @@ struct CleanSweepTests {
 
         // Declare pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1611,9 +1611,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .passActionSelectTarget(
+                prompt: .passActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 8),
                     validTargets: [
@@ -1631,7 +1631,7 @@ struct CleanSweepTests {
 
         // Select pass
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .passActionSelectTarget(target: pl(.away, 1))
@@ -1658,9 +1658,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .earnedObjective(
+                prompt: .earnedObjective(
                     objectives: [
                         2: .moveTheBall,
                     ]
@@ -1670,7 +1670,7 @@ struct CleanSweepTests {
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 2)
@@ -1718,9 +1718,9 @@ struct CleanSweepTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.home, 0): PromptValidDeclaringPlayer(
                             declarations: [

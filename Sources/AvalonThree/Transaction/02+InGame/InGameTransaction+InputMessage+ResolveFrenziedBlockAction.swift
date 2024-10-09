@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useFrenziedSkillBlockAction() throws -> Prompt? {
+    mutating func useFrenziedSkillBlockAction() throws -> AddressedPrompt? {
         return try resolveFrenziedSkillBlockAction(useFreeAction: true)
     }
 
-    mutating func declineFrenziedSkillBlockAction() throws -> Prompt? {
+    mutating func declineFrenziedSkillBlockAction() throws -> AddressedPrompt? {
         return try resolveFrenziedSkillBlockAction(useFreeAction: false)
     }
 
     private mutating func resolveFrenziedSkillBlockAction(
         useFreeAction: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let playerID =

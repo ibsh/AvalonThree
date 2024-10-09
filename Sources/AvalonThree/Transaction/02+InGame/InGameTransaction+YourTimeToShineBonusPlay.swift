@@ -13,7 +13,7 @@ extension InGameTransaction {
         .yourTimeToShine
     }
 
-    mutating func continueYourTimeToShineBonusPlay() throws -> Prompt? {
+    mutating func continueYourTimeToShineBonusPlay() throws -> AddressedPrompt? {
 
         let coachID = try history.latestTurnContext().coachID
 
@@ -26,7 +26,7 @@ extension InGameTransaction {
         return try continueWithReservesAction()
     }
 
-    private mutating func continueWithReservesAction() throws -> Prompt? {
+    private mutating func continueWithReservesAction() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
         let coachID = turnContext.coachID
@@ -55,9 +55,9 @@ extension InGameTransaction {
             history.append(
                 .eligibleForYourTimeToShineBonusPlayReservesAction(validPlayerIDs)
             )
-            return Prompt(
+            return AddressedPrompt(
                 coachID: coachID,
-                payload: .eligibleForYourTimeToShineBonusPlayReservesAction(
+                prompt: .eligibleForYourTimeToShineBonusPlayReservesAction(
                     validPlayers: validPlayerIDs
                 )
             )
@@ -66,7 +66,7 @@ extension InGameTransaction {
         return try continueWithRunAction()
     }
 
-    private mutating func continueWithRunAction() throws -> Prompt? {
+    private mutating func continueWithRunAction() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
         let coachID = turnContext.coachID
@@ -107,9 +107,9 @@ extension InGameTransaction {
             history.append(
                 .eligibleForYourTimeToShineBonusPlayRunAction(validPlayerIDs)
             )
-            return Prompt(
+            return AddressedPrompt(
                 coachID: coachID,
-                payload: .eligibleForYourTimeToShineBonusPlayRunAction(
+                prompt: .eligibleForYourTimeToShineBonusPlayRunAction(
                     validPlayers: try validPlayerIDs.reduce([:]) { partialResult, playerID in
                         guard let playerSquare = table.getPlayer(id: playerID)?.square else {
                             throw GameError("Player is in reserves")
@@ -126,7 +126,7 @@ extension InGameTransaction {
         return try finishUp()
     }
 
-    private mutating func finishUp() throws -> Prompt? {
+    private mutating func finishUp() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
         let coachID = turnContext.coachID
@@ -146,7 +146,7 @@ extension InGameTransaction {
 
     mutating func useYourTimeToShineBonusPlayReservesAction(
         playerID: PlayerID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
         guard let playerIDs = try history.latestTurnContext().history.lastResult(
             { entry -> Set<PlayerID>? in
                 guard case .eligibleForYourTimeToShineBonusPlayReservesAction(
@@ -165,13 +165,13 @@ extension InGameTransaction {
         return try declareReservesAction(playerID: playerID, isFree: true)
     }
 
-    mutating func declineYourTimeToShineBonusPlayReservesAction() throws -> Prompt? {
+    mutating func declineYourTimeToShineBonusPlayReservesAction() throws -> AddressedPrompt? {
         return try continueYourTimeToShineBonusPlay()
     }
 
     mutating func useYourTimeToShineBonusPlayRunAction(
         playerID: PlayerID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
         guard let playerIDs = try history.latestTurnContext().history.lastResult(
             { entry -> Set<PlayerID>? in
                 guard case .eligibleForYourTimeToShineBonusPlayRunAction(
@@ -190,7 +190,7 @@ extension InGameTransaction {
         return try declareRunAction(playerID: playerID, isFree: true)
     }
 
-    mutating func declineYourTimeToShineBonusPlayRunAction() throws -> Prompt? {
+    mutating func declineYourTimeToShineBonusPlayRunAction() throws -> AddressedPrompt? {
         return try continueYourTimeToShineBonusPlay()
     }
 }

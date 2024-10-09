@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useDivingTackleBonusPlayBlockAction() throws -> Prompt? {
+    mutating func useDivingTackleBonusPlayBlockAction() throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last
         else {
@@ -24,7 +24,7 @@ extension InGameTransaction {
         )
     }
 
-    mutating func declineDivingTackleBonusPlayBlockAction() throws -> Prompt? {
+    mutating func declineDivingTackleBonusPlayBlockAction() throws -> AddressedPrompt? {
         return try endAction()
     }
 }

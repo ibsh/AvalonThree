@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func blockActionSelectSafeHandsLooseBallDirection(
         direction: Direction
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,

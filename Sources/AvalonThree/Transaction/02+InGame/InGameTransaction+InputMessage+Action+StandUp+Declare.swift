@@ -12,7 +12,7 @@ extension InGameTransaction {
     mutating func declareStandUpAction(
         playerID: PlayerID,
         isFree: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard var player = table.getPlayer(id: playerID) else {
             throw GameError("No player")

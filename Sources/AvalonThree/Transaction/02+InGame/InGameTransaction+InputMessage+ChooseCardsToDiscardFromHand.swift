@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func selectCardsToDiscardFromHand(
         cards: Set<ChallengeCard>
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 

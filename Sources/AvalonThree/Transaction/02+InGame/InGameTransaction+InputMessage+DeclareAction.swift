@@ -13,7 +13,7 @@ extension InGameTransaction {
         declaration: ActionDeclaration,
         consumesBonusPlays: Set<BonusPlay>,
         isFree: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             try !history.latestTurnContext().actionContexts().contains(

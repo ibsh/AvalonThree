@@ -64,9 +64,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -145,9 +145,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -226,9 +226,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -314,9 +314,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -395,9 +395,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -476,9 +476,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -557,9 +557,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -638,9 +638,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -718,9 +718,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -796,9 +796,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -807,7 +807,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -834,9 +834,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -987,7 +987,7 @@ struct HurlTeammateTests {
         // Select target square
 
         #expect(throws: GameError("Invalid target")) {
-            (latestEvents, latestPrompt) = try game.process(
+            (latestEvents, latestAddressedPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
                     message: .hurlTeammateActionSelectTarget(
@@ -1058,9 +1058,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -1069,7 +1069,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1096,9 +1096,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -1248,7 +1248,7 @@ struct HurlTeammateTests {
         // Select target square
 
         #expect(throws: GameError("Invalid target")) {
-            (latestEvents, latestPrompt) = try game.process(
+            (latestEvents, latestAddressedPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
                     message: .hurlTeammateActionSelectTarget(
@@ -1319,9 +1319,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -1330,7 +1330,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1357,9 +1357,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -1509,7 +1509,7 @@ struct HurlTeammateTests {
         // Select target square
 
         #expect(throws: GameError("Invalid target")) {
-            (latestEvents, latestPrompt) = try game.process(
+            (latestEvents, latestAddressedPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .away,
                     message: .hurlTeammateActionSelectTarget(
@@ -1580,9 +1580,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -1591,7 +1591,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1618,9 +1618,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -1769,7 +1769,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(
@@ -1802,8 +1802,8 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func canHurlToShortDistance() async throws {
@@ -1866,9 +1866,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -1877,7 +1877,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1904,9 +1904,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -2055,7 +2055,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(targetSquare: sq(7, 6))
@@ -2086,8 +2086,8 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func longDistanceModifiesRoll() async throws {
@@ -2164,9 +2164,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -2175,7 +2175,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2202,9 +2202,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -2353,7 +2353,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(
@@ -2392,8 +2392,8 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func obstructionModifiesRoll() async throws {
@@ -2464,9 +2464,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -2475,7 +2475,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2502,9 +2502,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -2653,7 +2653,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(targetSquare: sq(0, 4))
@@ -2690,8 +2690,8 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func markedIntermediateSquareModifiesRoll() async throws {
@@ -2762,9 +2762,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -2773,7 +2773,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -2800,9 +2800,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -2951,7 +2951,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(
@@ -2990,8 +2990,8 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func markedTargetSquareDoesNotModifyRoll() async throws {
@@ -3054,9 +3054,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -3065,7 +3065,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3092,9 +3092,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -3243,7 +3243,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(
@@ -3276,8 +3276,8 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func twoOrMoreModifiersOnlyModifyOnce() async throws {
@@ -3348,9 +3348,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -3359,7 +3359,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3386,9 +3386,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(0, 0),
                     validTargets: [
@@ -3460,7 +3460,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(
@@ -3501,8 +3501,8 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func canFumbleTeammate() async throws {
@@ -3565,9 +3565,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -3576,7 +3576,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3603,9 +3603,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -3754,7 +3754,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(targetSquare: sq(7, 6))
@@ -3794,8 +3794,8 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func canCrashTeammate() async throws {
@@ -3858,9 +3858,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -3869,7 +3869,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -3896,9 +3896,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -4047,7 +4047,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(targetSquare: sq(7, 6))
@@ -4089,8 +4089,8 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func canHurlOntoABall() async throws {
@@ -4157,9 +4157,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -4168,7 +4168,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -4195,9 +4195,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -4346,7 +4346,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(targetSquare: sq(7, 6))
@@ -4408,8 +4408,8 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func promptedForTeammateIfMoreThanOneIsEligible() async throws {
@@ -4478,9 +4478,9 @@ struct HurlTeammateTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -4489,7 +4489,7 @@ struct HurlTeammateTests {
 
         // Declare hurl teammate
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -4516,9 +4516,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTeammate(
+                prompt: .hurlTeammateActionSelectTeammate(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTeammates: [
@@ -4531,7 +4531,7 @@ struct HurlTeammateTests {
 
         // Select teammate
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTeammate(
@@ -4545,9 +4545,9 @@ struct HurlTeammateTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .hurlTeammateActionSelectTarget(
+                prompt: .hurlTeammateActionSelectTarget(
                     playerID: pl(.away, 0),
                     playerSquare: sq(3, 6),
                     validTargets: [
@@ -4695,7 +4695,7 @@ struct HurlTeammateTests {
 
         // Select target square
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .hurlTeammateActionSelectTarget(
@@ -4728,7 +4728,7 @@ struct HurlTeammateTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 }

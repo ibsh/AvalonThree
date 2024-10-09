@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     private var bonusPlay: BonusPlay { .rawTalent }
 
-    mutating func blockActionUseRawTalentBonusPlayRerollForBlockDieResults() throws -> Prompt? {
+    mutating func blockActionUseRawTalentBonusPlayRerollForBlockDieResults() throws -> AddressedPrompt? {
         guard let actionContext = try history.latestTurnContext().actionContexts().last else {
             throw GameError("No action in history")
         }
@@ -24,7 +24,7 @@ extension InGameTransaction {
 
     mutating func blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
         result: BlockDieResult?
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
             !actionContext.isFinished,

@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useShoulderChargeBonusPlayBlockAction() throws -> Prompt? {
+    mutating func useShoulderChargeBonusPlayBlockAction() throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last
         else {
@@ -24,7 +24,7 @@ extension InGameTransaction {
         )
     }
 
-    mutating func declineShoulderChargeBonusPlayBlockAction() throws -> Prompt? {
+    mutating func declineShoulderChargeBonusPlayBlockAction() throws -> AddressedPrompt? {
         return try endAction()
     }
 }

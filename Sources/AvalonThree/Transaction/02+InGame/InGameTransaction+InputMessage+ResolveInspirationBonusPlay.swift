@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func useInspirationBonusPlayFreeAction(
         declaration: ActionDeclaration
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last
         else {
@@ -26,7 +26,7 @@ extension InGameTransaction {
         )
     }
 
-    mutating func declineInspirationBonusPlayFreeAction() throws -> Prompt? {
+    mutating func declineInspirationBonusPlayFreeAction() throws -> AddressedPrompt? {
         return try endAction()
     }
 }

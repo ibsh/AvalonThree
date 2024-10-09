@@ -12,7 +12,7 @@ extension InGameTransaction {
     mutating func declareSidestepAction(
         playerID: PlayerID,
         isFree: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard let player = table.getPlayer(id: playerID) else {
             throw GameError("No player")
@@ -49,9 +49,9 @@ extension InGameTransaction {
             .declaredAction(declaration: declaration, isFree: isFree, playerSquare: playerSquare)
         )
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: playerID.coachID,
-            payload: .sidestepActionSelectSquare(
+            prompt: .sidestepActionSelectSquare(
                 playerID: playerID,
                 playerSquare: playerSquare,
                 validSquares: validSquares

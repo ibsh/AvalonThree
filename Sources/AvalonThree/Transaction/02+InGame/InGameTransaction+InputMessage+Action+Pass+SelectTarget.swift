@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func passActionSelectTarget(
         target targetPlayerID: PlayerID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -52,9 +52,9 @@ extension InGameTransaction {
                 .usedBonusPlay(coachID: actionContext.coachID, bonusPlay: bonusPlay)
             )
         {
-            return Prompt(
+            return AddressedPrompt(
                 coachID: actionContext.coachID,
-                payload: .passActionEligibleForAccuratePassBonusPlay(
+                prompt: .passActionEligibleForAccuratePassBonusPlay(
                     playerID: actionContext.playerID,
                     playerSquare: playerSquare
                 )

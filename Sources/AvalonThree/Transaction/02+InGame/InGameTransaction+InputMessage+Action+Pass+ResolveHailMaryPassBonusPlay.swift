@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func passActionUseHailMaryPassBonusPlay() throws -> Prompt? {
+    mutating func passActionUseHailMaryPassBonusPlay() throws -> AddressedPrompt? {
         return try passActionResolveHailMaryPassBonusPlay(use: true)
     }
 
-    mutating func passActionDeclineHailMaryPassBonusPlay() throws -> Prompt? {
+    mutating func passActionDeclineHailMaryPassBonusPlay() throws -> AddressedPrompt? {
         return try passActionResolveHailMaryPassBonusPlay(use: false)
     }
 
     private mutating func passActionResolveHailMaryPassBonusPlay(
         use: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
@@ -57,9 +57,9 @@ extension InGameTransaction {
             history.append(.passValidTargets(validTargets))
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: actionContext.coachID,
-            payload: .passActionSelectTarget(
+            prompt: .passActionSelectTarget(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare,
                 validTargets: validTargets

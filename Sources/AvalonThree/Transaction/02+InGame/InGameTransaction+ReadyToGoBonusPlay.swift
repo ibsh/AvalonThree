@@ -13,7 +13,7 @@ extension InGameTransaction {
         .readyToGo
     }
 
-    mutating func continueReadyToGoBonusPlay() throws -> Prompt? {
+    mutating func continueReadyToGoBonusPlay() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -44,9 +44,9 @@ extension InGameTransaction {
                 guard let playerSquare = player.square else {
                     throw GameError("Player is in reserves")
                 }
-                return Prompt(
+                return AddressedPrompt(
                     coachID: coachID,
-                    payload: .eligibleForReadyToGoBonusPlayRunAction(
+                    prompt: .eligibleForReadyToGoBonusPlayRunAction(
                         playerID: player.id,
                         playerSquare: playerSquare
                     )
@@ -64,9 +64,9 @@ extension InGameTransaction {
                 guard let playerSquare = player.square else {
                     throw GameError("Player is in reserves")
                 }
-                return Prompt(
+                return AddressedPrompt(
                     coachID: coachID,
-                    payload: .eligibleForReadyToGoBonusPlaySidestepAction(
+                    prompt: .eligibleForReadyToGoBonusPlaySidestepAction(
                         playerID: player.id,
                         playerSquare: playerSquare
                     )
@@ -84,9 +84,9 @@ extension InGameTransaction {
                 guard let playerSquare = player.square else {
                     throw GameError("Player is in reserves")
                 }
-                return Prompt(
+                return AddressedPrompt(
                     coachID: coachID,
-                    payload: .eligibleForReadyToGoBonusPlayStandUpAction(
+                    prompt: .eligibleForReadyToGoBonusPlayStandUpAction(
                         playerID: player.id,
                         playerSquare: playerSquare
                     )
@@ -120,27 +120,27 @@ extension InGameTransaction {
         return playerID
     }
 
-    mutating func useReadyToGoBonusPlayRunAction() throws -> Prompt? {
+    mutating func useReadyToGoBonusPlayRunAction() throws -> AddressedPrompt? {
         return try declareRunAction(playerID: try latestEligiblePlayerID(), isFree: true)
     }
 
-    mutating func declineReadyToGoBonusPlayRunAction() throws -> Prompt? {
+    mutating func declineReadyToGoBonusPlayRunAction() throws -> AddressedPrompt? {
         return try continueReadyToGoBonusPlay()
     }
 
-    mutating func useReadyToGoBonusPlaySidestepAction() throws -> Prompt? {
+    mutating func useReadyToGoBonusPlaySidestepAction() throws -> AddressedPrompt? {
         return try declareSidestepAction(playerID: try latestEligiblePlayerID(), isFree: true)
     }
 
-    mutating func declineReadyToGoBonusPlaySidestepAction() throws -> Prompt? {
+    mutating func declineReadyToGoBonusPlaySidestepAction() throws -> AddressedPrompt? {
         return try continueReadyToGoBonusPlay()
     }
 
-    mutating func useReadyToGoBonusPlayStandUpAction() throws -> Prompt? {
+    mutating func useReadyToGoBonusPlayStandUpAction() throws -> AddressedPrompt? {
         return try declareStandUpAction(playerID: try latestEligiblePlayerID(), isFree: true)
     }
 
-    mutating func declineReadyToGoBonusPlayStandUpAction() throws -> Prompt? {
+    mutating func declineReadyToGoBonusPlayStandUpAction() throws -> AddressedPrompt? {
         return try continueReadyToGoBonusPlay()
     }
 }

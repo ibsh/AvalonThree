@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionUseAbsoluteCarnageBonusPlay() throws -> Prompt? {
+    mutating func blockActionUseAbsoluteCarnageBonusPlay() throws -> AddressedPrompt? {
         return try blockActionResolveAbsoluteCarnageBonusPlay(use: true)
     }
 
-    mutating func blockActionDeclineAbsoluteCarnageBonusPlay() throws -> Prompt? {
+    mutating func blockActionDeclineAbsoluteCarnageBonusPlay() throws -> AddressedPrompt? {
         return try blockActionResolveAbsoluteCarnageBonusPlay(use: false)
     }
 
     private mutating func blockActionResolveAbsoluteCarnageBonusPlay(
         use: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let coachID = try history.latestTurnContext().coachID
 

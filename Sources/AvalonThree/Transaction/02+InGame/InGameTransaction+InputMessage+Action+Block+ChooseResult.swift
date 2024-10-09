@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func blockActionSelectResult(
         result: BlockDieResult
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
@@ -171,9 +171,9 @@ extension InGameTransaction {
                 history.append(.blockResult(result))
                 history.append(.blockFollowUpSquare(targetPlayerSquare))
 
-                return Prompt(
+                return AddressedPrompt(
                     coachID: actionContext.coachID,
-                    payload: .blockActionEligibleForFollowUp(
+                    prompt: .blockActionEligibleForFollowUp(
                         playerID: actionContext.playerID,
                         from: playerSquare,
                         to: targetPlayerSquare
@@ -218,9 +218,9 @@ extension InGameTransaction {
                     history.append(.blockResult(result))
                     history.append(.blockSafeHandsDirections(Set(directions.keys)))
 
-                    return Prompt(
+                    return AddressedPrompt(
                         coachID: targetPlayerID.coachID,
-                        payload: .blockActionSelectSafeHandsLooseBallDirection(
+                        prompt: .blockActionSelectSafeHandsLooseBallDirection(
                             playerID: targetPlayerID,
                             playerSquare: targetPlayerSquare,
                             directions: directions

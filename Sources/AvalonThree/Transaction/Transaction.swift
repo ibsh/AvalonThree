@@ -11,7 +11,7 @@ protocol Transaction {
 
     mutating func processInputMessageWrapper(
         _ messageWrapper: InputMessageWrapper
-    ) throws -> Prompt?
+    ) throws -> AddressedPrompt?
 
     var events: [Event] { get set }
 

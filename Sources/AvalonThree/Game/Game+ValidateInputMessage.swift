@@ -10,7 +10,7 @@ import Foundation
 extension Game {
 
     func validate(_ messageWrapper: InputMessageWrapper) throws {
-        guard let previousPrompt else {
+        guard let previousAddressedPrompt else {
             guard messageWrapper.coachID == .home else {
                 throw GameError("Message from wrong coach")
             }
@@ -20,460 +20,460 @@ extension Game {
             return
         }
 
-        guard messageWrapper.coachID == previousPrompt.coachID else {
+        guard messageWrapper.coachID == previousAddressedPrompt.coachID else {
             throw GameError("Message from wrong coach")
         }
 
-        let payload = previousPrompt.payload
+        let prompt = previousAddressedPrompt.prompt
 
         switch messageWrapper.message {
         case .begin:
             throw GameError("Invalid message")
 
         case .selectBoardSpec:
-            guard case .selectBoardSpec = payload else {
+            guard case .selectBoardSpec = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .selectChallengeDeck:
-            guard case .selectChallengeDeck = payload else {
+            guard case .selectChallengeDeck = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .selectRookieBonusRecipient:
-            guard case .selectRookieBonusRecipient = payload else {
+            guard case .selectRookieBonusRecipient = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .selectCoinFlipWinnerTeam:
-            guard case .selectCoinFlipWinnerTeam = payload else {
+            guard case .selectCoinFlipWinnerTeam = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .selectCoinFlipLoserTeam:
-            guard case .selectCoinFlipLoserTeam = payload else {
+            guard case .selectCoinFlipLoserTeam = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .arrangePlayers:
-            guard case .arrangePlayers = payload else {
+            guard case .arrangePlayers = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .declarePlayerAction:
-            guard case .declarePlayerAction = payload else {
+            guard case .declarePlayerAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .declareEmergencyReservesAction:
-            guard case .declareEmergencyReservesAction = payload else {
+            guard case .declareEmergencyReservesAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useRegenerationSkillStandUpAction,
              .declineRegenerationSkillStandUpAction:
-            guard case .eligibleForRegenerationSkillStandUpAction = payload else {
+            guard case .eligibleForRegenerationSkillStandUpAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useJumpUpBonusPlayStandUpAction,
              .declineJumpUpBonusPlayStandUpAction:
-            guard case .eligibleForJumpUpBonusPlayStandUpAction = payload else {
+            guard case .eligibleForJumpUpBonusPlayStandUpAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useReservesBonusPlayReservesAction,
              .declineReservesBonusPlayReservesAction:
-            guard case .eligibleForReservesBonusPlayReservesAction = payload else {
+            guard case .eligibleForReservesBonusPlayReservesAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .runActionUseBlockingPlayBonusPlay,
              .runActionDeclineBlockingPlayBonusPlay:
-            guard case .runActionEligibleForBlockingPlayBonusPlay = payload else {
+            guard case .runActionEligibleForBlockingPlayBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .runActionUseDodgeBonusPlay,
              .runActionDeclineDodgeBonusPlay:
-            guard case .runActionEligibleForDodgeBonusPlay = payload else {
+            guard case .runActionEligibleForDodgeBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .runActionUseSprintBonusPlay,
              .runActionDeclineSprintBonusPlay:
-            guard case .runActionEligibleForSprintBonusPlay = payload else {
+            guard case .runActionEligibleForSprintBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .runActionSelectSquares:
-            guard case .runActionSelectSquares = payload else {
+            guard case .runActionSelectSquares = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .markActionUseInterferenceBonusPlay,
              .markActionDeclineInterferenceBonusPlay:
-            guard case .markActionEligibleForInterferenceBonusPlay = payload else {
+            guard case .markActionEligibleForInterferenceBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .markActionSelectSquares:
-            guard case .markActionSelectSquares = payload else {
+            guard case .markActionSelectSquares = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .passActionUseHailMaryPassBonusPlay,
              .passActionDeclineHailMaryPassBonusPlay:
-            guard case .passActionEligibleForHailMaryPassBonusPlay = payload else {
+            guard case .passActionEligibleForHailMaryPassBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .passActionSelectTarget:
-            guard case .passActionSelectTarget = payload else {
+            guard case .passActionSelectTarget = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .passActionUseAccuratePassBonusPlay,
              .passActionDeclineAccuratePassBonusPlay:
-            guard case .passActionEligibleForAccuratePassBonusPlay = payload else {
+            guard case .passActionEligibleForAccuratePassBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .passActionUseProBonusPlay,
              .passActionDeclineProBonusPlay:
-            guard case .passActionEligibleForProBonusPlay = payload else {
+            guard case .passActionEligibleForProBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .passActionUseRawTalentBonusPlayReroll,
              .passActionDeclineRawTalentBonusPlayReroll:
-            guard case .passActionResultEligibleForRawTalentBonusPlayReroll = payload else {
+            guard case .passActionResultEligibleForRawTalentBonusPlayReroll = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .hurlTeammateActionSelectTeammate:
-            guard case .hurlTeammateActionSelectTeammate = payload else {
+            guard case .hurlTeammateActionSelectTeammate = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .hurlTeammateActionSelectTarget:
-            guard case .hurlTeammateActionSelectTarget = payload else {
+            guard case .hurlTeammateActionSelectTarget = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .hurlTeammateActionUseAccuratePassBonusPlay,
              .hurlTeammateActionDeclineAccuratePassBonusPlay:
-            guard case .hurlTeammateActionEligibleForAccuratePassBonusPlay = payload else {
+            guard case .hurlTeammateActionEligibleForAccuratePassBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .hurlTeammateActionUseProBonusPlay,
              .hurlTeammateActionDeclineProBonusPlay:
-            guard case .hurlTeammateActionEligibleForProBonusPlay = payload else {
+            guard case .hurlTeammateActionEligibleForProBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .hurlTeammateActionUseRawTalentBonusPlayReroll,
              .hurlTeammateActionDeclineRawTalentBonusPlayReroll:
-            guard case .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll = payload else {
+            guard case .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .foulActionSelectTarget:
-            guard case .foulActionSelectTarget = payload else {
+            guard case .foulActionSelectTarget = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionSelectTarget:
-            guard case .blockActionSelectTarget = payload else {
+            guard case .blockActionSelectTarget = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseStepAsideBonusPlaySidestepAction,
              .blockActionDeclineStepAsideBonusPlaySidestepAction:
-            guard case .blockActionEligibleForStepAsideBonusPlaySidestepAction = payload else {
+            guard case .blockActionEligibleForStepAsideBonusPlaySidestepAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseBodyCheckBonusPlay,
              .blockActionDeclineBodyCheckBonusPlay:
-            guard case .blockActionEligibleForBodyCheckBonusPlay = payload else {
+            guard case .blockActionEligibleForBodyCheckBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseTheKidsGotMoxyBonusPlay,
              .blockActionDeclineTheKidsGotMoxyBonusPlay:
-            guard case .blockActionEligibleForTheKidsGotMoxyBonusPlay = payload else {
+            guard case .blockActionEligibleForTheKidsGotMoxyBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseOffensiveSpecialistSkillReroll,
              .blockActionDeclineOffensiveSpecialistSkillReroll:
-            guard case .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll = payload else {
+            guard case .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseRawTalentBonusPlayRerollForBlockDieResults,
              .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults:
-            guard case .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll = payload else {
+            guard case .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionSelectResult:
-            guard case .blockActionSelectResult = payload else {
+            guard case .blockActionSelectResult = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionSelectSafeHandsLooseBallDirection:
-            guard case .blockActionSelectSafeHandsLooseBallDirection = payload else {
+            guard case .blockActionSelectSafeHandsLooseBallDirection = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseFollowUp,
              .blockActionDeclineFollowUp:
-            guard case .blockActionEligibleForFollowUp = payload else {
+            guard case .blockActionEligibleForFollowUp = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseBladedKnuckleDustersBonusPlay,
              .blockActionDeclineBladedKnuckleDustersBonusPlay:
-            guard case .blockActionEligibleForBladedKnuckleDustersBonusPlay = payload else {
+            guard case .blockActionEligibleForBladedKnuckleDustersBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseAbsolutelyNailsBonusPlay,
              .blockActionDeclineAbsolutelyNailsBonusPlay:
-            guard case .blockActionEligibleForAbsolutelyNailsBonusPlay = payload else {
+            guard case .blockActionEligibleForAbsolutelyNailsBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseToughEnoughBonusPlay,
              .blockActionDeclineToughEnoughBonusPlay:
-            guard case .blockActionEligibleForToughEnoughBonusPlay = payload else {
+            guard case .blockActionEligibleForToughEnoughBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseProBonusPlay,
              .blockActionDeclineProBonusPlay:
-            guard case .blockActionEligibleForProBonusPlay = payload else {
+            guard case .blockActionEligibleForProBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseAbsoluteCarnageBonusPlay,
              .blockActionDeclineAbsoluteCarnageBonusPlay:
-            guard case .blockActionEligibleForAbsoluteCarnageBonusPlay = payload else {
+            guard case .blockActionEligibleForAbsoluteCarnageBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .blockActionUseRawTalentBonusPlayRerollForArmourResult,
              .blockActionDeclineRawTalentBonusPlayRerollForArmourResult:
-            guard case .blockActionArmourResultEligibleForRawTalentBonusPlayReroll = payload else {
+            guard case .blockActionArmourResultEligibleForRawTalentBonusPlayReroll = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .sidestepActionSelectSquare:
-            guard case .sidestepActionSelectSquare = payload else {
+            guard case .sidestepActionSelectSquare = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .reservesActionSelectSquare:
-            guard case .reservesActionSelectSquare = payload else {
+            guard case .reservesActionSelectSquare = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useGetInThereBonusPlayReservesAction,
              .declineGetInThereBonusPlayReservesAction:
-            guard case .eligibleForGetInThereBonusPlayReservesAction = payload else {
+            guard case .eligibleForGetInThereBonusPlayReservesAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useFrenziedSkillBlockAction,
              .declineFrenziedSkillBlockAction:
-            guard case .eligibleForFrenziedSkillBlockAction = payload else {
+            guard case .eligibleForFrenziedSkillBlockAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useShoulderChargeBonusPlayBlockAction,
              .declineShoulderChargeBonusPlayBlockAction:
-            guard case .eligibleForShoulderChargeBonusPlayBlockAction = payload else {
+            guard case .eligibleForShoulderChargeBonusPlayBlockAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useDivingTackleBonusPlayBlockAction,
              .declineDivingTackleBonusPlayBlockAction:
-            guard case .eligibleForDivingTackleBonusPlayBlockAction = payload else {
+            guard case .eligibleForDivingTackleBonusPlayBlockAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useHeadbuttSkillBlockAction,
              .declineHeadbuttSkillBlockAction:
-            guard case .eligibleForHeadbuttSkillBlockAction = payload else {
+            guard case .eligibleForHeadbuttSkillBlockAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useBlitzBonusPlayBlockAction,
              .declineBlitzBonusPlayBlockAction:
-            guard case .eligibleForBlitzBonusPlayBlockAction = payload else {
+            guard case .eligibleForBlitzBonusPlayBlockAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useComboPlayBonusPlayFreeAction,
              .declineComboPlayBonusPlayFreeAction:
-            guard case .eligibleForComboPlayBonusPlayFreeAction = payload else {
+            guard case .eligibleForComboPlayBonusPlayFreeAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useDistractionBonusPlaySidestepAction,
              .declineDistractionBonusPlaySidestepAction:
-            guard case .eligibleForDistractionBonusPlaySidestepAction = payload else {
+            guard case .eligibleForDistractionBonusPlaySidestepAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useInterventionBonusPlayMarkAction,
              .declineInterventionBonusPlayMarkAction:
-            guard case .eligibleForInterventionBonusPlayMarkAction = payload else {
+            guard case .eligibleForInterventionBonusPlayMarkAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .claimObjective,
              .declineToClaimObjective:
-            guard case .earnedObjective = payload else {
+            guard case .earnedObjective = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useReadyToGoBonusPlayRunAction,
              .declineReadyToGoBonusPlayRunAction:
-            guard case .eligibleForReadyToGoBonusPlayRunAction = payload else {
+            guard case .eligibleForReadyToGoBonusPlayRunAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useReadyToGoBonusPlaySidestepAction,
              .declineReadyToGoBonusPlaySidestepAction:
-            guard case .eligibleForReadyToGoBonusPlaySidestepAction = payload else {
+            guard case .eligibleForReadyToGoBonusPlaySidestepAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useReadyToGoBonusPlayStandUpAction,
              .declineReadyToGoBonusPlayStandUpAction:
-            guard case .eligibleForReadyToGoBonusPlayStandUpAction = payload else {
+            guard case .eligibleForReadyToGoBonusPlayStandUpAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useYourTimeToShineBonusPlayReservesAction,
              .declineYourTimeToShineBonusPlayReservesAction:
-            guard case .eligibleForYourTimeToShineBonusPlayReservesAction = payload else {
+            guard case .eligibleForYourTimeToShineBonusPlayReservesAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useYourTimeToShineBonusPlayRunAction,
              .declineYourTimeToShineBonusPlayRunAction:
-            guard case .eligibleForYourTimeToShineBonusPlayRunAction = payload else {
+            guard case .eligibleForYourTimeToShineBonusPlayRunAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useCatchersInstinctsSkillRunAction,
              .declineCatchersInstinctsSkillRunAction:
-            guard case .eligibleForCatchersInstinctsSkillRunAction = payload else {
+            guard case .eligibleForCatchersInstinctsSkillRunAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useInspirationBonusPlayFreeAction,
              .declineInspirationBonusPlayFreeAction:
-            guard case .eligibleForInspirationBonusPlayFreeAction = payload else {
+            guard case .eligibleForInspirationBonusPlayFreeAction = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useShadowBonusPlayExtraMove,
              .declineShadowBonusPlayExtraMove:
-            guard case .eligibleForShadowBonusPlayExtraMove = payload else {
+            guard case .eligibleForShadowBonusPlayExtraMove = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .selectCardsToDiscardFromHand:
-            guard case .selectCardsToDiscardFromHand = payload else {
+            guard case .selectCardsToDiscardFromHand = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .useDefensivePlayBonusPlay,
              .declineDefensivePlayBonusPlay:
-            guard case .eligibleForDefensivePlayBonusPlay = payload else {
+            guard case .eligibleForDefensivePlayBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .usePassingPlayBonusPlay,
              .declinePassingPlayBonusPlay:
-            guard case .eligibleForPassingPlayBonusPlay = payload else {
+            guard case .eligibleForPassingPlayBonusPlay = prompt else {
                 throw GameError("Invalid message")
             }
             return
 
         case .selectObjectiveToDiscard:
-            guard case .selectObjectiveToDiscard = payload else {
+            guard case .selectObjectiveToDiscard = prompt else {
                 throw GameError("Invalid message")
             }
             return

@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func beginTurn() throws -> Prompt? {
+    mutating func beginTurn() throws -> AddressedPrompt? {
 
         var turnContext = try history.latestTurnContext()
 
@@ -62,9 +62,9 @@ extension InGameTransaction {
 
         let validDeclarations = try validDeclarations()
 
-        return try Prompt(
+        return try AddressedPrompt(
             coachID: turnContext.coachID,
-            payload: .declarePlayerAction(
+            prompt: .declarePlayerAction(
                 validDeclarations: validDeclarations.toPromptDeclarations(table: table),
                 playerActionsLeft: playerActionsLeft()
             )
@@ -73,7 +73,7 @@ extension InGameTransaction {
 
     private mutating func checkForDefensivePlayBonusPlay(
         turnContext: TurnContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let historyEntry = HistoryEntry.eligibleForDefensivePlayBonusPlay
 
@@ -91,15 +91,15 @@ extension InGameTransaction {
 
         history.append(historyEntry)
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: turnContext.coachID,
-            payload: .eligibleForDefensivePlayBonusPlay
+            prompt: .eligibleForDefensivePlayBonusPlay
         )
     }
 
     private mutating func checkForPassingPlayBonusPlay(
         turnContext: TurnContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let historyEntry = HistoryEntry.eligibleForPassingPlayBonusPlay
 
@@ -117,15 +117,15 @@ extension InGameTransaction {
 
         history.append(historyEntry)
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: turnContext.coachID,
-            payload: .eligibleForPassingPlayBonusPlay
+            prompt: .eligibleForPassingPlayBonusPlay
         )
     }
 
     private mutating func checkForDiscardObjectives(
         turnContext: TurnContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         if turnContext.isFirstOrSecond {
             return nil
@@ -171,9 +171,9 @@ extension InGameTransaction {
             return nil
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: turnContext.coachID,
-            payload: .selectObjectiveToDiscard(
+            prompt: .selectObjectiveToDiscard(
                 objectives: objectives.mapValues { $0.challenge }
             )
         )
@@ -247,7 +247,7 @@ extension InGameTransaction {
 
     private mutating func checkForEmergencyReserves(
         turnContext: TurnContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let historyEntry = HistoryEntry.declareEmergencyReservesAction
 
@@ -278,9 +278,9 @@ extension InGameTransaction {
 
         if validPlayers.count >= table.teamID(coachID: turnContext.coachID).spec.emergencyReserves {
             history.append(historyEntry)
-            return Prompt(
+            return AddressedPrompt(
                 coachID: turnContext.coachID,
-                payload: .declareEmergencyReservesAction(validPlayers: validPlayers)
+                prompt: .declareEmergencyReservesAction(validPlayers: validPlayers)
             )
         }
 
@@ -289,7 +289,7 @@ extension InGameTransaction {
 
     private mutating func checkForGetInThereBonusPlay(
         turnContext: TurnContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         if let prompt = try checkForGetInThereBonusPlay(
             turnContext: turnContext,
@@ -311,7 +311,7 @@ extension InGameTransaction {
     private mutating func checkForGetInThereBonusPlay(
         turnContext: TurnContext,
         coachID: CoachID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let bonusPlay = BonusPlay.getInThere
 
@@ -341,9 +341,9 @@ extension InGameTransaction {
 
             history.append(historyEntry)
 
-            return Prompt(
+            return AddressedPrompt(
                 coachID: coachID,
-                payload: .eligibleForGetInThereBonusPlayReservesAction(playerID: playerID)
+                prompt: .eligibleForGetInThereBonusPlayReservesAction(playerID: playerID)
             )
         }
 
@@ -352,7 +352,7 @@ extension InGameTransaction {
 
     private mutating func checkForRegenerationSkill(
         turnContext: TurnContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         for proneRegeneratingPlayer in table
             .players(coachID: turnContext.coachID)
@@ -376,9 +376,9 @@ extension InGameTransaction {
                 throw GameError("Player is in reserves")
             }
 
-            return Prompt(
+            return AddressedPrompt(
                 coachID: proneRegeneratingPlayer.coachID,
-                payload: .eligibleForRegenerationSkillStandUpAction(
+                prompt: .eligibleForRegenerationSkillStandUpAction(
                     playerID: proneRegeneratingPlayer.id,
                     playerSquare: playerSquare
                 )
@@ -390,7 +390,7 @@ extension InGameTransaction {
 
     private mutating func checkForJumpUpBonusPlay(
         turnContext: TurnContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let historyEntry = HistoryEntry.eligibleForJumpUpBonusPlayStandUpAction
 
@@ -421,9 +421,9 @@ extension InGameTransaction {
 
         history.append(historyEntry)
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: turnContext.coachID,
-            payload: .eligibleForJumpUpBonusPlayStandUpAction(
+            prompt: .eligibleForJumpUpBonusPlayStandUpAction(
                 validPlayers: try players.reduce([:]) { partialResult, player in
                     guard let playerSquare = player.square else {
                         throw GameError("Player is in reserves")
@@ -439,7 +439,7 @@ extension InGameTransaction {
 
     private mutating func checkForReservesBonusPlay(
         turnContext: TurnContext
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let historyEntry = HistoryEntry.eligibleForReservesBonusPlayReservesAction
 
@@ -471,9 +471,9 @@ extension InGameTransaction {
 
         history.append(historyEntry)
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: turnContext.coachID,
-            payload: .eligibleForReservesBonusPlayReservesAction(validPlayers: playerIDs)
+            prompt: .eligibleForReservesBonusPlayReservesAction(validPlayers: playerIDs)
         )
     }
 }

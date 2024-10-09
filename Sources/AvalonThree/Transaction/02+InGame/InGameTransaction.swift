@@ -11,7 +11,7 @@ struct InGameTransaction: Transaction {
 
     var table: Table
     var history: [HistoryEntry]
-    let previousPromptPayload: PromptPayload
+    let previousPrompt: Prompt
     let randomizers: Randomizers
 
     var events = [Event]()
@@ -19,12 +19,12 @@ struct InGameTransaction: Transaction {
     init(
         table: Table,
         history: [HistoryEntry],
-        previousPromptPayload: PromptPayload,
+        previousPrompt: Prompt,
         randomizers: Randomizers
     ) {
         self.table = table
         self.history = history
-        self.previousPromptPayload = previousPromptPayload
+        self.previousPrompt = previousPrompt
         self.randomizers = randomizers
     }
 }

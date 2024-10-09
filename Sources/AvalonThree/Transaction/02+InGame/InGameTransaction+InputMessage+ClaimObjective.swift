@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func claimObjective(
         objectiveIndex: Int
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard let objective = try table.objectives.getObjective(index: objectiveIndex) else {
             throw GameError("No objective")

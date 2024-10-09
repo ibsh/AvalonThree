@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionUseFollowUp() throws -> Prompt? {
+    mutating func blockActionUseFollowUp() throws -> AddressedPrompt? {
         return try blockActionResolveFollowUp(followUp: true)
     }
 
-    mutating func blockActionDeclineFollowUp() throws -> Prompt? {
+    mutating func blockActionDeclineFollowUp() throws -> AddressedPrompt? {
         return try blockActionResolveFollowUp(followUp: false)
     }
 
     private mutating func blockActionResolveFollowUp(
         followUp: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,

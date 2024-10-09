@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func declineToClaimObjective() throws -> Prompt? {
+    mutating func declineToClaimObjective() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 

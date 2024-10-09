@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func resolveHurlTeammateAction() throws -> Prompt? {
+    mutating func resolveHurlTeammateAction() throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,

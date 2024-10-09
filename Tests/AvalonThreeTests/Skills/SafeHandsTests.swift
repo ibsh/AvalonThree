@@ -64,9 +64,9 @@ struct SafeHandsTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -75,7 +75,7 @@ struct SafeHandsTests {
 
         // Declare block
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -101,9 +101,9 @@ struct SafeHandsTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .blockActionSelectSafeHandsLooseBallDirection(
+                prompt: .blockActionSelectSafeHandsLooseBallDirection(
                     playerID: pl(.home, 0),
                     playerSquare: sq(3, 4),
                     directions: [
@@ -120,7 +120,7 @@ struct SafeHandsTests {
 
         // Choose loose ball direction
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .blockActionSelectSafeHandsLooseBallDirection(direction: .east)
@@ -149,7 +149,7 @@ struct SafeHandsTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 }

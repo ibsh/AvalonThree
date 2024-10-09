@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useJumpUpBonusPlayStandUpAction(playerID: PlayerID) throws -> Prompt? {
+    mutating func useJumpUpBonusPlayStandUpAction(playerID: PlayerID) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -36,7 +36,7 @@ extension InGameTransaction {
         )
     }
 
-    mutating func declineJumpUpBonusPlayStandUpAction() throws -> Prompt? {
+    mutating func declineJumpUpBonusPlayStandUpAction() throws -> AddressedPrompt? {
         return try endAction()
     }
 }

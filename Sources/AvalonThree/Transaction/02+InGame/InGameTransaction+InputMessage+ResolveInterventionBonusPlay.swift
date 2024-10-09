@@ -11,13 +11,13 @@ extension InGameTransaction {
 
     mutating func useInterventionBonusPlayMarkAction(
         playerID: PlayerID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
         return try resolveInterventionBonusPlayMarkAction(
             use: playerID
         )
     }
 
-    mutating func declineInterventionBonusPlayMarkAction() throws -> Prompt? {
+    mutating func declineInterventionBonusPlayMarkAction() throws -> AddressedPrompt? {
         return try resolveInterventionBonusPlayMarkAction(
             use: nil
         )
@@ -25,7 +25,7 @@ extension InGameTransaction {
 
     private mutating func resolveInterventionBonusPlayMarkAction(
         use: PlayerID?
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
         let coachID = turnContext.coachID.inverse

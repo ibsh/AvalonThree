@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionTargetPlayerInjured() throws -> Prompt? {
+    mutating func blockActionTargetPlayerInjured() throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,

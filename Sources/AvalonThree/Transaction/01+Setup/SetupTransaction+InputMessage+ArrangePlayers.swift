@@ -12,7 +12,7 @@ extension SetupTransaction {
     mutating func arrangePlayers(
         playerPositions: [Square],
         coachID: CoachID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard let coinFlipLoserCoachID else {
             throw GameError("No coin flip")
@@ -27,7 +27,7 @@ extension SetupTransaction {
 
     private mutating func coinFlipLoserArrangedPlayers(
         playerPositions: [Square]
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard let coinFlipLoserCoachID else {
             throw GameError("No coin flip")
@@ -61,9 +61,9 @@ extension SetupTransaction {
         }
 
         let coinFlipWinnerCoachID = coinFlipLoserCoachID.inverse
-        return Prompt(
+        return AddressedPrompt(
             coachID: coinFlipWinnerCoachID,
-            payload: .arrangePlayers(
+            prompt: .arrangePlayers(
                 playerIDs: table
                     .coinFlipWinnerTeamID
                     .spec
@@ -79,7 +79,7 @@ extension SetupTransaction {
 
     private mutating func coinFlipWinnerArrangedPlayers(
         playerPositions: [Square]
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard let coinFlipWinnerCoachID else {
             throw GameError("No coin flip")

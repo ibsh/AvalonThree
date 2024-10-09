@@ -65,9 +65,9 @@ struct OffensiveSpecialistTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -76,7 +76,7 @@ struct OffensiveSpecialistTests {
 
         // Declare block
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -97,15 +97,15 @@ struct OffensiveSpecialistTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.coachID == .away)
         #expect(
-            latestPrompt?.payload.case ==
+            latestAddressedPrompt?.prompt.case ==
                 .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll
         )
 
         // Choose block result rather than reroll
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineOffensiveSpecialistSkillReroll(result: .kerrunch)
@@ -125,8 +125,8 @@ struct OffensiveSpecialistTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
     @Test func used() async throws {
@@ -184,9 +184,9 @@ struct OffensiveSpecialistTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -195,7 +195,7 @@ struct OffensiveSpecialistTests {
 
         // Declare block
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -216,15 +216,15 @@ struct OffensiveSpecialistTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.coachID == .away)
         #expect(
-            latestPrompt?.payload.case ==
+            latestAddressedPrompt?.prompt.case ==
                 .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll
         )
 
         // Choose to reroll
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
@@ -239,12 +239,12 @@ struct OffensiveSpecialistTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .blockActionSelectResult)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .blockActionSelectResult)
 
         // Choose block result
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionSelectResult(result: .smash)
@@ -262,7 +262,7 @@ struct OffensiveSpecialistTests {
             ]
         )
 
-        #expect(latestPrompt?.coachID == .away)
-        #expect(latestPrompt?.payload.case == .declarePlayerAction)
+        #expect(latestAddressedPrompt?.coachID == .away)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 }

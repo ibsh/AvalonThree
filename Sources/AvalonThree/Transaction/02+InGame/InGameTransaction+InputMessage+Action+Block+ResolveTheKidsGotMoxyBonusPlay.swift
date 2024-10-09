@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     private var bonusPlay: BonusPlay { .theKidsGotMoxy }
 
-    mutating func blockActionUseTheKidsGotMoxyBonusPlay() throws -> Prompt? {
+    mutating func blockActionUseTheKidsGotMoxyBonusPlay() throws -> AddressedPrompt? {
 
         _ = try useBonusPlay(
             bonusPlay: bonusPlay,
@@ -23,7 +23,7 @@ extension InGameTransaction {
         return try blockActionPrepareToRollDice()
     }
 
-    mutating func blockActionDeclineTheKidsGotMoxyBonusPlay() throws -> Prompt? {
+    mutating func blockActionDeclineTheKidsGotMoxyBonusPlay() throws -> AddressedPrompt? {
         return try blockActionPrepareToRollDice()
     }
 }

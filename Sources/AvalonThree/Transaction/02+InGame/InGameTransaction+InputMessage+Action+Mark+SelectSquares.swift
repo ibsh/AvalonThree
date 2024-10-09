@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func markActionSelectSquares(
         squares: [Square]
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
         

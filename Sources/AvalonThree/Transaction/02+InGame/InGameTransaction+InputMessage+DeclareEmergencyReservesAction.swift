@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func declareEmergencyReservesAction(
         playerID: PlayerID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             try !history.latestTurnContext().actionContexts().contains(

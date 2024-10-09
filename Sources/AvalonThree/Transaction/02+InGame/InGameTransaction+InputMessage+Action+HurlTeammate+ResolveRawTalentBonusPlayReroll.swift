@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     private var bonusPlay: BonusPlay { .rawTalent }
 
-    mutating func hurlTeammateActionUseRawTalentBonusPlayReroll() throws -> Prompt? {
+    mutating func hurlTeammateActionUseRawTalentBonusPlayReroll() throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
             !actionContext.isFinished
@@ -25,7 +25,7 @@ extension InGameTransaction {
         )
     }
 
-    mutating func hurlTeammateActionDeclineRawTalentBonusPlayReroll() throws -> Prompt? {
+    mutating func hurlTeammateActionDeclineRawTalentBonusPlayReroll() throws -> AddressedPrompt? {
         return try resolveHurlTeammateAction()
     }
 }

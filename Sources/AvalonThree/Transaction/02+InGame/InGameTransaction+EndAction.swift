@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func endAction() throws -> Prompt? {
+    mutating func endAction() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
         let actionContexts = try turnContext.actionContexts()
@@ -130,9 +130,9 @@ extension InGameTransaction {
         if playerActionsTaken < TableConstants.maxPlayerActionsPerTurn,
             !validDeclarations.isEmpty
         {
-            return try Prompt(
+            return try AddressedPrompt(
                 coachID: turnContext.coachID,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: validDeclarations.toPromptDeclarations(table: table),
                     playerActionsLeft: playerActionsLeft()
                 )

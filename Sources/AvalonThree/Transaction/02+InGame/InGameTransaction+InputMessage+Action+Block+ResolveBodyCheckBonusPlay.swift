@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     private var bonusPlay: BonusPlay { .bodyCheck }
 
-    mutating func blockActionUseBodyCheckBonusPlay() throws -> Prompt? {
+    mutating func blockActionUseBodyCheckBonusPlay() throws -> AddressedPrompt? {
 
         let coachID = try history.latestTurnContext().coachID
 
@@ -27,7 +27,7 @@ extension InGameTransaction {
         return try blockActionSelectResult(result: .kerrunch)
     }
 
-    mutating func blockActionDeclineBodyCheckBonusPlay() throws -> Prompt? {
+    mutating func blockActionDeclineBodyCheckBonusPlay() throws -> AddressedPrompt? {
         return try blockActionPrepareToRollDice()
     }
 }

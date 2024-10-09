@@ -10,20 +10,20 @@ import Foundation
 public struct Game: Sendable {
 
     var phase: Phase
-    var previousPrompt: Prompt?
+    var previousAddressedPrompt: AddressedPrompt?
 
     init(
         phase: Phase,
-        previousPrompt: Prompt?
+        previousAddressedPrompt: AddressedPrompt?
     ) {
         self.phase = phase
-        self.previousPrompt = previousPrompt
+        self.previousAddressedPrompt = previousAddressedPrompt
     }
 
     public init() {
         self.init(
             phase: .config(Config()),
-            previousPrompt: nil
+            previousAddressedPrompt: nil
         )
     }
 }

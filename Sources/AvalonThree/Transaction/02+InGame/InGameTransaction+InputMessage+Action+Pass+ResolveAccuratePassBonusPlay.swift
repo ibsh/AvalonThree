@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func passActionUseAccuratePassBonusPlay() throws -> Prompt? {
+    mutating func passActionUseAccuratePassBonusPlay() throws -> AddressedPrompt? {
         return try passActionResolveAccuratePassBonusPlay(use: true)
     }
 
-    mutating func passActionDeclineAccuratePassBonusPlay() throws -> Prompt? {
+    mutating func passActionDeclineAccuratePassBonusPlay() throws -> AddressedPrompt? {
         return try passActionResolveAccuratePassBonusPlay(use: false)
     }
 
     private mutating func passActionResolveAccuratePassBonusPlay(
         use: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,

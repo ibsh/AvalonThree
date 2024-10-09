@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionUseRawTalentBonusPlayRerollForArmourResult() throws -> Prompt? {
+    mutating func blockActionUseRawTalentBonusPlayRerollForArmourResult() throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
             !actionContext.isFinished,
@@ -29,7 +29,7 @@ extension InGameTransaction {
         )
     }
 
-    mutating func blockActionDeclineRawTalentBonusPlayRerollForArmourResult() throws -> Prompt? {
+    mutating func blockActionDeclineRawTalentBonusPlayRerollForArmourResult() throws -> AddressedPrompt? {
         return try blockActionTargetPlayerInjured()
     }
 
@@ -43,7 +43,7 @@ extension InGameTransaction {
     mutating func useRawTalentBonusPlay(
         coachID: CoachID,
         action: RawTalentAction
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
         let bonusPlay = BonusPlay.rawTalent
         let card = try useBonusPlay(bonusPlay: bonusPlay, coachID: coachID)
 

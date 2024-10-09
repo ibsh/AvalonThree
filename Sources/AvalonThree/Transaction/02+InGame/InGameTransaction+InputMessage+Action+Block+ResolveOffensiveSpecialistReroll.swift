@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionUseOffensiveSpecialistSkillReroll() throws -> Prompt? {
+    mutating func blockActionUseOffensiveSpecialistSkillReroll() throws -> AddressedPrompt? {
         guard let actionContext = try history.latestTurnContext().actionContexts().last else {
             throw GameError("No action in history")
         }
@@ -30,7 +30,7 @@ extension InGameTransaction {
 
     mutating func blockActionDeclineOffensiveSpecialistSkillReroll(
         result: BlockDieResult
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
             !actionContext.isFinished

@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func endTurn() throws -> Prompt? {
+    mutating func endTurn() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -52,9 +52,9 @@ extension InGameTransaction {
 
         let hand = table.getHand(coachID: oldTurnCoachID)
         if hand.count > TableConstants.maxHandCount {
-            return Prompt(
+            return AddressedPrompt(
                 coachID: oldTurnCoachID,
-                payload: .selectCardsToDiscardFromHand(
+                prompt: .selectCardsToDiscardFromHand(
                     cards: hand,
                     count: hand.count - TableConstants.maxHandCount
                 )

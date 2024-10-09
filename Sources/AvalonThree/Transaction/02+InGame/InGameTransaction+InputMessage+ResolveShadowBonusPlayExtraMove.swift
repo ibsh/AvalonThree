@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useShadowBonusPlayExtraMove(playerID: PlayerID) throws -> Prompt? {
+    mutating func useShadowBonusPlayExtraMove(playerID: PlayerID) throws -> AddressedPrompt? {
         return try resolveShadowBonusPlayExtraMove(use: playerID)
     }
 
-    mutating func declineShadowBonusPlayExtraMove() throws -> Prompt? {
+    mutating func declineShadowBonusPlayExtraMove() throws -> AddressedPrompt? {
         return try resolveShadowBonusPlayExtraMove(use: nil)
     }
 
     private mutating func resolveShadowBonusPlayExtraMove(
         use: PlayerID?
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 

@@ -95,9 +95,9 @@ struct RefreshObjectivesTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -106,7 +106,7 @@ struct RefreshObjectivesTests {
 
         // Declare mark
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -133,9 +133,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .markActionSelectSquares(
+                prompt: .markActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
@@ -180,7 +180,7 @@ struct RefreshObjectivesTests {
 
         // Select mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSelectSquares(squares: [
@@ -203,9 +203,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -228,7 +228,7 @@ struct RefreshObjectivesTests {
 
         // Declare block
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -282,9 +282,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .earnedObjective(
+                prompt: .earnedObjective(
                     objectives: [
                         0: .takeThemDown,
                     ]
@@ -294,7 +294,7 @@ struct RefreshObjectivesTests {
 
         // Claim objective
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .claimObjective(objectiveIndex: 0)
@@ -330,9 +330,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -355,7 +355,7 @@ struct RefreshObjectivesTests {
 
         // Declare foul
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -409,9 +409,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.home, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -554,9 +554,9 @@ struct RefreshObjectivesTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -565,7 +565,7 @@ struct RefreshObjectivesTests {
 
         // Declare mark
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -592,9 +592,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .markActionSelectSquares(
+                prompt: .markActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
@@ -639,7 +639,7 @@ struct RefreshObjectivesTests {
 
         // Select mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSelectSquares(squares: [
@@ -662,9 +662,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -687,7 +687,7 @@ struct RefreshObjectivesTests {
 
         // Declare block
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -741,9 +741,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -766,7 +766,7 @@ struct RefreshObjectivesTests {
 
         // Declare foul
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -810,9 +810,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .selectObjectiveToDiscard(
+                prompt: .selectObjectiveToDiscard(
                     objectives: [
                         1: .spreadOut,
                         2: .showNoFear,
@@ -824,7 +824,7 @@ struct RefreshObjectivesTests {
         // Try to preempt the prompt by declaring an action instead
 
         #expect(throws: GameError("Invalid message")) {
-            (latestEvents, latestPrompt) = try game.process(
+            (latestEvents, latestAddressedPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .home,
                     message: .declarePlayerAction(
@@ -841,7 +841,7 @@ struct RefreshObjectivesTests {
         // Try to discard an invalid action
 
         #expect(throws: GameError("Invalid objective ID")) {
-            (latestEvents, latestPrompt) = try game.process(
+            (latestEvents, latestAddressedPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .home,
                     message: .selectObjectiveToDiscard(objectiveIndex: 0)
@@ -851,7 +851,7 @@ struct RefreshObjectivesTests {
 
         // Choose objective to discard
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .selectObjectiveToDiscard(objectiveIndex: 1)
@@ -892,9 +892,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.home, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -1036,9 +1036,9 @@ struct RefreshObjectivesTests {
                     ),
                 ]
             ),
-            previousPrompt: Prompt(
+            previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [:],
                     playerActionsLeft: 3
                 )
@@ -1047,7 +1047,7 @@ struct RefreshObjectivesTests {
 
         // Declare mark
 
-        var (latestEvents, latestPrompt) = try game.process(
+        var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1074,9 +1074,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .markActionSelectSquares(
+                prompt: .markActionSelectSquares(
                     playerID: pl(.away, 0),
                     playerSquare: sq(5, 5),
                     validSquares: ValidMoveSquares(
@@ -1121,7 +1121,7 @@ struct RefreshObjectivesTests {
 
         // Select mark
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .markActionSelectSquares(squares: [
@@ -1144,9 +1144,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -1169,7 +1169,7 @@ struct RefreshObjectivesTests {
 
         // Declare block
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1223,9 +1223,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.away, 0): PromptValidDeclaringPlayer(
                             declarations: [
@@ -1248,7 +1248,7 @@ struct RefreshObjectivesTests {
 
         // Declare foul
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
@@ -1292,9 +1292,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .selectObjectiveToDiscard(
+                prompt: .selectObjectiveToDiscard(
                     objectives: [
                         0: .showboatForTheCrowd,
                         1: .spreadOut,
@@ -1307,7 +1307,7 @@ struct RefreshObjectivesTests {
         // Try to preempt the prompt by declaring an action instead
 
         #expect(throws: GameError("Invalid message")) {
-            (latestEvents, latestPrompt) = try game.process(
+            (latestEvents, latestAddressedPrompt) = try game.process(
                 InputMessageWrapper(
                     coachID: .home,
                     message: .declarePlayerAction(
@@ -1323,7 +1323,7 @@ struct RefreshObjectivesTests {
 
         // Choose objective to discard
 
-        (latestEvents, latestPrompt) = try game.process(
+        (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
                 message: .selectObjectiveToDiscard(objectiveIndex: 1)
@@ -1358,9 +1358,9 @@ struct RefreshObjectivesTests {
         )
 
         #expect(
-            latestPrompt == Prompt(
+            latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                payload: .declarePlayerAction(
+                prompt: .declarePlayerAction(
                     validDeclarations: [
                         pl(.home, 0): PromptValidDeclaringPlayer(
                             declarations: [

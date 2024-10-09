@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func hurlTeammateActionUseProBonusPlay() throws -> Prompt? {
+    mutating func hurlTeammateActionUseProBonusPlay() throws -> AddressedPrompt? {
         return try hurlTeammateActionResolvedProBonusPlay(use: true)
     }
 
-    mutating func hurlTeammateActionDeclineProBonusPlay() throws -> Prompt? {
+    mutating func hurlTeammateActionDeclineProBonusPlay() throws -> AddressedPrompt? {
         return try hurlTeammateActionResolvedProBonusPlay(use: false)
     }
 
     private mutating func hurlTeammateActionResolvedProBonusPlay(
         use: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,

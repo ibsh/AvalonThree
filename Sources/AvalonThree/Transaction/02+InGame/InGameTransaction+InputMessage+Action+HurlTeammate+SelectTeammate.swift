@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     mutating func hurlTeammateActionSelectTeammate(
         teammate teammateID: PlayerID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
@@ -85,9 +85,9 @@ extension InGameTransaction {
         history.append(.hurlTeammateTeammate(teammateID))
         history.append(.hurlTeammateValidTargets(validTargets))
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: actionContext.coachID,
-            payload: .hurlTeammateActionSelectTarget(
+            prompt: .hurlTeammateActionSelectTarget(
                 playerID: actionContext.playerID,
                 playerSquare: playerSquare,
                 validTargets: validTargets

@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionRollForArmour() throws -> Prompt? {
+    mutating func blockActionRollForArmour() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -68,9 +68,9 @@ extension InGameTransaction {
             )
         {
             history.append(.eligibleForBladedKnuckleDustersBonusPlay)
-            return Prompt(
+            return AddressedPrompt(
                 coachID: actionContext.coachID,
-                payload: .blockActionEligibleForBladedKnuckleDustersBonusPlay(
+                prompt: .blockActionEligibleForBladedKnuckleDustersBonusPlay(
                     playerID: actionContext.playerID,
                     playerSquare: playerSquare
                 )
@@ -87,9 +87,9 @@ extension InGameTransaction {
             )
         {
             history.append(.eligibleForAbsolutelyNailsBonusPlay)
-            return Prompt(
+            return AddressedPrompt(
                 coachID: targetPlayerID.coachID,
-                payload: .blockActionEligibleForAbsolutelyNailsBonusPlay(
+                prompt: .blockActionEligibleForAbsolutelyNailsBonusPlay(
                     playerID: targetPlayerID,
                     playerSquare: targetPlayerSquare
                 )
@@ -109,9 +109,9 @@ extension InGameTransaction {
             )
         {
             history.append(.eligibleForToughEnoughBonusPlay)
-            return Prompt(
+            return AddressedPrompt(
                 coachID: targetPlayerID.coachID,
-                payload: .blockActionEligibleForToughEnoughBonusPlay(
+                prompt: .blockActionEligibleForToughEnoughBonusPlay(
                     playerID: targetPlayerID,
                     playerSquare: targetPlayerSquare
                 )
@@ -132,9 +132,9 @@ extension InGameTransaction {
         {
             history.append(.blockActionEligibleForProBonusPlay)
 
-            return Prompt(
+            return AddressedPrompt(
                 coachID: targetPlayerID.coachID,
-                payload: .blockActionEligibleForProBonusPlay(
+                prompt: .blockActionEligibleForProBonusPlay(
                     playerID: targetPlayerID,
                     playerSquare: targetPlayerSquare
                 )
@@ -154,9 +154,9 @@ extension InGameTransaction {
             )
         {
             history.append(.eligibleForAbsoluteCarnageBonusPlay)
-            return Prompt(
+            return AddressedPrompt(
                 coachID: actionContext.coachID,
-                payload: .blockActionEligibleForAbsoluteCarnageBonusPlay(
+                prompt: .blockActionEligibleForAbsoluteCarnageBonusPlay(
                     playerID: actionContext.playerID,
                     playerSquare: playerSquare
                 )
@@ -249,9 +249,9 @@ extension InGameTransaction {
                 )
             {
                 history.append(.armourResultEligibleForRawTalentBonusPlayReroll)
-                return Prompt(
+                return AddressedPrompt(
                     coachID: targetPlayerID.coachID,
-                    payload: .blockActionArmourResultEligibleForRawTalentBonusPlayReroll(
+                    prompt: .blockActionArmourResultEligibleForRawTalentBonusPlayReroll(
                         playerID: targetPlayerID,
                         playerSquare: playerSquare,
                         result: modifiedRoll

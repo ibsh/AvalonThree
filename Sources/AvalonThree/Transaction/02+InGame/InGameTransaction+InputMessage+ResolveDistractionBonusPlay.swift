@@ -11,13 +11,13 @@ extension InGameTransaction {
 
     mutating func useDistractionBonusPlaySidestepAction(
         playerID: PlayerID
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
         return try resolveDistractionBonusPlaySidestepAction(
             use: playerID
         )
     }
 
-    mutating func declineDistractionBonusPlaySidestepAction() throws -> Prompt? {
+    mutating func declineDistractionBonusPlaySidestepAction() throws -> AddressedPrompt? {
         return try resolveDistractionBonusPlaySidestepAction(
             use: nil
         )
@@ -25,7 +25,7 @@ extension InGameTransaction {
 
     private mutating func resolveDistractionBonusPlaySidestepAction(
         use: PlayerID?
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
         let coachID = turnContext.coachID.inverse

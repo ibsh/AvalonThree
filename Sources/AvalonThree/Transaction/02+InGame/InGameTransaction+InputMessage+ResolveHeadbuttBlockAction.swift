@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useHeadbuttSkillBlockAction() throws -> Prompt? {
+    mutating func useHeadbuttSkillBlockAction() throws -> AddressedPrompt? {
         return try resolveHeadbuttSkillBlockAction(useFreeAction: true)
     }
 
-    mutating func declineHeadbuttSkillBlockAction() throws -> Prompt? {
+    mutating func declineHeadbuttSkillBlockAction() throws -> AddressedPrompt? {
         return try resolveHeadbuttSkillBlockAction(useFreeAction: false)
     }
 
     private mutating func resolveHeadbuttSkillBlockAction(
         useFreeAction: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let playerID =

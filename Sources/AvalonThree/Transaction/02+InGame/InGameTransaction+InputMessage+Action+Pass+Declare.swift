@@ -12,7 +12,7 @@ extension InGameTransaction {
     mutating func declarePassAction(
         playerID: PlayerID,
         isFree: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard let playerSquare = table.getPlayer(id: playerID)?.square else {
             throw GameError("Player is in reserves")
@@ -59,9 +59,9 @@ extension InGameTransaction {
 
             history.append(.passValidTargets(hailMaryPassValidTargets))
 
-            return Prompt(
+            return AddressedPrompt(
                 coachID: playerID.coachID,
-                payload: .passActionSelectTarget(
+                prompt: .passActionSelectTarget(
                     playerID: playerID,
                     playerSquare: playerSquare,
                     validTargets: hailMaryPassValidTargets
@@ -82,18 +82,18 @@ extension InGameTransaction {
             .usedBonusPlay(coachID: playerID.coachID, bonusPlay: bonusPlay)
            )
         {
-            return Prompt(
+            return AddressedPrompt(
                 coachID: playerID.coachID,
-                payload: .passActionEligibleForHailMaryPassBonusPlay(
+                prompt: .passActionEligibleForHailMaryPassBonusPlay(
                     playerID: playerID,
                     playerSquare: playerSquare
                 )
             )
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: playerID.coachID,
-            payload: .passActionSelectTarget(
+            prompt: .passActionSelectTarget(
                 playerID: playerID,
                 playerSquare: playerSquare,
                 validTargets: basicValidTargets

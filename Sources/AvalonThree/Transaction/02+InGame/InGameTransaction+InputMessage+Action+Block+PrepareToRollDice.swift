@@ -9,7 +9,7 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func blockActionPrepareToRollDice() throws -> Prompt? {
+    mutating func blockActionPrepareToRollDice() throws -> AddressedPrompt? {
 
         let turnContext = try history.latestTurnContext()
 
@@ -54,9 +54,9 @@ extension InGameTransaction {
             ) == .canDeclare(consumesBonusPlays: [])
         {
             history.append(.blockDieResultsEligibleForStepAsideBonusPlaySidestepAction)
-            return Prompt(
+            return AddressedPrompt(
                 coachID: targetPlayerID.coachID,
-                payload: .blockActionEligibleForStepAsideBonusPlaySidestepAction(
+                prompt: .blockActionEligibleForStepAsideBonusPlaySidestepAction(
                     playerID: targetPlayerID,
                     playerSquare: targetPlayerSquare
                 )
@@ -75,9 +75,9 @@ extension InGameTransaction {
             )
         {
             history.append(.blockDieResultsEligibleForBodyCheckBonusPlay)
-            return Prompt(
+            return AddressedPrompt(
                 coachID: actionContext.coachID,
-                payload: .blockActionEligibleForBodyCheckBonusPlay(
+                prompt: .blockActionEligibleForBodyCheckBonusPlay(
                     playerID: actionContext.playerID,
                     playerSquare: playerSquare
                 )
@@ -99,9 +99,9 @@ extension InGameTransaction {
             )
         {
             history.append(.blockDieResultsEligibleForTheKidsGotMoxyBonusPlay)
-            return Prompt(
+            return AddressedPrompt(
                 coachID: actionContext.coachID,
-                payload: .blockActionEligibleForTheKidsGotMoxyBonusPlay(
+                prompt: .blockActionEligibleForTheKidsGotMoxyBonusPlay(
                     playerID: actionContext.playerID,
                     playerSquare: playerSquare
                 )

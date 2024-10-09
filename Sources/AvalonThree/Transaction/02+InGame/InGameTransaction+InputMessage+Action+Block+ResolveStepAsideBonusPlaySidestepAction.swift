@@ -11,7 +11,7 @@ extension InGameTransaction {
 
     private var bonusPlay: BonusPlay { .stepAside }
 
-    mutating func blockActionUseStepAsideBonusPlaySidestepAction() throws -> Prompt? {
+    mutating func blockActionUseStepAsideBonusPlaySidestepAction() throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
             let targetPlayerID = actionContext.history.lastResult(
@@ -35,7 +35,7 @@ extension InGameTransaction {
         )
     }
 
-    mutating func blockActionDeclineStepAsideBonusPlaySidestepAction() throws -> Prompt? {
+    mutating func blockActionDeclineStepAsideBonusPlaySidestepAction() throws -> AddressedPrompt? {
         return try blockActionPrepareToRollDice()
     }
 }

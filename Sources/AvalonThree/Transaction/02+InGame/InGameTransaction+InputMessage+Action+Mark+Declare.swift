@@ -12,7 +12,7 @@ extension InGameTransaction {
     mutating func declareMarkAction(
         playerID: PlayerID,
         isFree: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard let player = table.getPlayer(id: playerID) else {
             throw GameError("No player")
@@ -97,9 +97,9 @@ extension InGameTransaction {
                 )
             )
 
-            return Prompt(
+            return AddressedPrompt(
                 coachID: playerID.coachID,
-                payload: .markActionSelectSquares(
+                prompt: .markActionSelectSquares(
                     playerID: playerID,
                     playerSquare: playerSquare,
                     validSquares: interferenceValidSquares
@@ -131,18 +131,18 @@ extension InGameTransaction {
            ),
            !interferenceValidSquares.final.subtracting(basicValidSquares.final).isEmpty
         {
-            return Prompt(
+            return AddressedPrompt(
                 coachID: playerID.coachID,
-                payload: .markActionEligibleForInterferenceBonusPlay(
+                prompt: .markActionEligibleForInterferenceBonusPlay(
                     playerID: playerID,
                     playerSquare: playerSquare
                 )
             )
         }
 
-        return Prompt(
+        return AddressedPrompt(
             coachID: playerID.coachID,
-            payload: .markActionSelectSquares(
+            prompt: .markActionSelectSquares(
                 playerID: playerID,
                 playerSquare: playerSquare,
                 validSquares: basicValidSquares

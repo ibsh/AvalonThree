@@ -9,17 +9,17 @@ import Foundation
 
 extension InGameTransaction {
 
-    mutating func useRegenerationSkillStandUpAction() throws -> Prompt? {
+    mutating func useRegenerationSkillStandUpAction() throws -> AddressedPrompt? {
         return try resolveRegenerationSkillStandUpAction(useFreeAction: true)
     }
 
-    mutating func declineRegenerationSkillStandUpAction() throws -> Prompt? {
+    mutating func declineRegenerationSkillStandUpAction() throws -> AddressedPrompt? {
         return try resolveRegenerationSkillStandUpAction(useFreeAction: false)
     }
 
     private mutating func resolveRegenerationSkillStandUpAction(
         useFreeAction: Bool
-    ) throws -> Prompt? {
+    ) throws -> AddressedPrompt? {
 
         guard
             let playerID =
