@@ -10,7 +10,8 @@ import Foundation
 extension InGameTransaction {
 
     mutating func useInspirationBonusPlayFreeAction(
-        declaration: ActionDeclaration
+        declaration: ActionDeclaration,
+        consumesBonusPlays: Set<BonusPlay>
     ) throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last
@@ -21,7 +22,7 @@ extension InGameTransaction {
         _ = try useBonusPlay(bonusPlay: .inspiration, coachID: actionContext.coachID)
         return try declareAction(
             declaration: declaration,
-            consumesBonusPlays: [],
+            consumesBonusPlays: consumesBonusPlays,
             isFree: true
         )
     }

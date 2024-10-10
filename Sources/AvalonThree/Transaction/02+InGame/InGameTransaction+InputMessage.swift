@@ -356,9 +356,10 @@ extension InGameTransaction {
         case .declineCatchersInstinctsSkillRunAction:
             return try declineCatchersInstinctsSkillRunAction()
 
-        case .useInspirationBonusPlayFreeAction(let declaration):
+        case .useInspirationBonusPlayFreeAction(let declaration, let consumesBonusPlays):
             return try useInspirationBonusPlayFreeAction(
-                declaration: declaration
+                declaration: declaration,
+                consumesBonusPlays: consumesBonusPlays
             )
 
         case .declineInspirationBonusPlayFreeAction:

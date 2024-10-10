@@ -324,9 +324,9 @@ struct MoveTheBallTests {
                         ChallengeCard(challenge: Challenge.tieThemUp, bonusPlay: BonusPlay.rawTalent)
                     ],
                     objectives: Objectives(
-                        first: Optional(ChallengeCard(challenge: Challenge.moveTheBall, bonusPlay: BonusPlay.dodge)),
-                        second: Optional(ChallengeCard(challenge: Challenge.moveTheBall, bonusPlay: BonusPlay.rawTalent)),
-                        third: Optional(ChallengeCard(challenge: Challenge.getTheBall, bonusPlay: BonusPlay.shadow))
+                        first: ChallengeCard(challenge: Challenge.moveTheBall, bonusPlay: BonusPlay.dodge),
+                        second: ChallengeCard(challenge: Challenge.moveTheBall, bonusPlay: BonusPlay.rawTalent),
+                        third: ChallengeCard(challenge: Challenge.getTheBall, bonusPlay: BonusPlay.shadow)
                     ),
                     discards: [
                         ChallengeCard(challenge: Challenge.showboatForTheCrowd, bonusPlay: BonusPlay.rawTalent),

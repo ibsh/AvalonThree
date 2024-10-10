@@ -168,7 +168,7 @@ public enum InputMessage: Codable, Sendable {
     case useCatchersInstinctsSkillRunAction
     case declineCatchersInstinctsSkillRunAction
 
-    case useInspirationBonusPlayFreeAction(declaration: ActionDeclaration)
+    case useInspirationBonusPlayFreeAction(declaration: ActionDeclaration, consumesBonusPlays: Set<BonusPlay>)
     case declineInspirationBonusPlayFreeAction
 
     case useShadowBonusPlayExtraMove(playerID: PlayerID)

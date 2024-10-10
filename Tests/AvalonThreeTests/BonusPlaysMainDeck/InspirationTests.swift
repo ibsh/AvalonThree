@@ -573,7 +573,8 @@ struct InspirationTests {
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 2),
                         actionID: .run
-                    )
+                    ),
+                    consumesBonusPlays: []
                 )
             )
         )
@@ -897,7 +898,8 @@ struct InspirationTests {
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 6),
                         actionID: .mark
-                    )
+                    ),
+                    consumesBonusPlays: []
                 )
             )
         )
@@ -1215,7 +1217,8 @@ struct InspirationTests {
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 2),
                         actionID: .pass
-                    )
+                    ),
+                    consumesBonusPlays: []
                 )
             )
         )
@@ -1538,7 +1541,8 @@ struct InspirationTests {
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 6),
                         actionID: .hurlTeammate
-                    )
+                    ),
+                    consumesBonusPlays: []
                 )
             )
         )
@@ -1862,7 +1866,8 @@ struct InspirationTests {
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 3),
                         actionID: .foul
-                    )
+                    ),
+                    consumesBonusPlays: []
                 )
             ),
             randomizers: Randomizers(foulDie: foul(.gotThem))
@@ -2162,7 +2167,8 @@ struct InspirationTests {
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 5),
                         actionID: .block
-                    )
+                    ),
+                    consumesBonusPlays: []
                 )
             ),
             randomizers: Randomizers(blockDie: block(.shove))
@@ -2481,7 +2487,8 @@ struct InspirationTests {
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 5),
                         actionID: .sidestep
-                    )
+                    ),
+                    consumesBonusPlays: []
                 )
             )
         )
@@ -2795,7 +2802,8 @@ struct InspirationTests {
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 4),
                         actionID: .standUp
-                    )
+                    ),
+                    consumesBonusPlays: []
                 )
             )
         )
@@ -3092,7 +3100,8 @@ struct InspirationTests {
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
                         actionID: .reserves
-                    )
+                    ),
+                    consumesBonusPlays: []
                 )
             )
         )
@@ -3407,7 +3416,8 @@ struct InspirationTests {
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
                         actionID: .reserves
-                    )
+                    ),
+                    consumesBonusPlays: []
                 )
             )
         )
@@ -3443,5 +3453,357 @@ struct InspirationTests {
 
         #expect(latestAddressedPrompt?.coachID == .home)
         #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
+    }
+
+    @Test func usedWithConsumedBonusPlays() async throws {
+
+        var game = Game(
+            phase: .active(
+                Table(
+                    config: FinalizedConfig(
+                        coinFlipWinnerCoachID: .away,
+                        boardSpecID: BoardSpecID.season1Board1,
+                        challengeDeckID: ChallengeDeckID.shortStandard,
+                        rookieBonusRecipientID: RookieBonusRecipientID.noOne,
+                        coinFlipWinnerTeamID: TeamID.snotling,
+                        coinFlipLoserTeamID: TeamID.skaven
+                    ),
+                    players: [
+                        Player(id: PlayerID(coachID: .home, index: 0), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(1, 14)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .home, index: 1), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(1, 2)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .home, index: 2), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(5, 8)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .home, index: 3), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 3, armour: 4, skills: [.handlingSkills]), state: .standing(square: sq(4, 14)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .home, index: 4), spec: PlayerSpec(move: PlayerSpec.Move.fixed(9), block: 1, pass: 4, armour: 5, skills: [.safeHands]), state: .inReserves, canTakeActions: true),
+                        Player(id: PlayerID(coachID: .home, index: 5), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 5, armour: 3, skills: [.offensiveSpecialist]), state: .standing(square: sq(4, 5)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .away, index: 0), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(9, 5)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .away, index: 1), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(0, 4)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .away, index: 2), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(7, 0)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .away, index: 3), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(3, 3)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .away, index: 4), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(6, 4)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .away, index: 5), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(10, 5)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .away, index: 6), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 4, armour: nil, skills: [.bomber]), state: .standing(square: sq(7, 5)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .away, index: 7), spec: PlayerSpec(move: PlayerSpec.Move.fixed(6), block: 1, pass: 5, armour: nil, skills: [.leap]), state: .standing(square: sq(6, 0)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .away, index: 8), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 5, armour: nil, skills: []), state: .standing(square: sq(4, 0)), canTakeActions: true),
+                        Player(id: PlayerID(coachID: .away, index: 9), spec: PlayerSpec(move: PlayerSpec.Move.d6, block: 3, pass: nil, armour: 3, skills: [.warMachine]), state: .inReserves, canTakeActions: true),
+                    ],
+                    playerNumbers: [
+                        PlayerID(coachID: .away, index: 4): 43,
+                        PlayerID(coachID: .away, index: 8): 23,
+                        PlayerID(coachID: .home, index: 1): 22,
+                        PlayerID(coachID: .away, index: 0): 50,
+                        PlayerID(coachID: .home, index: 2): 15,
+                        PlayerID(coachID: .away, index: 3): 68,
+                        PlayerID(coachID: .away, index: 6): 93,
+                        PlayerID(coachID: .home, index: 5): 35,
+                        PlayerID(coachID: .away, index: 1): 11,
+                        PlayerID(coachID: .home, index: 4): 96,
+                        PlayerID(coachID: .away, index: 2): 76,
+                        PlayerID(coachID: .home, index: 0): 49,
+                        PlayerID(coachID: .away, index: 9): 67,
+                        PlayerID(coachID: .home, index: 3): 78,
+                        PlayerID(coachID: .away, index: 5): 89,
+                        PlayerID(coachID: .away, index: 7): 18
+                    ],
+                    coinFlipLoserHand: [
+                        ChallengeCard(challenge: .getTheBall, bonusPlay: .distraction)
+                    ],
+                    coinFlipWinnerHand: [
+                        ChallengeCard(challenge: .takeThemDown, bonusPlay: .divingTackle),
+                        ChallengeCard(challenge: .takeThemDown, bonusPlay: .inspiration),
+                        ChallengeCard(challenge: .getMoving, bonusPlay: .interference)
+                    ],
+                    coinFlipLoserActiveBonuses: [],
+                    coinFlipWinnerActiveBonuses: [],
+                    coinFlipLoserScore: 1,
+                    coinFlipWinnerScore: 6,
+                    balls: [
+                        Ball(id: 38, state: Ball.State.held(playerID: PlayerID(coachID: .home, index: 1)))
+                    ],
+                    deck: [
+                        ChallengeCard(challenge: .getMoving, bonusPlay: .sprint),
+                        ChallengeCard(challenge: .showUsACompletion, bonusPlay: .inspiration),
+                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .blockingPlay),
+                        ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .blitz),
+                        ChallengeCard(challenge: .freeUpTheBall, bonusPlay: .intervention),
+                        ChallengeCard(challenge: .tieThemUp, bonusPlay: .defensivePlay),
+                        ChallengeCard(challenge: .showNoFear, bonusPlay: .jumpUp),
+                        ChallengeCard(challenge: .gangUp, bonusPlay: .inspiration),
+                        ChallengeCard(challenge: .spreadOut, bonusPlay: .reserves),
+                        ChallengeCard(challenge: .showboatForTheCrowd, bonusPlay: .rawTalent),
+                        ChallengeCard(challenge: .moveTheBall, bonusPlay: .dodge),
+                        ChallengeCard(challenge: .getTogether, bonusPlay: .reserves),
+                        ChallengeCard(challenge: .tieThemUp, bonusPlay: .rawTalent),
+                        ChallengeCard(challenge: .getTheBall, bonusPlay: .shadow),
+                        ChallengeCard(challenge: .showboatForTheCrowd, bonusPlay: .multiBall),
+                        ChallengeCard(challenge: .breakSomeBones, bonusPlay: .stepAside),
+                        ChallengeCard(challenge: .showUsACompletion, bonusPlay: .passingPlay),
+                    ],
+                    objectives: Objectives(
+                        first: nil,
+                        second: ChallengeCard(challenge: .gangUp, bonusPlay: .toughEnough),
+                        third: ChallengeCard(challenge: .makeARiskyPass, bonusPlay: .accuratePass)
+                    ),
+                    discards: [
+                        ChallengeCard(challenge: .moveTheBall, bonusPlay: .rawTalent)
+                    ]
+                ),
+                [
+                    .prepareForTurn(
+                        coachID: .away,
+                        isSpecial: nil,
+                        mustDiscardObjective: false
+                    ),
+                    .actionDeclaration(
+                        declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 5), actionID: .run),
+                        snapshot: ActionSnapshot(
+                            balls: [Ball(id: 38, state: Ball.State.held(playerID: PlayerID(coachID: .home, index: 1)))],
+                            players: [
+                                Player(id: PlayerID(coachID: .away, index: 6), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 4, armour: nil, skills: [.bomber]), state: .standing(square: sq(7, 5)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .home, index: 2), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(5, 8)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .away, index: 8), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 5, armour: nil, skills: []), state: .standing(square: sq(4, 0)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .away, index: 3), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(2, 0)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .away, index: 4), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(6, 4)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .away, index: 7), spec: PlayerSpec(move: PlayerSpec.Move.fixed(6), block: 1, pass: 5, armour: nil, skills: [.leap]), state: .standing(square: sq(6, 0)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .home, index: 4), spec: PlayerSpec(move: PlayerSpec.Move.fixed(9), block: 1, pass: 4, armour: 5, skills: [.safeHands]), state: .inReserves, canTakeActions: true),
+                                Player(id: PlayerID(coachID: .home, index: 3), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 3, armour: 4, skills: [.handlingSkills]), state: .standing(square: sq(4, 14)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .away, index: 9), spec: PlayerSpec(move: PlayerSpec.Move.d6, block: 3, pass: nil, armour: 3, skills: [.warMachine]), state: .inReserves, canTakeActions: true),
+                                Player(id: PlayerID(coachID: .home, index: 1), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(1, 2)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .away, index: 1), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(0, 4)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .away, index: 5), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(10, 0)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .home, index: 0), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(1, 14)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .home, index: 5), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 5, armour: 3, skills: [.offensiveSpecialist]), state: .standing(square: sq(4, 5)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .away, index: 2), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(7, 0)), canTakeActions: true),
+                                Player(id: PlayerID(coachID: .away, index: 0), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(9, 0)), canTakeActions: true)
+                            ]
+                        )
+                    ),
+                    .runValidSquares(
+                        maxDistance: 5,
+                        validSquares: ValidMoveSquares(
+                            intermediate: [sq(10, 3), sq(6, 3), sq(5, 0), sq(6, 1), sq(5, 3), sq(8, 5), sq(6, 2), sq(10, 2), sq(10, 5), sq(10, 1), sq(5, 1), sq(7, 1), sq(7, 2), sq(9, 5), sq(9, 1), sq(5, 2), sq(7, 3), sq(10, 0), sq(6, 5), sq(8, 2), sq(8, 0), sq(7, 4), sq(8, 1), sq(10, 4), sq(9, 2)],
+                            final: [sq(6, 2), sq(8, 0), sq(8, 2), sq(10, 5), sq(8, 1), sq(7, 4), sq(10, 4), sq(10, 1), sq(7, 2), sq(5, 2), sq(5, 3), sq(5, 1), sq(7, 3), sq(9, 5), sq(10, 3), sq(10, 0), sq(6, 3), sq(8, 5), sq(6, 5), sq(5, 0), sq(10, 2), sq(9, 1), sq(6, 1), sq(7, 1), sq(9, 2)]
+                        )
+                    ),
+                    .actionFinished,
+                    .actionDeclaration(
+                        declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 0), actionID: .run),
+                        snapshot: ActionSnapshot(
+                            balls: [Ball(id: 38, state: Ball.State.held(playerID: PlayerID(coachID: .home, index: 1)))],
+                            players: [Player(id: PlayerID(coachID: .away, index: 6), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 4, armour: nil, skills: [.bomber]), state: .standing(square: sq(7, 5)), canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 2), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(5, 8)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 8), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 5, armour: nil, skills: []), state: .standing(square: sq(4, 0)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 3), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(2, 0)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 4), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(6, 4)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 7), spec: PlayerSpec(move: PlayerSpec.Move.fixed(6), block: 1, pass: 5, armour: nil, skills: [.leap]), state: .standing(square: sq(6, 0)), canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 4), spec: PlayerSpec(move: PlayerSpec.Move.fixed(9), block: 1, pass: 4, armour: 5, skills: [.safeHands]), state: .inReserves, canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 3), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 3, armour: 4, skills: [.handlingSkills]), state: .standing(square: sq(4, 14)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 9), spec: PlayerSpec(move: PlayerSpec.Move.d6, block: 3, pass: nil, armour: 3, skills: [.warMachine]), state: .inReserves, canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 1), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(1, 2)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 1), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(0, 4)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 5), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(10, 5)), canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 0), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(1, 14)), canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 5), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 5, armour: 3, skills: [.offensiveSpecialist]), state: .standing(square: sq(4, 5)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 2), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(7, 0)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 0), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(9, 0)), canTakeActions: true)]
+                        )
+                    ),
+                    .runValidSquares(
+                        maxDistance: 5,
+                        validSquares: ValidMoveSquares(
+                            intermediate: [sq(7, 1), sq(10, 3), sq(5, 3), sq(10, 0), sq(8, 2), sq(10, 2), sq(6, 3), sq(7, 2), sq(9, 0), sq(10, 4), sq(6, 1), sq(6, 5), sq(9, 2), sq(8, 5), sq(9, 5), sq(4, 3), sq(5, 1), sq(10, 1), sq(7, 3), sq(8, 0), sq(8, 1), sq(5, 2), sq(7, 4), sq(4, 1), sq(9, 1), sq(6, 2), sq(5, 0), sq(4, 2)],
+                            final: [sq(8, 1), sq(8, 5), sq(8, 2), sq(9, 5), sq(10, 4), sq(10, 3), sq(6, 5), sq(6, 2), sq(9, 1), sq(8, 0), sq(9, 2), sq(5, 3), sq(6, 1), sq(6, 3), sq(5, 1), sq(7, 4), sq(10, 2), sq(5, 2), sq(7, 1), sq(4, 1), sq(7, 3), sq(9, 0), sq(4, 2), sq(10, 1), sq(7, 2), sq(10, 0), sq(4, 3), sq(5, 0)]
+                        )
+                    ),
+                    .actionFinished,
+                    .actionDeclaration(
+                        declaration: ActionDeclaration(playerID: PlayerID(coachID: .away, index: 3), actionID: .run),
+                        snapshot: ActionSnapshot(
+                            balls: [Ball(id: 38, state: Ball.State.held(playerID: PlayerID(coachID: .home, index: 1)))],
+                            players: [Player(id: PlayerID(coachID: .away, index: 6), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 4, armour: nil, skills: [.bomber]), state: .standing(square: sq(7, 5)), canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 2), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(5, 8)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 8), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 5, armour: nil, skills: []), state: .standing(square: sq(4, 0)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 3), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(2, 0)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 4), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(6, 4)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 7), spec: PlayerSpec(move: PlayerSpec.Move.fixed(6), block: 1, pass: 5, armour: nil, skills: [.leap]), state: .standing(square: sq(6, 0)), canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 4), spec: PlayerSpec(move: PlayerSpec.Move.fixed(9), block: 1, pass: 4, armour: 5, skills: [.safeHands]), state: .inReserves, canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 3), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 3, armour: 4, skills: [.handlingSkills]), state: .standing(square: sq(4, 14)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 9), spec: PlayerSpec(move: PlayerSpec.Move.d6, block: 3, pass: nil, armour: 3, skills: [.warMachine]), state: .inReserves, canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 1), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(1, 2)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 1), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(0, 4)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 5), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(10, 5)), canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 0), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 4, armour: 4, skills: []), state: .standing(square: sq(1, 14)), canTakeActions: true), Player(id: PlayerID(coachID: .home, index: 5), spec: PlayerSpec(move: PlayerSpec.Move.fixed(7), block: 1, pass: 5, armour: 3, skills: [.offensiveSpecialist]), state: .standing(square: sq(4, 5)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 2), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(7, 0)), canTakeActions: true), Player(id: PlayerID(coachID: .away, index: 0), spec: PlayerSpec(move: PlayerSpec.Move.fixed(5), block: 1, pass: 5, armour: nil, skills: [.insignificant]), state: .standing(square: sq(9, 5)), canTakeActions: true)]
+                        )
+                    ),
+                    .runValidSquares(
+                        maxDistance: 5,
+                        validSquares: ValidMoveSquares(
+                            intermediate: [sq(6, 2), sq(0, 0), sq(3, 3), sq(7, 1), sq(5, 2), sq(4, 1), sq(7, 4), sq(6, 5), sq(2, 5), sq(3, 0), sq(5, 1), sq(1, 0), sq(0, 5), sq(7, 3), sq(6, 3), sq(6, 1), sq(4, 3), sq(3, 2), sq(2, 0), sq(3, 1), sq(7, 2), sq(1, 5), sq(4, 2), sq(5, 0), sq(5, 3)],
+                            final: [sq(2, 0), sq(5, 1), sq(5, 0), sq(4, 1), sq(5, 2), sq(4, 2), sq(7, 1), sq(1, 0), sq(3, 3), sq(5, 3), sq(6, 1), sq(0, 0), sq(3, 0), sq(7, 3), sq(3, 1), sq(3, 2), sq(6, 3), sq(7, 2), sq(6, 2), sq(7, 4), sq(4, 3)]
+                        )
+                    ),
+                    .actionFinished,
+                    .choosingObjectiveToClaim(objectiveIndices: [0]),
+                    .claimedObjective(objectiveIndex: 0),
+                    .eligibleForInspirationBonusPlayFreeAction
+                ]
+            ),
+            previousAddressedPrompt: AddressedPrompt(
+                coachID: .away,
+                prompt: .eligibleForInspirationBonusPlayFreeAction(
+                    validDeclarations: [
+                        PromptValidDeclaringPlayer(
+                            playerID: PlayerID(coachID: .away, index: 3),
+                            square: sq(3, 3),
+                            declarations: [
+                                PromptValidDeclaration(actionID: .mark, consumesBonusPlays: [])
+                            ]
+                        ),
+                        PromptValidDeclaringPlayer(
+                            playerID: PlayerID(coachID: .away, index: 2),
+                            square: sq(7, 0),
+                            declarations: [
+                                PromptValidDeclaration(actionID: .run, consumesBonusPlays: []),
+                                PromptValidDeclaration(actionID: .mark, consumesBonusPlays: [.interference])
+                            ]
+                        ),
+                        PromptValidDeclaringPlayer(
+                            playerID: PlayerID(coachID: .away, index: 6),
+                            square: sq(7, 5),
+                            declarations: [
+                                PromptValidDeclaration(actionID: .run, consumesBonusPlays: []),
+                                PromptValidDeclaration(actionID: .mark, consumesBonusPlays: []),
+                                PromptValidDeclaration(actionID: .block, consumesBonusPlays: [])
+                            ]
+                        ),
+                        PromptValidDeclaringPlayer(
+                            playerID: PlayerID(coachID: .away, index: 9),
+                            square: nil,
+                            declarations: [
+                                PromptValidDeclaration(actionID: .reserves, consumesBonusPlays: [])
+                            ]
+                        ),
+                        PromptValidDeclaringPlayer(
+                            playerID: PlayerID(coachID: .away, index: 0),
+                            square: sq(9, 5),
+                            declarations: [
+                                PromptValidDeclaration(actionID: .mark, consumesBonusPlays: [.interference])
+                            ]
+                        ),
+                        PromptValidDeclaringPlayer(
+                            playerID: PlayerID(coachID: .away, index: 7),
+                            square: sq(6, 0),
+                            declarations: [
+                                PromptValidDeclaration(actionID: .run, consumesBonusPlays: []),
+                                PromptValidDeclaration(actionID: .mark, consumesBonusPlays: [.interference])
+                            ]
+                        ),
+                        PromptValidDeclaringPlayer(
+                            playerID: PlayerID(coachID: .away, index: 4),
+                            square: sq(6, 4),
+                            declarations: [
+                                PromptValidDeclaration(actionID: .run, consumesBonusPlays: []),
+                                PromptValidDeclaration(actionID: .mark, consumesBonusPlays: [])
+                            ]
+                        ),
+                        PromptValidDeclaringPlayer(
+                            playerID: PlayerID(coachID: .away, index: 8),
+                            square: sq(4, 0),
+                            declarations: [
+                                PromptValidDeclaration(actionID: .run, consumesBonusPlays: []),
+                                PromptValidDeclaration(actionID: .mark, consumesBonusPlays: [])
+                            ]
+                        ),
+                        PromptValidDeclaringPlayer(
+                            playerID: PlayerID(coachID: .away, index: 1),
+                            square: sq(0, 4),
+                            declarations: [
+                                PromptValidDeclaration(actionID: .run, consumesBonusPlays: []),
+                                PromptValidDeclaration(actionID: .mark, consumesBonusPlays: [])
+                            ]
+                        ),
+                        PromptValidDeclaringPlayer(
+                            playerID: PlayerID(coachID: .away, index: 5),
+                            square: sq(10, 5),
+                            declarations: [
+                                PromptValidDeclaration(actionID: .mark, consumesBonusPlays: [.interference])
+                            ]
+                        )
+                    ]
+                )
+            )
+        )
+
+        // Declare mark with interference
+
+        let (latestEvents, latestAddressedPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .useInspirationBonusPlayFreeAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 0),
+                        actionID: .mark
+                    ),
+                    consumesBonusPlays: [.interference]
+                )
+            )
+        )
+
+        #expect(
+            latestEvents == [
+                .activatedBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .inspiration),
+                    hand: [
+                        .open(card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .divingTackle)),
+                        .open(card: ChallengeCard(challenge: .getMoving, bonusPlay: .interference))
+                    ],
+                    active: [
+                        ChallengeCard(challenge: .takeThemDown, bonusPlay: .inspiration)
+                    ]
+                ),
+                .activatedBonusPlay(
+                    coachID: .away,
+                    card: ChallengeCard(challenge: .getMoving, bonusPlay: .interference),
+                    hand: [
+                        .open(card: ChallengeCard(challenge: .takeThemDown, bonusPlay: .divingTackle)),
+                    ],
+                    active: [
+                        ChallengeCard(challenge: .takeThemDown, bonusPlay: .inspiration),
+                        ChallengeCard(challenge: .getMoving, bonusPlay: .interference)
+                    ]
+                ),
+                .declaredAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 0),
+                        actionID: .mark
+                    ),
+                    isFree: true,
+                    playerSquare: sq(9, 5)
+                ),
+            ]
+        )
+
+        #expect(
+            latestAddressedPrompt == AddressedPrompt(
+                coachID: .away,
+                prompt: .markActionSelectSquares(
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(9, 5)
+                    ),
+                    maxDistance: 4,
+                    validSquares: ValidMoveSquares(
+                        intermediate: squares("""
+                        ...........
+                        .....aaaaaa
+                        .....aaaaaa
+                        .....aaa..a
+                        .....a.a..a
+                        .....aa.aa.
+                        .....aaaaaa
+                        .....aaaaaa
+                        ......aaaaa
+                        .....aaaaaa
+                        ...........
+                        ...........
+                        ...........
+                        ...........
+                        ...........
+                        """),
+                        final: squares("""
+                        ...........
+                        ...........
+                        ...........
+                        ...........
+                        .....a.....
+                        .....a.....
+                        .....a.....
+                        .....aa....
+                        ......a....
+                        .....aa....
+                        ...........
+                        ...........
+                        ...........
+                        ...........
+                        ...........
+                        """)
+                    )
+                )
+            )
+        )
+        #expect(latestAddressedPrompt?.prompt.case == .markActionSelectSquares)
     }
 }
