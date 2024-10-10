@@ -496,7 +496,7 @@ extension InGameTransaction {
                         throw GameError("Player is in reserves")
                     }
                     return PromptBoardPlayer(
-                        id: player.id,
+                        id: playerID,
                         square: playerSquare
                     )
                 }.toSet()
