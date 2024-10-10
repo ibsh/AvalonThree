@@ -72,7 +72,7 @@ public enum Event: Equatable, Codable, Sendable {
 
     case rolledForMaxRunDistance(
         coachID: CoachID,
-        maxRunDistance: Int
+        maxDistance: Int
     )
 
     case rolledForPass(

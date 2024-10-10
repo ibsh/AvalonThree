@@ -250,7 +250,7 @@ struct CleanSweepTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaaa
@@ -867,7 +867,7 @@ struct CleanSweepTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaaa
@@ -1436,7 +1436,7 @@ struct CleanSweepTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaaa

@@ -35,7 +35,7 @@ enum HistoryEntry: Equatable, Sendable {
     case actionIsFree
 
     case runValidSquares(
-        maxRunDistance: Int,
+        maxDistance: Int,
         validSquares: ValidMoveSquares
     )
     case runEligibleForBlockingPlayBonusPlay
@@ -43,7 +43,7 @@ enum HistoryEntry: Equatable, Sendable {
     case runEligibleForSprintBonusPlay
 
     case markValidSquares(
-        maxMarkDistance: Int,
+        maxDistance: Int,
         validSquares: ValidMoveSquares
     )
     case markHasRequiredTargetPlayer(PlayerID)

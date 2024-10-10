@@ -104,7 +104,7 @@ struct InsignificantTests {
                         id: pl(.away, 0),
                         square: sq(3, 6)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaa.
@@ -255,7 +255,7 @@ struct InsignificantTests {
                         id: pl(.away, 0),
                         square: sq(3, 6)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaa.
@@ -436,7 +436,7 @@ struct InsignificantTests {
                         id: pl(.away, 0),
                         square: sq(3, 6)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaa.

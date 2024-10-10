@@ -198,7 +198,7 @@ struct ReadyToGoTests {
                         id: pl(.away, 1),
                         square: sq(5, 11)
                     ),
-                    maxRunDistance: 1,
+                    maxDistance: 1,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -284,7 +284,7 @@ struct ReadyToGoTests {
                         id: pl(.away, 4),
                         square: sq(9, 9)
                     ),
-                    maxRunDistance: 1,
+                    maxDistance: 1,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

@@ -104,7 +104,7 @@ struct LeapTests {
                         id: pl(.away, 0),
                         square: sq(3, 5)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaa.
@@ -294,7 +294,7 @@ struct LeapTests {
                         id: pl(.away, 0),
                         square: sq(3, 5)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaa.
@@ -445,7 +445,7 @@ struct LeapTests {
                         id: pl(.away, 0),
                         square: sq(3, 5)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaa.
@@ -619,7 +619,7 @@ struct LeapTests {
                         id: pl(.away, 0),
                         square: sq(0, 6)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaa....

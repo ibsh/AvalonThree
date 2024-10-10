@@ -128,7 +128,7 @@ struct BlockingPlayTests {
                         id: pl(.away, 0),
                         square: sq(2, 7)
                     ),
-                    maxRunDistance: 5,
+                    maxDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -312,7 +312,7 @@ struct BlockingPlayTests {
                         id: pl(.away, 0),
                         square: sq(2, 7)
                     ),
-                    maxRunDistance: 5,
+                    maxDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -500,7 +500,7 @@ struct BlockingPlayTests {
                         id: pl(.away, 0),
                         square: sq(2, 7)
                     ),
-                    maxRunDistance: 5,
+                    maxDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -596,7 +596,7 @@ struct BlockingPlayTests {
                         id: pl(.away, 1),
                         square: sq(9, 7)
                     ),
-                    maxRunDistance: 5,
+                    maxDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -898,7 +898,7 @@ struct BlockingPlayTests {
                         id: pl(.away, 0),
                         square: sq(5, 7)
                     ),
-                    maxRunDistance: 5,
+                    maxDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

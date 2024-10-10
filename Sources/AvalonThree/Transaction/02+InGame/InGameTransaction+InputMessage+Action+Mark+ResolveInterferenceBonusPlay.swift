@@ -24,7 +24,7 @@ extension InGameTransaction {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
             !actionContext.isFinished,
-            var (maxMarkDistance, validSquares) = actionContext.history.lastResult(
+            var (maxDistance, validSquares) = actionContext.history.lastResult(
                 { entry -> (Int, ValidMoveSquares)? in
                     guard case .markValidSquares(
                         let maxMarkDistance,
@@ -54,7 +54,7 @@ extension InGameTransaction {
 
             // refresh valid squares now that the player has the bonus active
 
-            maxMarkDistance = TableConstants.interferenceBonusPlayMaxMarkDistance
+            maxDistance = TableConstants.interferenceBonusPlayMaxMarkDistance
 
             let targetSquares: Set<Square>? = try {
                 guard let targetPlayerID = actionContext.history.lastResult(
@@ -80,12 +80,12 @@ extension InGameTransaction {
                 playerID: player.id,
                 playerSquare: playerSquare,
                 moveReason: .mark(targetSquares: targetSquares),
-                maxDistance: maxMarkDistance
+                maxDistance: maxDistance
             )
 
             history.append(
                 .markValidSquares(
-                    maxMarkDistance: maxMarkDistance,
+                    maxDistance: maxDistance,
                     validSquares: validSquares
                 )
             )
@@ -98,6 +98,7 @@ extension InGameTransaction {
                     id: actionContext.playerID,
                     square: playerSquare
                 ),
+                maxDistance: maxDistance,
                 validSquares: validSquares
             )
         )

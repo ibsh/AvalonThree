@@ -780,7 +780,7 @@ struct MyFirstGameTests {
                         id: pl(.away, 2),
                         square: sq(4, 0)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ..aaaa.aa..
@@ -987,7 +987,7 @@ struct MyFirstGameTests {
                         id: pl(.away, 3),
                         square: sq(6, 0)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ..aaaaaaa..
@@ -1184,7 +1184,7 @@ struct MyFirstGameTests {
                         id: pl(.away, 1),
                         square: sq(1, 0)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         .aaaaaaa...

@@ -43,21 +43,21 @@ extension InGameTransaction {
             }
         }
 
-        let maxRunDistance: Int
+        let maxDistance: Int
         if table.getActiveBonuses(coachID: playerID.coachID).contains(
             where: { $0.bonusPlay == .readyToGo }
         ) {
-            maxRunDistance = TableConstants.readyToGoBonusPlayMaxRunDistance
+            maxDistance = TableConstants.readyToGoBonusPlayMaxRunDistance
         } else {
             switch player.spec.move {
             case .fixed(let fixed):
-                maxRunDistance = fixed
+                maxDistance = fixed
             case .d6:
-                maxRunDistance = randomizers.d6.roll()
+                maxDistance = randomizers.d6.roll()
                 events.append(
                     .rolledForMaxRunDistance(
                         coachID: playerID.coachID,
-                        maxRunDistance: maxRunDistance
+                        maxDistance: maxDistance
                     )
                 )
             }
@@ -67,7 +67,7 @@ extension InGameTransaction {
             playerID: playerID,
             playerSquare: playerSquare,
             moveReason: .run,
-            maxDistance: maxRunDistance
+            maxDistance: maxDistance
         )
 
         let declaration = ActionDeclaration(
@@ -87,7 +87,7 @@ extension InGameTransaction {
         }
         history.append(
             .runValidSquares(
-                maxRunDistance: maxRunDistance,
+                maxDistance: maxDistance,
                 validSquares: validSquares
             )
         )

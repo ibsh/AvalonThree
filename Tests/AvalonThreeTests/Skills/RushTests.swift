@@ -104,7 +104,7 @@ struct RushTests {
                         id: pl(.away, 0),
                         square: sq(3, 5)
                     ),
-                    maxRunDistance: 8,
+                    maxDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaaa
@@ -276,7 +276,7 @@ struct RushTests {
                         id: pl(.away, 0),
                         square: sq(3, 5)
                     ),
-                    maxRunDistance: 8,
+                    maxDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaaa
@@ -426,7 +426,7 @@ struct RushTests {
                         id: pl(.away, 0),
                         square: sq(3, 5)
                     ),
-                    maxRunDistance: 8,
+                    maxDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaaa
@@ -590,7 +590,7 @@ struct RushTests {
                         id: pl(.away, 0),
                         square: sq(3, 6)
                     ),
-                    maxRunDistance: 8,
+                    maxDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaaa

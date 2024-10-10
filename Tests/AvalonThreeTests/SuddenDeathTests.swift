@@ -154,7 +154,7 @@ struct SuddenDeathTests {
                         id: pl(.away, 0),
                         square: sq(6, 10)
                     ),
-                    maxRunDistance: 5,
+                    maxDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -410,7 +410,7 @@ struct SuddenDeathTests {
                         id: pl(.away, 0),
                         square: sq(6, 10)
                     ),
-                    maxRunDistance: 5,
+                    maxDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -673,7 +673,7 @@ struct SuddenDeathTests {
                         id: pl(.away, 0),
                         square: sq(6, 10)
                     ),
-                    maxRunDistance: 5,
+                    maxDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

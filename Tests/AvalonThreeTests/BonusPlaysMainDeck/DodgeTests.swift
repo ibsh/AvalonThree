@@ -120,7 +120,7 @@ struct DodgeTests {
                         id: pl(.away, 0),
                         square: sq(3, 5)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaa.
@@ -291,7 +291,7 @@ struct DodgeTests {
                         id: pl(.away, 0),
                         square: sq(3, 5)
                     ),
-                    maxRunDistance: 6,
+                    maxDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         aaaaaaaaaa.

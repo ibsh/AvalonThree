@@ -281,6 +281,7 @@ struct InterventionTests {
                         id: pl(.home, 0),
                         square: sq(1, 12)
                     ),
+                    maxDistance: 2,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -511,6 +512,7 @@ struct InterventionTests {
                         id: pl(.home, 1),
                         square: sq(7, 12)
                     ),
+                    maxDistance: 2,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -729,6 +731,7 @@ struct InterventionTests {
                         id: pl(.home, 1),
                         square: sq(8, 12)
                     ),
+                    maxDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1511,6 +1514,7 @@ struct InterventionTests {
                         id: pl(.home, 0),
                         square: sq(1, 12)
                     ),
+                    maxDistance: 2,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1871,6 +1875,7 @@ struct InterventionTests {
                         id: pl(.home, 0),
                         square: sq(1, 12)
                     ),
+                    maxDistance: 2,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -2099,6 +2104,7 @@ struct InterventionTests {
                         id: pl(.home, 0),
                         square: sq(1, 12)
                     ),
+                    maxDistance: 2,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

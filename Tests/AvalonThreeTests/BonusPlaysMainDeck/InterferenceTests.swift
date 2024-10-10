@@ -170,6 +170,7 @@ struct InterferenceTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
+                    maxDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -879,6 +880,7 @@ struct InterferenceTests {
                         id: pl(.away, 0),
                         square: sq(4, 5)
                     ),
+                    maxDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

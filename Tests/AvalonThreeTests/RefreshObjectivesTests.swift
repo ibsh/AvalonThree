@@ -140,6 +140,7 @@ struct RefreshObjectivesTests {
                         id: pl(.away, 0),
                         square: sq(5, 5)
                     ),
+                    maxDistance: 2,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -604,6 +605,7 @@ struct RefreshObjectivesTests {
                         id: pl(.away, 0),
                         square: sq(5, 5)
                     ),
+                    maxDistance: 2,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1091,6 +1093,7 @@ struct RefreshObjectivesTests {
                         id: pl(.away, 0),
                         square: sq(5, 5)
                     ),
+                    maxDistance: 2,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

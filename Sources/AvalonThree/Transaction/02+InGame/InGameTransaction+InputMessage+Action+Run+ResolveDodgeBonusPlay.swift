@@ -59,7 +59,7 @@ extension InGameTransaction {
 
             history.append(
                 .runValidSquares(
-                    maxRunDistance: maxRunDistance,
+                    maxDistance: maxRunDistance,
                     validSquares: validSquares
                 )
             )

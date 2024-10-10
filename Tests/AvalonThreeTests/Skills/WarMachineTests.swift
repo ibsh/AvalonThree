@@ -93,7 +93,7 @@ struct WarMachineTests {
             latestEvents == [
                 .rolledForMaxRunDistance(
                     coachID: .away,
-                    maxRunDistance: 4
+                    maxDistance: 4
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
@@ -114,7 +114,7 @@ struct WarMachineTests {
                         id: pl(.away, 0),
                         square: sq(2, 6)
                     ),
-                    maxRunDistance: 4,
+                    maxDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -286,7 +286,7 @@ struct WarMachineTests {
             latestEvents == [
                 .rolledForMaxRunDistance(
                     coachID: .away,
-                    maxRunDistance: 3
+                    maxDistance: 3
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
@@ -307,7 +307,7 @@ struct WarMachineTests {
                         id: pl(.away, 0),
                         square: sq(2, 6)
                     ),
-                    maxRunDistance: 3,
+                    maxDistance: 3,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -474,7 +474,7 @@ struct WarMachineTests {
             latestEvents == [
                 .rolledForMaxRunDistance(
                     coachID: .away,
-                    maxRunDistance: 4
+                    maxDistance: 4
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
@@ -495,7 +495,7 @@ struct WarMachineTests {
                         id: pl(.away, 0),
                         square: sq(2, 6)
                     ),
-                    maxRunDistance: 4,
+                    maxDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -654,7 +654,7 @@ struct WarMachineTests {
             latestEvents == [
                 .rolledForMaxRunDistance(
                     coachID: .away,
-                    maxRunDistance: 4
+                    maxDistance: 4
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
@@ -675,7 +675,7 @@ struct WarMachineTests {
                         id: pl(.away, 0),
                         square: sq(2, 6)
                     ),
-                    maxRunDistance: 4,
+                    maxDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -810,7 +810,7 @@ struct WarMachineTests {
             latestEvents == [
                 .rolledForMaxRunDistance(
                     coachID: .away,
-                    maxRunDistance: 4
+                    maxDistance: 4
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
@@ -831,7 +831,7 @@ struct WarMachineTests {
                         id: pl(.away, 0),
                         square: sq(2, 6)
                     ),
-                    maxRunDistance: 4,
+                    maxDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -966,7 +966,7 @@ struct WarMachineTests {
             latestEvents == [
                 .rolledForMaxRunDistance(
                     coachID: .away,
-                    maxRunDistance: 4
+                    maxDistance: 4
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
@@ -987,7 +987,7 @@ struct WarMachineTests {
                         id: pl(.away, 0),
                         square: sq(2, 6)
                     ),
-                    maxRunDistance: 4,
+                    maxDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1152,7 +1152,7 @@ struct WarMachineTests {
             latestEvents == [
                 .rolledForMaxRunDistance(
                     coachID: .away,
-                    maxRunDistance: 4
+                    maxDistance: 4
                 ),
                 .declaredAction(
                     declaration: ActionDeclaration(
@@ -1173,7 +1173,7 @@ struct WarMachineTests {
                         id: pl(.away, 0),
                         square: sq(2, 6)
                     ),
-                    maxRunDistance: 4,
+                    maxDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

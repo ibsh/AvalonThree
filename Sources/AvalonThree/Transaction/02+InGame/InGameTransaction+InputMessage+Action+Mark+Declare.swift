@@ -82,9 +82,11 @@ extension InGameTransaction {
 
         if table.getActiveBonuses(coachID: playerID.coachID).contains(where: { $0.bonusPlay == .interference }) {
 
+            let maxDistance = TableConstants.interferenceBonusPlayMaxMarkDistance
+
             history.append(
                 .markValidSquares(
-                    maxMarkDistance: TableConstants.interferenceBonusPlayMaxMarkDistance,
+                    maxDistance: maxDistance,
                     validSquares: interferenceValidSquares
                 )
             )
@@ -104,14 +106,17 @@ extension InGameTransaction {
                         id: playerID,
                         square: playerSquare
                     ),
+                    maxDistance: maxDistance,
                     validSquares: interferenceValidSquares
                 )
             )
         }
 
+        let maxDistance = TableConstants.maxMarkDistance
+
         history.append(
             .markValidSquares(
-                maxMarkDistance: TableConstants.maxMarkDistance,
+                maxDistance: maxDistance,
                 validSquares: basicValidSquares
             )
         )
@@ -151,6 +156,7 @@ extension InGameTransaction {
                     id: playerID,
                     square: playerSquare
                 ),
+                maxDistance: maxDistance,
                 validSquares: basicValidSquares
             )
         )

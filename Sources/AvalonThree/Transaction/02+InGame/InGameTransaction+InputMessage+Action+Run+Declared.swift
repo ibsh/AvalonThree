@@ -14,7 +14,7 @@ extension InGameTransaction {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
             !actionContext.isFinished,
-            let (maxRunDistance, validSquares) = actionContext.history.lastResult(
+            let (maxDistance, validSquares) = actionContext.history.lastResult(
                 { entry -> (Int, ValidMoveSquares)? in
                     guard
                         case .runValidSquares(
@@ -52,7 +52,7 @@ extension InGameTransaction {
                     id: actionContext.playerID,
                     square: playerSquare
                 ),
-                maxRunDistance: maxRunDistance,
+                maxDistance: maxDistance,
                 validSquares: validSquares
             )
         )

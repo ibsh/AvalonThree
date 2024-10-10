@@ -82,7 +82,7 @@ public enum Prompt: Equatable, Codable, Sendable {
 
     case runActionSelectSquares(
         player: PromptBoardPlayer,
-        maxRunDistance: Int,
+        maxDistance: Int,
         validSquares: ValidMoveSquares
     )
 
@@ -94,6 +94,7 @@ public enum Prompt: Equatable, Codable, Sendable {
 
     case markActionSelectSquares(
         player: PromptBoardPlayer,
+        maxDistance: Int,
         validSquares: ValidMoveSquares
     )
 
