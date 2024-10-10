@@ -33,15 +33,15 @@ struct DistractionTests {
                             canTakeActions: true
                         ),
                         Player(
-                            id: pl(.away, 1),
-                            spec: .human_lineman,
-                            state: .standing(square: sq(10, 12)),
-                            canTakeActions: true
-                        ),
-                        Player(
                             id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 6)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 1),
+                            spec: .human_lineman,
+                            state: .standing(square: sq(7, 5)),
                             canTakeActions: true
                         ),
                     ],
@@ -128,8 +128,17 @@ struct DistractionTests {
             ]
         )
 
-        #expect(latestAddressedPrompt?.coachID == .home)
-        #expect(latestAddressedPrompt?.prompt.case == .eligibleForDistractionBonusPlaySidestepAction)
+        #expect(
+            latestAddressedPrompt == AddressedPrompt(
+                coachID: .home,
+                prompt: .eligibleForDistractionBonusPlaySidestepAction(
+                    validPlayers: [
+                        PromptBoardPlayer(id: pl(.home, 0), square: sq(7, 6)),
+                        PromptBoardPlayer(id: pl(.home, 1), square: sq(7, 5)),
+                    ]
+                )
+            )
+        )
 
         // Use bonus play
 
