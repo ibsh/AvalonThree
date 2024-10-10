@@ -48,8 +48,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: actionContext.coachID,
             prompt: .runActionSelectSquares(
-                playerID: actionContext.playerID,
-                playerSquare: playerSquare,
+                player: PromptBoardPlayer(
+                    id: actionContext.playerID,
+                    square: playerSquare
+                ),
                 maxRunDistance: maxRunDistance,
                 validSquares: validSquares
             )
@@ -87,8 +89,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: actionContext.coachID,
             prompt: .runActionEligibleForBlockingPlayBonusPlay(
-                playerID: actionContext.playerID,
-                playerSquare: playerSquare
+                player: PromptBoardPlayer(
+                    id: actionContext.playerID,
+                    square: playerSquare
+                )
             )
         )
     }
@@ -124,8 +128,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: actionContext.coachID,
             prompt: .runActionEligibleForDodgeBonusPlay(
-                playerID: actionContext.playerID,
-                playerSquare: playerSquare
+                player: PromptBoardPlayer(
+                    id: actionContext.playerID,
+                    square: playerSquare
+                )
             )
         )
     }
@@ -161,8 +167,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: actionContext.coachID,
             prompt: .runActionEligibleForSprintBonusPlay(
-                playerID: actionContext.playerID,
-                playerSquare: playerSquare
+                player: PromptBoardPlayer(
+                    id: actionContext.playerID,
+                    square: playerSquare
+                )
             )
         )
     }

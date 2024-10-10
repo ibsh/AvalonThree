@@ -61,7 +61,7 @@ struct AbsoluteCarnageTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )

@@ -678,59 +678,65 @@ struct MyFirstGameTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(0, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(0, 0)
+                            ]
                         ),
-                        pl(.away, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 1),
+                            square: sq(1, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(1, 0)
+                            ]
                         ),
-                        pl(.away, 2): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 2),
+                            square: sq(4, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(4, 0)
+                            ]
                         ),
-                        pl(.away, 3): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 3),
+                            square: sq(6, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 0)
+                            ]
                         ),
-                        pl(.away, 4): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 4),
+                            square: sq(9, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(9, 0)
+                            ]
                         ),
-                        pl(.away, 5): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 5),
+                            square: sq(10, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(10, 0)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3
@@ -770,8 +776,10 @@ struct MyFirstGameTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 2),
-                    playerSquare: sq(4, 0),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 2),
+                        square: sq(4, 0)
+                    ),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -887,50 +895,55 @@ struct MyFirstGameTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(0, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(0, 0)
+                            ]
                         ),
-                        pl(.away, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 1),
+                            square: sq(1, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(1, 0)
+                            ]
                         ),
-                        pl(.away, 3): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 3),
+                            square: sq(6, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 0)
+                            ]
                         ),
-                        pl(.away, 4): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 4),
+                            square: sq(9, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(9, 0)
+                            ]
                         ),
-                        pl(.away, 5): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 5),
+                            square: sq(10, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(10, 0)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 2
@@ -970,8 +983,10 @@ struct MyFirstGameTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 3),
-                    playerSquare: sq(6, 0),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 3),
+                        square: sq(6, 0)
+                    ),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1087,41 +1102,45 @@ struct MyFirstGameTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(0, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(0, 0)
+                            ]
                         ),
-                        pl(.away, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 1),
+                            square: sq(1, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(1, 0)
+                            ]
                         ),
-                        pl(.away, 4): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 4),
+                            square: sq(9, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(9, 0)
+                            ]
                         ),
-                        pl(.away, 5): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 5),
+                            square: sq(10, 0),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(10, 0)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 1
@@ -1161,8 +1180,10 @@ struct MyFirstGameTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 1),
-                    playerSquare: sq(1, 0),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 1),
+                        square: sq(1, 0)
+                    ),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1283,59 +1304,65 @@ struct MyFirstGameTests {
                 coachID: .home,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.home, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 0),
+                            square: sq(2, 14),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(2, 14)
+                            ]
                         ),
-                        pl(.home, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 1),
+                            square: sq(3, 14),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(3, 14)
+                            ]
                         ),
-                        pl(.home, 2): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 2),
+                            square: sq(4, 14),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(4, 14)
+                            ]
                         ),
-                        pl(.home, 3): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 3),
+                            square: sq(6, 14),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 14)
+                            ]
                         ),
-                        pl(.home, 4): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 4),
+                            square: sq(7, 14),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(7, 14)
+                            ]
                         ),
-                        pl(.home, 5): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 5),
+                            square: sq(8, 14),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(8, 14)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3

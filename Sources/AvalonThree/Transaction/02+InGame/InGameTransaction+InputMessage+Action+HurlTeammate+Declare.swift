@@ -62,17 +62,19 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: playerID.coachID,
                 prompt: .hurlTeammateActionSelectTeammate(
-                    playerID: playerID,
-                    playerSquare: playerSquare,
-                    validTeammates: try validTeammates.reduce([:]) { partialResult, teammate in
+                    player: PromptBoardPlayer(
+                        id: playerID,
+                        square: playerSquare
+                    ),
+                    validTeammates: try validTeammates.map { teammate in
                         guard let teammateSquare = teammate.square else {
                             throw GameError("Player is in reserves")
                         }
-                        return partialResult.adding(
-                            key: teammate.id,
-                            value: teammateSquare
+                        return PromptBoardPlayer(
+                            id: teammate.id,
+                            square: teammateSquare
                         )
-                    }
+                    }.toSet()
                 )
             )
         }

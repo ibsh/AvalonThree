@@ -53,29 +53,26 @@ extension ValidDeclaration {
 }
 
 extension Collection where Element == ValidDeclaration {
-    func toPromptDeclarations(table: Table) -> [PlayerID: PromptValidDeclaringPlayer] {
+    func toPromptDeclarations(table: Table) -> Set<PromptValidDeclaringPlayer> {
         sorted { $0.actionID.sortOrder < $1.actionID.sortOrder }
-            .reduce([:]) { partialResult, declaration in
-                let oldValue = partialResult[declaration.playerID]
-                ?? PromptValidDeclaringPlayer(
-                    declarations: [],
-                    square: table.getPlayer(id: declaration.playerID)?.square
+            .reduce([]) { partialResult, declaration in
+                var partialResult = partialResult
+                var value = partialResult.removeFirst(
+                    where: { $0.playerID == declaration.playerID }
+                ) ?? PromptValidDeclaringPlayer(
+                    playerID: declaration.playerID,
+                    square: table.getPlayer(id: declaration.playerID)?.square,
+                    declarations: []
                 )
-                var declarations = oldValue.declarations
-                declarations.append(
+                value.declarations.append(
                     PromptValidDeclaration(
                         actionID: declaration.actionID,
                         consumesBonusPlays: declaration.consumesBonusPlays
                     )
                 )
-                return partialResult.adding(
-                    key: declaration.playerID,
-                    value: PromptValidDeclaringPlayer(
-                        declarations: declarations,
-                        square: oldValue.square
-                    )
-                )
+                return partialResult + [value]
             }
+            .toSet()
     }
 }
 

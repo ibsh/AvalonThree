@@ -205,8 +205,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: actionContext.coachID,
                 prompt: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: actionContext.playerID,
-                    playerSquare: playerSquare,
+                    player: PromptBoardPlayer(
+                        id: actionContext.playerID,
+                        square: playerSquare
+                    ),
                     results: results
                 )
             )
@@ -228,8 +230,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: actionContext.coachID,
                 prompt: .blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
-                    playerID: actionContext.playerID,
-                    playerSquare: playerSquare,
+                    player: PromptBoardPlayer(
+                        id: actionContext.playerID,
+                        square: playerSquare
+                    ),
                     results: results,
                     clawsResult: clawsResult,
                     maySelectResultToDecline:
@@ -250,8 +254,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: actionContext.coachID,
             prompt: .blockActionSelectResult(
-                playerID: actionContext.playerID,
-                playerSquare: playerSquare,
+                player: PromptBoardPlayer(
+                    id: actionContext.playerID,
+                    square: playerSquare
+                ),
                 results: results
             )
         )

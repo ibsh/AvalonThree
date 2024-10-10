@@ -66,7 +66,7 @@ struct ShowboatForTheCrowdTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -185,7 +185,7 @@ struct ShowboatForTheCrowdTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )

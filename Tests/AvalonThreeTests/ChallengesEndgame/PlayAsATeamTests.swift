@@ -84,7 +84,7 @@ struct PlayAsATeamTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -299,7 +299,7 @@ struct PlayAsATeamTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -514,7 +514,7 @@ struct PlayAsATeamTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )

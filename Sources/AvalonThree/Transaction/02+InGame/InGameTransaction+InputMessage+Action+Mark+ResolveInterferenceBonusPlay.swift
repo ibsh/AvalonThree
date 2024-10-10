@@ -94,8 +94,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: actionContext.coachID,
             prompt: .markActionSelectSquares(
-                playerID: actionContext.playerID,
-                playerSquare: playerSquare,
+                player: PromptBoardPlayer(
+                    id: actionContext.playerID,
+                    square: playerSquare
+                ),
                 validSquares: validSquares
             )
         )

@@ -116,7 +116,7 @@ struct PassingPlayTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .home,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -565,7 +565,7 @@ struct PassingPlayTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .home,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )

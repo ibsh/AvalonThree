@@ -73,7 +73,7 @@ extension InGameTransaction {
         for entry in lastActionContext.history {
             switch entry {
             case .passTarget(let target):
-                targetPlayerID = target.targetPlayerID
+                targetPlayerID = target.targetPlayer.id
                 distance = target.distance
             case .passSuccessful:
                 success = true
@@ -127,8 +127,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: targetPlayer.coachID,
             prompt: .eligibleForCatchersInstinctsSkillRunAction(
-                playerID: targetPlayerID,
-                playerSquare: targetPlayerSquare
+                player: PromptBoardPlayer(
+                    id: targetPlayerID,
+                    square: targetPlayerSquare
+                )
             )
         )
     }
@@ -230,15 +232,15 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: coachID,
             prompt: .eligibleForShadowBonusPlayExtraMove(
-                validPlayers: try validPlayers.reduce([:]) { partialResult, player in
+                validPlayers: try validPlayers.map { player in
                     guard let playerSquare = player.square else {
                         throw GameError("Player is in reserves")
                     }
-                    return partialResult.adding(
-                        key: player.id,
-                        value: playerSquare
+                    return PromptBoardPlayer(
+                        id: player.id,
+                        square: playerSquare
                     )
-                },
+                }.toSet(),
                 square: square
             )
         )

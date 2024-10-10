@@ -67,7 +67,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -148,7 +148,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -229,7 +229,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -317,7 +317,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -398,7 +398,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -479,7 +479,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -560,7 +560,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -641,7 +641,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -721,7 +721,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -799,7 +799,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -837,8 +837,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 3), sq(2, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
@@ -1061,7 +1063,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1099,8 +1101,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1322,7 +1326,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1360,8 +1364,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1583,7 +1589,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1621,8 +1627,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -1869,7 +1877,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1907,8 +1915,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2167,7 +2177,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2205,8 +2215,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2467,7 +2479,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2505,8 +2517,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -2765,7 +2779,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2803,8 +2817,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(2, 4), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 3), sq(1, 3), sq(2, 4), sq(1, 4)]),
@@ -3057,7 +3073,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -3095,8 +3111,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(2, 4), sq(1, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 4), sq(1, 3), sq(2, 4), sq(2, 3)]),
@@ -3351,7 +3369,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -3389,8 +3407,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(0, 0),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(0, 0)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 2), distance: .short, obstructingSquares: []),
                         HurlTeammateTarget(targetSquare: sq(0, 3), distance: .short, obstructingSquares: []),
@@ -3568,7 +3588,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -3606,8 +3626,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -3861,7 +3883,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -3899,8 +3921,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4160,7 +4184,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -4198,8 +4222,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(1, 3), sq(2, 3), sq(1, 4), sq(2, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(2, 4), sq(1, 4), sq(1, 3), sq(2, 3)]),
@@ -4481,7 +4507,7 @@ struct HurlTeammateTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -4519,11 +4545,19 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTeammate(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTeammates: [
-                        pl(.away, 1): sq(4, 6),
-                        pl(.away, 2): sq(2, 6),
+                        PromptBoardPlayer(
+                            id: pl(.away, 1),
+                            square: sq(4, 6)
+                        ),
+                        PromptBoardPlayer(
+                            id: pl(.away, 2),
+                            square: sq(2, 6)
+                        ),
                     ]
                 )
             )
@@ -4548,8 +4582,10 @@ struct HurlTeammateTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .hurlTeammateActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     validTargets: [
                         HurlTeammateTarget(targetSquare: sq(0, 0), distance: .long, obstructingSquares: [sq(2, 3), sq(2, 4), sq(1, 3), sq(1, 4)]),
                         HurlTeammateTarget(targetSquare: sq(0, 1), distance: .long, obstructingSquares: [sq(1, 4), sq(1, 3), sq(2, 4), sq(2, 3)]),

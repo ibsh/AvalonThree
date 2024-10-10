@@ -71,8 +71,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: actionContext.coachID,
                 prompt: .blockActionEligibleForBladedKnuckleDustersBonusPlay(
-                    playerID: actionContext.playerID,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: actionContext.playerID,
+                        square: playerSquare
+                    )
                 )
             )
         }
@@ -90,8 +92,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: targetPlayerID.coachID,
                 prompt: .blockActionEligibleForAbsolutelyNailsBonusPlay(
-                    playerID: targetPlayerID,
-                    playerSquare: targetPlayerSquare
+                    player: PromptBoardPlayer(
+                        id: targetPlayerID,
+                        square: targetPlayerSquare
+                    )
                 )
             )
         }
@@ -112,8 +116,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: targetPlayerID.coachID,
                 prompt: .blockActionEligibleForToughEnoughBonusPlay(
-                    playerID: targetPlayerID,
-                    playerSquare: targetPlayerSquare
+                    player: PromptBoardPlayer(
+                        id: targetPlayerID,
+                        square: targetPlayerSquare
+                    )
                 )
             )
         }
@@ -135,8 +141,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: targetPlayerID.coachID,
                 prompt: .blockActionEligibleForProBonusPlay(
-                    playerID: targetPlayerID,
-                    playerSquare: targetPlayerSquare
+                    player: PromptBoardPlayer(
+                        id: targetPlayerID,
+                        square: targetPlayerSquare
+                    )
                 )
             )
         }
@@ -157,8 +165,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: actionContext.coachID,
                 prompt: .blockActionEligibleForAbsoluteCarnageBonusPlay(
-                    playerID: actionContext.playerID,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: actionContext.playerID,
+                        square: playerSquare
+                    )
                 )
             )
         }
@@ -252,8 +262,10 @@ extension InGameTransaction {
                 return AddressedPrompt(
                     coachID: targetPlayerID.coachID,
                     prompt: .blockActionArmourResultEligibleForRawTalentBonusPlayReroll(
-                        playerID: targetPlayerID,
-                        playerSquare: playerSquare,
+                        player: PromptBoardPlayer(
+                            id: targetPlayerID,
+                            square: playerSquare
+                        ),
                         result: modifiedRoll
                     )
                 )

@@ -87,11 +87,11 @@ extension InGameTransaction {
 
         // Success?
 
-        guard let targetPlayer = table.getPlayer(id: target.targetPlayerID) else {
+        guard let targetPlayer = table.getPlayer(id: target.targetPlayer.id) else {
             throw GameError("No target player")
         }
 
-        guard let angle = playerSquare.angle(to: target.targetSquare) else {
+        guard let angle = playerSquare.angle(to: target.targetPlayer.square) else {
             throw GameError("No throw angle")
         }
 
@@ -101,22 +101,22 @@ extension InGameTransaction {
                 history.append(.passSuccessful)
                 history.append(.actionFinished)
 
-                ball.state = .held(playerID: target.targetPlayerID)
+                ball.state = .held(playerID: target.targetPlayer.id)
                 table.balls.update(with: ball)
 
                 events.append(
                     .playerPassedBall(
                         playerID: player.id,
                         from: playerSquare,
-                        to: target.targetSquare,
+                        to: target.targetPlayer.square,
                         angle: angle,
                         ballID: ball.id
                     )
                 )
                 events.append(
                     .playerCaughtPass(
-                        playerID: target.targetPlayerID,
-                        playerSquare: target.targetSquare,
+                        playerID: target.targetPlayer.id,
+                        playerSquare: target.targetPlayer.square,
                         ballID: ball.id
                     )
                 )
@@ -133,20 +133,20 @@ extension InGameTransaction {
             .playerPassedBall(
                 playerID: player.id,
                 from: playerSquare,
-                to: target.targetSquare,
+                to: target.targetPlayer.square,
                 angle: angle,
                 ballID: ball.id
             )
         )
         events.append(
             .playerFailedCatch(
-                playerID: target.targetPlayerID,
-                playerSquare: target.targetSquare,
+                playerID: target.targetPlayer.id,
+                playerSquare: target.targetPlayer.square,
                 ballID: ball.id
             )
         )
 
-        try ballComesLoose(id: ball.id, square: target.targetSquare)
+        try ballComesLoose(id: ball.id, square: target.targetPlayer.square)
         try bounceBall(id: ball.id)
 
         return try endAction()

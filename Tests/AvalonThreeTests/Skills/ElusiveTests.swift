@@ -67,7 +67,7 @@ struct ElusiveTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -184,7 +184,7 @@ struct ElusiveTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -288,7 +288,7 @@ struct ElusiveTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -410,7 +410,7 @@ struct ElusiveTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )

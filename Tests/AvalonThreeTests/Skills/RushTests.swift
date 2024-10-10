@@ -62,7 +62,7 @@ struct RushTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -100,8 +100,10 @@ struct RushTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 5),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 5)
+                    ),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -232,7 +234,7 @@ struct RushTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -270,8 +272,10 @@ struct RushTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 5),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 5)
+                    ),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -380,7 +384,7 @@ struct RushTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -418,8 +422,10 @@ struct RushTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 5),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 5)
+                    ),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -542,7 +548,7 @@ struct RushTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -580,8 +586,10 @@ struct RushTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     maxRunDistance: 8,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""

@@ -88,8 +88,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: actionContext.coachID,
             prompt: .hurlTeammateActionSelectTarget(
-                playerID: actionContext.playerID,
-                playerSquare: playerSquare,
+                player: PromptBoardPlayer(
+                    id: actionContext.playerID,
+                    square: playerSquare
+                ),
                 validTargets: validTargets
             )
         )

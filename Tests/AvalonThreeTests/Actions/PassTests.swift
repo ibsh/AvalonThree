@@ -67,7 +67,7 @@ struct PassTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -105,12 +105,16 @@ struct PassTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .passActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 5),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 5)
+                    ),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: pl(.away, 1),
-                            targetSquare: sq(4, 5),
+                            targetPlayer: PromptBoardPlayer(
+                                id: pl(.away, 1),
+                                square: sq(4, 5)
+                            ),
                             distance: .handoff,
                             obstructingSquares: [],
                             markedTargetSquares: []
@@ -163,23 +167,25 @@ struct PassTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(3, 5),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(3, 5)
+                            ]
                         ),
-                        pl(.away, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 1),
+                            square: sq(4, 5),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(4, 5)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 2
@@ -245,7 +251,7 @@ struct PassTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -283,12 +289,16 @@ struct PassTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .passActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 5),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 5)
+                    ),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: pl(.away, 1),
-                            targetSquare: sq(4, 5),
+                            targetPlayer: PromptBoardPlayer(
+                                id: pl(.away, 1),
+                                square: sq(4, 5)
+                            ),
                             distance: .short,
                             obstructingSquares: [],
                             markedTargetSquares: []
@@ -346,23 +356,25 @@ struct PassTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(2, 5),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(2, 5)
+                            ]
                         ),
-                        pl(.away, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 1),
+                            square: sq(4, 5),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(4, 5)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 2

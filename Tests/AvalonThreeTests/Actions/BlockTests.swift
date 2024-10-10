@@ -67,7 +67,7 @@ struct BlockTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 1
                 )
             )
@@ -133,7 +133,9 @@ struct BlockTests {
                 coachID: .home,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.home, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 0),
+                            square: sq(5, 11),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .block,
@@ -143,8 +145,7 @@ struct BlockTests {
                                     actionID: .sidestep,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 11)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3
@@ -221,7 +222,7 @@ struct BlockTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 1
                 )
             )
@@ -264,8 +265,7 @@ struct BlockTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .blockActionSelectResult(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 8),
+                    player: PromptBoardPlayer(id: pl(.away, 0), square: sq(2, 8)),
                     results: [.shove, .kerrunch, .smash]
                 )
             )
@@ -335,7 +335,7 @@ struct BlockTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 1
                 )
             )
@@ -373,11 +373,13 @@ struct BlockTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .blockActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(5, 12),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(5, 12)
+                    ),
                     validTargets: [
-                        pl(.home, 0): sq(5, 11),
-                        pl(.home, 1): sq(4, 13),
+                        PromptBoardPlayer(id: pl(.home, 0), square: sq(5, 11)),
+                        PromptBoardPlayer(id: pl(.home, 1), square: sq(4, 13)),
                     ]
                 )
             )
@@ -429,7 +431,9 @@ struct BlockTests {
                 coachID: .home,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.home, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 0),
+                            square: sq(5, 11),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .block,
@@ -439,10 +443,11 @@ struct BlockTests {
                                     actionID: .sidestep,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 11)
+                            ]
                         ),
-                        pl(.home, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 1),
+                            square: sq(4, 13),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .block,
@@ -452,8 +457,7 @@ struct BlockTests {
                                     actionID: .sidestep,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(4, 13)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3

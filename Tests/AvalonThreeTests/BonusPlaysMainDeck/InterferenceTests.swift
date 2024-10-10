@@ -69,7 +69,7 @@ struct InterferenceTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -166,8 +166,10 @@ struct InterferenceTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 6)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -296,7 +298,7 @@ struct InterferenceTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -430,7 +432,7 @@ struct InterferenceTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -608,7 +610,7 @@ struct InterferenceTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -780,7 +782,7 @@ struct InterferenceTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -873,8 +875,10 @@ struct InterferenceTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(4, 5),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(4, 5)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........

@@ -67,7 +67,7 @@ struct FoulTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 1
                 )
             )
@@ -120,14 +120,15 @@ struct FoulTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(5, 12),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 12)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 2
@@ -199,7 +200,7 @@ struct FoulTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 1
                 )
             )
@@ -237,11 +238,19 @@ struct FoulTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .foulActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(5, 12),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(5, 12)
+                    ),
                     validTargets: [
-                        pl(.home, 0): sq(5, 11),
-                        pl(.home, 1): sq(4, 13),
+                        PromptBoardPlayer(
+                            id: pl(.home, 0),
+                            square: sq(5, 11)
+                        ),
+                        PromptBoardPlayer(
+                            id: pl(.home, 1),
+                            square: sq(4, 13)
+                        ),
                     ]
                 )
             )
@@ -280,14 +289,15 @@ struct FoulTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(5, 12),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 12)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 2

@@ -62,8 +62,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: playerID.coachID,
                 prompt: .passActionSelectTarget(
-                    playerID: playerID,
-                    playerSquare: playerSquare,
+                    player: PromptBoardPlayer(
+                        id: playerID,
+                        square: playerSquare
+                    ),
                     validTargets: hailMaryPassValidTargets
                 )
             )
@@ -85,8 +87,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: playerID.coachID,
                 prompt: .passActionEligibleForHailMaryPassBonusPlay(
-                    playerID: playerID,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: playerID,
+                        square: playerSquare
+                    )
                 )
             )
         }
@@ -94,8 +98,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: playerID.coachID,
             prompt: .passActionSelectTarget(
-                playerID: playerID,
-                playerSquare: playerSquare,
+                player: PromptBoardPlayer(
+                    id: playerID,
+                    square: playerSquare
+                ),
                 validTargets: basicValidTargets
             )
         )
@@ -159,8 +165,10 @@ extension InGameTransaction {
 
                 return partialResult.union([
                     PassTarget(
-                        targetPlayerID: targetPlayer.id,
-                        targetSquare: targetSquare,
+                        targetPlayer: PromptBoardPlayer(
+                            id: targetPlayer.id,
+                            square: targetSquare
+                        ),
                         distance: measure.distance,
                         obstructingSquares: obstructingSquares,
                         markedTargetSquares: markedTargetSquares

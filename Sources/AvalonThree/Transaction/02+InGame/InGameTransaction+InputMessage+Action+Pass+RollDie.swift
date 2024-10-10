@@ -56,8 +56,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: actionContext.coachID,
                 prompt: .passActionEligibleForProBonusPlay(
-                    playerID: player.id,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: player.id,
+                        square: playerSquare
+                    )
                 )
             )
         }
@@ -74,17 +76,19 @@ extension InGameTransaction {
         switch target.distance {
         case .handoff:
 
-            guard let targetPlayer = table.getPlayer(id: target.targetPlayerID) else {
+            guard let targetPlayer = table.getPlayer(id: target.targetPlayer.id) else {
                 throw GameError("No target player")
             }
 
-            guard let direction = playerSquare.direction(to: target.targetSquare) else {
+            guard let direction = playerSquare.direction(
+                to: target.targetPlayer.square
+            ) else {
                 throw GameError("No handoff direction")
             }
 
             if targetPlayer.spec.pass != nil {
 
-                ball.state = .held(playerID: target.targetPlayerID)
+                ball.state = .held(playerID: target.targetPlayer.id)
                 table.balls.update(with: ball)
 
                 history.append(.passSuccessful)
@@ -94,22 +98,22 @@ extension InGameTransaction {
                     .playerHandedOffBall(
                         playerID: player.id,
                         from: playerSquare,
-                        to: target.targetSquare,
+                        to: target.targetPlayer.square,
                         direction: direction,
                         ballID: ball.id
                     )
                 )
                 events.append(
                     .playerCaughtHandoff(
-                        playerID: target.targetPlayerID,
-                        playerSquare: target.targetSquare,
+                        playerID: target.targetPlayer.id,
+                        playerSquare: target.targetPlayer.square,
                         ballID: ball.id
                     )
                 )
 
             } else {
 
-                ball.state = .loose(square: target.targetSquare)
+                ball.state = .loose(square: target.targetPlayer.square)
                 table.balls.update(with: ball)
 
                 history.append(.actionFinished)
@@ -118,20 +122,20 @@ extension InGameTransaction {
                     .playerHandedOffBall(
                         playerID: player.id,
                         from: playerSquare,
-                        to: target.targetSquare,
+                        to: target.targetPlayer.square,
                         direction: direction,
                         ballID: ball.id
                     )
                 )
                 events.append(
                     .playerFailedCatch(
-                        playerID: target.targetPlayerID,
-                        playerSquare: target.targetSquare,
+                        playerID: target.targetPlayer.id,
+                        playerSquare: target.targetPlayer.square,
                         ballID: ball.id
                     )
                 )
 
-                try ballComesLoose(id: ball.id, square: target.targetSquare)
+                try ballComesLoose(id: ball.id, square: target.targetPlayer.square)
                 try bounceBall(id: ball.id)
             }
 
@@ -221,8 +225,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: player.coachID,
                 prompt: .passActionResultEligibleForRawTalentBonusPlayReroll(
-                    playerID: player.id,
-                    playerSquare: playerSquare,
+                    player: PromptBoardPlayer(
+                        id: player.id,
+                        square: playerSquare
+                    ),
                     result: modifiedRoll
                 )
             )

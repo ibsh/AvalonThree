@@ -1113,7 +1113,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1280,7 +1280,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1419,7 +1419,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1578,7 +1578,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1709,7 +1709,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1800,9 +1800,11 @@ struct RawTalentTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .blockActionEligibleForFollowUp(
-                    playerID: pl(.away, 0),
-                    from: sq(3, 6),
-                    to: sq(2, 6)
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
+                    destination: sq(2, 6)
                 )
             )
         )
@@ -1867,7 +1869,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1991,7 +1993,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2132,7 +2134,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2278,7 +2280,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2474,7 +2476,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2640,7 +2642,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2793,7 +2795,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2934,7 +2936,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2996,9 +2998,11 @@ struct RawTalentTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .blockActionEligibleForFollowUp(
-                    playerID: pl(.away, 0),
-                    from: sq(3, 6),
-                    to: sq(2, 6)
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
+                    destination: sq(2, 6)
                 )
             )
         )
@@ -3063,7 +3067,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -3200,7 +3204,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -3315,7 +3319,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -3419,7 +3423,7 @@ struct RawTalentTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )

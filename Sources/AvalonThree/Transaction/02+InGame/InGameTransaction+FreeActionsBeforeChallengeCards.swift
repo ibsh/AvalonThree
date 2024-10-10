@@ -115,8 +115,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: player.coachID,
             prompt: .eligibleForFrenziedSkillBlockAction(
-                playerID: player.id,
-                playerSquare: playerSquare
+                player: PromptBoardPlayer(
+                    id: player.id,
+                    square: playerSquare
+                )
             )
         )
     }
@@ -161,8 +163,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: lastActionContext.coachID,
             prompt: .eligibleForShoulderChargeBonusPlayBlockAction(
-                playerID: player.id,
-                playerSquare: playerSquare
+                player: PromptBoardPlayer(
+                    id: player.id,
+                    square: playerSquare
+                )
             )
         )
     }
@@ -207,8 +211,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: lastActionContext.coachID,
             prompt: .eligibleForDivingTackleBonusPlayBlockAction(
-                playerID: player.id,
-                playerSquare: playerSquare
+                player: PromptBoardPlayer(
+                    id: player.id,
+                    square: playerSquare
+                )
             )
         )
     }
@@ -256,8 +262,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: player.coachID,
             prompt: .eligibleForHeadbuttSkillBlockAction(
-                playerID: lastActionContext.playerID,
-                playerSquare: playerSquare
+                player: PromptBoardPlayer(
+                    id: lastActionContext.playerID,
+                    square: playerSquare
+                )
             )
         )
     }
@@ -310,8 +318,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: lastActionContext.coachID,
             prompt: .eligibleForBlitzBonusPlayBlockAction(
-                playerID: player.id,
-                playerSquare: playerSquare
+                player: PromptBoardPlayer(
+                    id: player.id,
+                    square: playerSquare
+                )
             )
         )
     }
@@ -353,7 +363,7 @@ extension InGameTransaction {
         }
 
         let relevantValidDeclarations = allValidDeclarations.filter({ validDeclaration in
-            validDeclaration.playerID == passTarget.targetPlayerID
+            validDeclaration.playerID == passTarget.targetPlayer.id
             && [.run, .sidestep].contains(validDeclaration.actionID)
         })
 
@@ -481,15 +491,15 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: coachID,
             prompt: .eligibleForDistractionBonusPlaySidestepAction(
-                validPlayers: try validPlayerIDs.reduce([:]) { partialResult, playerID in
+                validPlayers: try validPlayerIDs.map { playerID in
                     guard let playerSquare = table.getPlayer(id: playerID)?.square else {
                         throw GameError("Player is in reserves")
                     }
-                    return partialResult.adding(
-                        key: player.id,
-                        value: playerSquare
+                    return PromptBoardPlayer(
+                        id: player.id,
+                        square: playerSquare
                     )
-                }
+                }.toSet()
             )
         )
     }

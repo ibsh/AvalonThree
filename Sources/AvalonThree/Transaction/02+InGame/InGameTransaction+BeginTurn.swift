@@ -379,8 +379,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: proneRegeneratingPlayer.coachID,
                 prompt: .eligibleForRegenerationSkillStandUpAction(
-                    playerID: proneRegeneratingPlayer.id,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: proneRegeneratingPlayer.id,
+                        square: playerSquare
+                    )
                 )
             )
         }
@@ -424,15 +426,15 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: turnContext.coachID,
             prompt: .eligibleForJumpUpBonusPlayStandUpAction(
-                validPlayers: try players.reduce([:]) { partialResult, player in
+                validPlayers: try players.map { player in
                     guard let playerSquare = player.square else {
                         throw GameError("Player is in reserves")
                     }
-                    return partialResult.adding(
-                        key: player.id,
-                        value: playerSquare
+                    return PromptBoardPlayer(
+                        id: player.id,
+                        square: playerSquare
                     )
-                }
+                }.toSet()
             )
         )
     }

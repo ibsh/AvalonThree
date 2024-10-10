@@ -55,8 +55,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: turnContext.coachID,
                 prompt: .hurlTeammateActionEligibleForAccuratePassBonusPlay(
-                    playerID: actionContext.playerID,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: actionContext.playerID,
+                        square: playerSquare
+                    )
                 )
             )
         }

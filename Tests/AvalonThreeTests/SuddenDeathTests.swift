@@ -112,7 +112,7 @@ struct SuddenDeathTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 1
                 )
             )
@@ -150,8 +150,10 @@ struct SuddenDeathTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 10),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 10)
+                    ),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -366,7 +368,7 @@ struct SuddenDeathTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 1
                 )
             )
@@ -404,8 +406,10 @@ struct SuddenDeathTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 10),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 10)
+                    ),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -627,7 +631,7 @@ struct SuddenDeathTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 1
                 )
             )
@@ -665,8 +669,10 @@ struct SuddenDeathTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 10),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 10)
+                    ),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""

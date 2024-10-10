@@ -67,7 +67,7 @@ struct WarMachineTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -110,8 +110,10 @@ struct WarMachineTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 6)
+                    ),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -258,7 +260,7 @@ struct WarMachineTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -301,8 +303,10 @@ struct WarMachineTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 6)
+                    ),
                     maxRunDistance: 3,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -444,7 +448,7 @@ struct WarMachineTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -487,8 +491,10 @@ struct WarMachineTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 6)
+                    ),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -622,7 +628,7 @@ struct WarMachineTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -665,8 +671,10 @@ struct WarMachineTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 6)
+                    ),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -776,7 +784,7 @@ struct WarMachineTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -819,8 +827,10 @@ struct WarMachineTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 6)
+                    ),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -930,7 +940,7 @@ struct WarMachineTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -973,8 +983,10 @@ struct WarMachineTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 6)
+                    ),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1114,7 +1126,7 @@ struct WarMachineTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1157,8 +1169,10 @@ struct WarMachineTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 6)
+                    ),
                     maxRunDistance: 4,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1304,7 +1318,7 @@ struct WarMachineTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1344,8 +1358,10 @@ struct WarMachineTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .blockActionSelectResult(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 6)
+                    ),
                     results: [.kerrunch, .tackle, .shove]
                 )
             )

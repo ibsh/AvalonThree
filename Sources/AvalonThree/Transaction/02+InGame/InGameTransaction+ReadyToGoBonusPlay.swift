@@ -47,8 +47,10 @@ extension InGameTransaction {
                 return AddressedPrompt(
                     coachID: coachID,
                     prompt: .eligibleForReadyToGoBonusPlayRunAction(
-                        playerID: player.id,
-                        playerSquare: playerSquare
+                        player: PromptBoardPlayer(
+                            id: player.id,
+                            square: playerSquare
+                        )
                     )
                 )
             }
@@ -67,8 +69,10 @@ extension InGameTransaction {
                 return AddressedPrompt(
                     coachID: coachID,
                     prompt: .eligibleForReadyToGoBonusPlaySidestepAction(
-                        playerID: player.id,
-                        playerSquare: playerSquare
+                        player: PromptBoardPlayer(
+                            id: player.id,
+                            square: playerSquare
+                        )
                     )
                 )
             }
@@ -87,8 +91,10 @@ extension InGameTransaction {
                 return AddressedPrompt(
                     coachID: coachID,
                     prompt: .eligibleForReadyToGoBonusPlayStandUpAction(
-                        playerID: player.id,
-                        playerSquare: playerSquare
+                        player: PromptBoardPlayer(
+                            id: player.id,
+                            square: playerSquare
+                        )
                     )
                 )
             }

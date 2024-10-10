@@ -98,7 +98,7 @@ struct RefreshObjectivesTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -136,8 +136,10 @@ struct RefreshObjectivesTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(5, 5),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(5, 5)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -207,7 +209,9 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(5, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .block,
@@ -217,8 +221,7 @@ struct RefreshObjectivesTests {
                                     actionID: .sidestep,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 6)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 2
@@ -334,7 +337,9 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(5, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
@@ -344,8 +349,7 @@ struct RefreshObjectivesTests {
                                     actionID: .foul,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 6)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 1
@@ -413,14 +417,15 @@ struct RefreshObjectivesTests {
                 coachID: .home,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.home, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 0),
+                            square: sq(5, 7),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .standUp,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 7)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3
@@ -557,7 +562,7 @@ struct RefreshObjectivesTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -595,8 +600,10 @@ struct RefreshObjectivesTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(5, 5),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(5, 5)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -666,7 +673,9 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(5, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .block,
@@ -676,8 +685,7 @@ struct RefreshObjectivesTests {
                                     actionID: .sidestep,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 6)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 2
@@ -745,7 +753,9 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(5, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
@@ -755,8 +765,7 @@ struct RefreshObjectivesTests {
                                     actionID: .foul,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 6)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 1
@@ -896,14 +905,15 @@ struct RefreshObjectivesTests {
                 coachID: .home,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.home, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 0),
+                            square: sq(5, 7),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .standUp,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 7)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3
@@ -1039,7 +1049,7 @@ struct RefreshObjectivesTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1077,8 +1087,10 @@ struct RefreshObjectivesTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(5, 5),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(5, 5)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1148,7 +1160,9 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(5, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .block,
@@ -1158,8 +1172,7 @@ struct RefreshObjectivesTests {
                                     actionID: .sidestep,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 6)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 2
@@ -1227,7 +1240,9 @@ struct RefreshObjectivesTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(5, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
@@ -1237,8 +1252,7 @@ struct RefreshObjectivesTests {
                                     actionID: .foul,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 6)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 1
@@ -1362,14 +1376,15 @@ struct RefreshObjectivesTests {
                 coachID: .home,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.home, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 0),
+                            square: sq(5, 7),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .standUp,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(5, 7)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3

@@ -62,7 +62,7 @@ struct InsignificantTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -100,8 +100,10 @@ struct InsignificantTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -211,7 +213,7 @@ struct InsignificantTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -249,8 +251,10 @@ struct InsignificantTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -390,7 +394,7 @@ struct InsignificantTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -428,8 +432,10 @@ struct InsignificantTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -578,7 +584,7 @@ struct InsignificantTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )

@@ -174,9 +174,11 @@ extension InGameTransaction {
                 return AddressedPrompt(
                     coachID: actionContext.coachID,
                     prompt: .blockActionEligibleForFollowUp(
-                        playerID: actionContext.playerID,
-                        from: playerSquare,
-                        to: targetPlayerSquare
+                        player: PromptBoardPlayer(
+                            id: player.id,
+                            square: playerSquare
+                        ),
+                        destination: targetPlayerSquare
                     )
                 )
             }
@@ -199,30 +201,36 @@ extension InGameTransaction {
 
                 if targetPlayer.spec.skills.contains(.safeHands) {
 
-                    let directions: [Direction: Square] = try targetPlayerSquare
+                    let directions: Set<PromptDirection> = try targetPlayerSquare
                         .adjacentSquares
-                        .reduce([:], { partialResult, adjacentSquare in
+                        .compactMap { adjacentSquare in
                             guard
                                 adjacentSquare != targetPlayerSquare,
                                 table.squareIsUnobstructed(adjacentSquare)
                             else {
-                                return partialResult
+                                return nil
                             }
                             guard
                                 let direction = targetPlayerSquare.direction(to: adjacentSquare)
                             else { throw GameError("Square is not adjacent") }
-                            return partialResult.adding(key: direction, value: adjacentSquare)
-                        })
+                            return PromptDirection(
+                                direction: direction,
+                                destination: adjacentSquare
+                            )
+                        }
+                        .toSet()
 
                     // update the action
                     history.append(.blockResult(result))
-                    history.append(.blockSafeHandsDirections(Set(directions.keys)))
+                    history.append(.blockSafeHandsDirections(Set(directions.map { $0.direction })))
 
                     return AddressedPrompt(
                         coachID: targetPlayerID.coachID,
                         prompt: .blockActionSelectSafeHandsLooseBallDirection(
-                            playerID: targetPlayerID,
-                            playerSquare: targetPlayerSquare,
+                            player: PromptBoardPlayer(
+                                id: targetPlayerID,
+                                square: targetPlayerSquare
+                            ),
                             directions: directions
                         )
                     )

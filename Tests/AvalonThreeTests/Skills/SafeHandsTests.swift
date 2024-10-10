@@ -67,7 +67,7 @@ struct SafeHandsTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -104,15 +104,17 @@ struct SafeHandsTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .blockActionSelectSafeHandsLooseBallDirection(
-                    playerID: pl(.home, 0),
-                    playerSquare: sq(3, 4),
+                    player: PromptBoardPlayer(
+                        id: pl(.home, 0),
+                        square: sq(3, 4)
+                    ),
                     directions: [
-                        .north: sq(3, 3),
-                        .northEast: sq(4, 3),
-                        .east: sq(4, 4),
-                        .southEast: sq(4, 5),
-                        .south: sq(3, 5),
-                        .southWest: sq(2, 5),
+                        PromptDirection(direction: .north, destination: sq(3, 3)),
+                        PromptDirection(direction: .northEast, destination: sq(4, 3)),
+                        PromptDirection(direction: .east, destination: sq(4, 4)),
+                        PromptDirection(direction: .southEast, destination: sq(4, 5)),
+                        PromptDirection(direction: .south, destination: sq(3, 5)),
+                        PromptDirection(direction: .southWest, destination: sq(2, 5)),
                     ]
                 )
             )

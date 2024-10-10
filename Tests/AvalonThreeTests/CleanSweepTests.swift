@@ -82,7 +82,7 @@ struct CleanSweepTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -122,8 +122,10 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 6)
+                    ),
                     results: [.smash]
                 )
             )
@@ -182,7 +184,9 @@ struct CleanSweepTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(6, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
@@ -192,17 +196,17 @@ struct CleanSweepTests {
                                     actionID: .foul,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 6)
+                            ]
                         ),
-                        pl(.away, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 1),
+                            square: sq(6, 12),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 12)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 2
@@ -242,8 +246,10 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 6)
+                    ),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -390,23 +396,25 @@ struct CleanSweepTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(6, 8),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .pass,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 8)
+                            ]
                         ),
-                        pl(.away, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 1),
+                            square: sq(6, 12),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 12)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 1
@@ -446,12 +454,16 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .passActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 8),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 8)
+                    ),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: pl(.away, 1),
-                            targetSquare: sq(6, 12),
+                            targetPlayer: PromptBoardPlayer(
+                                id: pl(.away, 1),
+                                square: sq(6, 12)
+                            ),
                             distance: .short,
                             obstructingSquares: [],
                             markedTargetSquares: []
@@ -546,14 +558,15 @@ struct CleanSweepTests {
                 coachID: .home,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.home, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 0),
+                            square: sq(7, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .standUp,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(7, 6)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3
@@ -641,7 +654,7 @@ struct CleanSweepTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -681,8 +694,10 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 6)
+                    ),
                     results: [.smash]
                 )
             )
@@ -786,7 +801,9 @@ struct CleanSweepTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(6, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
@@ -796,17 +813,17 @@ struct CleanSweepTests {
                                     actionID: .foul,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 6)
+                            ]
                         ),
-                        pl(.away, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 1),
+                            square: sq(6, 12),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 12)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 2
@@ -846,8 +863,10 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 6)
+                    ),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -981,23 +1000,25 @@ struct CleanSweepTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(6, 8),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .pass,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 8)
+                            ]
                         ),
-                        pl(.away, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 1),
+                            square: sq(6, 12),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 12)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 1
@@ -1037,12 +1058,16 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .passActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 8),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 8)
+                    ),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: pl(.away, 1),
-                            targetSquare: sq(6, 12),
+                            targetPlayer: PromptBoardPlayer(
+                                id: pl(.away, 1),
+                                square: sq(6, 12)
+                            ),
                             distance: .short,
                             obstructingSquares: [],
                             markedTargetSquares: []
@@ -1137,14 +1162,15 @@ struct CleanSweepTests {
                 coachID: .home,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.home, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 0),
+                            square: sq(7, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .standUp,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(7, 6)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3
@@ -1232,7 +1258,7 @@ struct CleanSweepTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1272,8 +1298,10 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 6)
+                    ),
                     results: [.smash]
                 )
             )
@@ -1404,8 +1432,10 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 6)
+                    ),
                     maxRunDistance: 6,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -1558,23 +1588,25 @@ struct CleanSweepTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(6, 8),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .pass,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 8)
+                            ]
                         ),
-                        pl(.away, 1): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 1),
+                            square: sq(6, 12),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(6, 12)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 1
@@ -1614,12 +1646,16 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .passActionSelectTarget(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(6, 8),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(6, 8)
+                    ),
                     validTargets: [
                         PassTarget(
-                            targetPlayerID: pl(.away, 1),
-                            targetSquare: sq(6, 12),
+                            targetPlayer: PromptBoardPlayer(
+                                id: pl(.away, 1),
+                                square: sq(6, 12)
+                            ),
                             distance: .short,
                             obstructingSquares: [],
                             markedTargetSquares: []
@@ -1722,14 +1758,15 @@ struct CleanSweepTests {
                 coachID: .home,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.home, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.home, 0),
+                            square: sq(7, 6),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .standUp,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(7, 6)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3

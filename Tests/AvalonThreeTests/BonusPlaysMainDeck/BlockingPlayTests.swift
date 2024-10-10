@@ -75,7 +75,7 @@ struct BlockingPlayTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -124,8 +124,10 @@ struct BlockingPlayTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 7),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 7)
+                    ),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -259,7 +261,7 @@ struct BlockingPlayTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -306,8 +308,10 @@ struct BlockingPlayTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 7),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 7)
+                    ),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -443,7 +447,7 @@ struct BlockingPlayTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -492,8 +496,10 @@ struct BlockingPlayTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(2, 7),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(2, 7)
+                    ),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -586,8 +592,10 @@ struct BlockingPlayTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 1),
-                    playerSquare: sq(9, 7),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 1),
+                        square: sq(9, 7)
+                    ),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
@@ -886,8 +894,10 @@ struct BlockingPlayTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .runActionSelectSquares(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(5, 7),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(5, 7)
+                    ),
                     maxRunDistance: 5,
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""

@@ -34,7 +34,7 @@ extension InGameTransaction {
 
         guard
             let validTarget = validTargets
-                .first(where: { $0.targetPlayerID == targetPlayerID })
+                .first(where: { $0.targetPlayer.id == targetPlayerID })
         else {
             throw GameError("Invalid target player")
         }
@@ -55,8 +55,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: actionContext.coachID,
                 prompt: .passActionEligibleForAccuratePassBonusPlay(
-                    playerID: actionContext.playerID,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: actionContext.playerID,
+                        square: playerSquare
+                    )
                 )
             )
         }

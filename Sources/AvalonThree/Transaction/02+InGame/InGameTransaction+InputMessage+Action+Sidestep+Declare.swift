@@ -52,8 +52,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: playerID.coachID,
             prompt: .sidestepActionSelectSquare(
-                playerID: playerID,
-                playerSquare: playerSquare,
+                player: PromptBoardPlayer(
+                    id: playerID,
+                    square: playerSquare
+                ),
                 validSquares: validSquares
             )
         )

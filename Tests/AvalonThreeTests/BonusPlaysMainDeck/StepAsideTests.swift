@@ -69,7 +69,7 @@ struct StepAsideTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -168,7 +168,7 @@ struct StepAsideTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -300,7 +300,7 @@ struct StepAsideTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -370,8 +370,10 @@ struct StepAsideTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .sidestepActionSelectSquare(
-                    playerID: pl(.home, 0),
-                    playerSquare: sq(0, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.home, 0),
+                        square: sq(0, 6)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -455,7 +457,9 @@ struct StepAsideTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [
-                        pl(.away, 0): PromptValidDeclaringPlayer(
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(1, 7),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
@@ -465,8 +469,7 @@ struct StepAsideTests {
                                     actionID: .mark,
                                     consumesBonusPlays: []
                                 ),
-                            ],
-                            square: sq(1, 7)
+                            ]
                         ),
                     ],
                     playerActionsLeft: 3
@@ -580,7 +583,7 @@ struct StepAsideTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -710,7 +713,7 @@ struct StepAsideTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )

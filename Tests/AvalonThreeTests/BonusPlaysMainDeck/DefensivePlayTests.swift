@@ -84,7 +84,7 @@ struct DefensivePlayTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .home,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -365,7 +365,7 @@ struct DefensivePlayTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .home,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -663,7 +663,7 @@ struct DefensivePlayTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .home,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )

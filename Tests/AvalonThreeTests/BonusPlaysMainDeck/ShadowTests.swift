@@ -64,7 +64,7 @@ struct ShadowTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -95,8 +95,10 @@ struct ShadowTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .sidestepActionSelectSquare(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(5, 5),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(5, 5)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -273,7 +275,7 @@ struct ShadowTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -399,7 +401,7 @@ struct ShadowTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )

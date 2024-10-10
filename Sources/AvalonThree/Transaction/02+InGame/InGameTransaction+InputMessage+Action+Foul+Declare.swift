@@ -60,17 +60,19 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: playerID.coachID,
                 prompt: .foulActionSelectTarget(
-                    playerID: playerID,
-                    playerSquare: playerSquare,
-                    validTargets: try validTargetPlayers.reduce([:]) { partialResult, player in
+                    player: PromptBoardPlayer(
+                        id: playerID,
+                        square: playerSquare
+                    ),
+                    validTargets: try validTargetPlayers.map { player in
                         guard let playerSquare = player.square else {
                             throw GameError("Player is in reserves")
                         }
-                        return partialResult.adding(
-                            key: player.id,
-                            value: playerSquare
+                        return PromptBoardPlayer(
+                            id: player.id,
+                            square: playerSquare
                         )
-                    }
+                    }.toSet()
                 )
             )
         }

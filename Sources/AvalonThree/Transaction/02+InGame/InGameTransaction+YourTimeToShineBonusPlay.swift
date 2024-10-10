@@ -110,15 +110,15 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: coachID,
                 prompt: .eligibleForYourTimeToShineBonusPlayRunAction(
-                    validPlayers: try validPlayerIDs.reduce([:]) { partialResult, playerID in
+                    validPlayers: try validPlayerIDs.map { playerID in
                         guard let playerSquare = table.getPlayer(id: playerID)?.square else {
                             throw GameError("Player is in reserves")
                         }
-                        return partialResult.adding(
-                            key: playerID,
-                            value: playerSquare
+                        return PromptBoardPlayer(
+                            id: playerID,
+                            square: playerSquare
                         )
-                    }
+                    }.toSet()
                 )
             )
         }

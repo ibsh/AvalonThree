@@ -57,8 +57,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: targetPlayerID.coachID,
                 prompt: .blockActionEligibleForStepAsideBonusPlaySidestepAction(
-                    playerID: targetPlayerID,
-                    playerSquare: targetPlayerSquare
+                    player: PromptBoardPlayer(
+                        id: targetPlayerID,
+                        square: targetPlayerSquare
+                    )
                 )
             )
         }
@@ -78,8 +80,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: actionContext.coachID,
                 prompt: .blockActionEligibleForBodyCheckBonusPlay(
-                    playerID: actionContext.playerID,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: actionContext.playerID,
+                        square: playerSquare
+                    )
                 )
             )
         }
@@ -102,8 +106,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: actionContext.coachID,
                 prompt: .blockActionEligibleForTheKidsGotMoxyBonusPlay(
-                    playerID: actionContext.playerID,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: actionContext.playerID,
+                        square: playerSquare
+                    )
                 )
             )
         }

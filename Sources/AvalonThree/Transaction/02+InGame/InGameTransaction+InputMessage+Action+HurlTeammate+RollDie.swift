@@ -52,8 +52,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: actionContext.coachID,
                 prompt: .hurlTeammateActionEligibleForProBonusPlay(
-                    playerID: actionContext.playerID,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: actionContext.playerID,
+                        square: playerSquare
+                    )
                 )
             )
         }
@@ -147,8 +149,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: player.coachID,
                 prompt: .hurlTeammateActionResultEligibleForRawTalentBonusPlayReroll(
-                    playerID: player.id,
-                    playerSquare: playerSquare,
+                    player: PromptBoardPlayer(
+                        id: player.id,
+                        square: playerSquare
+                    ),
                     result: modifiedRoll
                 )
             )

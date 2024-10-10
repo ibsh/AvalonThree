@@ -100,8 +100,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: playerID.coachID,
                 prompt: .markActionSelectSquares(
-                    playerID: playerID,
-                    playerSquare: playerSquare,
+                    player: PromptBoardPlayer(
+                        id: playerID,
+                        square: playerSquare
+                    ),
                     validSquares: interferenceValidSquares
                 )
             )
@@ -134,8 +136,10 @@ extension InGameTransaction {
             return AddressedPrompt(
                 coachID: playerID.coachID,
                 prompt: .markActionEligibleForInterferenceBonusPlay(
-                    playerID: playerID,
-                    playerSquare: playerSquare
+                    player: PromptBoardPlayer(
+                        id: playerID,
+                        square: playerSquare
+                    )
                 )
             )
         }
@@ -143,8 +147,10 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: playerID.coachID,
             prompt: .markActionSelectSquares(
-                playerID: playerID,
-                playerSquare: playerSquare,
+                player: PromptBoardPlayer(
+                    id: playerID,
+                    square: playerSquare
+                ),
                 validSquares: basicValidSquares
             )
         )

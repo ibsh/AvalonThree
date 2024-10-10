@@ -62,7 +62,7 @@ struct MightyBlowTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -107,8 +107,10 @@ struct MightyBlowTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .blockActionSelectResult(
-                    playerID: pl(.away, 0),
-                    playerSquare: sq(3, 6),
+                    player: PromptBoardPlayer(
+                        id: pl(.away, 0),
+                        square: sq(3, 6)
+                    ),
                     results: [.shove, .kerrunch]
                 )
             )

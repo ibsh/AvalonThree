@@ -69,7 +69,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -197,7 +197,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -277,8 +277,10 @@ struct InterventionTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.home, 0),
-                    playerSquare: sq(1, 12),
+                    player: PromptBoardPlayer(
+                        id: pl(.home, 0),
+                        square: sq(1, 12)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -425,7 +427,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -505,8 +507,10 @@ struct InterventionTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.home, 1),
-                    playerSquare: sq(7, 12),
+                    player: PromptBoardPlayer(
+                        id: pl(.home, 1),
+                        square: sq(7, 12)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -638,7 +642,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -721,8 +725,10 @@ struct InterventionTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.home, 1),
-                    playerSquare: sq(8, 12),
+                    player: PromptBoardPlayer(
+                        id: pl(.home, 1),
+                        square: sq(8, 12)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -859,7 +865,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1070,7 +1076,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1278,7 +1284,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1419,7 +1425,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1501,8 +1507,10 @@ struct InterventionTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.home, 0),
-                    playerSquare: sq(1, 12),
+                    player: PromptBoardPlayer(
+                        id: pl(.home, 0),
+                        square: sq(1, 12)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -1635,7 +1643,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1779,7 +1787,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -1859,8 +1867,10 @@ struct InterventionTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.home, 0),
-                    playerSquare: sq(1, 12),
+                    player: PromptBoardPlayer(
+                        id: pl(.home, 0),
+                        square: sq(1, 12)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
@@ -2005,7 +2015,7 @@ struct InterventionTests {
             previousAddressedPrompt: AddressedPrompt(
                 coachID: .away,
                 prompt: .declarePlayerAction(
-                    validDeclarations: [:],
+                    validDeclarations: [],
                     playerActionsLeft: 3
                 )
             )
@@ -2085,8 +2095,10 @@ struct InterventionTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .markActionSelectSquares(
-                    playerID: pl(.home, 0),
-                    playerSquare: sq(1, 12),
+                    player: PromptBoardPlayer(
+                        id: pl(.home, 0),
+                        square: sq(1, 12)
+                    ),
                     validSquares: ValidMoveSquares(
                         intermediate: squares("""
                         ...........
