@@ -130,7 +130,8 @@ struct DiscardFromHandTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    results: [.smash]
+                    results: [.smash],
+                    maySelectResultToDecline: false
                 )
             )
         )
@@ -699,6 +700,12 @@ struct DiscardFromHandTests {
                             canTakeActions: true
                         ),
                         Player(
+                            id: pl(.away, 2),
+                            spec: .undead_zombie,
+                            state: .standing(square: sq(8, 5)),
+                            canTakeActions: true
+                        ),
+                        Player(
                             id: pl(.home, 0),
                             spec: .human_lineman,
                             state: .standing(square: sq(7, 6)),
@@ -774,7 +781,7 @@ struct DiscardFromHandTests {
                     consumesBonusPlays: []
                 )
             ),
-            randomizers: Randomizers(blockDie: block(.smash))
+            randomizers: Randomizers(blockDie: block(.smash, .miss))
         )
 
         #expect(
@@ -787,7 +794,7 @@ struct DiscardFromHandTests {
                     isFree: false,
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(coachID: .away, results: [.smash, .miss]),
             ]
         )
 
@@ -799,7 +806,8 @@ struct DiscardFromHandTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    results: [.smash]
+                    results: [.smash, .miss],
+                    maySelectResultToDecline: true
                 )
             )
         )
@@ -811,7 +819,11 @@ struct DiscardFromHandTests {
                 coachID: .away,
                 message: .blockActionUseOffensiveSpecialistSkillReroll
             ),
-            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6), direction: direction(.northWest))
+            randomizers: Randomizers(
+                blockDie: block(.smash, .smash),
+                d6: d6(6),
+                direction: direction(.northWest)
+            )
         )
 
         #expect(
@@ -820,11 +832,14 @@ struct DiscardFromHandTests {
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: [.smash, .smash]
+                ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: [.smash, .smash]
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -832,6 +847,14 @@ struct DiscardFromHandTests {
                     to: sq(7, 6),
                     direction: .east,
                     targetPlayerID: pl(.home, 0)
+                ),
+                .playerAssistedBlock(
+                    assistingPlayerID: pl(.away, 2),
+                    from: sq(8, 5),
+                    to: sq(7, 6),
+                    direction: .southWest,
+                    targetPlayerID: pl(.home, 0),
+                    blockingPlayerID: pl(.away, 0)
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
@@ -938,6 +961,20 @@ struct DiscardFromHandTests {
                                 ),
                             ]
                         ),
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 2),
+                            square: sq(8, 5),
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .foul,
+                                    consumesBonusPlays: []
+                                ),
+                            ]
+                        ),
                     ],
                     playerActionsLeft: 2
                 )
@@ -988,7 +1025,7 @@ struct DiscardFromHandTests {
                         aaaaaaaaaaa
                         a..aaaaa..a
                         a..aaaaa..a
-                        aaaaaaaaaaa
+                        aaaaaaaa.aa
                         aaaaaaa.aaa
                         aaaaaaaaaaa
                         aaaaaaaaaaa
@@ -1005,7 +1042,7 @@ struct DiscardFromHandTests {
                         aaaaaaaaaaa
                         a..aaaaa..a
                         a..aaaaa..a
-                        aaaaaaaaaaa
+                        aaaaaaaa.aa
                         aaaaaaa.aaa
                         aaaaaaaaaaa
                         aaaaaaaaaaa
@@ -1164,6 +1201,20 @@ struct DiscardFromHandTests {
                                 ),
                             ]
                         ),
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 2),
+                            square: sq(8, 5),
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .foul,
+                                    consumesBonusPlays: []
+                                ),
+                            ]
+                        ),
                     ],
                     playerActionsLeft: 1
                 )
@@ -1215,7 +1266,16 @@ struct DiscardFromHandTests {
                             distance: .short,
                             obstructingSquares: [],
                             markedTargetSquares: []
-                        )
+                        ),
+                        PassTarget(
+                            targetPlayer: PromptBoardPlayer(
+                                id: pl(.away, 2),
+                                square: sq(8, 5)
+                            ),
+                            distance: .short,
+                            obstructingSquares: [],
+                            markedTargetSquares: []
+                        ),
                     ]
                 )
             )

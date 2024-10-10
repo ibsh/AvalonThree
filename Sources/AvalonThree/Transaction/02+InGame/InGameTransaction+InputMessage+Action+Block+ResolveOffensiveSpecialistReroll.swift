@@ -29,11 +29,17 @@ extension InGameTransaction {
     }
 
     mutating func blockActionDeclineOffensiveSpecialistSkillReroll(
-        result: BlockDieResult
+        result: BlockDieResult?
     ) throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
-            !actionContext.isFinished
+            !actionContext.isFinished,
+            let results = actionContext.history.lastResult(
+                { entry -> [BlockDieResult]? in
+                    guard case .blockResults(let results) = entry else { return nil }
+                    return results
+                }
+            )
         else {
             throw GameError("No action in history")
         }
@@ -49,7 +55,19 @@ extension InGameTransaction {
             )
         )
 
-        // update the action
-        return try blockActionSelectResult(result: result)
+        if results.count == 1 {
+
+            guard result == nil else {
+                throw GameError("May not select result")
+            }
+            return try blockActionSelectResult(result: results[0])
+
+        } else {
+
+            guard let result else {
+                throw GameError("Must select result")
+            }
+            return try blockActionSelectResult(result: result)
+        }
     }
 }

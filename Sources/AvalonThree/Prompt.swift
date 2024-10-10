@@ -175,7 +175,8 @@ public enum Prompt: Equatable, Codable, Sendable {
 
     case blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
         player: PromptBoardPlayer,
-        results: [BlockDieResult]
+        results: [BlockDieResult],
+        maySelectResultToDecline: Bool
     )
 
     case blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(

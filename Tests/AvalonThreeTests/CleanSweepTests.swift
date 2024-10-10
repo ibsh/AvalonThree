@@ -126,7 +126,8 @@ struct CleanSweepTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    results: [.smash]
+                    results: [.smash],
+                    maySelectResultToDecline: false
                 )
             )
         )
@@ -698,7 +699,8 @@ struct CleanSweepTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    results: [.smash]
+                    results: [.smash],
+                    maySelectResultToDecline: false
                 )
             )
         )
@@ -1302,7 +1304,8 @@ struct CleanSweepTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    results: [.smash]
+                    results: [.smash],
+                    maySelectResultToDecline: false
                 )
             )
         )

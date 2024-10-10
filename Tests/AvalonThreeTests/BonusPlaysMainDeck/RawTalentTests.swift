@@ -1891,6 +1891,19 @@ struct RawTalentTests {
             randomizers: Randomizers(blockDie: block(.miss))
         )
 
+        // Can't decline reroll with a result argument
+
+        #expect(throws: GameError("May not select result")) {
+            try game.process(
+                InputMessageWrapper(
+                    coachID: .away,
+                    message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
+                        result: .miss
+                    )
+                )
+            )
+        }
+
         // Decline reroll
 
         (latestEvents, latestAddressedPrompt) = try game.process(
@@ -2498,12 +2511,27 @@ struct RawTalentTests {
             randomizers: Randomizers(blockDie: block(.shove, .miss, .shove), d6: d6(3, 3), direction: direction(.east))
         )
 
+        // Can't decline reroll with a result argument
+
+        #expect(throws: GameError("May not select result")) {
+            try game.process(
+                InputMessageWrapper(
+                    coachID: .away,
+                    message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
+                        result: .shove
+                    )
+                )
+            )
+        }
+
         // Decline reroll
 
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(result: nil)
+                message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
+                    result: nil
+                )
             ),
             randomizers: Randomizers(d6: d6(3), direction: direction(.south))
         )
@@ -2957,6 +2985,19 @@ struct RawTalentTests {
             ),
             randomizers: Randomizers(blockDie: block(.miss, .tackle, .shove))
         )
+
+        // Can't decline reroll without a result argument
+
+        #expect(throws: GameError("Must select result")) {
+            try game.process(
+                InputMessageWrapper(
+                    coachID: .away,
+                    message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
+                        result: nil
+                    )
+                )
+            )
+        }
 
         // Decline reroll
 

@@ -209,7 +209,8 @@ extension InGameTransaction {
                         id: actionContext.playerID,
                         square: playerSquare
                     ),
-                    results: results
+                    results: results,
+                    maySelectResultToDecline: results.count > 1
                 )
             )
         }
