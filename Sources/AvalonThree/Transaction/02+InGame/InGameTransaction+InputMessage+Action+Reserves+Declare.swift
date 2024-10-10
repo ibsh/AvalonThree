@@ -26,7 +26,7 @@ extension InGameTransaction {
 
         let idealFinalSquares = emptySquares
             .filter { square in
-                table.standingOpponentsAdjacentToSquare(square, for: playerID).isEmpty
+                table.opponentsAdjacentToSquare(square, for: playerID).isEmpty
                 && table.looseBalls(in: square).isEmpty
             }
 

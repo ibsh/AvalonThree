@@ -1,16 +1,16 @@
 //
-//  PassTests.swift
+//  FoulTests.swift
 //  AvalonThree
 //
-//  Created by Ibrahim Sha'ath on 7/25/24.
+//  Created by Ibrahim Sha'ath on 9/27/24.
 //
 
 import Testing
 @testable import AvalonThree
 
-struct PassTests {
+struct FoulActionTests {
 
-    @Test func handingOffToAPlayerWithoutPassStat() async throws {
+    @Test func notPromptedIfOnlyOneEligibleTarget() async throws {
 
         // Init
 
@@ -22,22 +22,22 @@ struct PassTests {
                         boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
-                        coinFlipWinnerTeamID: .human,
-                        coinFlipLoserTeamID: .necromantic
+                        coinFlipWinnerTeamID: .undead,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
                             id: pl(.away, 0),
-                            spec: .necromantic_zombie,
-                            state: .standing(square: sq(3, 5)),
+                            spec: .human_lineman,
+                            state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: pl(.away, 1),
-                            spec: .necromantic_wraith,
-                            state: .standing(square: sq(4, 5)),
+                            id: pl(.home, 0),
+                            spec: .undead_skeleton,
+                            state: .prone(square: sq(5, 11)),
                             canTakeActions: true
-                        )
+                        ),
                     ],
                     playerNumbers: [:],
                     coinFlipLoserHand: [],
@@ -68,24 +68,25 @@ struct PassTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [],
-                    playerActionsLeft: 3
+                    playerActionsLeft: 1
                 )
             )
         )
 
-        // Declare handoff
+        // Declare foul
 
-        var (latestEvents, latestAddressedPrompt) = try game.process(
+        let (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .pass
+                        actionID: .foul
                     ),
                     consumesBonusPlays: []
                 )
-            )
+            ),
+            randomizers: Randomizers(foulDie: foul(.gotThem))
         )
 
         #expect(
@@ -93,71 +94,23 @@ struct PassTests {
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .pass
+                        actionID: .foul
                     ),
                     isFree: false,
-                    playerSquare: sq(3, 5)
-                )
-            ]
-        )
-
-        #expect(
-            latestAddressedPrompt == AddressedPrompt(
-                coachID: .away,
-                prompt: .passActionSelectTarget(
-                    player: PromptBoardPlayer(
-                        id: pl(.away, 0),
-                        square: sq(3, 5)
-                    ),
-                    validTargets: [
-                        PassTarget(
-                            targetPlayer: PromptBoardPlayer(
-                                id: pl(.away, 1),
-                                square: sq(4, 5)
-                            ),
-                            distance: .handoff,
-                            obstructingSquares: [],
-                            markedTargetSquares: []
-                        )
-                    ]
-                )
-            )
-        )
-
-        // Select handoff
-
-        (latestEvents, latestAddressedPrompt) = try game.process(
-            InputMessageWrapper(
-                coachID: .away,
-                message: .passActionSelectTarget(target: pl(.away, 1))
-            ),
-            randomizers: Randomizers(direction: direction(.south))
-        )
-
-        #expect(
-            latestEvents == [
-                .playerHandedOffBall(
+                    playerSquare: sq(5, 12)
+                ),
+                .rolledForFoul(coachID: .away, result: .gotThem),
+                .playerFouled(
                     playerID: pl(.away, 0),
-                    from: sq(3, 5),
-                    to: sq(4, 5),
-                    direction: .east,
-                    ballID: 123
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFailedCatch(
-                    playerID: pl(.away, 1),
-                    playerSquare: sq(4, 5),
-                    ballID: 123
-                ),
-                .ballCameLoose(ballID: 123, ballSquare: sq(4, 5)),
-                .rolledForDirection(
-                    coachID: .away,
-                    direction: .south
-                ),
-                .ballBounced(
-                    ballID: 123,
-                    from: sq(4, 5),
-                    to: sq(4, 6),
-                    direction: .south
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    playerSquare: sq(5, 11),
+                    reason: .fouled
                 ),
             ]
         )
@@ -169,17 +122,7 @@ struct PassTests {
                     validDeclarations: [
                         PromptValidDeclaringPlayer(
                             playerID: pl(.away, 0),
-                            square: sq(3, 5),
-                            declarations: [
-                                PromptValidDeclaration(
-                                    actionID: .run,
-                                    consumesBonusPlays: []
-                                ),
-                            ]
-                        ),
-                        PromptValidDeclaringPlayer(
-                            playerID: pl(.away, 1),
-                            square: sq(4, 5),
+                            square: sq(5, 12),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,
@@ -194,7 +137,7 @@ struct PassTests {
         )
     }
 
-    @Test func passingToAPlayerWithoutPassStat() async throws {
+    @Test func promptedIfMoreThanOneEligibleTarget() async throws {
 
         // Init
 
@@ -206,22 +149,28 @@ struct PassTests {
                         boardSpecID: .season1Board1,
                         challengeDeckID: .shortStandard,
                         rookieBonusRecipientID: .noOne,
-                        coinFlipWinnerTeamID: .human,
-                        coinFlipLoserTeamID: .necromantic
+                        coinFlipWinnerTeamID: .undead,
+                        coinFlipLoserTeamID: .human
                     ),
                     players: [
                         Player(
                             id: pl(.away, 0),
-                            spec: .necromantic_zombie,
-                            state: .standing(square: sq(2, 5)),
+                            spec: .human_lineman,
+                            state: .standing(square: sq(5, 12)),
                             canTakeActions: true
                         ),
                         Player(
-                            id: pl(.away, 1),
-                            spec: .necromantic_wraith,
-                            state: .standing(square: sq(4, 5)),
+                            id: pl(.home, 0),
+                            spec: .undead_skeleton,
+                            state: .prone(square: sq(5, 11)),
                             canTakeActions: true
-                        )
+                        ),
+                        Player(
+                            id: pl(.home, 1),
+                            spec: .undead_skeleton,
+                            state: .prone(square: sq(4, 13)),
+                            canTakeActions: true
+                        ),
                     ],
                     playerNumbers: [:],
                     coinFlipLoserHand: [],
@@ -252,12 +201,12 @@ struct PassTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [],
-                    playerActionsLeft: 3
+                    playerActionsLeft: 1
                 )
             )
         )
 
-        // Declare pass
+        // Declare foul
 
         var (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
@@ -265,7 +214,7 @@ struct PassTests {
                 message: .declarePlayerAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .pass
+                        actionID: .foul
                     ),
                     consumesBonusPlays: []
                 )
@@ -277,10 +226,10 @@ struct PassTests {
                 .declaredAction(
                     declaration: ActionDeclaration(
                         playerID: pl(.away, 0),
-                        actionID: .pass
+                        actionID: .foul
                     ),
                     isFree: false,
-                    playerSquare: sq(2, 5)
+                    playerSquare: sq(5, 12)
                 )
             ]
         )
@@ -288,65 +237,49 @@ struct PassTests {
         #expect(
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                prompt: .passActionSelectTarget(
+                prompt: .foulActionSelectTarget(
                     player: PromptBoardPlayer(
                         id: pl(.away, 0),
-                        square: sq(2, 5)
+                        square: sq(5, 12)
                     ),
                     validTargets: [
-                        PassTarget(
-                            targetPlayer: PromptBoardPlayer(
-                                id: pl(.away, 1),
-                                square: sq(4, 5)
-                            ),
-                            distance: .short,
-                            obstructingSquares: [],
-                            markedTargetSquares: []
-                        )
+                        PromptBoardPlayer(
+                            id: pl(.home, 0),
+                            square: sq(5, 11)
+                        ),
+                        PromptBoardPlayer(
+                            id: pl(.home, 1),
+                            square: sq(4, 13)
+                        ),
                     ]
                 )
             )
         )
 
-        // Select pass
+        // Select foul
 
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .passActionSelectTarget(target: pl(.away, 1))
+                message: .foulActionSelectTarget(target: pl(.home, 0))
             ),
-            randomizers: Randomizers(d6: d6(6), direction: direction(.south))
+            randomizers: Randomizers(foulDie: foul(.gotThem))
         )
 
         #expect(
             latestEvents == [
-                .rolledForPass(
-                    coachID: .away,
-                    die: .d6,
-                    unmodified: 6
-                ),
-                .playerPassedBall(
+                .rolledForFoul(coachID: .away, result: .gotThem),
+                .playerFouled(
                     playerID: pl(.away, 0),
-                    from: sq(2, 5),
-                    to: sq(4, 5),
-                    angle: 90,
-                    ballID: 123
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 0)
                 ),
-                .playerFailedCatch(
-                    playerID: pl(.away, 1),
-                    playerSquare: sq(4, 5),
-                    ballID: 123
-                ),
-                .ballCameLoose(ballID: 123, ballSquare: sq(4, 5)),
-                .rolledForDirection(
-                    coachID: .away,
-                    direction: .south
-                ),
-                .ballBounced(
-                    ballID: 123,
-                    from: sq(4, 5),
-                    to: sq(4, 6),
-                    direction: .south
+                .playerInjured(
+                    playerID: pl(.home, 0),
+                    playerSquare: sq(5, 11),
+                    reason: .fouled
                 ),
             ]
         )
@@ -358,17 +291,7 @@ struct PassTests {
                     validDeclarations: [
                         PromptValidDeclaringPlayer(
                             playerID: pl(.away, 0),
-                            square: sq(2, 5),
-                            declarations: [
-                                PromptValidDeclaration(
-                                    actionID: .run,
-                                    consumesBonusPlays: []
-                                ),
-                            ]
-                        ),
-                        PromptValidDeclaringPlayer(
-                            playerID: pl(.away, 1),
-                            square: sq(4, 5),
+                            square: sq(5, 12),
                             declarations: [
                                 PromptValidDeclaration(
                                     actionID: .run,

@@ -21,6 +21,16 @@ extension Table {
         playerInSquare(square) == nil
     }
 
+    func opponentsAdjacentToSquare(
+        _ square: Square,
+        for playerID: PlayerID
+    ) -> Set<Player> {
+        playersInSquares(square.adjacentSquares)
+            .filter { adjacentPlayer in
+                adjacentPlayer.coachID != playerID.coachID
+            }
+    }
+
     func standingOpponentsAdjacentToSquare(
         _ square: Square,
         for playerID: PlayerID

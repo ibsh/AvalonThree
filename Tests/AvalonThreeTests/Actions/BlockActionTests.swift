@@ -8,7 +8,7 @@
 import Testing
 @testable import AvalonThree
 
-struct BlockTests {
+struct BlockActionTests {
 
     @Test func notPromptedIfOnlyOneEligibleTarget() async throws {
 
