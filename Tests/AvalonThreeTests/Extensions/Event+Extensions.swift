@@ -106,7 +106,6 @@ extension Event {
         case .rolledForHurlTeammate: .rolledForHurlTeammate
         case .changedHurlTeammateResult: .changedHurlTeammateResult
         case .rolledForFoul: .rolledForFoul
-        case .rolledForClaws: .rolledForClaws
         case .rolledForBlock: .rolledForBlock
         case .usedOffensiveSpecialistSkillReroll: .usedOffensiveSpecialistSkillReroll
         case .declinedOffensiveSpecialistSkillReroll: .declinedOffensiveSpecialistSkillReroll

@@ -53,86 +53,91 @@ extension InGameTransaction {
             throw GameError("No block dice")
         }
 
-        var clawsResult: Int?
+        var claws: Int?
 
-        if player.spec.skills.contains(.claws) {
-            let result = randomizers.d6.roll()
-            clawsResult = result
-            events.append(.rolledForClaws(coachID: actionContext.coachID, result: result))
-            if result == TableConstants.clawsEffectiveD6Roll {
-
-                // finish the action
-                history.append(.blockTargetKnockedDown)
-                history.append(.blockTargetInjured)
-
-                targetPlayer.state = .prone(square: targetSquare)
-                table.players.update(with: targetPlayer)
-
-                guard let direction = playerSquare.direction(to: targetSquare) else {
-                    throw GameError("No block direction")
-                }
-                events.append(
-                    .playerBlocked(
-                        playerID: player.id,
-                        from: playerSquare,
-                        to: targetSquare,
-                        direction: direction,
-                        targetPlayerID: targetPlayerID
-                    )
-                )
-                for assistingPlayerID in actionContext.history.compactMap({ entry -> PlayerID? in
-                    guard case .blockAssistingPlayer(let playerID) = entry else { return nil }
-                    return playerID
-                }) {
-                    guard let square = table.getPlayer(id: assistingPlayerID)?.square else {
-                        throw GameError("Assisting player is in reserves")
-                    }
-                    guard let direction = square.direction(to: targetSquare) else {
-                        throw GameError("No assist direction")
-                    }
-                    events.append(
-                        .playerAssistedBlock(
-                            assistingPlayerID: assistingPlayerID,
-                            from: square,
-                            to: targetSquare,
-                            direction: direction,
-                            targetPlayerID: targetPlayerID,
-                            blockingPlayerID: player.id
-                        )
-                    )
-                }
-                events.append(
-                    .playerFellDown(
-                        playerID: targetPlayerID,
-                        playerSquare: targetSquare,
-                        reason: .blocked
-                    )
-                )
-
-                try playerIsInjured(playerID: targetPlayerID, reason: .blocked)
-
-                return try endBlockAction()
-            }
-        }
-
-        var unmodifiedResults = blockDiceCount.reduce([BlockDieResult]()) { partialResult in
+        var unmodifiedDice = blockDiceCount.reduce([BlockDieResult]()) { partialResult in
             partialResult + [randomizers.blockDie.rollBlockDie()]
         }
 
         if player.spec.skills.contains(.enforcer) {
-            unmodifiedResults = unmodifiedResults.sorted { lhs, rhs in
+            unmodifiedDice = unmodifiedDice.sorted { lhs, rhs in
                 lhs.enforcerSortValue < rhs.enforcerSortValue
             }
         }
 
+        if player.spec.skills.contains(.claws) {
+            claws = randomizers.d6.roll()
+        }
+
         events.append(
-            .rolledForBlock(coachID: actionContext.coachID, results: unmodifiedResults)
+            .rolledForBlock(
+                coachID: actionContext.coachID,
+                results: BlockResults(
+                    dice: unmodifiedDice,
+                    claws: claws
+                )
+            )
         )
 
-        var results = unmodifiedResults
+        if claws == TableConstants.clawsEffectiveD6Roll {
+
+            // finish the action
+            history.append(.blockTargetKnockedDown)
+            history.append(.blockTargetInjured)
+
+            targetPlayer.state = .prone(square: targetSquare)
+            table.players.update(with: targetPlayer)
+
+            guard let direction = playerSquare.direction(to: targetSquare) else {
+                throw GameError("No block direction")
+            }
+            events.append(
+                .playerBlocked(
+                    playerID: player.id,
+                    from: playerSquare,
+                    to: targetSquare,
+                    direction: direction,
+                    targetPlayerID: targetPlayerID
+                )
+            )
+            for assistingPlayerID in actionContext.history.compactMap({ entry -> PlayerID? in
+                guard case .blockAssistingPlayer(let playerID) = entry else { return nil }
+                return playerID
+            }) {
+                guard let square = table.getPlayer(id: assistingPlayerID)?.square else {
+                    throw GameError("Assisting player is in reserves")
+                }
+                guard let direction = square.direction(to: targetSquare) else {
+                    throw GameError("No assist direction")
+                }
+                events.append(
+                    .playerAssistedBlock(
+                        assistingPlayerID: assistingPlayerID,
+                        from: square,
+                        to: targetSquare,
+                        direction: direction,
+                        targetPlayerID: targetPlayerID,
+                        blockingPlayerID: player.id
+                    )
+                )
+            }
+            events.append(
+                .playerFellDown(
+                    playerID: targetPlayerID,
+                    playerSquare: targetSquare,
+                    reason: .blocked
+                )
+            )
+
+            try playerIsInjured(playerID: targetPlayerID, reason: .blocked)
+
+            return try endBlockAction()
+        }
+
+        var modifiedDice = unmodifiedDice
         var modifications = [BlockRollModification]()
 
-        results = results.map { result in
+        modifiedDice = modifiedDice.map { result in
             var result = result
 
             // blocking player effects
@@ -178,15 +183,23 @@ extension InGameTransaction {
         }
 
         if player.spec.skills.contains(.enforcer) {
-            results = results.sorted { lhs, rhs in
+            modifiedDice = modifiedDice.sorted { lhs, rhs in
                 lhs.enforcerSortValue < rhs.enforcerSortValue
             }
         }
 
-        if results != unmodifiedResults {
+        let results = BlockResults(
+            dice: modifiedDice,
+            claws: claws
+        )
+
+        if modifiedDice != unmodifiedDice {
             events.append(
                 .changedBlockResults(
-                    from: unmodifiedResults,
+                    from: BlockResults(
+                        dice: unmodifiedDice,
+                        claws: claws
+                    ),
                     to: results,
                     modifications: modifications
                 )
@@ -210,7 +223,7 @@ extension InGameTransaction {
                         square: playerSquare
                     ),
                     results: results,
-                    maySelectResultToDecline: results.count > 1
+                    maySelectResultToDecline: results.dice.count > 1
                 )
             )
         }
@@ -236,20 +249,19 @@ extension InGameTransaction {
                         square: playerSquare
                     ),
                     results: results,
-                    clawsResult: clawsResult,
                     maySelectResultToDecline:
-                        !player.spec.skills.contains(.enforcer) && results.count > 1
+                        !player.spec.skills.contains(.enforcer) && results.dice.count > 1
                 )
             )
         }
 
         // This implementation assumes that no enforcer is a bomber or offensive specialist.
         if player.spec.skills.contains(.enforcer) {
-            return try blockActionSelectResult(result: results[0])
+            return try blockActionSelectResult(result: results.dice[0])
         }
 
-        if results.count == 1 || Set(results).count == 1 {
-            return try blockActionSelectResult(result: results[0])
+        if results.dice.count == 1 || Set(results.dice).count == 1 {
+            return try blockActionSelectResult(result: results.dice[0])
         }
 
         return AddressedPrompt(

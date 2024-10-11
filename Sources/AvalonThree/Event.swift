@@ -106,14 +106,9 @@ public enum Event: Equatable, Codable, Sendable {
         result: FoulDieResult
     )
 
-    case rolledForClaws(
-        coachID: CoachID,
-        result: Int
-    )
-
     case rolledForBlock(
         coachID: CoachID,
-        results: [BlockDieResult]
+        results: BlockResults
     )
 
     case usedOffensiveSpecialistSkillReroll(
@@ -127,15 +122,15 @@ public enum Event: Equatable, Codable, Sendable {
     )
 
     case changedBlockResults(
-        from: [BlockDieResult],
-        to: [BlockDieResult],
+        from: BlockResults,
+        to: BlockResults,
         modifications: [BlockRollModification]
     )
 
     case selectedBlockDieResult(
         coachID: CoachID,
         result: BlockDieResult,
-        from: [BlockDieResult]
+        from: BlockResults
     )
 
     case declinedFollowUp(

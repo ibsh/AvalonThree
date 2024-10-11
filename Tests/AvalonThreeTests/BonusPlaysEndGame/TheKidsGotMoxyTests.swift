@@ -129,7 +129,7 @@ struct TheKidsGotMoxyTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .kerrunch,
-                    from: [.miss, .kerrunch, .shove]
+                    from: BlockResults(dice: [.miss, .kerrunch, .shove])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -272,12 +272,12 @@ struct TheKidsGotMoxyTests {
             latestEvents == [
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.smash]
+                    results: BlockResults(dice: [.smash])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

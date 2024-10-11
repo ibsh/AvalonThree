@@ -101,17 +101,17 @@ struct StandFirmTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.shove]
+                    results: BlockResults(dice: [.shove])
                 ),
                 .changedBlockResults(
-                    from: [.shove],
-                    to: [.miss],
+                    from: BlockResults(dice: [.shove]),
+                    to: BlockResults(dice: [.miss]),
                     modifications: [.opponentHasStandFirm]
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .miss,
-                    from: [.miss]
+                    from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

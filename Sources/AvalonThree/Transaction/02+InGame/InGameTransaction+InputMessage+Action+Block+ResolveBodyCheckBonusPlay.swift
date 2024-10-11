@@ -20,10 +20,15 @@ extension InGameTransaction {
             coachID: coachID
         )
 
+        let results = BlockResults(dice: [.kerrunch], claws: nil)
+
         events.append(
-            .rolledForBlock(coachID: coachID, results: [.kerrunch])
+            .rolledForBlock(
+                coachID: coachID,
+                results: results
+            )
         )
-        history.append(.blockResults([.kerrunch]))
+        history.append(.blockResults(results))
         return try blockActionSelectResult(result: .kerrunch)
     }
 

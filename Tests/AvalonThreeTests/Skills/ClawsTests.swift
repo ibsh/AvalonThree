@@ -94,12 +94,14 @@ struct ClawsTests {
                     isFree: false,
                     playerSquare: sq(2, 6)
                 ),
-                .rolledForClaws(coachID: .away, result: 5),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash], claws: 5)
+                ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash], claws: 5)
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -198,7 +200,7 @@ struct ClawsTests {
                     consumesBonusPlays: []
                 )
             ),
-            randomizers: Randomizers(blockDie: block(.smash), d6: d6(6))
+            randomizers: Randomizers(blockDie: block(.smash, .shove), d6: d6(6))
         )
 
         #expect(
@@ -211,7 +213,10 @@ struct ClawsTests {
                     isFree: false,
                     playerSquare: sq(2, 6)
                 ),
-                .rolledForClaws(coachID: .away, result: 6),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash, .shove], claws: 6)
+                ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
                     from: sq(2, 6),

@@ -118,7 +118,10 @@ struct DiscardFromHandTests {
                     isFree: false,
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash])
+                ),
             ]
         )
 
@@ -130,7 +133,7 @@ struct DiscardFromHandTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    results: [.smash],
+                    results: BlockResults(dice: [.smash]),
                     maySelectResultToDecline: false
                 )
             )
@@ -152,11 +155,14 @@ struct DiscardFromHandTests {
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash])
+                ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -797,7 +803,10 @@ struct DiscardFromHandTests {
                     isFree: false,
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash, .miss]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash, .miss])
+                ),
             ]
         )
 
@@ -809,7 +818,7 @@ struct DiscardFromHandTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    results: [.smash, .miss],
+                    results: BlockResults(dice: [.smash, .miss]),
                     maySelectResultToDecline: true
                 )
             )
@@ -837,12 +846,12 @@ struct DiscardFromHandTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.smash, .smash]
+                    results: BlockResults(dice: [.smash, .smash])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash, .smash]
+                    from: BlockResults(dice: [.smash, .smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

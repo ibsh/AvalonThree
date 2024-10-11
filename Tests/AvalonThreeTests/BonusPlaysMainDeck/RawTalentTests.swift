@@ -1761,12 +1761,12 @@ struct RawTalentTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.shove]
+                    results: BlockResults(dice: [.shove])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .shove,
-                    from: [.shove]
+                    from: BlockResults(dice: [.shove])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -1923,7 +1923,7 @@ struct RawTalentTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .miss,
-                    from: [.miss]
+                    from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -2050,7 +2050,7 @@ struct RawTalentTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .kerrunch,
-                    from: [.kerrunch, .miss]
+                    from: BlockResults(dice: [.kerrunch, .miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -2197,7 +2197,7 @@ struct RawTalentTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash, .miss]
+                    from: BlockResults(dice: [.smash, .miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -2346,12 +2346,12 @@ struct RawTalentTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.smash, .smash, .kerrunch]
+                    results: BlockResults(dice: [.smash, .smash, .kerrunch])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash, .smash, .kerrunch]
+                    from: BlockResults(dice: [.smash, .smash, .kerrunch])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -2402,12 +2402,12 @@ struct RawTalentTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash, .kerrunch]
+                    from: BlockResults(dice: [.smash, .kerrunch])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .kerrunch,
-                    from: [.kerrunch]
+                    from: BlockResults(dice: [.kerrunch])
                 ),
                 .discardedActiveBonusPlay(
                     coachID: .away,
@@ -2545,7 +2545,7 @@ struct RawTalentTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .shove,
-                    from: [.shove, .shove, .miss]
+                    from: BlockResults(dice: [.shove, .shove, .miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -2581,7 +2581,7 @@ struct RawTalentTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .shove,
-                    from: [.shove, .miss]
+                    from: BlockResults(dice: [.shove, .miss])
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
@@ -2607,7 +2607,7 @@ struct RawTalentTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .miss,
-                    from: [.miss]
+                    from: BlockResults(dice: [.miss])
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
@@ -2703,7 +2703,7 @@ struct RawTalentTests {
                 coachID: .away,
                 message: .blockActionUseRawTalentBonusPlayRerollForBlockDieResults
             ),
-            randomizers: Randomizers(d6: d6(6))
+            randomizers: Randomizers(blockDie: block(.miss), d6: d6(6))
         )
 
         #expect(
@@ -2722,9 +2722,9 @@ struct RawTalentTests {
                         ),
                     ]
                 ),
-                .rolledForClaws(
+                .rolledForBlock(
                     coachID: .away,
-                    result: 6
+                    results: BlockResults(dice: [.miss], claws: 6)
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -2875,7 +2875,7 @@ struct RawTalentTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .tackle,
-                    from: [.miss, .miss, .tackle]
+                    from: BlockResults(dice: [.miss, .miss, .tackle])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -3020,7 +3020,7 @@ struct RawTalentTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .shove,
-                    from: [.miss, .tackle, .shove]
+                    from: BlockResults(dice: [.miss, .tackle, .shove])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

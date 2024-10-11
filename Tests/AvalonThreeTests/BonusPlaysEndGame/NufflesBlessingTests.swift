@@ -221,12 +221,12 @@ struct NufflesBlessingTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.kerrunch, .kerrunch]
+                    results: BlockResults(dice: [.kerrunch, .kerrunch])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .kerrunch,
-                    from: [.kerrunch, .kerrunch]
+                    from: BlockResults(dice: [.kerrunch, .kerrunch])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

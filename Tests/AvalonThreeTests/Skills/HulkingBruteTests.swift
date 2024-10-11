@@ -110,10 +110,13 @@ struct HulkingBruteTests {
 
         #expect(
             latestEvents == [
-                .rolledForBlock(coachID: .away, results: [.tackle, .miss]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.tackle, .miss])
+                ),
                 .changedBlockResults(
-                    from: [.tackle, .miss],
-                    to: [.kerrunch, .miss],
+                    from: BlockResults(dice: [.tackle, .miss]),
+                    to: BlockResults(dice: [.kerrunch, .miss]),
                     modifications: [.playerIsHulkingBrute]
                 ),
             ]
@@ -127,7 +130,7 @@ struct HulkingBruteTests {
                         id: pl(.away, 0),
                         square: sq(3, 6)
                     ),
-                    results: [.kerrunch, .miss]
+                    results: BlockResults(dice: [.kerrunch, .miss])
                 )
             )
         )
@@ -217,10 +220,13 @@ struct HulkingBruteTests {
                     isFree: false,
                     playerSquare: sq(3, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.shove, .smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.shove, .smash])
+                ),
                 .changedBlockResults(
-                    from: [.shove, .smash],
-                    to: [.shove, .kerrunch],
+                    from: BlockResults(dice: [.shove, .smash]),
+                    to: BlockResults(dice: [.shove, .kerrunch]),
                     modifications: [.playerIsHulkingBrute]
                 ),
             ]
@@ -234,7 +240,7 @@ struct HulkingBruteTests {
                         id: pl(.away, 0),
                         square: sq(3, 6)
                     ),
-                    results: [.shove, .kerrunch]
+                    results: BlockResults(dice: [.shove, .kerrunch])
                 )
             )
         )
@@ -330,11 +336,11 @@ struct HulkingBruteTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.tackle]
+                    results: BlockResults(dice: [.tackle])
                 ),
                 .changedBlockResults(
-                    from: [.tackle],
-                    to: [.miss],
+                    from: BlockResults(dice: [.tackle]),
+                    to: BlockResults(dice: [.miss]),
                     modifications: [
                         .opponentIsHulkingBrute
                     ]
@@ -342,7 +348,7 @@ struct HulkingBruteTests {
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .miss,
-                    from: [.miss]
+                    from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

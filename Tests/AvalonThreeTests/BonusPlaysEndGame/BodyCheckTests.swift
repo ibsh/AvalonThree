@@ -126,12 +126,12 @@ struct BodyCheckTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.kerrunch]
+                    results: BlockResults(dice: [.kerrunch])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .kerrunch,
-                    from: [.kerrunch]
+                    from: BlockResults(dice: [.kerrunch])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -209,11 +209,14 @@ struct BodyCheckTests {
 
         #expect(
             latestEvents == [
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash])
+                ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

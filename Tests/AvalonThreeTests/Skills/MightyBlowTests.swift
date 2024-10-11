@@ -94,10 +94,13 @@ struct MightyBlowTests {
                     isFree: false,
                     playerSquare: sq(3, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.shove, .smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.shove, .smash])
+                ),
                 .changedBlockResults(
-                    from: [.shove, .smash],
-                    to: [.shove, .kerrunch],
+                    from: BlockResults(dice: [.shove, .smash]),
+                    to: BlockResults(dice: [.shove, .kerrunch]),
                     modifications: [.playerHasMightyBlow]
                 ),
             ]
@@ -111,7 +114,7 @@ struct MightyBlowTests {
                         id: pl(.away, 0),
                         square: sq(3, 6)
                     ),
-                    results: [.shove, .kerrunch]
+                    results: BlockResults(dice: [.shove, .kerrunch])
                 )
             )
         )

@@ -444,17 +444,17 @@ struct TitchyTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.tackle]
+                    results: BlockResults(dice: [.tackle])
                 ),
                 .changedBlockResults(
-                    from: [.tackle],
-                    to: [.miss],
+                    from: BlockResults(dice: [.tackle]),
+                    to: BlockResults(dice: [.miss]),
                     modifications: [.playerIsTitchy]
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .miss,
-                    from: [.miss]
+                    from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

@@ -282,7 +282,7 @@ struct DefensivePlayTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.kerrunch, .smash]
+                    results: BlockResults(dice: [.kerrunch, .smash])
                 ),
             ]
         )
@@ -562,12 +562,12 @@ struct DefensivePlayTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.miss]
+                    results: BlockResults(dice: [.miss])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .miss,
-                    from: [.miss]
+                    from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -863,12 +863,12 @@ struct DefensivePlayTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.miss, .miss]
+                    results: BlockResults(dice: [.miss, .miss])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .miss,
-                    from: [.miss, .miss]
+                    from: BlockResults(dice: [.miss, .miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -1176,12 +1176,12 @@ struct DefensivePlayTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.smash]
+                    results: BlockResults(dice: [.smash])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 1),

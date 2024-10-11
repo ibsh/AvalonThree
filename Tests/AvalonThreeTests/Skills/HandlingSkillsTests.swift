@@ -98,12 +98,12 @@ struct HandlingSkillsTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.shove]
+                    results: BlockResults(dice: [.shove])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .shove,
-                    from: [.shove]
+                    from: BlockResults(dice: [.shove])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

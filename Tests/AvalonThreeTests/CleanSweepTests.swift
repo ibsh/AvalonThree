@@ -114,7 +114,10 @@ struct CleanSweepTests {
                     isFree: false,
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash])
+                ),
             ]
         )
 
@@ -126,7 +129,7 @@ struct CleanSweepTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    results: [.smash],
+                    results: BlockResults(dice: [.smash]),
                     maySelectResultToDecline: false
                 )
             )
@@ -148,11 +151,14 @@ struct CleanSweepTests {
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash])
+                ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -165,7 +171,8 @@ struct CleanSweepTests {
                     playerID: pl(.home, 0),
                     playerSquare: sq(7, 6),
                     reason: .blocked
-                ), .ballCameLoose(ballID: 123, ballSquare: sq(7, 6)),
+                ),
+                .ballCameLoose(ballID: 123, ballSquare: sq(7, 6)),
                 .rolledForDirection(
                     coachID: .away,
                     direction: .northWest
@@ -689,7 +696,10 @@ struct CleanSweepTests {
                     isFree: false,
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash])
+                ),
             ]
         )
 
@@ -701,7 +711,7 @@ struct CleanSweepTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    results: [.smash],
+                    results: BlockResults(dice: [.smash]),
                     maySelectResultToDecline: false
                 )
             )
@@ -723,11 +733,14 @@ struct CleanSweepTests {
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash])
+                ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -1296,7 +1309,10 @@ struct CleanSweepTests {
                     isFree: false,
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash])
+                ),
             ]
         )
 
@@ -1308,7 +1324,7 @@ struct CleanSweepTests {
                         id: pl(.away, 0),
                         square: sq(6, 6)
                     ),
-                    results: [.smash],
+                    results: BlockResults(dice: [.smash]),
                     maySelectResultToDecline: false
                 )
             )
@@ -1330,11 +1346,14 @@ struct CleanSweepTests {
                     playerID: pl(.away, 0),
                     playerSquare: sq(6, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.smash]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash])
+                ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

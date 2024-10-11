@@ -23,7 +23,7 @@ extension InGameTransaction {
                 }
             ),
             let results = actionContext.history.lastResult(
-                { entry -> [BlockDieResult]? in
+                { entry -> BlockResults? in
                     guard case .blockResults(let results) = entry else { return nil }
                     return results
                 }
@@ -32,7 +32,7 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
-        guard results.contains(result) else {
+        guard results.dice.contains(result) else {
             throw GameError("Result is not a valid choice")
         }
 
@@ -53,7 +53,11 @@ extension InGameTransaction {
         }
 
         events.append(
-            .selectedBlockDieResult(coachID: player.coachID, result: result, from: results)
+            .selectedBlockDieResult(
+                coachID: player.coachID,
+                result: result,
+                from: results
+            )
         )
 
         if !actionContext.history.contains(.blockAnimationEventsSent) {
@@ -129,7 +133,7 @@ extension InGameTransaction {
         // miss?
 
         if result == .miss {
-            if player.spec.skills.contains(.enforcer), results.count > 1 {
+            if player.spec.skills.contains(.enforcer), results.dice.count > 1 {
                 return try blockActionContinueWithEnforcer()
             }
 
@@ -157,7 +161,7 @@ extension InGameTransaction {
                     reason: .shoved
                 )
 
-                if player.spec.skills.contains(.enforcer), results.count > 1 {
+                if player.spec.skills.contains(.enforcer), results.dice.count > 1 {
                     try playerMovesIntoSquare(
                         playerID: player.id,
                         newSquare: targetPlayerSquare,

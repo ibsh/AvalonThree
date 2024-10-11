@@ -1350,7 +1350,10 @@ struct WarMachineTests {
                     isFree: false,
                     playerSquare: sq(2, 6)
                 ),
-                .rolledForBlock(coachID: .away, results: [.kerrunch, .tackle, .shove]),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.kerrunch, .tackle, .shove])
+                ),
             ]
         )
 
@@ -1362,7 +1365,7 @@ struct WarMachineTests {
                         id: pl(.away, 0),
                         square: sq(2, 6)
                     ),
-                    results: [.kerrunch, .tackle, .shove]
+                    results: BlockResults(dice: [.kerrunch, .tackle, .shove])
                 )
             )
         )

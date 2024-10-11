@@ -258,12 +258,12 @@ struct RefreshObjectivesTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.smash]
+                    results: BlockResults(dice: [.smash])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -724,12 +724,12 @@ struct RefreshObjectivesTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.smash]
+                    results: BlockResults(dice: [.smash])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -1212,12 +1212,12 @@ struct RefreshObjectivesTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.smash]
+                    results: BlockResults(dice: [.smash])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .smash,
-                    from: [.smash]
+                    from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

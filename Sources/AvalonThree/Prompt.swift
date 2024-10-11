@@ -175,20 +175,19 @@ public enum Prompt: Equatable, Codable, Sendable {
 
     case blockActionBlockDieResultsEligibleForOffensiveSpecialistSkillReroll(
         player: PromptBoardPlayer,
-        results: [BlockDieResult],
+        results: BlockResults,
         maySelectResultToDecline: Bool
     )
 
     case blockActionBlockDieResultsEligibleForRawTalentBonusPlayReroll(
         player: PromptBoardPlayer,
-        results: [BlockDieResult],
-        clawsResult: Int?,
+        results: BlockResults,
         maySelectResultToDecline: Bool
     )
 
     case blockActionSelectResult(
         player: PromptBoardPlayer,
-        results: [BlockDieResult]
+        results: BlockResults
     )
 
     case blockActionSelectSafeHandsLooseBallDirection(
@@ -380,4 +379,9 @@ public struct HurlTeammateTarget: Hashable, Codable, Sendable {
     public let targetSquare: Square
     public let distance: PassDistance
     public let obstructingSquares: Set<Square>
+}
+
+public struct BlockResults: Hashable, Codable, Sendable {
+    public var dice: [BlockDieResult]
+    public var claws: Int?
 }

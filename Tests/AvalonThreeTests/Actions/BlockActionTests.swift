@@ -101,12 +101,12 @@ struct BlockActionTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.miss]
+                    results: BlockResults(dice: [.miss])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .miss,
-                    from: [.miss]
+                    from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -256,7 +256,7 @@ struct BlockActionTests {
                 ),
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.shove, .kerrunch, .smash]
+                    results: BlockResults(dice: [.shove, .kerrunch, .smash])
                 ),
             ]
         )
@@ -266,7 +266,7 @@ struct BlockActionTests {
                 coachID: .away,
                 prompt: .blockActionSelectResult(
                     player: PromptBoardPlayer(id: pl(.away, 0), square: sq(2, 8)),
-                    results: [.shove, .kerrunch, .smash]
+                    results: BlockResults(dice: [.shove, .kerrunch, .smash])
                 )
             )
         )
@@ -399,12 +399,12 @@ struct BlockActionTests {
             latestEvents == [
                 .rolledForBlock(
                     coachID: .away,
-                    results: [.miss]
+                    results: BlockResults(dice: [.miss])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
                     result: .miss,
-                    from: [.miss]
+                    from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),

@@ -29,7 +29,7 @@ extension InGameTransaction {
             let actionContext = try history.latestTurnContext().actionContexts().last,
             !actionContext.isFinished,
             let results = actionContext.history.lastResult(
-                { entry -> [BlockDieResult]? in
+                { entry -> BlockResults? in
                     guard case .blockResults(let results) = entry else { return nil }
                     return results
                 }
@@ -42,12 +42,12 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
-        if player.spec.skills.contains(.enforcer) || results.count == 1 {
+        if player.spec.skills.contains(.enforcer) || results.dice.count == 1 {
 
             guard result == nil else {
                 throw GameError("May not select result")
             }
-            return try blockActionSelectResult(result: results[0])
+            return try blockActionSelectResult(result: results.dice[0])
 
         } else {
 
