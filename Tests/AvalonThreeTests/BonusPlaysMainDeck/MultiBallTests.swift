@@ -140,7 +140,8 @@ struct MultiBallTests {
                                 bonusPlay: .multiBall
                             )
                         )
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .activatedBonusPlay(
@@ -199,6 +200,7 @@ struct MultiBallTests {
                         challenge: .takeThemDown,
                         bonusPlay: .multiBall
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(

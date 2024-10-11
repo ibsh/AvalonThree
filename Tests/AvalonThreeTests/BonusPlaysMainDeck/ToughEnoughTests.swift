@@ -136,6 +136,7 @@ struct ToughEnoughTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .toughEnough
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(

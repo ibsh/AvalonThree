@@ -37,7 +37,8 @@ extension InGameTransaction {
                 .discardedCardFromHand(
                     coachID: turnContext.coachID,
                     card: card,
-                    hand: newHand.map { .open(card: $0) }
+                    hand: newHand.map { .open(card: $0) },
+                    active: table.getActiveBonuses(coachID: turnContext.coachID)
                 )
             )
             table.discards.append(card)

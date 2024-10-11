@@ -22,6 +22,7 @@ extension InGameTransaction {
             .discardedActiveBonusPlay(
                 coachID: coachID,
                 card: removedCard,
+                hand: table.getHand(coachID: coachID).map { .open(card: $0) },
                 active: table.getActiveBonuses(coachID: coachID)
             )
         )

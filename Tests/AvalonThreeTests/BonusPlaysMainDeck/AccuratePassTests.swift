@@ -593,6 +593,7 @@ struct AccuratePassTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .accuratePass
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(
@@ -761,6 +762,7 @@ struct AccuratePassTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .accuratePass
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(

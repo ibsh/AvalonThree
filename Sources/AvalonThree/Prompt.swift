@@ -326,6 +326,7 @@ public enum Prompt: Equatable, Codable, Sendable {
 
     case selectCardsToDiscardFromHand(
         cards: [ChallengeCard],
+        active: [ChallengeCard],
         count: Int
     )
 

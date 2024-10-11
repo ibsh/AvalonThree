@@ -323,7 +323,8 @@ struct RefreshObjectivesTests {
                                 bonusPlay: .absoluteCarnage
                             )
                         )
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(
                     coachID: .away,

@@ -220,7 +220,8 @@ struct DiscardFromHandTests {
                                 bonusPlay: .blitz
                             )
                         )
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
             ]
@@ -438,7 +439,8 @@ struct DiscardFromHandTests {
                                 bonusPlay: .blitz
                             )
                         ),
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(coachID: .away, increment: 1, total: 3),
             ]
@@ -604,7 +606,8 @@ struct DiscardFromHandTests {
                                 bonusPlay: .blitz
                             )
                         ),
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(coachID: .away, increment: 1, total: 4),
                 .earnedCleanSweep(coachID: .away),
@@ -926,7 +929,8 @@ struct DiscardFromHandTests {
                                 bonusPlay: .blitz
                             )
                         ),
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
             ]
@@ -1170,7 +1174,8 @@ struct DiscardFromHandTests {
                                 bonusPlay: .blitz
                             )
                         ),
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(coachID: .away, increment: 1, total: 3),
             ]
@@ -1371,7 +1376,8 @@ struct DiscardFromHandTests {
                                 bonusPlay: .blitz
                             )
                         ),
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(coachID: .away, increment: 1, total: 4),
                 .earnedCleanSweep(coachID: .away),
@@ -1405,6 +1411,7 @@ struct DiscardFromHandTests {
                             bonusPlay: .blitz
                         ),
                     ],
+                    active: [],
                     count: 2
                 )
             )
@@ -1529,7 +1536,8 @@ struct DiscardFromHandTests {
                                 bonusPlay: .blitz
                             )
                         ),
-                    ]
+                    ],
+                    active: []
                 ),
                 .updatedDiscards(top: .blitz, count: 1),
                 .discardedCardFromHand(
@@ -1557,7 +1565,8 @@ struct DiscardFromHandTests {
                                 bonusPlay: .blitz
                             )
                         ),
-                    ]
+                    ],
+                    active: []
                 ),
                 .updatedDiscards(top: .blitz, count: 2),
                 .turnEnded(coachID: .away),

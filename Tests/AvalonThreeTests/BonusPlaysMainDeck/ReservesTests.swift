@@ -918,7 +918,7 @@ struct ReservesTests {
                         bonusPlay: .reserves
                     ),
                     hand: [
-                        WrappedChallengeCard.open(
+                        .open(
                             card: ChallengeCard(
                                 challenge: .breakTheirLines,
                                 bonusPlay: .reserves

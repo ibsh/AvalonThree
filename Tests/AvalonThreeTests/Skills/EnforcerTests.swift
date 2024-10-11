@@ -235,7 +235,8 @@ struct EnforcerTests {
                                 bonusPlay: .blitz
                             )
                         )
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(
                     coachID: .away,

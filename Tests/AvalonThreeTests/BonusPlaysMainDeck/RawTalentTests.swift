@@ -1202,6 +1202,7 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(
@@ -1500,6 +1501,7 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(
@@ -1787,6 +1789,7 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(
@@ -2412,6 +2415,7 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(
@@ -2745,6 +2749,7 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(
@@ -3173,6 +3178,7 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(
@@ -3514,7 +3520,7 @@ struct RawTalentTests {
                         bonusPlay: .rawTalent
                     ),
                     hand: [
-                        WrappedChallengeCard.open(
+                        .open(
                             card: ChallengeCard(
                                 challenge: .breakTheirLines,
                                 bonusPlay: .rawTalent
@@ -3559,6 +3565,14 @@ struct RawTalentTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .rawTalent
                     ),
+                    hand: [
+                        .open(
+                            card: ChallengeCard(
+                                challenge: .breakTheirLines,
+                                bonusPlay: .rawTalent
+                            )
+                        ),
+                    ],
                     active: []
                 ),
                 .updatedDiscards(

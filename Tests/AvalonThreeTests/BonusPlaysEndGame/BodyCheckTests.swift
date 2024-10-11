@@ -162,6 +162,7 @@ struct BodyCheckTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .bodyCheck
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(

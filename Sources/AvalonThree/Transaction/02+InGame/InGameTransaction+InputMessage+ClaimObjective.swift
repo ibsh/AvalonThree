@@ -46,7 +46,8 @@ extension InGameTransaction {
                 coachID: turnContext.coachID,
                 objectiveIndex: objectiveIndex,
                 objective: .open(card: objective),
-                hand: newHand.map { .open(card: $0) }
+                hand: newHand.map { .open(card: $0) },
+                active: table.getActiveBonuses(coachID: turnContext.coachID)
             )
         )
 

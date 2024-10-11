@@ -439,6 +439,7 @@ struct StepAsideTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .stepAside
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(

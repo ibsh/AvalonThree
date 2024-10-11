@@ -56,6 +56,7 @@ extension InGameTransaction {
                 coachID: oldTurnCoachID,
                 prompt: .selectCardsToDiscardFromHand(
                     cards: hand,
+                    active: table.getActiveBonuses(coachID: oldTurnCoachID),
                     count: hand.count - TableConstants.maxHandCount
                 )
             )

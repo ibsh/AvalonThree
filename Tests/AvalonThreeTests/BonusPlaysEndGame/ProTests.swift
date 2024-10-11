@@ -172,6 +172,7 @@ struct ProTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .pro
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(top: .pro, count: 1),
@@ -486,6 +487,7 @@ struct ProTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .pro
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(top: .pro, count: 1),
@@ -764,6 +766,7 @@ struct ProTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .pro
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(top: .pro, count: 1),

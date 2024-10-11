@@ -160,6 +160,7 @@ struct TheKidsGotMoxyTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .theKidsGotMoxy
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(

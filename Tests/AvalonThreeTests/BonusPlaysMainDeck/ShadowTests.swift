@@ -196,6 +196,7 @@ struct ShadowTests {
                         challenge: .breakSomeBones,
                         bonusPlay: .shadow
                     ),
+                    hand: [],
                     active: []
                 ),
                 .updatedDiscards(

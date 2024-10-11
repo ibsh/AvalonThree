@@ -332,7 +332,8 @@ struct BreakTheirLinesTests {
                                 bonusPlay: .absoluteCarnage
                             )
                         )
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
             ]
@@ -467,7 +468,8 @@ struct BreakTheirLinesTests {
                                 bonusPlay: .absoluteCarnage
                             )
                         )
-                    ]
+                    ],
+                    active: []
                 ),
                 .scoreUpdated(coachID: .away, increment: 2, total: 2),
                 .playerScoredTouchdown(

@@ -367,7 +367,8 @@ public enum Event: Equatable, Codable, Sendable {
         coachID: CoachID,
         objectiveIndex: Int,
         objective: WrappedChallengeCard,
-        hand: [WrappedChallengeCard]
+        hand: [WrappedChallengeCard],
+        active: [ChallengeCard]
     )
 
     case declinedObjectives(
@@ -409,7 +410,8 @@ public enum Event: Equatable, Codable, Sendable {
     case discardedCardFromHand(
         coachID: CoachID,
         card: ChallengeCard,
-        hand: [WrappedChallengeCard]
+        hand: [WrappedChallengeCard],
+        active: [ChallengeCard]
     )
 
     case activatedBonusPlay(
@@ -422,6 +424,7 @@ public enum Event: Equatable, Codable, Sendable {
     case discardedActiveBonusPlay(
         coachID: CoachID,
         card: ChallengeCard,
+        hand: [WrappedChallengeCard],
         active: [ChallengeCard]
     )
 
