@@ -100,7 +100,7 @@ struct ClawsTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash], claws: 5)
                 ),
                 .playerBlocked(

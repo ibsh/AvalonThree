@@ -175,22 +175,22 @@ extension InGameTransaction {
         case .blockActionUseOffensiveSpecialistSkillReroll:
             return try blockActionUseOffensiveSpecialistSkillReroll()
 
-        case .blockActionDeclineOffensiveSpecialistSkillReroll(let result):
+        case .blockActionDeclineOffensiveSpecialistSkillReroll(let dieIndex):
             return try blockActionDeclineOffensiveSpecialistSkillReroll(
-                result: result
+                dieIndex: dieIndex
             )
 
         case .blockActionUseRawTalentBonusPlayRerollForBlockDieResults:
             return try blockActionUseRawTalentBonusPlayRerollForBlockDieResults()
 
-        case .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(let result):
+        case .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(let dieIndex):
             return try blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
-                result: result
+                dieIndex: dieIndex
             )
 
-        case .blockActionSelectResult(let result):
+        case .blockActionSelectResult(let dieIndex):
             return try blockActionSelectResult(
-                result: result
+                dieIndex: dieIndex
             )
 
         case .blockActionSelectSafeHandsLooseBallDirection(let direction):

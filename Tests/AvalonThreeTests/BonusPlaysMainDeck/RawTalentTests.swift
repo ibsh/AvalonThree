@@ -1765,7 +1765,7 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.shove])
                 ),
                 .playerBlocked(
@@ -1901,7 +1901,7 @@ struct RawTalentTests {
                 InputMessageWrapper(
                     coachID: .away,
                     message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
-                        result: .miss
+                        dieIndex: 0
                     )
                 )
             )
@@ -1913,7 +1913,7 @@ struct RawTalentTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
-                    result: nil
+                    dieIndex: nil
                 )
             )
         )
@@ -1922,7 +1922,7 @@ struct RawTalentTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(
@@ -2028,7 +2028,7 @@ struct RawTalentTests {
                     consumesBonusPlays: []
                 )
             ),
-            randomizers: Randomizers(blockDie: block(.kerrunch, .miss))
+            randomizers: Randomizers(blockDie: block(.miss, .kerrunch))
         )
 
         // Choose block result rather than reroll
@@ -2036,7 +2036,9 @@ struct RawTalentTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionDeclineOffensiveSpecialistSkillReroll(result: .kerrunch)
+                message: .blockActionDeclineOffensiveSpecialistSkillReroll(
+                    dieIndex: 1
+                )
             ),
             randomizers: Randomizers(d6: d6(5))
         )
@@ -2049,8 +2051,8 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch,
-                    from: BlockResults(dice: [.kerrunch, .miss])
+                    dieIndex: 1,
+                    from: BlockResults(dice: [.miss, .kerrunch])
                 ),
                 .playerBlocked(
                     playerID: pl(.away, 0),
@@ -2187,7 +2189,9 @@ struct RawTalentTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSelectResult(result: .smash)
+                message: .blockActionSelectResult(
+                    dieIndex: 0
+                )
             ),
             randomizers: Randomizers(d6: d6(3))
         )
@@ -2196,7 +2200,7 @@ struct RawTalentTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash, .miss])
                 ),
                 .playerBlocked(
@@ -2350,7 +2354,7 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash, .smash, .kerrunch])
                 ),
                 .playerBlocked(
@@ -2401,13 +2405,13 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
-                    from: BlockResults(dice: [.smash, .kerrunch])
+                    dieIndex: 1,
+                    from: BlockResults(dice: [.smash, .smash, .kerrunch])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch,
-                    from: BlockResults(dice: [.kerrunch])
+                    dieIndex: 2,
+                    from: BlockResults(dice: [.smash, .smash, .kerrunch])
                 ),
                 .discardedActiveBonusPlay(
                     coachID: .away,
@@ -2512,7 +2516,11 @@ struct RawTalentTests {
                     consumesBonusPlays: []
                 )
             ),
-            randomizers: Randomizers(blockDie: block(.shove, .miss, .shove), d6: d6(3, 3), direction: direction(.east))
+            randomizers: Randomizers(
+                blockDie: block(.shove, .miss, .shove),
+                d6: d6(3, 3),
+                direction: direction(.east)
+            )
         )
 
         // Can't decline reroll with a result argument
@@ -2522,7 +2530,7 @@ struct RawTalentTests {
                 InputMessageWrapper(
                     coachID: .away,
                     message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
-                        result: .shove
+                        dieIndex: 0
                     )
                 )
             )
@@ -2534,7 +2542,7 @@ struct RawTalentTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
-                    result: nil
+                    dieIndex: nil
                 )
             ),
             randomizers: Randomizers(d6: d6(3), direction: direction(.south))
@@ -2544,7 +2552,7 @@ struct RawTalentTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.shove, .shove, .miss])
                 ),
                 .playerBlocked(
@@ -2580,8 +2588,8 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove,
-                    from: BlockResults(dice: [.shove, .miss])
+                    dieIndex: 1,
+                    from: BlockResults(dice: [.shove, .shove, .miss])
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
@@ -2606,8 +2614,8 @@ struct RawTalentTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss,
-                    from: BlockResults(dice: [.miss])
+                    dieIndex: 2,
+                    from: BlockResults(dice: [.shove, .shove, .miss])
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
@@ -2865,7 +2873,9 @@ struct RawTalentTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSelectResult(result: .tackle)
+                message: .blockActionSelectResult(
+                    dieIndex: 2
+                )
             ),
             randomizers: Randomizers(d6: d6(1))
         )
@@ -2874,7 +2884,7 @@ struct RawTalentTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .tackle,
+                    dieIndex: 2,
                     from: BlockResults(dice: [.miss, .miss, .tackle])
                 ),
                 .playerBlocked(
@@ -2998,7 +3008,7 @@ struct RawTalentTests {
                 InputMessageWrapper(
                     coachID: .away,
                     message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
-                        result: nil
+                        dieIndex: nil
                     )
                 )
             )
@@ -3010,7 +3020,7 @@ struct RawTalentTests {
             InputMessageWrapper(
                 coachID: .away,
                 message: .blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(
-                    result: .shove
+                    dieIndex: 2
                 )
             )
         )
@@ -3019,7 +3029,7 @@ struct RawTalentTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove,
+                    dieIndex: 2,
                     from: BlockResults(dice: [.miss, .tackle, .shove])
                 ),
                 .playerBlocked(

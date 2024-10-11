@@ -29,7 +29,7 @@ extension InGameTransaction {
     }
 
     mutating func blockActionDeclineOffensiveSpecialistSkillReroll(
-        result: BlockDieResult?
+        dieIndex: Int?
     ) throws -> AddressedPrompt? {
         guard
             let actionContext = try history.latestTurnContext().actionContexts().last,
@@ -57,17 +57,17 @@ extension InGameTransaction {
 
         if results.dice.count == 1 {
 
-            guard result == nil else {
+            guard dieIndex == nil else {
                 throw GameError("May not select result")
             }
-            return try blockActionSelectResult(result: results.dice[0])
+            return try blockActionSelectResult(dieIndex: 0)
 
         } else {
 
-            guard let result else {
+            guard let dieIndex else {
                 throw GameError("Must select result")
             }
-            return try blockActionSelectResult(result: result)
+            return try blockActionSelectResult(dieIndex: dieIndex)
         }
     }
 }

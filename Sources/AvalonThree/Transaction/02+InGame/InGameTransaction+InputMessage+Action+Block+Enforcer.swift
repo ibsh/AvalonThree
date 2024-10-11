@@ -19,12 +19,6 @@ extension InGameTransaction {
                     guard case .blockTarget(let targetPlayerID) = entry else { return nil }
                     return targetPlayerID
                 }
-            ),
-            var results = actionContext.history.lastResult(
-                { entry -> BlockResults? in
-                    guard case .blockResults(let results) = entry else { return nil }
-                    return results
-                }
             )
         else {
             throw GameError("No action in history")
@@ -34,11 +28,31 @@ extension InGameTransaction {
             throw GameError("No player")
         }
 
-        guard results.dice.count > 1 else {
-            throw GameError("Not enough results to continue")
-        }
+        let (results, dieIndex) = try { () -> (BlockResults, Int) in
+            if let (results, oldDieIndex) = actionContext.history.lastResult(
+                { entry -> (BlockResults, Int)? in
+                    guard case .selectedBlockResult(let results, let dieIndex) = entry else { return nil }
+                    return (results, dieIndex)
+                }
+            ) {
+                return (results, oldDieIndex + 1)
+            }
 
-        _ = results.dice.popFirst()
+            if let results = actionContext.history.lastResult(
+                { entry -> BlockResults? in
+                    guard case .blockResults(let results) = entry else { return nil }
+                    return results
+                }
+            ) {
+                return (results, 0)
+            }
+
+            throw GameError("No block results in history")
+        }()
+
+        guard dieIndex < results.dice.count else {
+            return try endBlockAction()
+        }
 
         guard let targetPlayer = table.getPlayer(id: targetPlayerID) else {
             throw GameError("No target player")
@@ -46,16 +60,16 @@ extension InGameTransaction {
 
         if targetPlayer.isInReserves {
             // We've already injured the target; all that's left is to disable the player.
-            while let result = results.dice.first {
+            var newDieIndex = dieIndex
+            while newDieIndex < results.dice.count {
                 events.append(
                     .selectedBlockDieResult(
                         coachID: actionContext.coachID,
-                        result: result,
+                        dieIndex: newDieIndex,
                         from: results
                     )
                 )
-                _ = results.dice.popFirst()
-                if [.miss, .tackle].contains(result) {
+                if [.miss, .tackle].contains(results.dice[newDieIndex]) {
                     if player.canTakeActions {
                         player.canTakeActions = false
                         table.players.update(with: player)
@@ -67,13 +81,13 @@ extension InGameTransaction {
                         )
                     }
                 }
+                newDieIndex += 1
             }
 
             return try endBlockAction()
         }
 
         // update the action
-        history.append(.blockResults(results))
-        return try blockActionSelectResult(result: results.dice[0])
+        return try blockActionSelectResult(dieIndex: dieIndex)
     }
 }

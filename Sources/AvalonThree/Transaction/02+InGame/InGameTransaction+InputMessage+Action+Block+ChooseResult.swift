@@ -10,7 +10,7 @@ import Foundation
 extension InGameTransaction {
 
     mutating func blockActionSelectResult(
-        result: BlockDieResult
+        dieIndex: Int
     ) throws -> AddressedPrompt? {
 
         guard
@@ -32,9 +32,11 @@ extension InGameTransaction {
             throw GameError("No action in history")
         }
 
-        guard results.dice.contains(result) else {
+        guard results.dice.indices.contains(dieIndex) else {
             throw GameError("Result is not a valid choice")
         }
+
+        let result = results.dice[dieIndex]
 
         guard var player = table.getPlayer(id: actionContext.playerID) else {
             throw GameError("No player")
@@ -52,10 +54,12 @@ extension InGameTransaction {
             throw GameError("Target player is in reserves")
         }
 
+        history.append(.selectedBlockResult(results, dieIndex))
+
         events.append(
             .selectedBlockDieResult(
                 coachID: player.coachID,
-                result: result,
+                dieIndex: dieIndex,
                 from: results
             )
         )
@@ -133,11 +137,9 @@ extension InGameTransaction {
         // miss?
 
         if result == .miss {
-            if player.spec.skills.contains(.enforcer), results.dice.count > 1 {
+            if player.spec.skills.contains(.enforcer) {
                 return try blockActionContinueWithEnforcer()
             }
-
-            history.append(.blockResult(result))
 
             return try endBlockAction()
         }
@@ -161,7 +163,7 @@ extension InGameTransaction {
                     reason: .shoved
                 )
 
-                if player.spec.skills.contains(.enforcer), results.dice.count > 1 {
+                if player.spec.skills.contains(.enforcer) {
                     try playerMovesIntoSquare(
                         playerID: player.id,
                         newSquare: targetPlayerSquare,
@@ -172,7 +174,6 @@ extension InGameTransaction {
                 }
 
                 // update the action
-                history.append(.blockResult(result))
                 history.append(.blockFollowUpSquare(targetPlayerSquare))
 
                 return AddressedPrompt(
@@ -225,7 +226,6 @@ extension InGameTransaction {
                         .toSet()
 
                     // update the action
-                    history.append(.blockResult(result))
                     history.append(.blockSafeHandsDirections(Set(directions.map { $0.direction })))
 
                     return AddressedPrompt(
@@ -247,7 +247,6 @@ extension InGameTransaction {
         }
 
         // update the action
-        history.append(.blockResult(result))
         return try blockActionRollForArmour()
     }
 }

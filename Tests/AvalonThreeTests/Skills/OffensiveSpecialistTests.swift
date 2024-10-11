@@ -103,7 +103,9 @@ struct OffensiveSpecialistTests {
             try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .blockActionDeclineOffensiveSpecialistSkillReroll(result: .kerrunch)
+                    message: .blockActionDeclineOffensiveSpecialistSkillReroll(
+                        dieIndex: 0
+                    )
                 )
             )
         }
@@ -113,7 +115,9 @@ struct OffensiveSpecialistTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionDeclineOffensiveSpecialistSkillReroll(result: nil)
+                message: .blockActionDeclineOffensiveSpecialistSkillReroll(
+                    dieIndex: nil
+                )
             ),
             randomizers: Randomizers(d6: d6(5))
         )
@@ -232,7 +236,9 @@ struct OffensiveSpecialistTests {
             try game.process(
                 InputMessageWrapper(
                     coachID: .away,
-                    message: .blockActionDeclineOffensiveSpecialistSkillReroll(result: nil)
+                    message: .blockActionDeclineOffensiveSpecialistSkillReroll(
+                        dieIndex: nil
+                    )
                 )
             )
         }
@@ -242,7 +248,9 @@ struct OffensiveSpecialistTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionDeclineOffensiveSpecialistSkillReroll(result: .kerrunch)
+                message: .blockActionDeclineOffensiveSpecialistSkillReroll(
+                    dieIndex: 0
+                )
             ),
             randomizers: Randomizers(d6: d6(5))
         )
@@ -381,7 +389,9 @@ struct OffensiveSpecialistTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSelectResult(result: .smash)
+                message: .blockActionSelectResult(
+                    dieIndex: 0
+                )
             ),
             randomizers: Randomizers(d6: d6(3))
         )

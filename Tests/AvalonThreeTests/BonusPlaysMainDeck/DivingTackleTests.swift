@@ -993,7 +993,11 @@ struct DivingTackleTests {
                 coachID: .away,
                 message: .useDivingTackleBonusPlayBlockAction
             ),
-            randomizers: Randomizers(blockDie: block(.miss, .smash, .smash), d6: d6(2), direction: direction(.south))
+            randomizers: Randomizers(
+                blockDie: block(.miss, .smash, .smash),
+                d6: d6(2),
+                direction: direction(.south)
+            )
         )
 
         #expect(

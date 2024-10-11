@@ -102,7 +102,7 @@ struct HandlingSkillsTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.shove])
                 ),
                 .playerBlocked(

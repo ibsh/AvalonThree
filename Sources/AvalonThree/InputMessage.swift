@@ -86,10 +86,10 @@ public enum InputMessage: Codable, Sendable {
     case blockActionUseTheKidsGotMoxyBonusPlay
     case blockActionDeclineTheKidsGotMoxyBonusPlay
     case blockActionUseOffensiveSpecialistSkillReroll
-    case blockActionDeclineOffensiveSpecialistSkillReroll(result: BlockDieResult?)
+    case blockActionDeclineOffensiveSpecialistSkillReroll(dieIndex: Int?)
     case blockActionUseRawTalentBonusPlayRerollForBlockDieResults
-    case blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(result: BlockDieResult?)
-    case blockActionSelectResult(result: BlockDieResult)
+    case blockActionDeclineRawTalentBonusPlayRerollForBlockDieResults(dieIndex: Int?)
+    case blockActionSelectResult(dieIndex: Int)
     case blockActionSelectSafeHandsLooseBallDirection(direction: Direction)
     case blockActionUseFollowUp
     case blockActionDeclineFollowUp

@@ -19,12 +19,6 @@ extension InGameTransaction {
                     guard case .blockTarget(let targetPlayerID) = entry else { return nil }
                     return targetPlayerID
                 }
-            ),
-            let results = actionContext.history.lastResult(
-                { entry -> BlockResults? in
-                    guard case .blockResults(let results) = entry else { return nil }
-                    return results
-                }
             )
         else {
             throw GameError("No action in history")
@@ -38,7 +32,7 @@ extension InGameTransaction {
 
         try playerIsInjured(playerID: targetPlayerID, reason: .blocked)
 
-        if player.spec.skills.contains(.enforcer), results.dice.count > 1 {
+        if player.spec.skills.contains(.enforcer) {
             return try blockActionContinueWithEnforcer()
         }
 

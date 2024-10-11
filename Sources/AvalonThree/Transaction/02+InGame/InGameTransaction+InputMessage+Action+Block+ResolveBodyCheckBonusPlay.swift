@@ -29,7 +29,7 @@ extension InGameTransaction {
             )
         )
         history.append(.blockResults(results))
-        return try blockActionSelectResult(result: .kerrunch)
+        return try blockActionSelectResult(dieIndex: 0)
     }
 
     mutating func blockActionDeclineBodyCheckBonusPlay() throws -> AddressedPrompt? {

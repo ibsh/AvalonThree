@@ -242,7 +242,7 @@ struct ToughEnoughTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(

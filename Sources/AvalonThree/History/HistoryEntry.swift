@@ -87,7 +87,7 @@ enum HistoryEntry: Equatable, Sendable {
     case blockDieResultsEligibleForBodyCheckBonusPlay
     case blockDieResultsEligibleForTheKidsGotMoxyBonusPlay
     case blockResults(BlockResults)
-    case blockResult(BlockDieResult)
+    case selectedBlockResult(BlockResults, Int)
     case blockDieResultsEligibleForOffensiveSpecialistSkillReroll
     case blockDieResultsEligibleForRawTalentBonusPlayReroll
     case blockAnimationEventsSent

@@ -257,11 +257,11 @@ extension InGameTransaction {
 
         // This implementation assumes that no enforcer is a bomber or offensive specialist.
         if player.spec.skills.contains(.enforcer) {
-            return try blockActionSelectResult(result: results.dice[0])
+            return try blockActionSelectResult(dieIndex: 0)
         }
 
         if results.dice.count == 1 || Set(results.dice).count == 1 {
-            return try blockActionSelectResult(result: results.dice[0])
+            return try blockActionSelectResult(dieIndex: 0)
         }
 
         return AddressedPrompt(

@@ -116,7 +116,9 @@ struct BomberTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSelectResult(result: .kerrunch)
+                message: .blockActionSelectResult(
+                    dieIndex: 1
+                )
             ),
             randomizers: Randomizers(d6: d6(4), direction: direction(.southEast))
         )
@@ -125,7 +127,7 @@ struct BomberTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch,
+                    dieIndex: 1,
                     from: BlockResults(dice: [.miss, .kerrunch])
                 ),
                 .playerBlocked(
@@ -387,7 +389,7 @@ struct BomberTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash])
                 ),
                 .playerThrewBomb(
@@ -534,7 +536,7 @@ struct BomberTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.miss])
                 ),
                 .playerThrewBomb(

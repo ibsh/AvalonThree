@@ -129,7 +129,7 @@ public enum Event: Equatable, Codable, Sendable {
 
     case selectedBlockDieResult(
         coachID: CoachID,
-        result: BlockDieResult,
+        dieIndex: Int,
         from: BlockResults
     )
 

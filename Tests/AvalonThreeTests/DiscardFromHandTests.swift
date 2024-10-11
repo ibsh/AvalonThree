@@ -161,7 +161,7 @@ struct DiscardFromHandTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
@@ -850,7 +850,7 @@ struct DiscardFromHandTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash, .smash])
                 ),
                 .playerBlocked(

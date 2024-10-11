@@ -347,7 +347,7 @@ struct HulkingBruteTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(

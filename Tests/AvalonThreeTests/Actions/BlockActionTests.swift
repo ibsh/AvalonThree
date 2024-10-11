@@ -105,7 +105,7 @@ struct BlockActionTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(
@@ -403,7 +403,7 @@ struct BlockActionTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(

@@ -566,7 +566,7 @@ struct DefensivePlayTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.miss])
                 ),
                 .playerBlocked(
@@ -867,7 +867,7 @@ struct DefensivePlayTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.miss, .miss])
                 ),
                 .playerBlocked(
@@ -1180,7 +1180,7 @@ struct DefensivePlayTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
@@ -1323,7 +1323,9 @@ struct DefensivePlayTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSelectResult(result: .kerrunch)
+                message: .blockActionSelectResult(
+                    dieIndex: 0
+                )
             ),
             randomizers: Randomizers(d6: d6(6))
         )

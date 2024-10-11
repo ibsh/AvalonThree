@@ -22,16 +22,10 @@ extension InGameTransaction {
                     return targetPlayerID
                 }
             ),
-            let results = actionContext.history.lastResult(
-                { entry -> BlockResults? in
-                    guard case .blockResults(let results) = entry else { return nil }
-                    return results
-                }
-            ),
-            let result = actionContext.history.lastResult(
-                { entry -> BlockDieResult? in
-                    guard case .blockResult(let result) = entry else { return nil }
-                    return result
+            let (results, dieIndex) = actionContext.history.lastResult(
+                { entry -> (BlockResults, Int)? in
+                    guard case .selectedBlockResult(let results, let dieIndex) = entry else { return nil }
+                    return (results, dieIndex)
                 }
             )
         else {
@@ -179,7 +173,7 @@ extension InGameTransaction {
 
         var modifications = [ArmourRollModification]()
 
-        if result == .kerrunch {
+        if results.dice[dieIndex] == .kerrunch {
             modifications.append(.kerrunch)
             modifier -= 1
         }
@@ -276,7 +270,7 @@ extension InGameTransaction {
             return try blockActionTargetPlayerInjured()
         }
 
-        if player.spec.skills.contains(.enforcer), results.dice.count > 1 {
+        if player.spec.skills.contains(.enforcer) {
             return try blockActionContinueWithEnforcer()
         }
 

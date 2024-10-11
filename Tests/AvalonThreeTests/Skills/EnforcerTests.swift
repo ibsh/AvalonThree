@@ -95,7 +95,11 @@ struct EnforcerTests {
                     consumesBonusPlays: []
                 )
             ),
-            randomizers: Randomizers(blockDie: block(.kerrunch, .tackle, .shove), d6: d6(4, 2), direction: direction(.east))
+            randomizers: Randomizers(
+                blockDie: block(.kerrunch, .tackle, .shove),
+                d6: d6(4, 2),
+                direction: direction(.east)
+            )
         )
 
         #expect(
@@ -114,7 +118,7 @@ struct EnforcerTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .shove,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.shove, .kerrunch, .tackle])
                 ),
                 .playerBlocked(
@@ -150,8 +154,8 @@ struct EnforcerTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch,
-                    from: BlockResults(dice: [.kerrunch, .tackle])
+                    dieIndex: 1,
+                    from: BlockResults(dice: [.shove, .kerrunch, .tackle])
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
@@ -187,8 +191,8 @@ struct EnforcerTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .tackle,
-                    from: BlockResults(dice: [.tackle])
+                    dieIndex: 2,
+                    from: BlockResults(dice: [.shove, .kerrunch, .tackle])
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
@@ -351,7 +355,7 @@ struct EnforcerTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash, .smash, .miss])
                 ),
                 .playerBlocked(
@@ -397,13 +401,13 @@ struct EnforcerTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
-                    from: BlockResults(dice: [.smash, .miss])
+                    dieIndex: 1,
+                    from: BlockResults(dice: [.smash, .smash, .miss])
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .miss,
-                    from: BlockResults(dice: [.miss])
+                    dieIndex: 2,
+                    from: BlockResults(dice: [.smash, .smash, .miss])
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),

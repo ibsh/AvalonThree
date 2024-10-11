@@ -157,7 +157,7 @@ struct CleanSweepTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
@@ -739,7 +739,7 @@ struct CleanSweepTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
@@ -1352,7 +1352,7 @@ struct CleanSweepTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(

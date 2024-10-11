@@ -119,7 +119,9 @@ struct TheKidsGotMoxyTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .blockActionSelectResult(result: .kerrunch)
+                message: .blockActionSelectResult(
+                    dieIndex: 1
+                )
             ),
             randomizers: Randomizers(d6: d6(5))
         )
@@ -128,7 +130,7 @@ struct TheKidsGotMoxyTests {
             latestEvents == [
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .kerrunch,
+                    dieIndex: 1,
                     from: BlockResults(dice: [.miss, .kerrunch, .shove])
                 ),
                 .playerBlocked(
@@ -276,7 +278,7 @@ struct TheKidsGotMoxyTests {
                 ),
                 .selectedBlockDieResult(
                     coachID: .away,
-                    result: .smash,
+                    dieIndex: 0,
                     from: BlockResults(dice: [.smash])
                 ),
                 .playerBlocked(
