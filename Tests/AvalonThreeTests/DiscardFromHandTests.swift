@@ -1389,7 +1389,7 @@ struct DiscardFromHandTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .selectCardsToDiscardFromHand(
-                    cards: [
+                    hand: [
                         ChallengeCard(
                             challenge: .tieThemUp,
                             bonusPlay: .blitz
