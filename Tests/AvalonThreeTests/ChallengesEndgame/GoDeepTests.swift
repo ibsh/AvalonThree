@@ -232,7 +232,134 @@ struct GoDeepTests {
         #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
     }
 
-    @Test func availableWhenBothOpenAndInRange() async throws {
+    @Test func availableToHomeCoachWhenBothPlayersOpenAndInRange() async throws {
+
+        // Init
+
+        var game = Game(
+            phase: .active(
+                Table(
+                    config: FinalizedConfig(
+                        coinFlipWinnerCoachID: .away,
+                        boardSpecID: .season1Board1,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .human,
+                        coinFlipLoserTeamID: .orc
+                    ),
+                    players: [
+                        Player(
+                            id: pl(.home, 0),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(6, 4)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 1),
+                            spec: .orc_lineman,
+                            state: .standing(square: sq(7, 3)),
+                            canTakeActions: true
+                        ),
+                    ],
+                    playerNumbers: [:],
+                    coinFlipLoserHand: [],
+                    coinFlipWinnerHand: [],
+                    coinFlipLoserActiveBonuses: [],
+                    coinFlipWinnerActiveBonuses: [],
+                    coinFlipLoserScore: 0,
+                    coinFlipWinnerScore: 0,
+                    balls: [],
+                    deck: [],
+                    objectives: Objectives(
+                        second: ChallengeCard(
+                            challenge: .goDeep,
+                            bonusPlay: .absoluteCarnage
+                        )
+                    ),
+                    discards: []
+                ),
+                [
+                    .prepareForTurn(
+                        coachID: .home,
+                        isSpecial: nil,
+                        mustDiscardObjective: false
+                    ),
+                ]
+            ),
+            previousAddressedPrompt: AddressedPrompt(
+                coachID: .home,
+                prompt: .declarePlayerAction(
+                    validDeclarations: [],
+                    playerActionsLeft: 3
+                )
+            )
+        )
+
+        // Declare run
+
+        var (latestEvents, latestAddressedPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .home,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.home, 0),
+                        actionID: .run
+                    ),
+                    consumesBonusPlays: []
+                )
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .declaredAction,
+            ]
+        )
+
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .runActionSelectSquares)
+
+        // Select run
+
+        (latestEvents, latestAddressedPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .home,
+                message: .runActionSelectSquares(squares: [
+                    sq(6, 3)
+                ])
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .playerMoved,
+            ]
+        )
+
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .earnedObjective)
+
+        // Claim objective
+
+        (latestEvents, latestAddressedPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .home,
+                message: .claimObjective(objectiveIndex: 1)
+            )
+        )
+
+        #expect(
+            latestEvents.map { $0.case } == [
+                .claimedObjective,
+                .scoreUpdated,
+            ]
+        )
+
+        #expect(latestAddressedPrompt?.coachID == .home)
+        #expect(latestAddressedPrompt?.prompt.case == .declarePlayerAction)
+    }
+
+    @Test func availableToAwayCoachWhenBothPlayersOpenAndInRange() async throws {
 
         // Init
 

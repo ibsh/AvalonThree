@@ -469,10 +469,11 @@ extension InGameTransaction {
     ) throws -> Bool {
 
         let targetY = {
-            if lastActionContext.coachID == table.coinFlipLoserCoachID {
-                Square.Constants.yRange.last
-            } else {
+            switch lastActionContext.coachID {
+            case .home:
                 Square.Constants.yRange.first
+            case .away:
+                Square.Constants.yRange.last
             }
         }()
 
