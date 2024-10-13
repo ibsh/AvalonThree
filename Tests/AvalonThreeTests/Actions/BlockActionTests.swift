@@ -68,7 +68,7 @@ struct BlockActionTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [],
-                    playerActionsLeft: 1
+                    playerActionsLeft: 3
                 )
             )
         )
@@ -223,7 +223,7 @@ struct BlockActionTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [],
-                    playerActionsLeft: 1
+                    playerActionsLeft: 3
                 )
             )
         )
@@ -336,7 +336,7 @@ struct BlockActionTests {
                 coachID: .away,
                 prompt: .declarePlayerAction(
                     validDeclarations: [],
-                    playerActionsLeft: 1
+                    playerActionsLeft: 3
                 )
             )
         )
@@ -461,6 +461,155 @@ struct BlockActionTests {
                         ),
                     ],
                     playerActionsLeft: 3
+                )
+            )
+        )
+    }
+
+    @Test func distinctModificationsOnlyAppearOnce() async throws {
+
+        // Init
+
+        var game = Game(
+            phase: .active(
+                Table(
+                    config: FinalizedConfig(
+                        coinFlipWinnerCoachID: .home,
+                        boardSpecID: .season1Board1,
+                        challengeDeckID: .shortStandard,
+                        rookieBonusRecipientID: .noOne,
+                        coinFlipWinnerTeamID: .undead,
+                        coinFlipLoserTeamID: .halfling
+                    ),
+                    players: [
+                        Player(
+                            id: pl(.away, 0),
+                            spec: .halfling_treeman,
+                            state: .standing(square: sq(5, 12)),
+                            canTakeActions: true
+                        ),
+                        Player(
+                            id: pl(.home, 0),
+                            spec: .undead_skeleton,
+                            state: .standing(square: sq(5, 11)),
+                            canTakeActions: true
+                        ),
+                    ],
+                    playerNumbers: [:],
+                    coinFlipLoserHand: [],
+                    coinFlipWinnerHand: [],
+                    coinFlipLoserActiveBonuses: [],
+                    coinFlipWinnerActiveBonuses: [],
+                    coinFlipLoserScore: 0,
+                    coinFlipWinnerScore: 0,
+                    balls: [
+                        Ball(
+                            id: 123,
+                            state: .held(playerID: pl(.away, 0))
+                        )
+                    ],
+                    deck: [],
+                    objectives: Objectives(),
+                    discards: []
+                ),
+                [
+                    .prepareForTurn(
+                        coachID: .away,
+                        isSpecial: nil,
+                        mustDiscardObjective: false
+                    ),
+                ]
+            ),
+            previousAddressedPrompt: AddressedPrompt(
+                coachID: .away,
+                prompt: .declarePlayerAction(
+                    validDeclarations: [],
+                    playerActionsLeft: 3
+                )
+            )
+        )
+
+        // Declare block
+
+        let (latestEvents, latestAddressedPrompt) = try game.process(
+            InputMessageWrapper(
+                coachID: .away,
+                message: .declarePlayerAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 0),
+                        actionID: .block
+                    ),
+                    consumesBonusPlays: []
+                )
+            ),
+            randomizers: Randomizers(blockDie: block(.smash, .smash), d6: d6(6))
+        )
+
+        #expect(
+            latestEvents == [
+                .declaredAction(
+                    declaration: ActionDeclaration(
+                        playerID: pl(.away, 0),
+                        actionID: .block
+                    ),
+                    isFree: false,
+                    playerSquare: sq(5, 12)
+                ),
+                .rolledForBlock(
+                    coachID: .away,
+                    results: BlockResults(dice: [.smash, .smash])
+                ),
+                .changedBlockResults(
+                    from: BlockResults(dice: [.smash, .smash]),
+                    to: BlockResults(dice: [.kerrunch, .kerrunch]),
+                    modifications: [.playerIsHulkingBrute]
+                ),
+                .selectedBlockDieResult(
+                    coachID: .away,
+                    dieIndex: 0,
+                    from: BlockResults(dice: [.kerrunch, .kerrunch])
+                ),
+                .playerBlocked(
+                    playerID: pl(.away, 0),
+                    from: sq(5, 12),
+                    to: sq(5, 11),
+                    direction: .north,
+                    targetPlayerID: pl(.home, 0)
+                ),
+                .playerFellDown(
+                    playerID: pl(.home, 0),
+                    playerSquare: sq(5, 11),
+                    reason: .blocked
+                ),
+                .rolledForArmour(
+                    coachID: .home,
+                    die: .d6,
+                    unmodified: 6
+                ),
+            ]
+        )
+
+        #expect(
+            latestAddressedPrompt == AddressedPrompt(
+                coachID: .away,
+                prompt: .declarePlayerAction(
+                    validDeclarations: [
+                        PromptValidDeclaringPlayer(
+                            playerID: pl(.away, 0),
+                            square: sq(5, 12),
+                            declarations: [
+                                PromptValidDeclaration(
+                                    actionID: .run,
+                                    consumesBonusPlays: []
+                                ),
+                                PromptValidDeclaration(
+                                    actionID: .foul,
+                                    consumesBonusPlays: []
+                                ),
+                            ]
+                        ),
+                    ],
+                    playerActionsLeft: 2
                 )
             )
         )

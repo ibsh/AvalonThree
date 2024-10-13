@@ -201,7 +201,7 @@ extension InGameTransaction {
                         claws: claws
                     ),
                     to: results,
-                    modifications: modifications
+                    modifications: modifications.distinct()
                 )
             )
         }
