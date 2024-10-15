@@ -93,7 +93,7 @@ extension InGameTransaction {
         }
 
         guard let targetPlayerSquare = targetPlayer.square else {
-            throw GameError("Target player is in reserves")
+            return nil
         }
 
         guard
