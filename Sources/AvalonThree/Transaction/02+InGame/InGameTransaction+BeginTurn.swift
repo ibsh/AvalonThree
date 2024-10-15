@@ -138,21 +138,21 @@ extension InGameTransaction {
             return nil
         }
 
-        let objectives = table.objectives.notEmpty
+        let notEmptyObjectives = table.objectives.notEmpty
 
         guard
             turnContext.mustDiscardObjective,
-            !objectives.isEmpty
+            !notEmptyObjectives.isEmpty
         else {
             return nil
         }
 
         history.append(
-            .choosingObjectiveToDiscard(objectiveIndices: objectives.map { $0.0 })
+            .choosingObjectiveToDiscard(objectiveIndices: notEmptyObjectives.map { $0.0 })
         )
 
-        if objectives.count == 1 {
-            let objective = objectives.first!
+        if notEmptyObjectives.count == 1 {
+            let objective = notEmptyObjectives.first!
             history.append(
                 .discardedObjective(objectiveIndex: objective.0)
             )
@@ -162,7 +162,8 @@ extension InGameTransaction {
                 .discardedObjective(
                     coachID: turnContext.coachID,
                     objectiveIndex: objective.0,
-                    objective: objective.1
+                    objective: objective.1,
+                    objectives: table.objectives.toWrappedObjectives()
                 )
             )
             events.append(
@@ -174,7 +175,7 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: turnContext.coachID,
             prompt: .selectObjectiveToDiscard(
-                objectives: objectives.mapValues { $0.challenge }
+                objectives: table.objectives.toWrappedObjectives()
             )
         )
     }
@@ -196,11 +197,14 @@ extension InGameTransaction {
                 .dealtNewObjective(
                     coachID: turnContext.coachID,
                     objectiveIndex: 0,
-                    objective: card.challenge
+                    objectives: objectives.toWrappedObjectives()
                 )
             )
             events.append(
-                .updatedDeck(top: deck.first?.challenge, count: deck.count)
+                .updatedDeck(
+                    top: deck.first?.toWrappedObjective(),
+                    count: deck.count
+                )
             )
         }
 
@@ -210,11 +214,14 @@ extension InGameTransaction {
                 .dealtNewObjective(
                     coachID: turnContext.coachID,
                     objectiveIndex: 1,
-                    objective: card.challenge
+                    objectives: objectives.toWrappedObjectives()
                 )
             )
             events.append(
-                .updatedDeck(top: deck.first?.challenge, count: deck.count)
+                .updatedDeck(
+                    top: deck.first?.toWrappedObjective(),
+                    count: deck.count
+                )
             )
         }
 
@@ -224,11 +231,14 @@ extension InGameTransaction {
                 .dealtNewObjective(
                     coachID: turnContext.coachID,
                     objectiveIndex: 2,
-                    objective: card.challenge
+                    objectives: objectives.toWrappedObjectives()
                 )
             )
             events.append(
-                .updatedDeck(top: deck.first?.challenge, count: deck.count)
+                .updatedDeck(
+                    top: deck.first?.toWrappedObjective(),
+                    count: deck.count
+                )
             )
         }
 

@@ -192,9 +192,12 @@ struct DiscardFromHandTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        1: .takeThemDown,
-                    ]
+                    indices: [1],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: WrappedObjective(challenge: .takeThemDown, value: 2),
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -218,6 +221,11 @@ struct DiscardFromHandTests {
                             challenge: .takeThemDown,
                             bonusPlay: .blitz
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
                     ),
                     hand: [
                         .open(
@@ -405,9 +413,12 @@ struct DiscardFromHandTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        0: .getTheBall,
-                    ]
+                    indices: [0],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -431,6 +442,11 @@ struct DiscardFromHandTests {
                             challenge: .getTheBall,
                             bonusPlay: .blitz
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
                     ),
                     hand: [
                         .open(
@@ -566,9 +582,12 @@ struct DiscardFromHandTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        2: .moveTheBall,
-                    ]
+                    indices: [2],
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -592,6 +611,11 @@ struct DiscardFromHandTests {
                             challenge: .moveTheBall,
                             bonusPlay: .blitz
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: nil
                     ),
                     hand: [
                         .open(
@@ -892,9 +916,12 @@ struct DiscardFromHandTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        1: .takeThemDown,
-                    ]
+                    indices: [1],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: WrappedObjective(challenge: .takeThemDown, value: 2),
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -918,6 +945,11 @@ struct DiscardFromHandTests {
                             challenge: .takeThemDown,
                             bonusPlay: .blitz
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
                     ),
                     hand: [
                         .open(
@@ -1131,9 +1163,12 @@ struct DiscardFromHandTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        0: .getTheBall,
-                    ]
+                    indices: [0],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -1157,6 +1192,11 @@ struct DiscardFromHandTests {
                             challenge: .getTheBall,
                             bonusPlay: .blitz
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
                     ),
                     hand: [
                         .open(
@@ -1327,9 +1367,12 @@ struct DiscardFromHandTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        2: .moveTheBall,
-                    ]
+                    indices: [2],
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -1353,6 +1396,11 @@ struct DiscardFromHandTests {
                             challenge: .moveTheBall,
                             bonusPlay: .blitz
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: nil
                     ),
                     hand: [
                         .open(

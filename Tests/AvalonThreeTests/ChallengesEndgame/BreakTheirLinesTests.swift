@@ -325,6 +325,11 @@ struct BreakTheirLinesTests {
                             bonusPlay: .absoluteCarnage
                         )
                     ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: nil
+                    ),
                     hand: [
                         .open(
                             card: ChallengeCard(
@@ -460,6 +465,11 @@ struct BreakTheirLinesTests {
                             challenge: .breakTheirLines,
                             bonusPlay: .absoluteCarnage
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: nil
                     ),
                     hand: [
                         .open(

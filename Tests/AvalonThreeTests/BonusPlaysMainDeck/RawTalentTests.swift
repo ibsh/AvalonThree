@@ -320,34 +320,46 @@ struct RawTalentTests {
                     ]
                 ),
                 .updatedDeck(
-                    top: .breakSomeBones,
+                    top: WrappedObjective(challenge: .breakSomeBones, value: 3),
                     count: 5
                 ),
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 0,
-                    objective: .breakSomeBones
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: nil,
+                        third: nil
+                    )
                 ),
                 .updatedDeck(
-                    top: .breakSomeBones,
+                    top: WrappedObjective(challenge: .breakSomeBones, value: 3),
                     count: 4
                 ),
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 1,
-                    objective: .breakSomeBones
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        third: nil
+                    )
                 ),
                 .updatedDeck(
-                    top: .freeUpTheBall,
+                    top: WrappedObjective(challenge: .freeUpTheBall, value: 2),
                     count: 3
                 ),
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 2,
-                    objective: .freeUpTheBall
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        third: WrappedObjective(challenge: .freeUpTheBall, value: 2)
+                    )
                 ),
                 .updatedDeck(
-                    top: .freeUpTheBall,
+                    top: WrappedObjective(challenge: .freeUpTheBall, value: 2),
                     count: 2
                 ),
             ]
@@ -669,34 +681,46 @@ struct RawTalentTests {
                     ]
                 ),
                 .updatedDeck(
-                    top: .breakSomeBones,
+                    top: WrappedObjective(challenge: .breakSomeBones, value: 3),
                     count: 5
                 ),
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 0,
-                    objective: .breakSomeBones
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: nil,
+                        third: nil
+                    )
                 ),
                 .updatedDeck(
-                    top: .breakSomeBones,
+                    top: WrappedObjective(challenge: .breakSomeBones, value: 3),
                     count: 4
                 ),
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 1,
-                    objective: .breakSomeBones
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        third: nil
+                    )
                 ),
                 .updatedDeck(
-                    top: .freeUpTheBall,
+                    top: WrappedObjective(challenge: .freeUpTheBall, value: 2),
                     count: 3
                 ),
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 2,
-                    objective: .freeUpTheBall
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        third: WrappedObjective(challenge: .freeUpTheBall, value: 2)
+                    )
                 ),
                 .updatedDeck(
-                    top: .freeUpTheBall,
+                    top: WrappedObjective(challenge: .freeUpTheBall, value: 2),
                     count: 2
                 ),
             ]
@@ -1011,34 +1035,46 @@ struct RawTalentTests {
                     ]
                 ),
                 .updatedDeck(
-                    top: .breakSomeBones,
+                    top: WrappedObjective(challenge: .breakSomeBones, value: 3),
                     count: 5
                 ),
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 0,
-                    objective: .breakSomeBones
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: nil,
+                        third: nil
+                    )
                 ),
                 .updatedDeck(
-                    top: .breakSomeBones,
+                    top: WrappedObjective(challenge: .breakSomeBones, value: 3),
                     count: 4
                 ),
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 1,
-                    objective: .breakSomeBones
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        third: nil
+                    )
                 ),
                 .updatedDeck(
-                    top: .freeUpTheBall,
+                    top: WrappedObjective(challenge: .freeUpTheBall, value: 2),
                     count: 3
                 ),
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 2,
-                    objective: .freeUpTheBall
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        third: WrappedObjective(challenge: .freeUpTheBall, value: 2)
+                    )
                 ),
                 .updatedDeck(
-                    top: .freeUpTheBall,
+                    top: WrappedObjective(challenge: .freeUpTheBall, value: 2),
                     count: 2
                 ),
             ]

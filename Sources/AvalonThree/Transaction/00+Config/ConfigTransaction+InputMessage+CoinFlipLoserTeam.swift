@@ -129,7 +129,10 @@ extension ConfigTransaction {
         )
 
         events.append(
-            .updatedDeck(top: deck.first?.challenge, count: deck.count)
+            .updatedDeck(
+                top: deck.first?.toWrappedObjective(),
+                count: deck.count
+            )
         )
 
         var objectives = Objectives()
@@ -140,11 +143,14 @@ extension ConfigTransaction {
                 .dealtNewObjective(
                     coachID: coinFlipWinnerCoachID.inverse,
                     objectiveIndex: 0,
-                    objective: card.challenge
+                    objectives: objectives.toWrappedObjectives()
                 )
             )
             events.append(
-                .updatedDeck(top: deck.first?.challenge, count: deck.count)
+                .updatedDeck(
+                    top: deck.first?.toWrappedObjective(),
+                    count: deck.count
+                )
             )
         }
 
@@ -154,11 +160,14 @@ extension ConfigTransaction {
                 .dealtNewObjective(
                     coachID: coinFlipWinnerCoachID.inverse,
                     objectiveIndex: 1,
-                    objective: card.challenge
+                    objectives: objectives.toWrappedObjectives()
                 )
             )
             events.append(
-                .updatedDeck(top: deck.first?.challenge, count: deck.count)
+                .updatedDeck(
+                    top: deck.first?.toWrappedObjective(),
+                    count: deck.count
+                )
             )
         }
 
@@ -168,11 +177,14 @@ extension ConfigTransaction {
                 .dealtNewObjective(
                     coachID: coinFlipWinnerCoachID.inverse,
                     objectiveIndex: 2,
-                    objective: card.challenge
+                    objectives: objectives.toWrappedObjectives()
                 )
             )
             events.append(
-                .updatedDeck(top: deck.first?.challenge, count: deck.count)
+                .updatedDeck(
+                    top: deck.first?.toWrappedObjective(),
+                    count: deck.count
+                )
             )
         }
 

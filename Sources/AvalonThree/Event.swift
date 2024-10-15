@@ -362,13 +362,15 @@ public enum Event: Equatable, Codable, Sendable {
         coachID: CoachID,
         objectiveIndex: Int,
         objective: WrappedChallengeCard,
+        objectives: WrappedObjectives,
         hand: [WrappedChallengeCard],
         active: [ChallengeCard]
     )
 
     case declinedObjectives(
         coachID: CoachID,
-        objectives: [Int: Challenge]
+        indices: [Int],
+        objectives: WrappedObjectives
     )
 
     case declinedCatchersInstinctsSkillRunAction(
@@ -381,7 +383,7 @@ public enum Event: Equatable, Codable, Sendable {
     )
 
     case updatedDeck(
-        top: Challenge?,
+        top: WrappedObjective?,
         count: Int
     )
 
@@ -393,13 +395,14 @@ public enum Event: Equatable, Codable, Sendable {
     case dealtNewObjective(
         coachID: CoachID,
         objectiveIndex: Int,
-        objective: Challenge
+        objectives: WrappedObjectives
     )
 
     case discardedObjective(
         coachID: CoachID,
         objectiveIndex: Int,
-        objective: ChallengeCard
+        objective: ChallengeCard,
+        objectives: WrappedObjectives
     )
 
     case discardedCardFromHand(
@@ -446,6 +449,17 @@ public enum Event: Equatable, Codable, Sendable {
 public enum WrappedChallengeCard: Hashable, Codable, Sendable {
     case open(card: ChallengeCard)
     case closed(challenge: Challenge)
+}
+
+public struct WrappedObjective: Equatable, Codable, Sendable {
+    let challenge: Challenge
+    let value: Int
+}
+
+public struct WrappedObjectives: Equatable, Codable, Sendable {
+    let first: WrappedObjective?
+    let second: WrappedObjective?
+    let third: WrappedObjective?
 }
 
 public struct PlayerSetup: Hashable, Codable, Sendable {

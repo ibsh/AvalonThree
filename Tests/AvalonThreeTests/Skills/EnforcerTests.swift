@@ -232,6 +232,11 @@ struct EnforcerTests {
                             bonusPlay: .blitz
                         )
                     ),
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: nil,
+                        third: nil
+                    ),
                     hand: [
                         .open(
                             card: ChallengeCard(

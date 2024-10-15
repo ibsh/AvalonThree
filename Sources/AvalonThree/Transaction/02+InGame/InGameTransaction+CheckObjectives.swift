@@ -69,7 +69,8 @@ extension InGameTransaction {
         return AddressedPrompt(
             coachID: turnContext.coachID,
             prompt: .earnedObjective(
-                objectives: canClaim.mapValues { $0.challenge }
+                indices: canClaim.map { $0.0 },
+                objectives: table.objectives.toWrappedObjectives()
             )
         )
     }

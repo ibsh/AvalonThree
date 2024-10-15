@@ -20,24 +20,11 @@ extension InGameTransaction {
             throw GameError("No claim in history")
         }
 
-        let objectives = try objectiveIndices.reduce(
-            [Int: Challenge]()) { partialResult, objectiveIndex in
-                guard let objective = try table.objectives.getObjective(index: objectiveIndex) else {
-                    throw GameError("No objective")
-                }
-                return partialResult.adding(
-                    key: objectiveIndex,
-                    value: objective.challenge
-                )
-            }
-
-        history.append(
-            .declinedToClaimObjective
-        )
         events.append(
             .declinedObjectives(
                 coachID: turnContext.coachID,
-                objectives: objectives
+                indices: objectiveIndices,
+                objectives: table.objectives.toWrappedObjectives()
             )
         )
 

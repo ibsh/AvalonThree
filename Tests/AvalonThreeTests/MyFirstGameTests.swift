@@ -483,34 +483,46 @@ struct MyFirstGameTests {
                     ]
                 ),
                 .updatedDeck(
-                    top: .gangUp,
+                    top: WrappedObjective(challenge: .gangUp, value: 2),
                     count: 24
                 ),
                 .dealtNewObjective(
                     coachID: .away,
                     objectiveIndex: 0,
-                    objective: .gangUp
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .gangUp, value: 2),
+                        second: nil,
+                        third: nil
+                    )
                 ),
                 .updatedDeck(
-                    top: .showNoFear,
+                    top: WrappedObjective(challenge: .showNoFear, value: 2),
                     count: 23
                 ),
                 .dealtNewObjective(
                     coachID: .away,
                     objectiveIndex: 1,
-                    objective: .showNoFear
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .gangUp, value: 2),
+                        second: WrappedObjective(challenge: .showNoFear, value: 2),
+                        third: nil
+                    )
                 ),
                 .updatedDeck(
-                    top: .moveTheBall,
+                    top: WrappedObjective(challenge: .moveTheBall, value: 1),
                     count: 22
                 ),
                 .dealtNewObjective(
                     coachID: .away,
                     objectiveIndex: 2,
-                    objective: .moveTheBall
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .gangUp, value: 2),
+                        second: WrappedObjective(challenge: .showNoFear, value: 2),
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 ),
                 .updatedDeck(
-                    top: .takeThemDown,
+                    top: WrappedObjective(challenge: .takeThemDown, value: 2),
                     count: 21
                 )
             ]

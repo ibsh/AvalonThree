@@ -133,6 +133,11 @@ struct MultiBallTests {
                             bonusPlay: .multiBall
                         )
                     ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: nil
+                    ),
                     hand: [
                         .open(
                             card: ChallengeCard(

@@ -131,7 +131,6 @@ enum HistoryEntry: Equatable, Sendable {
 
     case choosingObjectiveToClaim(objectiveIndices: [Int])
     case claimedObjective(objectiveIndex: Int)
-    case declinedToClaimObjective
 
     case eligibleForReadyToGoBonusPlayFreeAction(PlayerID)
     case eligibleForYourTimeToShineBonusPlayReservesAction(Set<PlayerID>)

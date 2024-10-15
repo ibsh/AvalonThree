@@ -289,9 +289,12 @@ struct RefreshObjectivesTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        0: .takeThemDown,
-                    ]
+                    indices: [0],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .takeThemDown, value: 2),
+                        second: WrappedObjective(challenge: .spreadOut, value: 1),
+                        third: WrappedObjective(challenge: .showNoFear, value: 2)
+                    )
                 )
             )
         )
@@ -315,6 +318,11 @@ struct RefreshObjectivesTests {
                             challenge: .takeThemDown,
                             bonusPlay: .absoluteCarnage
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: WrappedObjective(challenge: .spreadOut, value: 1),
+                        third: WrappedObjective(challenge: .showNoFear, value: 2)
                     ),
                     hand: [
                         .open(
@@ -404,9 +412,19 @@ struct RefreshObjectivesTests {
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 0,
-                    objective: .goDeep
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .goDeep, value: 2),
+                        second: WrappedObjective(challenge: .spreadOut, value: 1),
+                        third: WrappedObjective(challenge: .showNoFear, value: 2)
+                    )
                 ),
-                .updatedDeck(top: .lastChance, count: 2),
+                .updatedDeck(
+                    top: WrappedObjective(
+                        challenge: .lastChance,
+                        value: 0
+                    ),
+                    count: 2
+                ),
                 .turnBegan(
                     coachID: .home,
                     isFinal: false
@@ -825,10 +843,11 @@ struct RefreshObjectivesTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .selectObjectiveToDiscard(
-                    objectives: [
-                        1: .spreadOut,
-                        2: .showNoFear,
-                    ]
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: WrappedObjective(challenge: .spreadOut, value: 1),
+                        third: WrappedObjective(challenge: .showNoFear, value: 2)
+                    )
                 )
             )
         )
@@ -878,6 +897,11 @@ struct RefreshObjectivesTests {
                     objective: ChallengeCard(
                         challenge: .spreadOut,
                         bonusPlay: .absoluteCarnage
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: WrappedObjective(challenge: .showNoFear, value: 2)
                     )
                 ),
                 .updatedDiscards(
@@ -887,15 +911,29 @@ struct RefreshObjectivesTests {
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 0,
-                    objective: .goDeep
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .goDeep, value: 2),
+                        second: nil,
+                        third: WrappedObjective(challenge: .showNoFear, value: 2)
+                    )
                 ),
-                .updatedDeck(top: .lastChance, count: 2),
+                .updatedDeck(
+                    top: WrappedObjective(challenge: .lastChance, value: 0),
+                    count: 2
+                ),
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 1,
-                    objective: .lastChance
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .goDeep, value: 2),
+                        second: WrappedObjective(challenge: .lastChance, value: 0),
+                        third: WrappedObjective(challenge: .showNoFear, value: 2)
+                    )
                 ),
-                .updatedDeck(top: .pileOn, count: 1),
+                .updatedDeck(
+                    top: WrappedObjective(challenge: .pileOn, value: 2),
+                    count: 1
+                ),
                 .turnBegan(
                     coachID: .home,
                     isFinal: false
@@ -1313,11 +1351,11 @@ struct RefreshObjectivesTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .selectObjectiveToDiscard(
-                    objectives: [
-                        0: .showboatForTheCrowd,
-                        1: .spreadOut,
-                        2: .showNoFear,
-                    ]
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .showboatForTheCrowd, value: 1),
+                        second: WrappedObjective(challenge: .spreadOut, value: 1),
+                        third: WrappedObjective(challenge: .showNoFear, value: 2)
+                    )
                 )
             )
         )
@@ -1356,6 +1394,11 @@ struct RefreshObjectivesTests {
                     objective: ChallengeCard(
                         challenge: .spreadOut,
                         bonusPlay: .absoluteCarnage
+                    ),
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .showboatForTheCrowd, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .showNoFear, value: 2)
                     )
                 ),
                 .updatedDiscards(
@@ -1365,9 +1408,16 @@ struct RefreshObjectivesTests {
                 .dealtNewObjective(
                     coachID: .home,
                     objectiveIndex: 1,
-                    objective: .goDeep
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .showboatForTheCrowd, value: 1),
+                        second: WrappedObjective(challenge: .goDeep, value: 2),
+                        third: WrappedObjective(challenge: .showNoFear, value: 2)
+                    )
                 ),
-                .updatedDeck(top: .lastChance, count: 2),
+                .updatedDeck(
+                    top: WrappedObjective(challenge: .lastChance, value: 0),
+                    count: 2
+                ),
                 .turnBegan(
                     coachID: .home,
                     isFinal: false

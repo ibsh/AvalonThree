@@ -285,7 +285,8 @@ public enum Prompt: Equatable, Codable, Sendable {
     )
 
     case earnedObjective(
-        objectives: [Int: Challenge]
+        indices: [Int],
+        objectives: WrappedObjectives
     )
 
     case eligibleForReadyToGoBonusPlayRunAction(
@@ -335,7 +336,7 @@ public enum Prompt: Equatable, Codable, Sendable {
     case eligibleForPassingPlayBonusPlay
 
     case selectObjectiveToDiscard(
-        objectives: [Int: Challenge]
+        objectives: WrappedObjectives
     )
 }
 

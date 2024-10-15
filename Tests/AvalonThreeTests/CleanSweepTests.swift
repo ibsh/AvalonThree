@@ -359,9 +359,12 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        0: .getTheBall,
-                    ]
+                    indices: [0],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -385,6 +388,11 @@ struct CleanSweepTests {
                             challenge: .getTheBall,
                             bonusPlay: .absoluteCarnage
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
                     ),
                     hand: [
                         .open(
@@ -514,9 +522,12 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        2: .moveTheBall,
-                    ]
+                    indices: [2],
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -540,6 +551,11 @@ struct CleanSweepTests {
                             challenge: .moveTheBall,
                             bonusPlay: .absoluteCarnage
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: nil
                     ),
                     hand: [
                         .open(
@@ -773,9 +789,12 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        1: .takeThemDown,
-                    ]
+                    indices: [1],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: WrappedObjective(challenge: .takeThemDown, value: 2),
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -799,6 +818,11 @@ struct CleanSweepTests {
                             challenge: .takeThemDown,
                             bonusPlay: .absoluteCarnage
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
                     ),
                     hand: [
                         .open(
@@ -986,9 +1010,12 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        0: .getTheBall,
-                    ]
+                    indices: [0],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -1006,9 +1033,12 @@ struct CleanSweepTests {
             latestEvents == [
                 .declinedObjectives(
                     coachID: .away,
-                    objectives: [
-                        0: .getTheBall,
-                    ]
+                    indices: [0],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             ]
         )
@@ -1127,9 +1157,12 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        2: .moveTheBall,
-                    ]
+                    indices: [2],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -1153,6 +1186,11 @@ struct CleanSweepTests {
                             challenge: .moveTheBall,
                             bonusPlay: .absoluteCarnage
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: nil
                     ),
                     hand: [
                         .open(
@@ -1383,9 +1421,12 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        1: .takeThemDown,
-                    ]
+                    indices: [1],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: WrappedObjective(challenge: .takeThemDown, value: 2),
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -1409,6 +1450,11 @@ struct CleanSweepTests {
                             challenge: .takeThemDown,
                             bonusPlay: .absoluteCarnage
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
                     ),
                     hand: [
                         .open(
@@ -1564,9 +1610,12 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        0: .getTheBall,
-                    ]
+                    indices: [0],
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .getTheBall, value: 1),
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -1590,6 +1639,11 @@ struct CleanSweepTests {
                             challenge: .getTheBall,
                             bonusPlay: .absoluteCarnage
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
                     ),
                     hand: [
                         .open(
@@ -1725,9 +1779,12 @@ struct CleanSweepTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
                 prompt: .earnedObjective(
-                    objectives: [
-                        2: .moveTheBall,
-                    ]
+                    indices: [2],
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: WrappedObjective(challenge: .moveTheBall, value: 1)
+                    )
                 )
             )
         )
@@ -1751,6 +1808,11 @@ struct CleanSweepTests {
                             challenge: .moveTheBall,
                             bonusPlay: .absoluteCarnage
                         )
+                    ),
+                    objectives: WrappedObjectives(
+                        first: nil,
+                        second: nil,
+                        third: nil
                     ),
                     hand: [
                         .open(

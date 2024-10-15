@@ -26,4 +26,15 @@ public struct Game: Sendable {
             previousAddressedPrompt: nil
         )
     }
+
+    public var isFinished: Bool {
+        switch phase {
+        case .config,
+             .setup,
+             .active:
+            false
+        case .finished:
+            true
+        }
+    }
 }

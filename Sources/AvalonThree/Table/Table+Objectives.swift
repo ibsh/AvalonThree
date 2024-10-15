@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Objectives: Codable, Sendable {
+struct Objectives {
     var first: ChallengeCard?
     var second: ChallengeCard?
     var third: ChallengeCard?
@@ -49,5 +49,19 @@ extension Objectives {
 
     var emptyCount: Int {
         3 - notEmpty.count
+    }
+
+    func toWrappedObjectives() -> WrappedObjectives {
+        WrappedObjectives(
+            first: first?.toWrappedObjective(),
+            second: second?.toWrappedObjective(),
+            third: third?.toWrappedObjective()
+        )
+    }
+}
+
+extension ChallengeCard {
+    func toWrappedObjective() -> WrappedObjective {
+        WrappedObjective(challenge: challenge, value: challenge.scoreIncrement)
     }
 }

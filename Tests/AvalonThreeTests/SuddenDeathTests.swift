@@ -519,11 +519,11 @@ struct SuddenDeathTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .selectObjectiveToDiscard(
-                    objectives: [
-                        0: .breakSomeBones,
-                        1: .breakSomeBones,
-                        2: .breakTheirLines
-                    ]
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        third: WrappedObjective(challenge: .breakTheirLines, value: 2)
+                    )
                 )
             )
         )
@@ -782,11 +782,11 @@ struct SuddenDeathTests {
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
                 prompt: .selectObjectiveToDiscard(
-                    objectives: [
-                        0: .breakSomeBones,
-                        1: .breakSomeBones,
-                        2: .breakSomeBones,
-                    ]
+                    objectives: WrappedObjectives(
+                        first: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        second: WrappedObjective(challenge: .breakSomeBones, value: 3),
+                        third: WrappedObjective(challenge: .breakSomeBones, value: 3)
+                    )
                 )
             )
         )

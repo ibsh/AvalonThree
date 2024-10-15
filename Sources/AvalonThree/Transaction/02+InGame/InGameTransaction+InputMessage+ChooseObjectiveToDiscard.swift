@@ -39,7 +39,8 @@ extension InGameTransaction {
             .discardedObjective(
                 coachID: turnContext.coachID,
                 objectiveIndex: objectiveIndex,
-                objective: objective
+                objective: objective,
+                objectives: table.objectives.toWrappedObjectives()
             )
         )
         events.append(
