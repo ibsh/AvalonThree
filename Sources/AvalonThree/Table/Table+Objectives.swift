@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Objectives {
+struct Objectives: Codable {
     var first: ChallengeCard?
     var second: ChallengeCard?
     var third: ChallengeCard?

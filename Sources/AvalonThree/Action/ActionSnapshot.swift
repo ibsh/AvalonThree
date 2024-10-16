@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ActionSnapshot: Equatable {
+struct ActionSnapshot: Codable, Equatable {
     let balls: Set<Ball>
     let players: Set<Player>
 }

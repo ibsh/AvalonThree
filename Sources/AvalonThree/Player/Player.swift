@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Player {
+struct Player: Codable {
     let id: PlayerID
     let spec: PlayerSpec
     var state: State
@@ -20,7 +20,7 @@ public struct PlayerID: Hashable, Codable, Sendable {
 }
 
 extension Player {
-    enum State {
+    enum State: Codable {
         case inReserves
         case standing(square: Square)
         case prone(square: Square)

@@ -9,7 +9,7 @@ import Foundation
 
 /// This is a bit like `Event` but it's all the stuff that we might need to check internally in
 /// subsequent logic.
-enum HistoryEntry: Equatable, Sendable {
+enum HistoryEntry: Codable, Equatable, Sendable {
 
     case prepareForTurn(
         coachID: CoachID,
@@ -150,7 +150,7 @@ enum HistoryEntry: Equatable, Sendable {
     case turnFinished
 }
 
-enum SpecialTurn: Equatable {
+enum SpecialTurn: Codable, Equatable {
     case first
     case second
     case final

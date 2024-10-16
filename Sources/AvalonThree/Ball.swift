@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct Ball {
+struct Ball: Codable {
     public let id: Int
     public var state: State
 }
 
 extension Ball {
-    enum State {
+    enum State: Codable {
         case held(playerID: PlayerID)
         case loose(square: Square)
     }

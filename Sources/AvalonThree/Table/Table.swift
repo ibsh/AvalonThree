@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Table: Sendable {
+struct Table: Codable, Sendable {
     let config: FinalizedConfig
 
     var players: Set<Player>
