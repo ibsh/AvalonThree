@@ -32,13 +32,9 @@ extension ConfigTransaction {
                 rookieBonusRecipientID: rookieBonusRecipientID
             )
 
-        case .selectCoinFlipWinnerTeam(let teamID):
-            return try selectCoinFlipWinnerTeam(
-                teamID: teamID
-            )
-
-        case .selectCoinFlipLoserTeam(let teamID):
-            return try selectCoinFlipLoserTeam(
+        case .selectTeam(let teamID):
+            return try selectTeam(
+                coachID: messageWrapper.coachID,
                 teamID: teamID
             )
 

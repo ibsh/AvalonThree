@@ -52,7 +52,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .selectCoinFlipWinnerTeam(teamID: .lizardmen)
+                message: .selectTeam(teamID: .lizardmen)
             )
         )
 
@@ -61,7 +61,7 @@ struct RawTalentTests {
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .selectCoinFlipLoserTeam(teamID: .orc)
+                message: .selectTeam(teamID: .orc)
             ),
             randomizers: Randomizers(
                 deck: deck(Array(ChallengeCard.standardShortDeck.prefix(5))),
@@ -413,7 +413,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .selectCoinFlipWinnerTeam(teamID: .lizardmen)
+                message: .selectTeam(teamID: .lizardmen)
             )
         )
 
@@ -422,7 +422,7 @@ struct RawTalentTests {
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .selectCoinFlipLoserTeam(teamID: .orc)
+                message: .selectTeam(teamID: .orc)
             ),
             randomizers: Randomizers(
                 deck: deck(Array(ChallengeCard.standardShortDeck.prefix(5))),
@@ -774,7 +774,7 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .selectCoinFlipWinnerTeam(teamID: .lizardmen)
+                message: .selectTeam(teamID: .lizardmen)
             )
         )
 
@@ -783,7 +783,7 @@ struct RawTalentTests {
         let (latestEvents, _) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .selectCoinFlipLoserTeam(teamID: .orc)
+                message: .selectTeam(teamID: .orc)
             ),
             randomizers: Randomizers(
                 deck: deck(Array(ChallengeCard.standardShortDeck.prefix(5))),

@@ -1,5 +1,5 @@
 //
-//  SetupTransaction+InputMessage+CoinFlipLoserConfig.swift
+//  SetupTransaction+InputMessage+SelectTeam.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 6/17/24.
@@ -9,7 +9,7 @@ import Foundation
 
 extension SetupTransaction {
 
-    mutating func selectCoinFlipLoserTeam() throws -> AddressedPrompt? {
+    mutating func selectTeam() throws -> AddressedPrompt? {
 
         return AddressedPrompt(
             coachID: table.coinFlipLoserCoachID,

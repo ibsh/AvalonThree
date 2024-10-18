@@ -46,7 +46,7 @@ extension ConfigTransaction {
 
         return AddressedPrompt(
             coachID: coinFlipWinnerCoachID,
-            prompt: .selectCoinFlipWinnerTeam(
+            prompt: .selectTeam(
                 teamIDs: TeamID.availableCases
             )
         )

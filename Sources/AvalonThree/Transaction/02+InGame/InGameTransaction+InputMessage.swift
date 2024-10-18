@@ -399,8 +399,7 @@ extension InGameTransaction {
              .selectBoardSpec,
              .selectChallengeDeck,
              .selectRookieBonusRecipient,
-             .selectCoinFlipWinnerTeam,
-             .selectCoinFlipLoserTeam:
+             .selectTeam:
             throw GameError("Invalid message for InGameTransaction")
         }
     }

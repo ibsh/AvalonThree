@@ -15,8 +15,7 @@ public enum InputMessage: Codable, Sendable {
     case selectBoardSpec(boardSpecID: BoardSpecID)
     case selectChallengeDeck(challengeDeckID: ChallengeDeckID)
     case selectRookieBonusRecipient(rookieBonusRecipientID: RookieBonusRecipientID)
-    case selectCoinFlipWinnerTeam(teamID: TeamID)
-    case selectCoinFlipLoserTeam(teamID: TeamID)
+    case selectTeam(teamID: TeamID)
 
     // MARK: - Table config
 

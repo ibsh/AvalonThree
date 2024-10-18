@@ -1,5 +1,5 @@
 //
-//  ConfigTransaction+InputMessage+CoinFlipLoserTeam.swift
+//  ConfigTransaction+InputMessage+SelectTeam.swift
 //  AvalonThree
 //
 //  Created by Ibrahim Sha'ath on 6/17/24.
@@ -9,8 +9,9 @@ import Foundation
 
 extension ConfigTransaction {
 
-    mutating func selectCoinFlipLoserTeam(
-        teamID coinFlipLoserTeamID: TeamID
+    mutating func selectTeam(
+        coachID: CoachID,
+        teamID: TeamID
     ) throws -> AddressedPrompt? {
 
         guard let coinFlipWinnerCoachID = config.coinFlipWinnerCoachID else {
@@ -29,6 +30,30 @@ extension ConfigTransaction {
             throw GameError("Raw Talent bonus play recipient has not been specified yet")
         }
 
+        if coachID == coinFlipWinnerCoachID {
+
+            guard config.coinFlipWinnerTeamID == nil else {
+                throw GameError("Coin flip winner team has already been specified")
+            }
+
+            guard TeamID.availableCases.contains(teamID) else {
+                throw GameError("Invalid coin flip winner team choice")
+            }
+
+            events.append(
+                .specifiedTeam(coachID: coinFlipWinnerCoachID, teamID: teamID)
+            )
+
+            config.coinFlipWinnerTeamID = teamID
+
+            return AddressedPrompt(
+                coachID: coinFlipWinnerCoachID.inverse,
+                prompt: .selectTeam(
+                    teamIDs: TeamID.availableCases
+                )
+            )
+        }
+
         guard let coinFlipWinnerTeamID = config.coinFlipWinnerTeamID else {
             throw GameError("Coin flip winner team has not been specified yet")
         }
@@ -37,17 +62,17 @@ extension ConfigTransaction {
             throw GameError("Coin flip loser team has already been specified")
         }
 
-        guard TeamID.availableCases.contains(coinFlipLoserTeamID) else {
+        guard TeamID.availableCases.contains(teamID) else {
             throw GameError("Invalid coin flip loser team choice")
         }
 
         let coinFlipLoserCoachID = coinFlipWinnerCoachID.inverse
 
         events.append(
-            .specifiedTeam(coachID: coinFlipLoserCoachID, teamID: coinFlipLoserTeamID)
+            .specifiedTeam(coachID: coinFlipLoserCoachID, teamID: teamID)
         )
 
-        config.coinFlipLoserTeamID = coinFlipLoserTeamID
+        config.coinFlipLoserTeamID = teamID
 
         var coinFlipLoserHand = [ChallengeCard]()
         var coinFlipWinnerHand = [ChallengeCard]()
@@ -75,7 +100,7 @@ extension ConfigTransaction {
             )
         )
 
-        let coinFlipLoserPlayerSetups = coinFlipLoserTeamID.spec
+        let coinFlipLoserPlayerSetups = teamID.spec
             .playerSetups(coachID: coinFlipWinnerCoachID.inverse)
 
         let coinFlipWinnerPlayerSetups = coinFlipWinnerTeamID.spec
@@ -195,7 +220,7 @@ extension ConfigTransaction {
                 challengeDeckID: challengeDeckID,
                 rookieBonusRecipientID: rookieBonusRecipientID,
                 coinFlipWinnerTeamID: coinFlipWinnerTeamID,
-                coinFlipLoserTeamID: coinFlipLoserTeamID
+                coinFlipLoserTeamID: teamID
             ),
             players: players.toSet(),
             playerNumbers: playerNumbers,

@@ -28,11 +28,7 @@ public enum Prompt: Equatable, Codable, Sendable {
         rookieBonusRecipientIDs: [RookieBonusRecipientID]
     )
 
-    case selectCoinFlipWinnerTeam(
-        teamIDs: [TeamID]
-    )
-
-    case selectCoinFlipLoserTeam(
+    case selectTeam(
         teamIDs: [TeamID]
     )
 

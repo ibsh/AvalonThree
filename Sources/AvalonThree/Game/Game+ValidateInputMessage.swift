@@ -48,14 +48,8 @@ extension Game {
             }
             return
 
-        case .selectCoinFlipWinnerTeam:
-            guard case .selectCoinFlipWinnerTeam = prompt else {
-                throw GameError("Invalid message")
-            }
-            return
-
-        case .selectCoinFlipLoserTeam:
-            guard case .selectCoinFlipLoserTeam = prompt else {
+        case .selectTeam:
+            guard case .selectTeam = prompt else {
                 throw GameError("Invalid message")
             }
             return

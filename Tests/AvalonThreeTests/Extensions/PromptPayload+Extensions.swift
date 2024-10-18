@@ -12,8 +12,7 @@ extension Prompt {
         case selectBoardSpec
         case selectChallengeDeck
         case selectRookieBonusRecipient
-        case selectCoinFlipWinnerTeam
-        case selectCoinFlipLoserTeam
+        case selectTeam
         case arrangePlayers
         case declarePlayerAction
         case declareEmergencyReservesAction
@@ -83,8 +82,7 @@ extension Prompt {
         case .selectBoardSpec: .selectBoardSpec
         case .selectChallengeDeck: .selectChallengeDeck
         case .selectRookieBonusRecipient: .selectRookieBonusRecipient
-        case .selectCoinFlipWinnerTeam: .selectCoinFlipWinnerTeam
-        case .selectCoinFlipLoserTeam: .selectCoinFlipLoserTeam
+        case .selectTeam: .selectTeam
         case .arrangePlayers: .arrangePlayers
         case .declarePlayerAction: .declarePlayerAction
         case .declareEmergencyReservesAction: .declareEmergencyReservesAction

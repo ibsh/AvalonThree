@@ -128,7 +128,7 @@ struct MyFirstGameTests {
         #expect(
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                prompt: .selectCoinFlipWinnerTeam(
+                prompt: .selectTeam(
                     teamIDs: [
                         .blackOrc,
                         .chaos,
@@ -159,7 +159,7 @@ struct MyFirstGameTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .selectCoinFlipWinnerTeam(teamID: .skaven)
+                message: .selectTeam(teamID: .skaven)
             )
         )
 
@@ -172,7 +172,7 @@ struct MyFirstGameTests {
         #expect(
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .away,
-                prompt: .selectCoinFlipLoserTeam(
+                prompt: .selectTeam(
                     teamIDs: [
                         .blackOrc,
                         .chaos,
@@ -203,7 +203,7 @@ struct MyFirstGameTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .selectCoinFlipLoserTeam(teamID: .human)
+                message: .selectTeam(teamID: .human)
             ),
             randomizers: Randomizers(
                 deck: deck([

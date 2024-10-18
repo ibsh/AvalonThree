@@ -14,8 +14,8 @@ extension SetupTransaction {
     ) throws -> AddressedPrompt? {
 
         switch messageWrapper.message {
-        case .selectCoinFlipLoserTeam:
-            return try selectCoinFlipLoserTeam()
+        case .selectTeam:
+            return try selectTeam()
 
         case .arrangePlayers(let playerPositions):
             return try arrangePlayers(
@@ -27,7 +27,6 @@ extension SetupTransaction {
              .selectBoardSpec,
              .selectChallengeDeck,
              .selectRookieBonusRecipient,
-             .selectCoinFlipWinnerTeam,
              .declarePlayerAction,
              .declareEmergencyReservesAction,
              .useRegenerationSkillStandUpAction,
