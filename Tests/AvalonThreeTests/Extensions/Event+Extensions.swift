@@ -54,7 +54,6 @@ extension Event {
         case playerFouled
         case playerBlocked
         case playerThrewBomb
-        case playerAssistedBlock
         case playerScoredTouchdown
         case newBallAppeared
         case ballCameLoose
@@ -132,7 +131,6 @@ extension Event {
         case .playerFouled: .playerFouled
         case .playerBlocked: .playerBlocked
         case .playerThrewBomb: .playerThrewBomb
-        case .playerAssistedBlock: .playerAssistedBlock
         case .playerScoredTouchdown: .playerScoredTouchdown
         case .newBallAppeared: .newBallAppeared
         case .ballCameLoose: .ballCameLoose

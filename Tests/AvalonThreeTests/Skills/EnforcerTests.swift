@@ -126,15 +126,14 @@ struct EnforcerTests {
                     from: sq(2, 6),
                     to: sq(1, 6),
                     direction: .west,
-                    targetPlayerID: pl(.home, 0)
-                ),
-                .playerAssistedBlock(
-                    assistingPlayerID: pl(.away, 1),
-                    from: sq(2, 7),
-                    to: sq(1, 6),
-                    direction: .northWest,
                     targetPlayerID: pl(.home, 0),
-                    blockingPlayerID: pl(.away, 0)
+                    assistingPlayers: [
+                        AssistingPlayer(
+                            id: pl(.away, 1),
+                            square: sq(2, 7),
+                            direction: .northWest
+                        ),
+                    ]
                 ),
                 .playerMoved(
                     playerID: pl(.home, 0),
@@ -368,15 +367,14 @@ struct EnforcerTests {
                     from: sq(2, 6),
                     to: sq(1, 6),
                     direction: .west,
-                    targetPlayerID: pl(.home, 0)
-                ),
-                .playerAssistedBlock(
-                    assistingPlayerID: pl(.away, 1),
-                    from: sq(2, 7),
-                    to: sq(1, 6),
-                    direction: .northWest,
                     targetPlayerID: pl(.home, 0),
-                    blockingPlayerID: pl(.away, 0)
+                    assistingPlayers: [
+                        AssistingPlayer(
+                            id: pl(.away, 1),
+                            square: sq(2, 7),
+                            direction: .northWest
+                        ),
+                    ]
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),

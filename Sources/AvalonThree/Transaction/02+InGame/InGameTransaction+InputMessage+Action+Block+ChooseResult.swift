@@ -79,39 +79,41 @@ extension InGameTransaction {
                     )
                 )
             } else {
-                guard let blockDirection = playerSquare.direction(to: targetPlayerSquare) else {
+                guard let direction = playerSquare.direction(to: targetPlayerSquare) else {
                     throw GameError("No direction")
                 }
+
+                let assistingPlayers = try actionContext
+                    .history
+                    .compactMap { entry -> AssistingPlayer? in
+                        guard case .blockAssistingPlayer(let assistingPlayerID) = entry else {
+                            return nil
+                        }
+                        guard let square = table.getPlayer(id: assistingPlayerID)?.square else {
+                            throw GameError("Assisting player is in reserves")
+                        }
+                        guard let direction = square.direction(to: targetPlayerSquare) else {
+                            throw GameError("No assist direction")
+                        }
+                        return AssistingPlayer(
+                            id: assistingPlayerID,
+                            square: square,
+                            direction: direction
+                        )
+                    }
+                    .toSet()
+
+
                 events.append(
                     .playerBlocked(
                         playerID: player.id,
                         from: playerSquare,
                         to: targetPlayerSquare,
-                        direction: blockDirection,
-                        targetPlayerID: targetPlayerID
+                        direction: direction,
+                        targetPlayerID: targetPlayerID,
+                        assistingPlayers: assistingPlayers
                     )
                 )
-                for assistingPlayerID in actionContext.history.compactMap({ entry -> PlayerID? in
-                    guard case .blockAssistingPlayer(let playerID) = entry else { return nil }
-                    return playerID
-                }) {
-                    guard let square = table.getPlayer(id: assistingPlayerID)?.square else {
-                        throw GameError("Assisting player is in reserves")
-                    }
-                    guard let assistDirection = square.direction(to: targetPlayerSquare) else {
-                        throw GameError("No direction")
-                    }
-                    events.append(
-                        .playerAssistedBlock(
-                            assistingPlayerID: assistingPlayerID,
-                            from: square,
-                            to: targetPlayerSquare,
-                            direction: assistDirection,
-                            targetPlayerID: targetPlayerID,
-                            blockingPlayerID: player.id
-                        )
-                    )
-                }
             }
         }
 

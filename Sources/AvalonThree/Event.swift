@@ -264,7 +264,8 @@ public enum Event: Equatable, Codable, Sendable {
         from: Square,
         to: Square,
         direction: Direction,
-        targetPlayerID: PlayerID
+        targetPlayerID: PlayerID,
+        assistingPlayers: Set<AssistingPlayer>
     )
 
     case playerThrewBomb(
@@ -272,15 +273,6 @@ public enum Event: Equatable, Codable, Sendable {
         from: Square,
         to: Square,
         angle: Int
-    )
-
-    case playerAssistedBlock(
-        assistingPlayerID: PlayerID,
-        from: Square,
-        to: Square,
-        direction: Direction,
-        targetPlayerID: PlayerID,
-        blockingPlayerID: PlayerID
     )
 
     case playerScoredTouchdown(
@@ -524,4 +516,10 @@ public enum PlayerMoveReason: String, Equatable, Codable, Sendable {
     case shoved
     case followUp
     case shadow
+}
+
+public struct AssistingPlayer: Hashable, Codable, Sendable {
+    public let id: PlayerID
+    public let square: Square
+    public let direction: Direction
 }

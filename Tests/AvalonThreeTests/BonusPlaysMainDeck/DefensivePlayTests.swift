@@ -574,7 +574,8 @@ struct DefensivePlayTests {
                     from: sq(2, 7),
                     to: sq(3, 8),
                     direction: .southEast,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
@@ -875,7 +876,8 @@ struct DefensivePlayTests {
                     from: sq(2, 7),
                     to: sq(3, 8),
                     direction: .southEast,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
@@ -1188,7 +1190,8 @@ struct DefensivePlayTests {
                     from: sq(9, 7),
                     to: sq(10, 8),
                     direction: .southEast,
-                    targetPlayerID: pl(.home, 1)
+                    targetPlayerID: pl(.home, 1),
+                    assistingPlayers: []
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 1),

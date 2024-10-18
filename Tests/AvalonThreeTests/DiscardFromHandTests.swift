@@ -169,7 +169,8 @@ struct DiscardFromHandTests {
                     from: sq(6, 6),
                     to: sq(7, 6),
                     direction: .east,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
@@ -882,15 +883,14 @@ struct DiscardFromHandTests {
                     from: sq(6, 6),
                     to: sq(7, 6),
                     direction: .east,
-                    targetPlayerID: pl(.home, 0)
-                ),
-                .playerAssistedBlock(
-                    assistingPlayerID: pl(.away, 2),
-                    from: sq(8, 5),
-                    to: sq(7, 6),
-                    direction: .southWest,
                     targetPlayerID: pl(.home, 0),
-                    blockingPlayerID: pl(.away, 0)
+                    assistingPlayers: [
+                        AssistingPlayer(
+                            id: pl(.away, 2),
+                            square: sq(8, 5),
+                            direction: .southWest
+                        ),
+                    ]
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),

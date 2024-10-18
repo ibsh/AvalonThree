@@ -250,7 +250,8 @@ struct ToughEnoughTests {
                     from: sq(3, 6),
                     to: sq(2, 6),
                     direction: .west,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),

@@ -1007,7 +1007,6 @@ struct DivingTackleTests {
                 .rolledForBlock,
                 .selectedBlockDieResult,
                 .playerBlocked,
-                .playerAssistedBlock,
                 .playerFellDown,
                 .rolledForArmour,
                 .playerInjured,

@@ -135,23 +135,19 @@ struct BomberTests {
                     from: sq(4, 5),
                     to: sq(3, 6),
                     direction: .southWest,
-                    targetPlayerID: pl(.home, 0)
-                ),
-                .playerAssistedBlock(
-                    assistingPlayerID: pl(.away, 1),
-                    from: sq(4, 6),
-                    to: sq(3, 6),
-                    direction: .west,
                     targetPlayerID: pl(.home, 0),
-                    blockingPlayerID: pl(.away, 0)
-                ),
-                .playerAssistedBlock(
-                    assistingPlayerID: pl(.away, 2),
-                    from: sq(4, 7),
-                    to: sq(3, 6),
-                    direction: .northWest,
-                    targetPlayerID: pl(.home, 0),
-                    blockingPlayerID: pl(.away, 0)
+                    assistingPlayers: [
+                        AssistingPlayer(
+                            id: pl(.away, 1),
+                            square: sq(4, 6),
+                            direction: .west
+                        ),
+                        AssistingPlayer(
+                            id: pl(.away, 2),
+                            square: sq(4, 7),
+                            direction: .northWest
+                        ),
+                    ]
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),

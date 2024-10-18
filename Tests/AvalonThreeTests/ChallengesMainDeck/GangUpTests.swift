@@ -130,7 +130,6 @@ struct GangUpTests {
                 .rolledForBlock,
                 .selectedBlockDieResult,
                 .playerBlocked,
-                .playerAssistedBlock,
                 .playerCannotTakeActions,
             ]
         )
@@ -340,7 +339,6 @@ struct GangUpTests {
                 .rolledForBlock,
                 .selectedBlockDieResult,
                 .playerBlocked,
-                .playerAssistedBlock,
                 .playerFellDown,
                 .rolledForArmour,
             ]

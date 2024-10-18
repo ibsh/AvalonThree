@@ -270,7 +270,8 @@ struct RefreshObjectivesTests {
                     from: sq(5, 6),
                     to: sq(5, 7),
                     direction: .south,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
@@ -754,7 +755,8 @@ struct RefreshObjectivesTests {
                     from: sq(5, 6),
                     to: sq(5, 7),
                     direction: .south,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
@@ -1262,7 +1264,8 @@ struct RefreshObjectivesTests {
                     from: sq(5, 6),
                     to: sq(5, 7),
                     direction: .south,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),

@@ -683,7 +683,6 @@ struct BlockingPlayTests {
                 .rolledForBlock,
                 .selectedBlockDieResult,
                 .playerBlocked,
-                .playerAssistedBlock,
                 .playerFellDown,
                 .rolledForArmour,
                 .turnEnded,

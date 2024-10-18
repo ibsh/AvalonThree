@@ -355,7 +355,8 @@ struct HulkingBruteTests {
                     from: sq(2, 6),
                     to: sq(3, 6),
                     direction: .east,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),

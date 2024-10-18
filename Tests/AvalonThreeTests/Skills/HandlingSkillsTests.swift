@@ -110,7 +110,8 @@ struct HandlingSkillsTests {
                     from: sq(2, 6),
                     to: sq(1, 6),
                     direction: .west,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerMoved(
                     playerID: pl(.home, 0),

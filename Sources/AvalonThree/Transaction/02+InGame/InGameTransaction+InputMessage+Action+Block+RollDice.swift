@@ -45,7 +45,7 @@ extension InGameTransaction {
             throw GameError("No target player")
         }
 
-        guard let targetSquare = targetPlayer.square else {
+        guard let targetPlayerSquare = targetPlayer.square else {
             throw GameError("No target player square")
         }
 
@@ -85,46 +85,48 @@ extension InGameTransaction {
             history.append(.blockTargetKnockedDown)
             history.append(.blockTargetInjured)
 
-            targetPlayer.state = .prone(square: targetSquare)
+            targetPlayer.state = .prone(square: targetPlayerSquare)
             table.players.update(with: targetPlayer)
 
-            guard let direction = playerSquare.direction(to: targetSquare) else {
+            guard let direction = playerSquare.direction(to: targetPlayerSquare) else {
                 throw GameError("No block direction")
             }
+
+            let assistingPlayers = try actionContext
+                .history
+                .compactMap { entry -> AssistingPlayer? in
+                    guard case .blockAssistingPlayer(let assistingPlayerID) = entry else {
+                        return nil
+                    }
+                    guard let square = table.getPlayer(id: assistingPlayerID)?.square else {
+                        throw GameError("Assisting player is in reserves")
+                    }
+                    guard let direction = square.direction(to: targetPlayerSquare) else {
+                        throw GameError("No assist direction")
+                    }
+                    return AssistingPlayer(
+                        id: assistingPlayerID,
+                        square: square,
+                        direction: direction
+                    )
+                }
+                .toSet()
+
             events.append(
                 .playerBlocked(
                     playerID: player.id,
                     from: playerSquare,
-                    to: targetSquare,
+                    to: targetPlayerSquare,
                     direction: direction,
-                    targetPlayerID: targetPlayerID
+                    targetPlayerID: targetPlayerID,
+                    assistingPlayers: assistingPlayers
                 )
             )
-            for assistingPlayerID in actionContext.history.compactMap({ entry -> PlayerID? in
-                guard case .blockAssistingPlayer(let playerID) = entry else { return nil }
-                return playerID
-            }) {
-                guard let square = table.getPlayer(id: assistingPlayerID)?.square else {
-                    throw GameError("Assisting player is in reserves")
-                }
-                guard let direction = square.direction(to: targetSquare) else {
-                    throw GameError("No assist direction")
-                }
-                events.append(
-                    .playerAssistedBlock(
-                        assistingPlayerID: assistingPlayerID,
-                        from: square,
-                        to: targetSquare,
-                        direction: direction,
-                        targetPlayerID: targetPlayerID,
-                        blockingPlayerID: player.id
-                    )
-                )
-            }
+
             events.append(
                 .playerFellDown(
                     playerID: targetPlayerID,
-                    playerSquare: targetSquare,
+                    playerSquare: targetPlayerSquare,
                     reason: .blocked
                 )
             )

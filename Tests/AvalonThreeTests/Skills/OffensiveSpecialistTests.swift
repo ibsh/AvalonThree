@@ -260,7 +260,6 @@ struct OffensiveSpecialistTests {
                 .declinedOffensiveSpecialistSkillReroll,
                 .selectedBlockDieResult,
                 .playerBlocked,
-                .playerAssistedBlock,
                 .playerFellDown,
                 .rolledForArmour,
                 .changedArmourResult,
@@ -400,7 +399,6 @@ struct OffensiveSpecialistTests {
             latestEvents.map { $0.case } == [
                 .selectedBlockDieResult,
                 .playerBlocked,
-                .playerAssistedBlock,
                 .playerFellDown,
                 .rolledForArmour,
             ]

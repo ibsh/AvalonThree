@@ -641,7 +641,8 @@ struct InsignificantTests {
                     from: sq(3, 6),
                     to: sq(2, 6),
                     direction: .west,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),

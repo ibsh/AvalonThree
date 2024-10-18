@@ -113,7 +113,8 @@ struct BlockActionTests {
                     from: sq(5, 12),
                     to: sq(5, 11),
                     direction: .north,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
@@ -411,7 +412,8 @@ struct BlockActionTests {
                     from: sq(5, 12),
                     to: sq(5, 11),
                     direction: .north,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerCannotTakeActions(
                     playerID: pl(.away, 0),
@@ -574,7 +576,8 @@ struct BlockActionTests {
                     from: sq(5, 12),
                     to: sq(5, 11),
                     direction: .north,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),

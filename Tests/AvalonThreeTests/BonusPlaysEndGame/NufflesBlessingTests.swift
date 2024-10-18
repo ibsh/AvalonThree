@@ -233,7 +233,8 @@ struct NufflesBlessingTests {
                     from: sq(5, 11),
                     to: sq(5, 12),
                     direction: .south,
-                    targetPlayerID: pl(.home, 0)
+                    targetPlayerID: pl(.home, 0),
+                    assistingPlayers: []
                 ),
                 .playerFellDown(
                     playerID: pl(.home, 0),
