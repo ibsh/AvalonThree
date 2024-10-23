@@ -25,7 +25,7 @@ extension SetupTransaction {
 
         case .begin,
              .selectBoardSpec,
-             .selectChallengeDeck,
+             .configureChallengeDeck,
              .selectRookieBonusRecipient,
              .declarePlayerAction,
              .declareEmergencyReservesAction,

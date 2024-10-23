@@ -11,7 +11,7 @@ extension Event {
     enum Case {
         case flippedCoin
         case specifiedBoardSpec
-        case specifiedChallengeDeck
+        case configuredChallengeDeck
         case specifiedRookieBonusRecipient
         case specifiedTeam
         case startingHandWasSetUp
@@ -89,7 +89,7 @@ extension Event {
         switch self {
         case .flippedCoin: .flippedCoin
         case .specifiedBoardSpec: .specifiedBoardSpec
-        case .specifiedChallengeDeck: .specifiedChallengeDeck
+        case .configuredChallengeDeck: .configuredChallengeDeck
         case .specifiedRookieBonusRecipient: .specifiedRookieBonusRecipient
         case .specifiedTeam: .specifiedTeam
         case .startingHandWasSetUp: .startingHandWasSetUp

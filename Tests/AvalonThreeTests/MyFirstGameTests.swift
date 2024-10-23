@@ -71,14 +71,7 @@ struct MyFirstGameTests {
         #expect(
             latestAddressedPrompt == AddressedPrompt(
                 coachID: .home,
-                prompt: .selectChallengeDeck(
-                    challengeDeckIDs: [
-                        .shortStandard,
-                        .shortRandomised,
-                        .longStandard,
-                        .longRandomised,
-                    ]
-                )
+                prompt: .configureChallengeDeck
             )
         )
 
@@ -87,13 +80,24 @@ struct MyFirstGameTests {
         (latestEvents, latestAddressedPrompt) = try game.process(
             InputMessageWrapper(
                 coachID: .home,
-                message: .selectChallengeDeck(challengeDeckID: .shortStandard)
+                message: .configureChallengeDeck(
+                    challengeDeckConfig: ChallengeDeckConfig(
+                        useEndgameCards: false,
+                        randomizeBonusPlays: false
+                    )
+                )
             )
         )
 
         #expect(
             latestEvents == [
-                .specifiedChallengeDeck(coachID: .home, challengeDeckID: .shortStandard)
+                .configuredChallengeDeck(
+                    coachID: .home,
+                    challengeDeckConfig: ChallengeDeckConfig(
+                        useEndgameCards: false,
+                        randomizeBonusPlays: false
+                    )
+                )
             ]
         )
 

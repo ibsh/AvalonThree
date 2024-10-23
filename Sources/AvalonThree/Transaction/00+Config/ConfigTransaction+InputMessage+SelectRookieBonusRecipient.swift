@@ -17,8 +17,8 @@ extension ConfigTransaction {
             throw GameError("Coin has not been flipped yet")
         }
 
-        guard config.challengeDeckID != nil else {
-            throw GameError("Challenge deck has not been specified yet")
+        guard config.challengeDeckConfig != nil else {
+            throw GameError("Challenge deck has not been configured yet")
         }
 
         guard config.rookieBonusRecipientID == nil else {

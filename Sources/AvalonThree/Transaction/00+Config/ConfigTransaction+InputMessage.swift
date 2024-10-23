@@ -22,9 +22,9 @@ extension ConfigTransaction {
                 boardSpecID: boardSpecID
             )
 
-        case .selectChallengeDeck(let challengeDeckID):
-            return try selectChallengeDeck(
-                challengeDeckID: challengeDeckID
+        case .configureChallengeDeck(let challengeDeckConfig):
+            return try configureChallengeDeck(
+                challengeDeckConfig: challengeDeckConfig
             )
 
         case .selectRookieBonusRecipient(let rookieBonusRecipientID):

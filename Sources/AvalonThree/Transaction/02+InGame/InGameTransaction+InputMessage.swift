@@ -397,7 +397,7 @@ extension InGameTransaction {
 
         case .begin,
              .selectBoardSpec,
-             .selectChallengeDeck,
+             .configureChallengeDeck,
              .selectRookieBonusRecipient,
              .selectTeam:
             throw GameError("Invalid message for InGameTransaction")

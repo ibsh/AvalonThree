@@ -20,7 +20,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .human
@@ -142,7 +145,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .human
@@ -373,7 +379,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .human
@@ -588,7 +597,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .human
@@ -813,7 +825,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .dwarf,
                         coinFlipLoserTeamID: .human
@@ -1023,7 +1038,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .elf,
                         coinFlipLoserTeamID: .human
@@ -1238,7 +1256,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .human
@@ -1379,7 +1400,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .human
@@ -1590,7 +1614,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .human
@@ -1734,7 +1761,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .human
@@ -1951,7 +1981,10 @@ struct InterventionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .human

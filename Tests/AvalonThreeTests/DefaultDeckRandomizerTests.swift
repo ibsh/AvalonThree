@@ -10,43 +10,79 @@ import Testing
 
 struct DefaultDeckRandomizerTests {
 
-    @Test func testShortRandomisedDeckIsARandomisedVersionOfShortStandardDeck() async throws {
+    @Test func testShortRandomizedDeckIsARandomizedVersionOfShortStandardDeck() async throws {
         let standardDeck = ChallengeCard.standardShortDeck
-        let randomisedDeck = DefaultDeckRandomizer().deal(.shortRandomised)
+        let randomizedDeck = DefaultDeckRandomizer()
+            .deal(
+                ChallengeDeckConfig(
+                    useEndgameCards: false,
+                    randomizeBonusPlays: true
+                )
+            )
 
-        #expect(randomisedDeck.count == standardDeck.count)
+        #expect(randomizedDeck.count == standardDeck.count)
 
-        #expect(randomisedDeck.sorted() != standardDeck.sorted())
+        #expect(randomizedDeck.sorted() != standardDeck.sorted())
 
         #expect(
-            randomisedDeck.map { $0.challenge }.sorted()
+            randomizedDeck.map { $0.challenge }.sorted()
             == standardDeck.map { $0.challenge }.sorted()
         )
 
         #expect(
-            randomisedDeck.map { $0.bonusPlay }.sorted()
+            randomizedDeck.map { $0.bonusPlay }.sorted()
             == standardDeck.map { $0.bonusPlay }.sorted()
         )
     }
 
     @Test func testLongStandardDeckCount() async throws {
-        #expect(DefaultDeckRandomizer().deal(.longStandard).count == 30)
+        #expect(
+            DefaultDeckRandomizer()
+                .deal(
+                    ChallengeDeckConfig(
+                        useEndgameCards: true,
+                        randomizeBonusPlays: false
+                    )
+                )
+                .count == 30
+        )
     }
 
-    @Test func testLongRandomisedDeckCount() async throws {
-        #expect(DefaultDeckRandomizer().deal(.longRandomised).count == 30)
+    @Test func testLongRandomizedDeckCount() async throws {
+        #expect(
+            DefaultDeckRandomizer()
+                .deal(
+                    ChallengeDeckConfig(
+                        useEndgameCards: true,
+                        randomizeBonusPlays: true
+                    )
+                )
+                .count == 30
+        )
     }
 
     @Test func testLongStandardDeckStartsWithShortStandardDeck() async throws {
-        let longDeck = DefaultDeckRandomizer().deal(.longStandard)
+        let longDeck = DefaultDeckRandomizer()
+            .deal(
+                ChallengeDeckConfig(
+                    useEndgameCards: true,
+                    randomizeBonusPlays: false
+                )
+            )
         let shortDeck = ChallengeCard.standardShortDeck
         let longDeckPrefix = Array(longDeck.prefix(shortDeck.count))
 
         #expect(longDeckPrefix.sorted() == shortDeck.sorted())
     }
 
-    @Test func testLongRandomisedDeckStartsWithARandomisedShortStandardDeck() async throws {
-        let longDeck = DefaultDeckRandomizer().deal(.longRandomised)
+    @Test func testLongRandomizedDeckStartsWithARandomizedShortStandardDeck() async throws {
+        let longDeck = DefaultDeckRandomizer()
+            .deal(
+                ChallengeDeckConfig(
+                    useEndgameCards: true,
+                    randomizeBonusPlays: true
+                )
+            )
         let shortDeck = ChallengeCard.standardShortDeck
         let longDeckPrefix = Array(longDeck.dropLast(longDeck.count - shortDeck.count)).sorted()
 
@@ -62,7 +98,13 @@ struct DefaultDeckRandomizerTests {
     }
 
     @Test func testLongStandardDeckEndsWithCardsFromStandardEndgameDeck() async throws {
-        let longDeck = DefaultDeckRandomizer().deal(.longStandard)
+        let longDeck = DefaultDeckRandomizer()
+            .deal(
+                ChallengeDeckConfig(
+                    useEndgameCards: true,
+                    randomizeBonusPlays: false
+                )
+            )
         let shortDeck = ChallengeCard.standardShortDeck
         let longDeckSuffix = Array(longDeck.suffix(longDeck.count - shortDeck.count))
 
@@ -74,8 +116,14 @@ struct DefaultDeckRandomizerTests {
         }
     }
 
-    @Test func testLongRandomisedDeckEndsWithCardsRandomisedFromTheEndgameDeck() async throws {
-        let longDeck = DefaultDeckRandomizer().deal(.longRandomised)
+    @Test func testLongRandomizedDeckEndsWithCardsRandomizedFromTheEndgameDeck() async throws {
+        let longDeck = DefaultDeckRandomizer()
+            .deal(
+                ChallengeDeckConfig(
+                    useEndgameCards: true,
+                    randomizeBonusPlays: true
+                )
+            )
         let shortDeck = ChallengeCard.standardShortDeck
         let longDeckSuffix = Array(longDeck.suffix(longDeck.count - shortDeck.count))
 

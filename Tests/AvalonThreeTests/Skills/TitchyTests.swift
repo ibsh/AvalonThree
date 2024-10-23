@@ -20,7 +20,10 @@ struct TitchyTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .ogre,
                         coinFlipLoserTeamID: .human
@@ -210,7 +213,10 @@ struct TitchyTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .orc,
                         coinFlipLoserTeamID: .human
@@ -363,7 +369,10 @@ struct TitchyTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .ogre

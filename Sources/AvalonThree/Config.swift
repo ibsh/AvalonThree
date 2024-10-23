@@ -11,7 +11,7 @@ import Foundation
 struct Config: Equatable, Codable, Sendable {
     var coinFlipWinnerCoachID: CoachID?
     var boardSpecID: BoardSpecID?
-    var challengeDeckID: ChallengeDeckID?
+    var challengeDeckConfig: ChallengeDeckConfig?
     var rookieBonusRecipientID: RookieBonusRecipientID?
     var coinFlipWinnerTeamID: TeamID?
     var coinFlipLoserTeamID: TeamID?
@@ -20,7 +20,7 @@ struct Config: Equatable, Codable, Sendable {
 struct FinalizedConfig: Equatable, Codable, Sendable {
     let coinFlipWinnerCoachID: CoachID
     let boardSpecID: BoardSpecID
-    let challengeDeckID: ChallengeDeckID
+    let challengeDeckConfig: ChallengeDeckConfig
     let rookieBonusRecipientID: RookieBonusRecipientID
     let coinFlipWinnerTeamID: TeamID
     let coinFlipLoserTeamID: TeamID

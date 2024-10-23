@@ -36,8 +36,8 @@ extension Game {
             }
             return
 
-        case .selectChallengeDeck:
-            guard case .selectChallengeDeck = prompt else {
+        case .configureChallengeDeck:
+            guard case .configureChallengeDeck = prompt else {
                 throw GameError("Invalid message")
             }
             return

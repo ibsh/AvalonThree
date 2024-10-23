@@ -19,9 +19,9 @@ public enum Event: Equatable, Codable, Sendable {
         boardSpec: BoardSpec
     )
 
-    case specifiedChallengeDeck(
+    case configuredChallengeDeck(
         coachID: CoachID,
-        challengeDeckID: ChallengeDeckID
+        challengeDeckConfig: ChallengeDeckConfig
     )
 
     case specifiedRookieBonusRecipient(

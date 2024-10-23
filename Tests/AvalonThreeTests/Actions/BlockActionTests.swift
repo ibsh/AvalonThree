@@ -20,7 +20,10 @@ struct BlockActionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .undead,
                         coinFlipLoserTeamID: .human
@@ -165,7 +168,10 @@ struct BlockActionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board2,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .darkElf,
                         coinFlipLoserTeamID: .chaos
@@ -283,7 +289,10 @@ struct BlockActionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .undead,
                         coinFlipLoserTeamID: .human
@@ -478,7 +487,10 @@ struct BlockActionTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .undead,
                         coinFlipLoserTeamID: .halfling

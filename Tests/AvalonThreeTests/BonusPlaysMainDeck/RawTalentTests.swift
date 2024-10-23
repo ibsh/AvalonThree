@@ -38,7 +38,12 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .selectChallengeDeck(challengeDeckID: .shortStandard)
+                message: .configureChallengeDeck(
+                    challengeDeckConfig: ChallengeDeckConfig(
+                        useEndgameCards: false,
+                        randomizeBonusPlays: false
+                    )
+                )
             )
         )
 
@@ -399,7 +404,12 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .selectChallengeDeck(challengeDeckID: .shortStandard)
+                message: .configureChallengeDeck(
+                    challengeDeckConfig: ChallengeDeckConfig(
+                        useEndgameCards: false,
+                        randomizeBonusPlays: false
+                    )
+                )
             )
         )
 
@@ -760,7 +770,12 @@ struct RawTalentTests {
         _ = try game.process(
             InputMessageWrapper(
                 coachID: .away,
-                message: .selectChallengeDeck(challengeDeckID: .shortStandard)
+                message: .configureChallengeDeck(
+                    challengeDeckConfig: ChallengeDeckConfig(
+                        useEndgameCards: false,
+                        randomizeBonusPlays: false
+                    )
+                )
             )
         )
 
@@ -1094,7 +1109,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -1262,7 +1280,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -1401,7 +1422,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .halfling
@@ -1561,7 +1585,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .halfling
@@ -1698,7 +1725,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -1860,7 +1890,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -1997,7 +2030,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -2139,7 +2175,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -2281,7 +2320,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .khorne
@@ -2477,7 +2519,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .khorne
@@ -2672,7 +2717,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .necromantic
@@ -2816,7 +2864,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .snotling
@@ -2966,7 +3017,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .snotling
@@ -3111,7 +3165,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -3249,7 +3306,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -3364,7 +3424,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -3461,7 +3524,10 @@ struct RawTalentTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc

@@ -20,7 +20,10 @@ struct MoveTheBallTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -135,7 +138,10 @@ struct MoveTheBallTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .home,
                         boardSpecID: .season1Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .human,
                         coinFlipLoserTeamID: .orc
@@ -269,7 +275,10 @@ struct MoveTheBallTests {
                     config: FinalizedConfig(
                         coinFlipWinnerCoachID: .away,
                         boardSpecID: BoardSpecID.season3Board1,
-                        challengeDeckID: .shortStandard,
+                        challengeDeckConfig: ChallengeDeckConfig(
+                            useEndgameCards: false,
+                            randomizeBonusPlays: false
+                        ),
                         rookieBonusRecipientID: .noOne,
                         coinFlipWinnerTeamID: .skaven,
                         coinFlipLoserTeamID: .woodElf

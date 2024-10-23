@@ -22,8 +22,8 @@ extension ConfigTransaction {
             throw GameError("Board spec has not been specified yet")
         }
 
-        guard let challengeDeckID = config.challengeDeckID else {
-            throw GameError("Challenge deck has not been specified yet")
+        guard let challengeDeckConfig = config.challengeDeckConfig else {
+            throw GameError("Challenge deck has not been configured yet")
         }
 
         guard let rookieBonusRecipientID = config.rookieBonusRecipientID else {
@@ -108,7 +108,7 @@ extension ConfigTransaction {
 
         let playerSetups = coinFlipLoserPlayerSetups + coinFlipWinnerPlayerSetups
 
-        var deck = randomizers.deck.deal(challengeDeckID)
+        var deck = randomizers.deck.deal(challengeDeckConfig)
 
         let players = playerSetups.map { playerSetup in
             Player(
@@ -217,7 +217,7 @@ extension ConfigTransaction {
             config: FinalizedConfig(
                 coinFlipWinnerCoachID: coinFlipWinnerCoachID,
                 boardSpecID: boardSpecID,
-                challengeDeckID: challengeDeckID,
+                challengeDeckConfig: challengeDeckConfig,
                 rookieBonusRecipientID: rookieBonusRecipientID,
                 coinFlipWinnerTeamID: coinFlipWinnerTeamID,
                 coinFlipLoserTeamID: teamID

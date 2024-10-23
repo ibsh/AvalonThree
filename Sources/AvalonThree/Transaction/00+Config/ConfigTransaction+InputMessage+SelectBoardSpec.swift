@@ -37,9 +37,7 @@ extension ConfigTransaction {
 
         return AddressedPrompt(
             coachID: coinFlipWinnerCoachID,
-            prompt: .selectChallengeDeck(
-                challengeDeckIDs: ChallengeDeckID.availableCases
-            )
+            prompt: .configureChallengeDeck
         )
     }
 }

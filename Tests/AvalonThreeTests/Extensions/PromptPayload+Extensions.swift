@@ -10,7 +10,7 @@
 extension Prompt {
     enum Case {
         case selectBoardSpec
-        case selectChallengeDeck
+        case configureChallengeDeck
         case selectRookieBonusRecipient
         case selectTeam
         case arrangePlayers
@@ -80,7 +80,7 @@ extension Prompt {
     var `case`: Case {
         switch self {
         case .selectBoardSpec: .selectBoardSpec
-        case .selectChallengeDeck: .selectChallengeDeck
+        case .configureChallengeDeck: .configureChallengeDeck
         case .selectRookieBonusRecipient: .selectRookieBonusRecipient
         case .selectTeam: .selectTeam
         case .arrangePlayers: .arrangePlayers

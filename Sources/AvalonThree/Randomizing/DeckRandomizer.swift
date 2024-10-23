@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol DeckRandomizing {
-    func deal(_ id: ChallengeDeckID) -> [ChallengeCard]
+    func deal(_ config: ChallengeDeckConfig) -> [ChallengeCard]
 }
 
 public final class DefaultDeckRandomizer {
@@ -31,21 +31,21 @@ public final class DefaultDeckRandomizer {
 
 extension DefaultDeckRandomizer: DeckRandomizing {
 
-    public func deal(_ id: ChallengeDeckID) -> [ChallengeCard] {
-        switch id {
-        case .shortStandard:
+    public func deal(_ config: ChallengeDeckConfig) -> [ChallengeCard] {
+        switch (config.useEndgameCards, config.randomizeBonusPlays) {
+        case (false, false):
             ChallengeCard.standardShortDeck.shuffled()
-        case .shortRandomised:
+        case (false, true):
             combine(
                 challenges: ChallengeCard.standardShortDeck.shuffled().map { $0.challenge },
                 bonusPlays: ChallengeCard.standardShortDeck.shuffled().map { $0.bonusPlay }
             )
-        case .longStandard:
+        case (true, false):
             ChallengeCard.standardShortDeck.shuffled()
             + Array(
                 ChallengeCard.standardEndgameDeck.shuffled().prefix(6)
             )
-        case .longRandomised:
+        case (true, true):
             combine(
                 challenges: ChallengeCard.standardShortDeck.shuffled().map { $0.challenge },
                 bonusPlays: ChallengeCard.standardShortDeck.shuffled().map { $0.bonusPlay }

@@ -20,7 +20,7 @@ private final class DeckRandomizerDouble: DeckRandomizing {
         self.nextResult = nextResult
     }
 
-    func deal(_ id: ChallengeDeckID) -> [ChallengeCard] {
-        nextResult ?? DefaultDeckRandomizer().deal(id)
+    func deal(_ config: ChallengeDeckConfig) -> [ChallengeCard] {
+        nextResult ?? DefaultDeckRandomizer().deal(config)
     }
 }

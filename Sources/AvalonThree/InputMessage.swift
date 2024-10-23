@@ -13,7 +13,7 @@ public enum InputMessage: Codable, Sendable {
 
     case begin
     case selectBoardSpec(boardSpecID: BoardSpecID)
-    case selectChallengeDeck(challengeDeckID: ChallengeDeckID)
+    case configureChallengeDeck(challengeDeckConfig: ChallengeDeckConfig)
     case selectRookieBonusRecipient(rookieBonusRecipientID: RookieBonusRecipientID)
     case selectTeam(teamID: TeamID)
 

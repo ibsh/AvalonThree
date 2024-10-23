@@ -20,9 +20,7 @@ public enum Prompt: Equatable, Codable, Sendable {
         boardSpecIDs: [BoardSpecID]
     )
 
-    case selectChallengeDeck(
-        challengeDeckIDs: [ChallengeDeckID]
-    )
+    case configureChallengeDeck
 
     case selectRookieBonusRecipient(
         rookieBonusRecipientIDs: [RookieBonusRecipientID]

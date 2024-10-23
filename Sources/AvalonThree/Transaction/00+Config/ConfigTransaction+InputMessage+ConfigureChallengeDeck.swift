@@ -9,8 +9,8 @@ import Foundation
 
 extension ConfigTransaction {
 
-    mutating func selectChallengeDeck(
-        challengeDeckID: ChallengeDeckID
+    mutating func configureChallengeDeck(
+        challengeDeckConfig: ChallengeDeckConfig
     ) throws -> AddressedPrompt? {
 
         guard let coinFlipWinnerCoachID = config.coinFlipWinnerCoachID else {
@@ -21,22 +21,18 @@ extension ConfigTransaction {
             throw GameError("Board spec has not been specified yet")
         }
 
-        guard config.challengeDeckID == nil else {
-            throw GameError("Challenge deck has already been specified")
-        }
-
-        guard ChallengeDeckID.availableCases.contains(challengeDeckID) else {
-            throw GameError("Invalid challenge deck choice")
+        guard config.challengeDeckConfig == nil else {
+            throw GameError("Challenge deck has already been configured")
         }
 
         events.append(
-            .specifiedChallengeDeck(
+            .configuredChallengeDeck(
                 coachID: coinFlipWinnerCoachID,
-                challengeDeckID: challengeDeckID
+                challengeDeckConfig: challengeDeckConfig
             )
         )
 
-        config.challengeDeckID = challengeDeckID
+        config.challengeDeckConfig = challengeDeckConfig
 
         return AddressedPrompt(
             coachID: coinFlipWinnerCoachID,
