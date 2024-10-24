@@ -65,34 +65,36 @@ extension Game {
                 )
             }
 
-        case .active(let table, let history):
+        case .active(let table, let entireHistory):
             guard let previousAddressedPrompt else {
                 throw GameError("No last prompt")
             }
 
-            let history: [HistoryEntry] = {
-                if let startIndex = history.lastIndex(
+            let (oldHistory, currentHistory): ([HistoryEntry], [HistoryEntry]) = {
+                if let startIndex = entireHistory.lastIndex(
                     where: { entry in
                         guard case .prepareForTurn = entry else { return false }
                         return true
                     }
                 ) {
-                    return Array(history[startIndex...])
+                    return (
+                        Array(entireHistory[..<startIndex]),
+                        Array(entireHistory[startIndex...])
+                    )
                 }
-                return []
+                return (entireHistory, [])
             }()
 
             var transaction = InGameTransaction(
                 table: table,
-                history: history,
+                history: currentHistory,
                 previousPrompt: previousAddressedPrompt.prompt,
                 randomizers: randomizers
             )
-            if let addressedPrompt = try transaction.processInputMessageWrapper(messageWrapper) {
-                phase = .active(transaction.table, transaction.history)
-                self.previousAddressedPrompt = addressedPrompt
-                return (priorEvents + transaction.events, addressedPrompt)
-            } else {
+
+            guard
+                let addressedPrompt = try transaction.processInputMessageWrapper(messageWrapper)
+            else {
                 phase = .finished(transaction.table)
                 return try process(
                     messageWrapper: messageWrapper,
@@ -100,6 +102,10 @@ extension Game {
                     randomizers: randomizers
                 )
             }
+
+            phase = .active(transaction.table, oldHistory + transaction.history)
+            self.previousAddressedPrompt = addressedPrompt
+            return (priorEvents + transaction.events, addressedPrompt)
 
         case .finished:
             return (priorEvents, nil)
