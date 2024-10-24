@@ -14,37 +14,51 @@ extension InGameTransaction {
         let turnContext = try history.latestTurnContext()
         let actionContexts = try turnContext.actionContexts()
 
-        guard !actionContexts.contains(where: { !$0.isFinished }) else {
-            throw GameError("Unfinished actions")
-        }
-
         guard let lastActionContext = actionContexts.last else {
             return nil
         }
 
         // MARK: - This coach
 
-        if let prompt = try checkForFrenzied(turnContext, lastActionContext) {
+        if let prompt = try checkForFrenzied(
+            turnContext,
+            lastActionContext
+        ) {
             return prompt
         }
 
-        if let prompt = try checkForShoulderCharge(turnContext, lastActionContext) {
+        if let prompt = try checkForShoulderCharge(
+            turnContext,
+            lastActionContext
+        ) {
             return prompt
         }
 
-        if let prompt = try checkForDivingTackle(turnContext, lastActionContext) {
+        if let prompt = try checkForDivingTackle(
+            turnContext,
+            lastActionContext
+        ) {
             return prompt
         }
 
-        if let prompt = try checkForHeadbutt(turnContext, lastActionContext) {
+        if let prompt = try checkForHeadbutt(
+            turnContext,
+            lastActionContext
+        ) {
             return prompt
         }
 
-        if let prompt = try checkForBlitz(turnContext, lastActionContext) {
+        if let prompt = try checkForBlitz(
+            turnContext,
+            lastActionContext
+        ) {
             return prompt
         }
 
-        if let prompt = try checkForComboPlay(turnContext, lastActionContext) {
+        if let prompt = try checkForComboPlay(
+            turnContext,
+            lastActionContext
+        ) {
             return prompt
         }
 
@@ -58,11 +72,17 @@ extension InGameTransaction {
 
         // MARK: - Other coach
 
-        if let prompt = try checkForDistraction(turnContext, lastActionContext) {
+        if let prompt = try checkForDistraction(
+            turnContext,
+            lastActionContext
+        ) {
             return prompt
         }
 
-        if let prompt = try checkForIntervention(turnContext, lastActionContext) {
+        if let prompt = try checkForIntervention(
+            turnContext,
+            lastActionContext
+        ) {
             return prompt
         }
 
@@ -448,7 +468,6 @@ extension InGameTransaction {
         guard
             table.getHand(coachID: coachID).contains(where: { $0.bonusPlay == bonusPlay }),
             !turnContext.history.contains(.usedBonusPlay(coachID: coachID, bonusPlay: bonusPlay)),
-            let lastActionContext = try turnContext.actionContexts().last,
             lastActionContext.actionID == .mark,
             lastActionContext.coachID == turnContext.coachID,
             let player = table.getPlayer(id: lastActionContext.playerID),
@@ -520,7 +539,6 @@ extension InGameTransaction {
             !turnContext.history.contains(
                 .usedBonusPlay(coachID: lastActionContext.coachID, bonusPlay: bonusPlay)
             ),
-            let lastActionContext = try turnContext.actionContexts().last,
             lastActionContext.actionID == .run,
             lastActionContext.coachID == turnContext.coachID,
             let targetPlayer = table.getPlayer(id: lastActionContext.playerID)
