@@ -181,10 +181,13 @@ extension InGameTransaction {
             }
         }
 
-        let oldBallsIDs = lastActionContext.snapshot.balls.filter(ballFilter).map { $0.id }
-        let newBallsIDs = table.balls.filter(ballFilter).map { $0.id }
+        for actionContext in try turnContext.actionContexts() {
+            let oldBallIDs = actionContext.snapshot.balls.filter(ballFilter).map { $0.id }.toSet()
+            let newBallIDs = table.balls.filter(ballFilter).map { $0.id }.toSet()
+            if newBallIDs.subtracting(oldBallIDs).isEmpty { return false }
+        }
 
-        return newBallsIDs.contains(where: { !oldBallsIDs.contains($0) })
+        return true
     }
 
     private func canClaimGetTogether(
