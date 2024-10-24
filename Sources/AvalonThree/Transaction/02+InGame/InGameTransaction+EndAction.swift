@@ -32,13 +32,11 @@ extension InGameTransaction {
         }
 
         // Check for free actions that happen before the claim challenge card step
-
         if let prompt = try checkForFreeActionsBeforeChallengeCards() {
             return prompt
         }
 
         // Check for objectives that are claimed before touchdowns (if not first turn)
-
         if !turnContext.isFirst {
             if let prompt = try checkObjectives(postTouchdown: false) {
                 return prompt
@@ -49,7 +47,6 @@ extension InGameTransaction {
         try checkForTouchdowns()
 
         // Check for objectives that are claimed after touchdowns (if not first turn)
-
         if !turnContext.isFirst {
             if let prompt = try checkObjectives(postTouchdown: true) {
                 return prompt
@@ -57,33 +54,32 @@ extension InGameTransaction {
         }
 
         // Check for free actions that happen after the claim challenge card step
-
         if let prompt = try checkForFreeActionsAfterChallengeCards() {
             return prompt
         }
 
-        let playerActionsTaken = try playerActionsTaken()
-
+        // Check for continuing Ready To Go Bonus Play
         if table.getActiveBonuses(coachID: turnContext.coachID).contains(
             where: { $0.bonusPlay == .readyToGo }
         ) {
             return try continueReadyToGoBonusPlay()
         }
 
+        // Check for continuing Your Time To Shine Bonus Play
         if table.getActiveBonuses(coachID: turnContext.coachID).contains(
             where: { $0.bonusPlay == .yourTimeToShine }
         ) {
             return try continueYourTimeToShineBonusPlay()
         }
 
-        // Is turn still starting?
+        let playerActionsTaken = try playerActionsTaken()
 
+        // Is turn still starting?
         if playerActionsTaken == 0 {
             return try beginTurn()
         }
 
         // Is turn still ongoing?
-
         let validDeclarations = try validDeclarations()
         if playerActionsTaken < TableConstants.maxPlayerActionsPerTurn,
             !validDeclarations.isEmpty
