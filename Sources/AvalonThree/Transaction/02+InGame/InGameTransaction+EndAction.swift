@@ -18,8 +18,7 @@ extension InGameTransaction {
             throw GameError("Unfinished actions")
         }
 
-        // remove action-long bonuses
-
+        // Remove action-long bonuses
         if let actionContext = actionContexts.last {
             try removeActionLongBonuses(
                 actionContext: actionContext,
